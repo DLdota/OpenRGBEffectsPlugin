@@ -1,4 +1,6 @@
-QT -= gui
+QT += gui
+QT += widgets
+QT += core
 
 TEMPLATE = lib
 DEFINES += ORGBEXAMPLEPLUGIN_LIBRARY
