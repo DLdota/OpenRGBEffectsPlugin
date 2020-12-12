@@ -1,6 +1,7 @@
-QT += gui
-QT += widgets
-QT += core
+QT +=               \
+    gui             \
+    widgets         \
+    core            \
 
 TEMPLATE = lib
 DEFINES += ORGBEXAMPLEPLUGIN_LIBRARY
@@ -15,8 +16,16 @@ SOURCES += \
     ORGBExamplePlugin.cpp
 
 HEADERS += \
-    ORGBExamplePluginInterface.h \
-    ORGBExamplePlugin.h
+    ORGBExamplePluginInterface.h   \
+    ORGBExamplePlugin.h            \
+    Dependencies/ResourceManager.h \
+    Dependencies/RGBController.h   \
+    Dependencies/NetworkClient.h   \
+    Dependencies/NetworkServer.h   \
+    Dependencies/SettingsManager.h \
+    Dependencies/NetworkProtocol.h \
+    Dependencies/net_port.h        \
+    Dependencies/json.hpp          \
 
 # Default rules for deployment.
 unix {
