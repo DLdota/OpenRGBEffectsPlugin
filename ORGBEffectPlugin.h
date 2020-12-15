@@ -1,8 +1,9 @@
 #pragma once
 
-#include "ORGBExamplePluginInterface.h"
+#include "ORGBPluginInterface.h"
 #include "Dependencies/ResourceManager.h"
 
+#include "ui_PluginPage.h"
 #include <QObject>
 #include <QString>
 #include <QtPlugin>
@@ -11,6 +12,8 @@
 #include "QPushButton"
 #include "QDialog"
 #include "QAction"
+#include "QTabBar"
+#include "QLayout"
 
 class ORGBPlugin : public QObject, public ORGBPluginInterface
 {
@@ -26,7 +29,21 @@ public:
     std::string PluginLocal() const override;
 
     QWidget* CreateGUI(QWidget *Parent, ResourceManager *RM = nullptr) const override;
+private:
+    QWidget* CreateInfoTab() const;
+};
 
-private slots:
-    void on_ExampleButton_clicked();
+namespace Ui{
+class PluginUi;
+}
+
+class Ui::PluginUi : public QFrame
+{
+    Q_OBJECT
+
+public:
+    explicit PluginUi(QWidget *parent = nullptr);
+    ~PluginUi();
+
+    Ui::PluginUi *ui;
 };
