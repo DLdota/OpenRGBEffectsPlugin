@@ -1,7 +1,9 @@
-QT +=               \
-    gui             \
-    widgets         \
-    core            \
+QT +=                  \
+    gui                \
+    widgets            \
+    core               \
+    network            \
+    webenginewidgets   \
 
 TEMPLATE = lib
 DEFINES += ORGBEXAMPLEPLUGIN_LIBRARY
@@ -12,11 +14,12 @@ CONFIG += c++11
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += \
-    ORGBEffectPlugin.cpp
+SOURCES +=                         \
+    ORGBUpdatePlugin.cpp           \
 
-HEADERS += \
-    ORGBEffectPlugin.h            \
+HEADERS +=                         \
+    ORGBPluginInterface.h          \
+    ORGBUpdatePlugin.h             \
     Dependencies/ResourceManager.h \
     Dependencies/RGBController.h   \
     Dependencies/NetworkClient.h   \
@@ -25,13 +28,13 @@ HEADERS += \
     Dependencies/NetworkProtocol.h \
     Dependencies/net_port.h        \
     Dependencies/json.hpp          \
-    ORGBPluginInterface.h
+    Dependencies/OpenRGBDialog2.h  \
+
+FORMS +=                           \
+    ORGBUpdatePlugin.ui            \
 
 # Default rules for deployment.
 unix {
     target.path = /usr/lib
 }
 !isEmpty(target.path): INSTALLS += target
-
-FORMS += \
-    PluginPage.ui
