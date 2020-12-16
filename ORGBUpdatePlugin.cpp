@@ -2,7 +2,6 @@
 #include "Dependencies/ResourceManager.h"
 
 #include "ui_ORGBUpdatePlugin.h"
-#include "Dependencies/OpenRGBDialog2.h"
 #include <QDebug>
 
 #include <QResizeEvent>
@@ -19,6 +18,9 @@
 #include <QtNetwork>
 #include <QUrl>
 
+ResourceManager *ORGBPlugin::RM = nullptr;
+
+bool ORGBPlugin::DarkTheme = false;
 
 bool ORGBPlugin::HasCustomIcon() const
 {
@@ -29,31 +31,21 @@ QLabel* ORGBPlugin::TabLabel() const
 {
     QString UpdateLabelTabString = "<html><table><tr><td width='30'><img src='";
     UpdateLabelTabString += ":/Update";
-    //if(IsDarkTheme()) UpdateLabelTabString += "_dark";
+    if(DarkTheme) UpdateLabelTabString += "_dark";
     UpdateLabelTabString += ".png' height='16' width='16'></td><td>Software</td></tr></table></html>";
 
     QLabel *UpdateTabLabel = new QLabel();
     UpdateTabLabel->setText(UpdateLabelTabString);
     UpdateTabLabel->setIndent(20);
-    /*if(IsDarkTheme())
+    if(DarkTheme)
     {
-        SoftwareTabLabel->setGeometry(0, 25, 200, 50);
+        UpdateTabLabel->setGeometry(0, 25, 200, 50);
     }
     else
-    {*/
+    {
         UpdateTabLabel->setGeometry(0, 0, 200, 25);
-    //}
+    }
     return UpdateTabLabel;
-}
-
-void SubSet(ResourceManager *NewRM)
-{
-    ORGBPlugin::RM = NewRM;
-}
-
-void ORGBPlugin::SetRM(ResourceManager *RM) const
-{
-    SubSet(RM);
 }
 
 std::string ORGBPlugin::PluginName() const
@@ -71,17 +63,14 @@ std::string ORGBPlugin::PluginLocal() const
     return "InfoTab";
 }
 
-QWidget* ORGBPlugin::CreateGUI(QWidget *Parent) const
+QWidget* ORGBPlugin::CreateGUI(QWidget *Parent, ResourceManager *NewRM, bool DarkTheme) const
 {
-    QWidget *ORGBExamplePage = new QWidget(Parent);
-    QLabel *ORGBExampleLabel = new QLabel(ORGBExamplePage);
+    ORGBPlugin::DarkTheme = DarkTheme;
+    ORGBPlugin::RM = NewRM;
 
-    QPushButton *ORGBExamplePushButton = new QPushButton(ORGBExamplePage);
-    qDebug() << ORGBExamplePushButton->objectName();
-    connect(ORGBExamplePushButton,SIGNAL(clicked()) ,this , SLOT(on_ExampleButton_clicked()));
+    OpenRGBUpdateInfoPage *UpdatePage = new OpenRGBUpdateInfoPage(Parent);
 
-    ORGBExampleLabel->setText("This is an example page added by plugins");
-    return ORGBExamplePage;
+    return UpdatePage;
 }
 
 /*-----------------------------------------------------*\
@@ -91,7 +80,6 @@ QWidget* ORGBPlugin::CreateGUI(QWidget *Parent) const
 | In the future having a patching process may be helpful|
 \*-----------------------------------------------------*/
 
-using namespace Ui;
 OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::OpenRGBUpdateInfoPageUi)
@@ -132,8 +120,10 @@ OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(QWidget *parent) :
         | Get prefered Branch/Fork from settings manager    |
         \*-------------------------------------------------*/
         json Update_Settings;
+        static SettingsManager *SM = ORGBPlugin::RM->GetSettingsManager();
+        Update_Settings = SM->GetSettings("Updates");
+        //Update_Settings = ORGBPlugin::RM->GetSettingsManager()->GetSettings("Updates");
 
-        Update_Settings = ORGBPlugin::RM->GetSettingsManager()->GetSettings("Updates");
         if (Update_Settings.contains("branch"))
         {
             OpenRGBUpdateInfoPage::CheckBranch.fromStdString(Update_Settings["branch"]);
@@ -153,7 +143,7 @@ void CreateMsgDialog(QString MSG)
     QLayout *MsgLayout = new QVBoxLayout(MsgDialog);
     MsgLayout->setAlignment(Qt::AlignCenter);
 
-    /*if (OpenRGBDialog2::IsDarkTheme())
+    if (ORGBPlugin::DarkTheme)
     {
         QPalette pal;
         pal.setColor(QPalette::WindowText, Qt::white);
@@ -161,7 +151,7 @@ void CreateMsgDialog(QString MSG)
         QFile darkTheme(":/windows_dark.qss");
         darkTheme.open(QFile::ReadOnly);
         MsgDialog->setStyleSheet(darkTheme.readAll());
-    }*/
+    }
 
     QLabel *MsgLabel = new QLabel();
     MsgLabel->setText(MSG);

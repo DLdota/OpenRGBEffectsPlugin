@@ -56,7 +56,7 @@ public:
     std::vector<NetworkClient*>&    GetClients();
     NetworkServer*                  GetServer();
 
-    SettingsManager*                GetSettingsManager();
+    virtual SettingsManager*        GetSettingsManager();
 
     void                            SetConfigurationDirectory(std::string directory);
 
@@ -87,7 +87,7 @@ private:
     /*-------------------------------------------------------------------------------------*\
     | Settings Manager                                                                      |
     \*-------------------------------------------------------------------------------------*/
-    SettingsManager*                            settings_manager;
+    const SettingsManager*                      settings_manager;
 
     /*-------------------------------------------------------------------------------------*\
     | RGBControllers                                                                        |

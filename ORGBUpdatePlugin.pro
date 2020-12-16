@@ -28,14 +28,12 @@ HEADERS +=                         \
     Dependencies/NetworkProtocol.h \
     Dependencies/net_port.h        \
     Dependencies/json.hpp          \
-    Dependencies/OpenRGBDialog2.h  \
 
 FORMS +=                           \
     ORGBUpdatePlugin.ui            \
 
 RESOURCES +=                       \
-    resources.qrc \
-    resources.qrc
+    resources.qrc                   \
 
 
 # Default rules for deployment.

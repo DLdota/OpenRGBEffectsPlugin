@@ -19,8 +19,7 @@ public:
     virtual std::string PluginDesc()            const = 0;
     virtual std::string PluginLocal()           const = 0;
 
-    virtual QWidget* CreateGUI(QWidget *Parent) const = 0;
-    virtual void SetRM(ResourceManager *RM)     const = 0;
+    virtual QWidget*    CreateGUI(QWidget *Parent, ResourceManager *RM, bool DarkTheme) const = 0;
 };
 
 Q_DECLARE_INTERFACE(ORGBPluginInterface, ORGBPluginInterface_IID)

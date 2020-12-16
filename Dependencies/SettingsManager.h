@@ -19,13 +19,13 @@ class SettingsManager
 {
 public:
     SettingsManager();
-    ~SettingsManager();
+    //~SettingsManager();
 
-    json    GetSettings(std::string settings_key);
-    void    SetSettings(std::string settings_key, json new_settings);
+    virtual json GetSettings(std::string settings_key);
+    virtual void SetSettings(std::string settings_key, json new_settings);
 
-    void    LoadSettings(std::string filename);
-    void    SaveSettings();
+    virtual void LoadSettings(std::string filename);
+    virtual void SaveSettings();
 
     
 private:
