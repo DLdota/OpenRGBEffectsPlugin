@@ -47,7 +47,7 @@ public:
     void RegisterRGBController(RGBController *rgb_controller);
 
     std::vector<RGBController*> & GetRGBControllers();
-    
+
     unsigned int GetDetectionPercent();
     const char*  GetDetectionString();
 
@@ -123,7 +123,7 @@ private:
     std::atomic<bool>                           detection_is_required;
     std::atomic<unsigned int>                   detection_percent;
     const char*                                 detection_string;
-    
+
     /*-------------------------------------------------------------------------------------*\
     | Device List Changed Callback                                                          |
     \*-------------------------------------------------------------------------------------*/

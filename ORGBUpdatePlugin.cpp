@@ -1,36 +1,7 @@
 #include "ORGBUpdatePlugin.h"
 #include "Dependencies/ResourceManager.h"
 
-std::string ORGBPlugin::PluginName() const
-{
-    return "Updates";
-}
-
-std::string ORGBPlugin::PluginDesc() const
-{
-    return "An Auto Updating plugin for OpenRGB";
-}
-
-std::string ORGBPlugin::PluginLocal() const
-{
-    return "InfoTab";
-}
-
-QWidget* ORGBPlugin::CreateGUI(QWidget *Parent, ResourceManager *RM) const
-{
-    QWidget *ORGBExamplePage = new QWidget(Parent);
-    QLabel *ORGBExampleLabel = new QLabel(ORGBExamplePage);
-
-    QPushButton *ORGBExamplePushButton = new QPushButton(ORGBExamplePage);
-    qDebug() << ORGBExamplePushButton->objectName();
-    connect(ORGBExamplePushButton,SIGNAL(clicked()) ,this , SLOT(on_ExampleButton_clicked()));
-
-    ORGBExampleLabel->setText("This is an example page added by plugins");
-    return ORGBExamplePage;
-}
-
 #include "ui_ORGBUpdatePlugin.h"
-#include "Dependencies/ResourceManager.h"
 #include "Dependencies/OpenRGBDialog2.h"
 #include <QDebug>
 
@@ -47,6 +18,71 @@ QWidget* ORGBPlugin::CreateGUI(QWidget *Parent, ResourceManager *RM) const
 #include <QSslSocket>
 #include <QtNetwork>
 #include <QUrl>
+
+
+bool ORGBPlugin::HasCustomIcon() const
+{
+    return true;
+}
+
+QLabel* ORGBPlugin::TabLabel() const
+{
+    QString UpdateLabelTabString = "<html><table><tr><td width='30'><img src='";
+    UpdateLabelTabString += ":/Update";
+    //if(IsDarkTheme()) UpdateLabelTabString += "_dark";
+    UpdateLabelTabString += ".png' height='16' width='16'></td><td>Software</td></tr></table></html>";
+
+    QLabel *UpdateTabLabel = new QLabel();
+    UpdateTabLabel->setText(UpdateLabelTabString);
+    UpdateTabLabel->setIndent(20);
+    /*if(IsDarkTheme())
+    {
+        SoftwareTabLabel->setGeometry(0, 25, 200, 50);
+    }
+    else
+    {*/
+        UpdateTabLabel->setGeometry(0, 0, 200, 25);
+    //}
+    return UpdateTabLabel;
+}
+
+void SubSet(ResourceManager *NewRM)
+{
+    ORGBPlugin::RM = NewRM;
+}
+
+void ORGBPlugin::SetRM(ResourceManager *RM) const
+{
+    SubSet(RM);
+}
+
+std::string ORGBPlugin::PluginName() const
+{
+    return "Updates";
+}
+
+std::string ORGBPlugin::PluginDesc() const
+{
+    return "An Auto Updating plugin for OpenRGB";
+}
+
+std::string ORGBPlugin::PluginLocal() const
+{
+    return "InfoTab";
+}
+
+QWidget* ORGBPlugin::CreateGUI(QWidget *Parent) const
+{
+    QWidget *ORGBExamplePage = new QWidget(Parent);
+    QLabel *ORGBExampleLabel = new QLabel(ORGBExamplePage);
+
+    QPushButton *ORGBExamplePushButton = new QPushButton(ORGBExamplePage);
+    qDebug() << ORGBExamplePushButton->objectName();
+    connect(ORGBExamplePushButton,SIGNAL(clicked()) ,this , SLOT(on_ExampleButton_clicked()));
+
+    ORGBExampleLabel->setText("This is an example page added by plugins");
+    return ORGBExamplePage;
+}
 
 /*-----------------------------------------------------*\
 | Updating is not a patching process                    |
@@ -97,7 +133,7 @@ OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(QWidget *parent) :
         \*-------------------------------------------------*/
         json Update_Settings;
 
-        Update_Settings = ResourceManager::get()->GetSettingsManager()->GetSettings("Updates");
+        Update_Settings = ORGBPlugin::RM->GetSettingsManager()->GetSettings("Updates");
         if (Update_Settings.contains("branch"))
         {
             OpenRGBUpdateInfoPage::CheckBranch.fromStdString(Update_Settings["branch"]);
@@ -117,7 +153,7 @@ void CreateMsgDialog(QString MSG)
     QLayout *MsgLayout = new QVBoxLayout(MsgDialog);
     MsgLayout->setAlignment(Qt::AlignCenter);
 
-    if (OpenRGBDialog2::IsDarkTheme())
+    /*if (OpenRGBDialog2::IsDarkTheme())
     {
         QPalette pal;
         pal.setColor(QPalette::WindowText, Qt::white);
@@ -125,7 +161,7 @@ void CreateMsgDialog(QString MSG)
         QFile darkTheme(":/windows_dark.qss");
         darkTheme.open(QFile::ReadOnly);
         MsgDialog->setStyleSheet(darkTheme.readAll());
-    }
+    }*/
 
     QLabel *MsgLabel = new QLabel();
     MsgLabel->setText(MSG);
@@ -534,7 +570,7 @@ void OpenRGBUpdateInfoPage::on_CheckButton_clicked()
     {
         UpdateProgressBar(true,"Adding info to table",70);
     }
-    ui->GitCommitInfoTable->setRowCount(Parsed.size());
+    ui->GitCommitInfoTable->setRowCount(int(Parsed.size()));
 
     for (int i = 0; i < int(Parsed.size()); i++)
     {

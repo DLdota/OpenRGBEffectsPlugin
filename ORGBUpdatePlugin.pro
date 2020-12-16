@@ -33,6 +33,11 @@ HEADERS +=                         \
 FORMS +=                           \
     ORGBUpdatePlugin.ui            \
 
+RESOURCES +=                       \
+    resources.qrc \
+    resources.qrc
+
+
 # Default rules for deployment.
 unix {
     target.path = /usr/lib

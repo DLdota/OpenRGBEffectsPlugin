@@ -24,27 +24,26 @@ class ORGBPlugin : public QObject, public ORGBPluginInterface
 public:
     ~ORGBPlugin() override {}
 
+    bool        HasCustomIcon() const override;
+    QLabel*     TabLabel()      const override;
+
     std::string PluginName() const override;
     std::string PluginDesc()  const override;
     std::string PluginLocal() const override;
 
-    QWidget* CreateGUI(QWidget *Parent, ResourceManager *RM = nullptr) const override;
+    QWidget* CreateGUI(QWidget *Parent) const override;
+    void SetRM(ResourceManager *RM) const override;
 
+    static ResourceManager *RM;
 };
 
-namespace Ui {
-class OpenRGBUpdateInfoPage;
-}
-
-class Ui::OpenRGBUpdateInfoPage : public QFrame
+class OpenRGBUpdateInfoPage : public QFrame
 {
     Q_OBJECT
 
 public:
     explicit OpenRGBUpdateInfoPage(QWidget *parent = nullptr);
     ~OpenRGBUpdateInfoPage();
-
-
 
 private slots:
     void on_CheckButton_clicked();

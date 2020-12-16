@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Update.png</file>
+        <file>Update_dark.png</file>
+    </qresource>
+</RCC>
