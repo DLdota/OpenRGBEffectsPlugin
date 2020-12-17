@@ -17,6 +17,8 @@
 #include <QLayout>
 #include <QDialog>
 #include <QLabel>
+#include <QFrame>
+#include <QWidget>
 
 #include <QNetworkRequest>
 #include <QWebEnginePage>
@@ -31,7 +33,7 @@ class OpenRGBUpdateInfoPage : public QFrame
     Q_OBJECT
 
 public:
-    OpenRGBUpdateInfoPage(QWidget *Parent = nullptr);
+    OpenRGBUpdateInfoPage(std::vector<std::string> UpdateVars, QWidget *Parent = nullptr);
     ~OpenRGBUpdateInfoPage();
 private slots:
     void on_CheckButton_clicked();
@@ -50,9 +52,8 @@ private:
     /*-------------------------------------------------*\
     | Defaults to primary master if it hasn't been set  |
     \*-------------------------------------------------*/
-
-    QString CheckBranch = "master";
-    QString Fork        = "CalcProgrammer1";
+    QString CheckBranch;
+    QString Fork;
 
     QString CommitLink;
     std::vector<QStringList> Parsed;

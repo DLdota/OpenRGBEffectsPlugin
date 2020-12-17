@@ -1,4 +1,5 @@
 #include "ORGBUpdatePlugin.h"
+#include "OpenRGBUpdateTab.h"
 #include "Dependencies/ResourceManager.h"
 
 bool ORGBPlugin::DarkTheme = false;
@@ -50,7 +51,22 @@ QWidget* ORGBPlugin::CreateGUI(QWidget *Parent, ResourceManager *RM, bool DarkTh
 
     ORGBPlugin::DarkTheme = DarkTheme;
 
-    UpdatePage = new OpenRGBUpdateInfoPage(Parent);
+    json UpdateSettings;
+    UpdateSettings = RM->GetSettingsManager()->GetSettings("Updates");
+    /*-------------------------------------------------*\
+    | Get prefered Branch/Fork from settings manager    |
+    \*-------------------------------------------------*/
+    std::vector<std::string> UpdateVars = {"master","CalcProgrammer1"};
+    if (UpdateSettings.contains("branch"))
+    {
+        UpdateVars[0] = UpdateSettings["branch"];
+    }
+    if (UpdateSettings.contains("fork"))
+    {
+        UpdateVars[1] = UpdateSettings["fork"];
+    }
+
+    UpdatePage = new OpenRGBUpdateInfoPage(UpdateVars,Parent);
 
     return UpdatePage;
 }

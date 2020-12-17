@@ -21,11 +21,11 @@ public:
     SettingsManager();
     ~SettingsManager();
 
-    virtual json GetSettings(std::string settings_key);
-    virtual void SetSettings(std::string settings_key, json new_settings);
+    virtual json    GetSettings(std::string settings_key);
+    virtual void    SetSettings(std::string settings_key, json new_settings);
 
-    virtual void LoadSettings(std::string filename);
-    virtual void SaveSettings();
+    virtual void    LoadSettings(std::string filename);
+    virtual void    SaveSettings();
 
     
 private:

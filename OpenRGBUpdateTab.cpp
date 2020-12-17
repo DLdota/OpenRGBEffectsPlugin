@@ -8,7 +8,7 @@
 | In the future having a patching process may be helpful|
 \*-----------------------------------------------------*/
 
-OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(QWidget *Parent) :
+OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(std::vector<std::string> UpdateVars, QWidget *Parent) :
     QFrame(Parent),
     ui(new Ui::OpenRGBUpdateInfoPageUi)
     {
@@ -43,20 +43,8 @@ OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(QWidget *Parent) :
         {
             ui->GitCommitInfoTable->setColumnWidth(i, HeaderWidth[i].toInt());
         }
-
-        json UpdateSettings;
-        if (UpdateSettings.contains("branch"))
-        {
-            OpenRGBUpdateInfoPage::CheckBranch = QString().fromStdString(UpdateSettings["branch"]);
-        }
-        if (UpdateSettings.contains("fork"))
-        {
-            OpenRGBUpdateInfoPage::Fork = QString().fromStdString(UpdateSettings["fork"]);
-        }
-
-        /*-------------------------------------------------*\
-        | Get prefered Branch/Fork from settings manager    |
-        \*-------------------------------------------------*/
+        OpenRGBUpdateInfoPage::CheckBranch = QString().fromStdString(UpdateVars[0]);
+        OpenRGBUpdateInfoPage::Fork = QString().fromStdString(UpdateVars[1]);
     }
 
 OpenRGBUpdateInfoPage::~OpenRGBUpdateInfoPage()
