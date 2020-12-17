@@ -16,26 +16,15 @@ CONFIG += c++11
 
 SOURCES +=                                      \
     ORGBUpdatePlugin.cpp                        \
-    Dependencies/ResourceManager.cpp            \
-    Dependencies/RGBController.cpp              \
-    Dependencies/RGBController_Network.cpp      \
-    Dependencies/NetworkClient.cpp              \
-    Dependencies/NetworkServer.cpp              \
-    Dependencies/NetworkProtocol.cpp            \
-    Dependencies/SettingsManager.cpp            \
-    Dependencies/net_port.cpp                   \
+    OpenRGBUpdateTab.cpp
 
 HEADERS +=                                      \
     ORGBPluginInterface.h                       \
     ORGBUpdatePlugin.h                          \
     Dependencies/ResourceManager.h              \
-    Dependencies/RGBController.h                \
-    Dependencies/RGBController_Network.h        \
-    Dependencies/NetworkServer.h                \
-    Dependencies/NetworkProtocol.h              \
     Dependencies/SettingsManager.h              \
-    Dependencies/net_port.h                     \
     Dependencies/json.hpp                       \
+    OpenRGBUpdateTab.h
 
 FORMS +=                                        \
     ORGBUpdatePlugin.ui                         \
