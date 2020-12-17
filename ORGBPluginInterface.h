@@ -12,14 +12,14 @@ class ORGBPluginInterface
 public:
     virtual ~ORGBPluginInterface() {}
 
-    virtual bool        HasCustomIcon()         const = 0;
-    virtual QLabel*     TabLabel()              const = 0;
+    virtual bool        HasCustomIcon() = 0;
+    virtual QLabel*     TabLabel() = 0;
 
-    virtual std::string PluginName()            const = 0;
-    virtual std::string PluginDesc()            const = 0;
-    virtual std::string PluginLocal()           const = 0;
+    virtual std::string PluginName() = 0;
+    virtual std::string PluginDesc() = 0;
+    virtual std::string PluginLocal() = 0;
 
-    virtual QWidget*    CreateGUI(QWidget *Parent, ResourceManager *RM, bool DarkTheme) const = 0;
+    virtual QWidget*    CreateGUI(QWidget *Parent, ResourceManager *RM, bool DarkTheme) = 0;
 };
 
 Q_DECLARE_INTERFACE(ORGBPluginInterface, ORGBPluginInterface_IID)

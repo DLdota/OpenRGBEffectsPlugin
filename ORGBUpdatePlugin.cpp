@@ -22,18 +22,12 @@ ResourceManager *ORGBPlugin::RM = nullptr;
 
 bool ORGBPlugin::DarkTheme = false;
 
-bool ORGBPlugin::HasCustomIcon() const
+bool ORGBPlugin::HasCustomIcon()
 {
     return true;
 }
 
-ResourceManager* ORGBPlugin::GetRM()
-{
-    return ORGBPlugin::RM;
-}
-
-
-QLabel* ORGBPlugin::TabLabel() const
+QLabel* ORGBPlugin::TabLabel()
 {
     QString UpdateLabelTabString = "<html><table><tr><td width='30'><img src='";
     UpdateLabelTabString += ":/Update";
@@ -54,22 +48,22 @@ QLabel* ORGBPlugin::TabLabel() const
     return UpdateTabLabel;
 }
 
-std::string ORGBPlugin::PluginName() const
+std::string ORGBPlugin::PluginName()
 {
     return "Updates";
 }
 
-std::string ORGBPlugin::PluginDesc() const
+std::string ORGBPlugin::PluginDesc()
 {
     return "An Auto Updating plugin for OpenRGB";
 }
 
-std::string ORGBPlugin::PluginLocal() const
+std::string ORGBPlugin::PluginLocal()
 {
     return "InfoTab";
 }
 
-QWidget* ORGBPlugin::CreateGUI(QWidget *Parent, ResourceManager *NewRM, bool DarkTheme) const
+QWidget* ORGBPlugin::CreateGUI(QWidget *Parent, ResourceManager *NewRM, bool DarkTheme)
 {
     OpenRGBUpdateInfoPage *UpdatePage = NULL;
 
@@ -127,15 +121,15 @@ OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(QWidget *Parent) :
         /*-------------------------------------------------*\
         | Get prefered Branch/Fork from settings manager    |
         \*-------------------------------------------------*/
-        /*ResourceManager *LocalRM = nullptr;
-        LocalRM = ORGBPlugin::GetRM();
+        ResourceManager *LocalRM = nullptr;
+        //LocalRM = ORGBPlugin::GetRM();
         if (LocalRM == nullptr)
         {
             qDebug() << "ResourceManager was missing?";
         }
         else
         {
-            json Update_Settings = LocalRM->get()->GetSettingsManager()->GetSettings("Updates");
+            static json Update_Settings = LocalRM->GetSettingsManager()->GetSettings("Updates");
             if (Update_Settings.contains("branch"))
         {
             OpenRGBUpdateInfoPage::CheckBranch.fromStdString(Update_Settings["branch"]);
@@ -144,8 +138,8 @@ OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(QWidget *Parent) :
         {
             OpenRGBUpdateInfoPage::Fork.fromStdString(Update_Settings["fork"]);
         }
-        Disabled for the time being until I (Or someone else) can get this working
-        }*/
+        //Disabled for the time being until I (Or someone else) can get this working
+        }
     }
 
 void CreateMsgDialog(QString MSG)

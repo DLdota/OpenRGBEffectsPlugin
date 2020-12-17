@@ -5,7 +5,6 @@
 #include <QFrame>
 #include "ui_ORGBUpdatePlugin.h"
 
-
 #include <QObject>
 #include <QString>
 #include <QtPlugin>
@@ -25,15 +24,14 @@ class ORGBPlugin : public QObject, public ORGBPluginInterface
 public:
     ~ORGBPlugin() override {}
 
-    bool        HasCustomIcon() const override;
-    QLabel*     TabLabel()      const override;
+    bool        HasCustomIcon() override;
+    QLabel*     TabLabel() override;
 
-    std::string PluginName() const override;
-    std::string PluginDesc()  const override;
-    std::string PluginLocal() const override;
+    std::string PluginName() override;
+    std::string PluginDesc() override;
+    std::string PluginLocal() override;
 
-    QWidget *CreateGUI(QWidget *Parent, ResourceManager *RM, bool DarkTheme) const override;
-    static ResourceManager* GetRM();
+    QWidget *CreateGUI(QWidget *Parent, ResourceManager *RM, bool DarkTheme) override;
 
     static bool DarkTheme;
     static ResourceManager *RM;

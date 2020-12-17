@@ -14,26 +14,34 @@ CONFIG += c++11
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES +=                         \
-    ORGBUpdatePlugin.cpp           \
+SOURCES +=                                      \
+    ORGBUpdatePlugin.cpp                        \
+    Dependencies/ResourceManager.cpp            \
+    Dependencies/RGBController.cpp              \
+    Dependencies/RGBController_Network.cpp      \
+    Dependencies/NetworkClient.cpp              \
+    Dependencies/NetworkServer.cpp              \
+    Dependencies/NetworkProtocol.cpp            \
+    Dependencies/SettingsManager.cpp            \
+    Dependencies/net_port.cpp                   \
 
-HEADERS +=                         \
-    ORGBPluginInterface.h          \
-    ORGBUpdatePlugin.h             \
-    Dependencies/ResourceManager.h \
-    Dependencies/RGBController.h   \
-    Dependencies/NetworkClient.h   \
-    Dependencies/NetworkServer.h   \
-    Dependencies/SettingsManager.h \
-    Dependencies/NetworkProtocol.h \
-    Dependencies/net_port.h        \
-    Dependencies/json.hpp          \
+HEADERS +=                                      \
+    ORGBPluginInterface.h                       \
+    ORGBUpdatePlugin.h                          \
+    Dependencies/ResourceManager.h              \
+    Dependencies/RGBController.h                \
+    Dependencies/RGBController_Network.h        \
+    Dependencies/NetworkServer.h                \
+    Dependencies/NetworkProtocol.h              \
+    Dependencies/SettingsManager.h              \
+    Dependencies/net_port.h                     \
+    Dependencies/json.hpp                       \
 
-FORMS +=                           \
-    ORGBUpdatePlugin.ui            \
+FORMS +=                                        \
+    ORGBUpdatePlugin.ui                         \
 
-RESOURCES +=                       \
-    resources.qrc                   \
+RESOURCES +=                                    \
+    resources.qrc                               \
 
 
 # Default rules for deployment.
