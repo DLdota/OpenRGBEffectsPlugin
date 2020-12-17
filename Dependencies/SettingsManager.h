@@ -19,7 +19,7 @@ class SettingsManager
 {
 public:
     SettingsManager();
-    //~SettingsManager();
+    ~SettingsManager();
 
     virtual json GetSettings(std::string settings_key);
     virtual void SetSettings(std::string settings_key, json new_settings);

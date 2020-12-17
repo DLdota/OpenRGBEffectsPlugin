@@ -14,6 +14,7 @@
 #include "QPushButton"
 #include "QDialog"
 #include "QAction"
+#include "Dependencies/json.hpp"
 
 class ORGBPlugin : public QObject, public ORGBPluginInterface
 {
@@ -32,6 +33,7 @@ public:
     std::string PluginLocal() const override;
 
     QWidget *CreateGUI(QWidget *Parent, ResourceManager *RM, bool DarkTheme) const override;
+    static ResourceManager* GetRM();
 
     static bool DarkTheme;
     static ResourceManager *RM;
@@ -42,7 +44,7 @@ class OpenRGBUpdateInfoPage : public QFrame
     Q_OBJECT
 
 public:
-    OpenRGBUpdateInfoPage(QWidget *parent = nullptr);
+    OpenRGBUpdateInfoPage(QWidget *Parent = nullptr);
 
 private slots:
     void on_CheckButton_clicked();

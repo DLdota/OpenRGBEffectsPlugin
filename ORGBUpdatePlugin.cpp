@@ -27,6 +27,12 @@ bool ORGBPlugin::HasCustomIcon() const
     return true;
 }
 
+ResourceManager* ORGBPlugin::GetRM()
+{
+    return ORGBPlugin::RM;
+}
+
+
 QLabel* ORGBPlugin::TabLabel() const
 {
     QString UpdateLabelTabString = "<html><table><tr><td width='30'><img src='";
@@ -65,10 +71,12 @@ std::string ORGBPlugin::PluginLocal() const
 
 QWidget* ORGBPlugin::CreateGUI(QWidget *Parent, ResourceManager *NewRM, bool DarkTheme) const
 {
+    OpenRGBUpdateInfoPage *UpdatePage = NULL;
+
     ORGBPlugin::DarkTheme = DarkTheme;
     ORGBPlugin::RM = NewRM;
 
-    OpenRGBUpdateInfoPage *UpdatePage = new OpenRGBUpdateInfoPage(Parent);
+    UpdatePage = new OpenRGBUpdateInfoPage(Parent);
 
     return UpdatePage;
 }
@@ -80,8 +88,8 @@ QWidget* ORGBPlugin::CreateGUI(QWidget *Parent, ResourceManager *NewRM, bool Dar
 | In the future having a patching process may be helpful|
 \*-----------------------------------------------------*/
 
-OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(QWidget *parent) :
-    QFrame(parent),
+OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(QWidget *Parent) :
+    QFrame(Parent),
     ui(new Ui::OpenRGBUpdateInfoPageUi)
     {
         ui->setupUi(this);
@@ -119,19 +127,25 @@ OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(QWidget *parent) :
         /*-------------------------------------------------*\
         | Get prefered Branch/Fork from settings manager    |
         \*-------------------------------------------------*/
-        json Update_Settings;
-        static SettingsManager *SM = ORGBPlugin::RM->GetSettingsManager();
-        Update_Settings = SM->GetSettings("Updates");
-        //Update_Settings = ORGBPlugin::RM->GetSettingsManager()->GetSettings("Updates");
-
-        if (Update_Settings.contains("branch"))
+        /*ResourceManager *LocalRM = nullptr;
+        LocalRM = ORGBPlugin::GetRM();
+        if (LocalRM == nullptr)
+        {
+            qDebug() << "ResourceManager was missing?";
+        }
+        else
+        {
+            json Update_Settings = LocalRM->get()->GetSettingsManager()->GetSettings("Updates");
+            if (Update_Settings.contains("branch"))
         {
             OpenRGBUpdateInfoPage::CheckBranch.fromStdString(Update_Settings["branch"]);
         }
-        if (Update_Settings.contains("fork"))
+            if (Update_Settings.contains("fork"))
         {
             OpenRGBUpdateInfoPage::Fork.fromStdString(Update_Settings["fork"]);
         }
+        Disabled for the time being until I (Or someone else) can get this working
+        }*/
     }
 
 void CreateMsgDialog(QString MSG)
