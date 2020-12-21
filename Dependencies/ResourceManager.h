@@ -56,7 +56,7 @@ public:
     static ResourceManager *get();
     
     ResourceManager();
-    virtual ~ResourceManager();
+    virtual ~ResourceManager() {};
     
     virtual void RegisterI2CBus(i2c_smbus_interface *);
     virtual std::vector<i2c_smbus_interface*> & GetI2CBusses();

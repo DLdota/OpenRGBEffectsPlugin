@@ -18,14 +18,16 @@ OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(std::vector<std::string> UpdateVars
         ui->StatusMessage->hide();
 
         ui->GitCommitInfoTable->setColumnCount(5);
-        QStringList HeaderNameList = {
+        QStringList HeaderNameList =
+        {
             "Commit Date",
             "Commit Name",
             "Commit Comments",
             "Commit ID",
             "Build Status",
         };
-        QStringList HeaderWidth = {
+        QStringList HeaderWidth =
+        {
             "90",
             "350",
             "120",

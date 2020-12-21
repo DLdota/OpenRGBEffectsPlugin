@@ -22,7 +22,6 @@ HEADERS +=                                      \
     Dependencies/SettingsManager.h              \
     Dependencies/i2c_smbus/i2c_smbus.h          \
     Dependencies/RGBController/RGBController.h  \
-    Dependencies/RGBControllerRGBCOntroller_Network.h \
     Dependencies/json.hpp                       \
     Dependencies/NetworkClient.h                \
     Dependencies/NetworkProtocol.h              \
