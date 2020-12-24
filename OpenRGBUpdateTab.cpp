@@ -316,7 +316,6 @@ void OpenRGBUpdateInfoPage::on_UpdateButton_clicked()
     {
         if (JobList[i].contains(PreferedPlatform))
         {
-            qDebug() << "Found Prefered";
             FoundPrefered = true;
             /*---------------------------------------------------------------------------------------------------------------------------------------------------------------*\
             | There are some inconsistancies when it comes to checks due to needing to split at a specific instance of the substring rather than keep one section of a split  |

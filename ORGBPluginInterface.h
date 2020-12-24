@@ -4,15 +4,6 @@
 #include <QLabel>
 #include "Dependencies/ResourceManager.h"
 
-struct PluginDataNeeded {
-    std::vector<int>                        Needed;
-
-    bool                                    DarkTheme;
-    std::vector<std::vector<std::string>>   Settings;
-    std::vector<RGBController *>            Devices;
-    std::vector<NetworkClient *>            Clients;
-};
-
 #define ORGBPluginInterface_IID "com.ORGBPluginInterface"
 
 struct PluginInfo
