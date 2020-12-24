@@ -13,26 +13,32 @@ struct PluginDataNeeded {
     std::vector<NetworkClient *>            Clients;
 };
 
-
-class QString;
 #define ORGBPluginInterface_IID "com.ORGBPluginInterface"
+
+struct PluginInfo
+{
+    std::string                 PluginName;
+    std::string                 PluginDesc;
+    std::string                 PluginLoca;
+
+    bool                        HasCustom;
+    QLabel                      *PluginLabel;
+
+    std::string                 SettingName;
+};
 
 class ORGBPluginInterface
 {
 public:
-    virtual ~ORGBPluginInterface() {}
+    virtual                 ~ORGBPluginInterface() {}
 
-    virtual void        DefineNeeded() = 0;
-    PluginDataNeeded    NeededInfo;
+    PluginInfo              PInfo;
 
-    virtual bool        HasCustomIcon() = 0;
-    virtual QLabel*     TabLabel() = 0;
+    virtual PluginInfo      DefineNeeded() = 0;
 
-    virtual std::string PluginName() = 0;
-    virtual std::string PluginDesc() = 0;
-    virtual std::string PluginLocal() = 0;
+    virtual PluginInfo      init(json Settings , bool DarkTheme) = 0;
 
-    virtual QWidget*    CreateGUI(QWidget *Parent) = 0;
+    virtual QWidget         *CreateGUI(QWidget *Parent) = 0;
 };
 
 Q_DECLARE_INTERFACE(ORGBPluginInterface, ORGBPluginInterface_IID)

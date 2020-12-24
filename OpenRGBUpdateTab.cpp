@@ -8,7 +8,7 @@
 | In the future having a patching process may be helpful|
 \*-----------------------------------------------------*/
 
-OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(std::vector<std::string> UpdateVars, QWidget *Parent) :
+OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(QWidget *Parent) :
     QFrame(Parent),
     ui(new Ui::OpenRGBUpdateInfoPageUi)
     {
@@ -45,8 +45,8 @@ OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(std::vector<std::string> UpdateVars
         {
             ui->GitCommitInfoTable->setColumnWidth(i, HeaderWidth[i].toInt());
         }
-        OpenRGBUpdateInfoPage::CheckBranch = QString().fromStdString(UpdateVars[0]);
-        OpenRGBUpdateInfoPage::Fork = QString().fromStdString(UpdateVars[1]);
+        OpenRGBUpdateInfoPage::CheckBranch = QString().fromStdString(ORGBPlugin::branch);
+        OpenRGBUpdateInfoPage::Fork = QString().fromStdString(ORGBPlugin::fork);
     }
 
 OpenRGBUpdateInfoPage::~OpenRGBUpdateInfoPage()

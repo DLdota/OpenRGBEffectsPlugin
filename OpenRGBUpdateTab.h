@@ -33,7 +33,7 @@ class OpenRGBUpdateInfoPage : public QFrame
     Q_OBJECT
 
 public:
-    OpenRGBUpdateInfoPage(std::vector<std::string> UpdateVars, QWidget *Parent = nullptr);
+    OpenRGBUpdateInfoPage(QWidget *Parent = nullptr);
     ~OpenRGBUpdateInfoPage();
 private slots:
     void on_CheckButton_clicked();

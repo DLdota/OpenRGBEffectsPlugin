@@ -2,20 +2,11 @@
 #include "OpenRGBUpdateTab.h"
 #include "Dependencies/ResourceManager.h"
 
-bool ORGBPlugin::HasCustomIcon()
-{
-    return true;
-}
+std::string ORGBPlugin::fork      = "CalcProgrammer1";
+std::string ORGBPlugin::branch    = "master";
+bool        ORGBPlugin::DarkTheme = false;
 
-bool ORGBPlugin::DarkTheme = false;
-
-void ORGBPlugin::DefineNeeded()
-{
-    ORGBPlugin::NeededInfo.Needed   = {1,2};
-    ORGBPlugin::NeededInfo.Settings = {{"Updates", "branch","fork"}};
-}
-
-QLabel* ORGBPlugin::TabLabel()
+QLabel* TabLabel()
 {
     QString UpdateLabelTabString = "<html><table><tr><td width='30'><img src='";
     UpdateLabelTabString += ":/Update";
@@ -36,39 +27,43 @@ QLabel* ORGBPlugin::TabLabel()
     return UpdateTabLabel;
 }
 
-std::string ORGBPlugin::PluginName()
+PluginInfo ORGBPlugin::DefineNeeded()
 {
-    return "Updates";
+    ORGBPlugin::PInfo.PluginName  = "Updates";
+    ORGBPlugin::PInfo.PluginDesc  = "A Plugin that bring auto updating to OpenRGB";
+    ORGBPlugin::PInfo.PluginLoca  = "InfoTab";
+
+    ORGBPlugin::PInfo.HasCustom   = true;
+
+    ORGBPlugin::PInfo.SettingName = "Updates";
+
+    return ORGBPlugin::PInfo;
 }
 
-std::string ORGBPlugin::PluginDesc()
+PluginInfo ORGBPlugin::init(json Settings , bool Dt)
 {
-    return "An Auto Updating plugin for OpenRGB";
-}
+    if (Settings.contains("branch"))
+    {
+        ORGBPlugin::branch = Settings["branch"];
+    }
+    if (Settings.contains("fork"))
+    {
+        ORGBPlugin::fork = Settings["fork"];
+    }
+    ORGBPlugin::DarkTheme = Dt;
 
-std::string ORGBPlugin::PluginLocal()
-{
-    return "InfoTab";
+    ORGBPlugin::PInfo.PluginLabel = TabLabel();
+
+    return ORGBPlugin::PInfo;
 }
 
 QWidget* ORGBPlugin::CreateGUI(QWidget *Parent)
 {
     OpenRGBUpdateInfoPage *UpdatePage = NULL;
-    ORGBPlugin::DarkTheme = NeededInfo.DarkTheme;
     /*-------------------------------------------------*\
     | Get prefered Branch/Fork from settings manager    |
     \*-------------------------------------------------*/
-    std::vector<std::string> UpdateVars = {"master","CalcProgrammer1"};
-    if ((ORGBPlugin::NeededInfo.Settings[0][0] != "NoSettingFound") && (ORGBPlugin::NeededInfo.Settings[0][0] != "Updates"))
-    {
-        UpdateVars[0] = ORGBPlugin::NeededInfo.Settings[0][0];
-    }
-    if ((ORGBPlugin::NeededInfo.Settings[0][1] != "NoSettingFound") && (ORGBPlugin::NeededInfo.Settings[0][1] != "branch"))
-    {
-        UpdateVars[1] = ORGBPlugin::NeededInfo.Settings[0][1];
-    }
-    qDebug() << QString().fromStdString(UpdateVars[0] + " " + UpdateVars[1]);
-    UpdatePage = new OpenRGBUpdateInfoPage(UpdateVars,Parent);
+    UpdatePage = new OpenRGBUpdateInfoPage(Parent);
 
     return UpdatePage;
 }
