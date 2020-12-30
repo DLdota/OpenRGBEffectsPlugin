@@ -1,0 +1,11 @@
+*.pro.user*
+*.o
+ui_*
+moc_*
+qrc_*
+OpenRGB
+openrgb
+Makefile
+OpenRGB-x86_64.AppImage
+.qmake.stash
+.vscode

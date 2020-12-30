@@ -25,7 +25,7 @@ public:
 
     PluginInfo      PInfo;
 
-    PluginInfo      init(json Settings , bool DarkTheme) override;
+    PluginInfo      init(json Settings , bool DarkTheme, IResourceManager *RM) override;
 
     QWidget         *CreateGUI(QWidget *Parent) override;
 

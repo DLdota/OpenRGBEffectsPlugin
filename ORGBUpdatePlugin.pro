@@ -12,13 +12,14 @@ CONFIG += c++11
 
 SOURCES +=                                      \
     ORGBUpdatePlugin.cpp                        \
-    OpenRGBUpdateTab.cpp
+    OpenRGBUpdateTab.cpp                        \
 
 HEADERS +=                                      \
     ORGBPluginInterface.h                       \
     ORGBUpdatePlugin.h                          \
     OpenRGBUpdateTab.h                          \
     Dependencies/ResourceManager.h              \
+    Dependencies/IResourceManager.h             \
     Dependencies/SettingsManager.h              \
     Dependencies/i2c_smbus/i2c_smbus.h          \
     Dependencies/RGBController/RGBController.h  \
@@ -35,6 +36,40 @@ FORMS +=                                        \
 RESOURCES +=                                    \
     resources.qrc                               \
 
+win32:INCLUDEPATH += openssl
+
+win32:contains(QMAKE_TARGET.arch, x86_64) {
+    CONFIG += static                                                                            \
+    LIBS +=                                                                                     \
+        -L"$$PWD/dependencies/openssl/x64/" -llibcrypto                                         \
+        -L"$$PWD/dependencies/openssl/x64/" -llibssl                                            \
+}
+
+win32:contains(QMAKE_TARGET.arch, x86) {
+    CONFIG += static                                                                            \
+    LIBS +=                                                                                     \
+        -L"$$PWD/dependencies/openssl/x86/" -llibcrypto                                         \
+        -L"$$PWD/dependencies/openssl/x86/" -llibssl                                            \
+}
+
+#win32:contains(QMAKE_TARGET.arch, x86_64) {
+#    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/dependencies/openssl/x64/libssl-1_1-x64.dll       )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
+#    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/dependencies/openssl/x64/libcrypto-1_1-x64.dll    )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
+#    first.depends = $(first) copydata
+#    export(first.depends)
+#    export(copydata.commands)
+#    QMAKE_EXTRA_TARGETS += first copydata
+#}
+
+#win32:contains(QMAKE_TARGET.arch, x86) {
+#    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/dependencies/openssl/x86/libssl-1_1.dll           )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
+#    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/dependencies/openssl/x86/libcrypto-1_1.dll        )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
+#
+#    first.depends = $(first) copydata
+#    export(first.depends)
+#    export(copydata.commands)
+#    QMAKE_EXTRA_TARGETS += first copydata
+#}
 
 # Default rules for deployment.
 unix {

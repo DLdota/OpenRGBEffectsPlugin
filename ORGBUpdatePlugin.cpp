@@ -40,7 +40,7 @@ PluginInfo ORGBPlugin::DefineNeeded()
     return ORGBPlugin::PInfo;
 }
 
-PluginInfo ORGBPlugin::init(json Settings , bool Dt)
+PluginInfo ORGBPlugin::init(json Settings , bool Dt, IResourceManager *RM)
 {
     if (Settings.contains("branch"))
     {

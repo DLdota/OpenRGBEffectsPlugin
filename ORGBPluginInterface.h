@@ -27,7 +27,7 @@ public:
 
     virtual PluginInfo      DefineNeeded() = 0;
 
-    virtual PluginInfo      init(json Settings , bool DarkTheme) = 0;
+    virtual PluginInfo      init(json Settings , bool DarkTheme, IResourceManager *RM) = 0;
 
     virtual QWidget         *CreateGUI(QWidget *Parent) = 0;
 };

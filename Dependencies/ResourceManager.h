@@ -23,6 +23,7 @@
 #include "ProfileManager.h"
 #include "Dependencies/RGBController/RGBController.h"
 #include "SettingsManager.h"
+#include "IResourceManager.h"
 
 #define HID_INTERFACE_ANY   -1
 #define HID_USAGE_ANY       -1
@@ -41,7 +42,7 @@ typedef struct
     std::string                 name;
     HIDDeviceDetectorFunction   function;
     unsigned int                address;
-    int                         interface_no;
+    int                         Interface;
     int                         usage_page;
     int                         usage;
 } HIDDeviceDetectorBlock;
@@ -50,73 +51,73 @@ typedef void (*DeviceListChangeCallback)(void *);
 typedef void (*DetectionProgressCallback)(void *);
 typedef void (*I2CBusListChangeCallback)(void *);
 
-class ResourceManager
-{
-public:
+class ResourceManager:
+public IResourceManager {
+    public:
     static ResourceManager *get();
-    
-    ResourceManager();
-    virtual ~ResourceManager() {};
-    
-    virtual void RegisterI2CBus(i2c_smbus_interface *);
-    virtual std::vector<i2c_smbus_interface*> & GetI2CBusses();
-    
-    virtual void RegisterRGBController(RGBController *rgb_controller);
 
-    virtual std::vector<RGBController*> & GetRGBControllers();
-    
-    virtual void RegisterI2CBusDetector         (I2CBusDetectorFunction     detector);
-    virtual void RegisterDeviceDetector         (std::string name, DeviceDetectorFunction     detector);
-    virtual void RegisterI2CDeviceDetector      (std::string name, I2CDeviceDetectorFunction  detector);
-    virtual void RegisterHIDDeviceDetector      (std::string name,
+    ResourceManager();
+    ~ResourceManager();
+
+    void RegisterI2CBus(i2c_smbus_interface *);
+    std::vector<i2c_smbus_interface*> & GetI2CBusses();
+
+    void RegisterRGBController(RGBController *rgb_controller);
+
+    std::vector<RGBController*> & GetRGBControllers();
+
+    void RegisterI2CBusDetector         (I2CBusDetectorFunction     detector);
+    void RegisterDeviceDetector         (std::string name, DeviceDetectorFunction     detector);
+    void RegisterI2CDeviceDetector      (std::string name, I2CDeviceDetectorFunction  detector);
+    void RegisterHIDDeviceDetector      (std::string name,
                                          HIDDeviceDetectorFunction  detector,
                                          uint16_t vid,
                                          uint16_t pid,
-                                         int interface_no = HID_INTERFACE_ANY,
-                                         int usage_page   = HID_USAGE_PAGE_ANY,
-                                         int usage        = HID_USAGE_ANY);
-    
-    virtual void RegisterDeviceListChangeCallback(DeviceListChangeCallback new_callback, void * new_callback_arg);
-    virtual void RegisterDetectionProgressCallback(DetectionProgressCallback new_callback, void * new_callback_arg);
-    virtual void RegisterI2CBusListChangeCallback(I2CBusListChangeCallback new_callback, void * new_callback_arg);
+                                         int Interface  = HID_INTERFACE_ANY,
+                                         int usage_page = HID_USAGE_PAGE_ANY,
+                                         int usage      = HID_USAGE_ANY);
 
-    virtual unsigned int GetDetectionPercent();
-    virtual const char*  GetDetectionString();
+    void RegisterDeviceListChangeCallback(DeviceListChangeCallback new_callback, void * new_callback_arg);
+    void RegisterDetectionProgressCallback(DetectionProgressCallback new_callback, void * new_callback_arg);
+    void RegisterI2CBusListChangeCallback(I2CBusListChangeCallback new_callback, void * new_callback_arg);
 
-    virtual std::string                     GetConfigurationDirectory();
+    unsigned int GetDetectionPercent();
+    const char*  GetDetectionString();
 
-    virtual std::vector<NetworkClient*>&    GetClients();
-    virtual NetworkServer*                  GetServer();
+    std::string                     GetConfigurationDirectory();
 
-    virtual ProfileManager*                 GetProfileManager();
-    virtual SettingsManager*                GetSettingsManager();
+    std::vector<NetworkClient*>&    GetClients();
+    NetworkServer*                  GetServer();
 
-    virtual void                            SetConfigurationDirectory(std::string directory);
+    ProfileManager*                 GetProfileManager();
+    SettingsManager*                GetSettingsManager();
 
-    virtual void DeviceListChanged();
-    virtual void DetectionProgressChanged();
-    virtual void I2CBusListChanged();
+    void                            SetConfigurationDirectory(std::string directory);
 
-    virtual void Cleanup();
+    void DeviceListChanged();
+    void DetectionProgressChanged();
+    void I2CBusListChanged();
 
-    virtual void DetectDevices();
+    void Cleanup();
 
-    virtual void DisableDetection();
+    void DetectDevices();
 
-    virtual void StopDeviceDetection();
+    void DisableDetection();
 
-    virtual void WaitForDeviceDetection();
+    void StopDeviceDetection();
+
+    void WaitForDeviceDetection();
 
 private:
     void DetectDevicesThreadFunction();
 
-    static std::unique_ptr<ResourceManager>     instance;
+    static ResourceManager     *instance;
 
     /*-------------------------------------------------------------------------------------*\
     | Detection enabled flag                                                                |
     \*-------------------------------------------------------------------------------------*/
     bool                                        detection_enabled;
-    
+
     /*-------------------------------------------------------------------------------------*\
     | Profile Manager                                                                       |
     \*-------------------------------------------------------------------------------------*/
@@ -169,7 +170,7 @@ private:
     std::atomic<bool>                           detection_is_required;
     std::atomic<unsigned int>                   detection_percent;
     const char*                                 detection_string;
-    
+
     /*-------------------------------------------------------------------------------------*\
     | Device List Changed Callback                                                          |
     \*-------------------------------------------------------------------------------------*/
