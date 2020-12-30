@@ -39,17 +39,15 @@ RESOURCES +=                                    \
 win32:INCLUDEPATH += openssl
 
 win32:contains(QMAKE_TARGET.arch, x86_64) {
-    CONFIG += static                                                                            \
-    LIBS +=                                                                                     \
-        -L"$$PWD/dependencies/openssl/x64/" -llibcrypto                                         \
-        -L"$$PWD/dependencies/openssl/x64/" -llibssl                                            \
+    LIBS +=                                                                        \
+        -L"$$PWD/openssl/x64/" -llibcrypto                                         \
+        -L"$$PWD/openssl/x64/" -llibssl                                            \
 }
 
 win32:contains(QMAKE_TARGET.arch, x86) {
-    CONFIG += static                                                                            \
-    LIBS +=                                                                                     \
-        -L"$$PWD/dependencies/openssl/x86/" -llibcrypto                                         \
-        -L"$$PWD/dependencies/openssl/x86/" -llibssl                                            \
+    LIBS +=                                                                        \
+        -L"$$PWD/openssl/x86/" -llibcrypto                                         \
+        -L"$$PWD/openssl/x86/" -llibssl                                            \
 }
 
 #win32:contains(QMAKE_TARGET.arch, x86_64) {
