@@ -34,9 +34,18 @@ FORMS +=                                        \
 RESOURCES +=                                    \
     resources.qrc                               \
 
+win32:CONFIG(debug, debug|release) {
+    win32:DESTDIR = debug
+}
+
 win32:CONFIG(release, debug|release) {
     win32:DESTDIR = release
 }
+
+win32:OBJECTS_DIR = _intermediate_$$DESTDIR/.obj
+win32:MOC_DIR     = _intermediate_$$DESTDIR/.moc
+win32:RCC_DIR     = _intermediate_$$DESTDIR/.qrc
+win32:UI_DIR      = _intermediate_$$DESTDIR/.ui
 
 # Default rules for deployment.
 unix {
