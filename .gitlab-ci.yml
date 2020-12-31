@@ -243,17 +243,11 @@ build_windows_64:
   - _fold_start_ 'start the actual build with jom instead of nmake; for speed'
   - ..\_qt\jom
   - _fold_final_
-  
-  - _fold_start_ 'run windeployqt to automatically copy the needed dll files'
-  - ..\_qt\5.15.0\msvc2019_64\bin\windeployqt --no-webkit2 --no-angle --no-translations --no-opengl-sw --no-system-d3d-compiler --no-compiler-runtime .\release\
-  - _fold_final_
-  
+
   - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
   - mv release 'OpenRGB Update Plugin'
-  - ${datetime} = Get-Date ([datetime]::UtcNow) -Format "yyyy-MM-ddTHH-mm-ss"
   - ${revision} = ((git rev-parse --short HEAD) | Out-String).Trim()
-  - ${rversion} = (((Get-Content '..\ORGBUpdatePlugin.pro' | Select-String -Pattern "VERSION     =") | Out-String).Trim().Split("="))[1].Trim()
-  - 7z a -mx9 -r -y "ORGBPlugin_Auto_Update_${rversion}_64_${revision}_nightly_${datetime}.7z" 'ORGBUpdatePlugin'
+  - 7z a -mx9 -r -y "ORGBPlugin_Auto_Update_64_${revision}.7z" 'ORGBUpdatePlugin'
   - _fold_final_
 #  cache:
 #    key: same-key

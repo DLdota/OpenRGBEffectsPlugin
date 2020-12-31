@@ -8,20 +8,6 @@ QT +=                  \
 TEMPLATE = lib
 DEFINES += ORGBUPDATEPLUGIN_LIBRARY
 
-win32:BUILDDATE = $$system(date /t)
-unix:BUILDDATE  = $$system(date -R -d "@${SOURCE_DATE_EPOCH:-$(date +%s)}")
-GIT_COMMIT_ID   = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$_PRO_FILE_PWD_ rev-parse HEAD)
-GIT_COMMIT_DATE = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$_PRO_FILE_PWD_ show -s --format=%ci HEAD)
-GIT_BRANCH      = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$_PRO_FILE_PWD_ rev-parse --abbrev-ref HEAD)
-
-
-DEFINES +=                                                                                      \
-    VERSION_STRING=\\"\"\"$$VERSION\\"\"\"                                                      \
-    BUILDDATE_STRING=\\"\"\"$$BUILDDATE\\"\"\"                                                  \
-    GIT_COMMIT_ID=\\"\"\"$$GIT_COMMIT_ID\\"\"\"                                                 \
-    GIT_COMMIT_DATE=\\"\"\"$$GIT_COMMIT_DATE\\"\"\"                                             \
-    GIT_BRANCH=\\"\"\"$$GIT_BRANCH\\"\"\"
-
 CONFIG += c++11
 
 SOURCES +=                                      \
@@ -60,6 +46,26 @@ win32:OBJECTS_DIR = _intermediate_$$DESTDIR/.obj
 win32:MOC_DIR     = _intermediate_$$DESTDIR/.moc
 win32:RCC_DIR     = _intermediate_$$DESTDIR/.qrc
 win32:UI_DIR      = _intermediate_$$DESTDIR/.ui
+
+win32:contains(QMAKE_TARGET.arch, x86_64) {
+    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/openssl/x64/libcrypto-1_1-x64.dll            )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
+    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/openssl/x64/libssl-1_1-x64.dll               )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
+    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/Dependencies/Qt5Network.dll                  )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
+    first.depends = $(first) copydata
+    export(first.depends)
+    export(copydata.commands)
+    QMAKE_EXTRA_TARGETS += first copydata
+}
+
+win32:contains(QMAKE_TARGET.arch, x86) {
+    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/openssl/x86/libcrypto-1_1.dll            )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
+    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/openssl/x86/libssl-1_1.dll               )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
+    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/Dependencies/Qt5Network.dll              )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
+    first.depends = $(first) copydata
+    export(first.depends)
+    export(copydata.commands)
+    QMAKE_EXTRA_TARGETS += first copydata
+}
 
 # Default rules for deployment.
 unix {
