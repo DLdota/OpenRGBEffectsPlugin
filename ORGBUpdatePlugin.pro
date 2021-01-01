@@ -71,15 +71,15 @@ win32:contains(QMAKE_TARGET.arch, x86_64) {
     QMAKE_EXTRA_TARGETS += first copydata
 }
 
-win32:contains(QMAKE_TARGET.arch, x86) {
-    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/openssl/x86/libcrypto-1_1.dll            )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
-    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/openssl/x86/libssl-1_1.dll               )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
-    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/Dependencies/Qt5Network.dll              )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
-    first.depends = $(first) copydata
-    export(first.depends)
-    export(copydata.commands)
-    QMAKE_EXTRA_TARGETS += first copydata
-}
+#win32:contains(QMAKE_TARGET.arch, x86) {
+#    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/openssl/x86/libcrypto-1_1.dll            )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
+#    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/openssl/x86/libssl-1_1.dll               )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
+#    copydata.commands += $(COPY_FILE) \"$$shell_path($$PWD/Dependencies/Qt5Network.dll              )\" \"$$shell_path($$DESTDIR)\" $$escape_expand(\n\t)
+#    first.depends = $(first) copydata
+#    export(first.depends)
+#    export(copydata.commands)
+#    QMAKE_EXTRA_TARGETS += first copydata
+#}
 
 # Default rules for deployment.
 unix {
