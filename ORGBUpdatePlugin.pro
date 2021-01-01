@@ -40,12 +40,14 @@ win32:contains(QMAKE_TARGET.arch, x86_64) {
     LIBS +=                                                                                     \
         -L"$$PWD/openssl/x64/" -llibssl                                                         \
         -L"$$PWD/openssl/x64/" -llibcrypto                                                      \
+        -L"$$PWD/Dependencies/" -lqt5network                                                    \
 }
 
 win32:contains(QMAKE_TARGET.arch, x86) {
     LIBS +=                                                                                     \
-    -L"$$PWD/openssl/x86/" -llibssl                                                         \
-    -L"$$PWD/openssl/x86/" -llibcrypto                                                      \
+    -L"$$PWD/openssl/x86/" -llibssl                                                             \
+    -L"$$PWD/openssl/x86/" -llibcrypto                                                          \
+    -L"$$PWD/Dependencies/" -lqt5network                                                        \
 }
 win32:CONFIG(debug, debug|release) {
     win32:DESTDIR = debug
