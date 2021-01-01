@@ -34,6 +34,19 @@ FORMS +=                                        \
 RESOURCES +=                                    \
     resources.qrc                               \
 
+win32:INCLUDEPATH += openssl/
+
+win32:contains(QMAKE_TARGET.arch, x86_64) {
+    LIBS +=                                                                                     \
+        -L"$$PWD/openssl/x64/" -llibssl                                                         \
+        -L"$$PWD/openssl/x64/" -llibcrypto                                                      \
+}
+
+win32:contains(QMAKE_TARGET.arch, x86) {
+    LIBS +=                                                                                     \
+    -L"$$PWD/openssl/x86/" -llibssl                                                         \
+    -L"$$PWD/openssl/x86/" -llibcrypto                                                      \
+}
 win32:CONFIG(debug, debug|release) {
     win32:DESTDIR = debug
 }
