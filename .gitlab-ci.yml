@@ -244,16 +244,9 @@ build_windows_64:
   - ..\_qt\jom
   - _fold_final_
 
-  - _fold_start_ 'run windeployqt to automatically copy the needed dll files'
-  - dir
-  - ..\_qt\5.15.0\msvc2019_64\bin\windeployqt --no-angle --no-translations --no-opengl-sw --no-system-d3d-compiler --no-compiler-runtime --no-webkit2 .\release
-  - _fold_final_
-  
-
   - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
-  - mv release 'OpenRGB Update Plugin'
-  - ${revision} = ((git rev-parse --short HEAD) | Out-String).Trim()
-  - 7z a -mx9 -r -y "ORGBPlugin_Auto_Update_64_${revision}.7z" 'ORGBUpdatePlugin'
+  - mv release 'ORGBUpdatePlugin'
+  - 7z a -mx9 -r -y "ORGBPlugin_Auto_Update_64.7z" 'ORGBUpdatePlugin'
   - _fold_final_
 #  cache:
 #    key: same-key

@@ -34,21 +34,18 @@ FORMS +=                                        \
 RESOURCES +=                                    \
     resources.qrc                               \
 
-win32:INCLUDEPATH += openssl/
-
 win32:contains(QMAKE_TARGET.arch, x86_64) {
     LIBS +=                                                                                     \
         -L"$$PWD/openssl/x64/" -llibssl                                                         \
-        -L"$$PWD/openssl/x64/" -llibcrypto                                                      \
-        -L"$$PWD/Dependencies/" -lqt5network                                                    \
+        -L"$$PWD/openssl/x64/" -llibcrypto
 }
 
 win32:contains(QMAKE_TARGET.arch, x86) {
     LIBS +=                                                                                     \
     -L"$$PWD/openssl/x86/" -llibssl                                                             \
-    -L"$$PWD/openssl/x86/" -llibcrypto                                                          \
-    -L"$$PWD/Dependencies/" -lqt5network                                                        \
+    -L"$$PWD/openssl/x86/" -llibcrypto
 }
+
 win32:CONFIG(debug, debug|release) {
     win32:DESTDIR = debug
 }
@@ -56,6 +53,8 @@ win32:CONFIG(debug, debug|release) {
 win32:CONFIG(release, debug|release) {
     win32:DESTDIR = release
 }
+
+win32:CONFIG += QTPLUGIN
 
 win32:OBJECTS_DIR = _intermediate_$$DESTDIR/.obj
 win32:MOC_DIR     = _intermediate_$$DESTDIR/.moc
