@@ -18,7 +18,7 @@ stages:
 
 before_script:
  - echo "started by ${GITLAB_USER_NAME}"
-
+#
 #reusable templates
 #.ccache_init: &ccache_init
 #  before_script:
@@ -38,9 +38,7 @@ before_script:
 #  
 #  artifacts:
 #    paths:
-#    - OpenRGB-i386.AppImage
-#    - 60-openrgb.rules
-#    - README.md
+#    - UpdatePlugin-i386.so
 #    expire_in: 30 days
 #
 ##-----------------------------------------------------------------------#
@@ -56,53 +54,9 @@ before_script:
 #  
 #  artifacts:
 #    paths:
-#    - OpenRGB-x86_64.AppImage
-#    - 60-openrgb.rules
-#    - README.md
+#    - UpdatePlugin.so
 #    expire_in: 30 days
 #
-##-----------------------------------------------------------------------#
-## Linux (.deb) 32-bit Build Target                                      #
-##-----------------------------------------------------------------------#
-#build_linux_deb32:
-#  <<: *ccache_init
-#  image: i386/ubuntu:bionic
-#  stage: build
-#  script:
-#  - apt install -y debhelper
-#  - dpkg-architecture -l
-#  - dpkg-buildpackage --target-arch i386 -us -B
-#  - rm -v ../openrgb-dbgsym*.ddeb
-#  - mv -v ../openrgb*.deb ./
-#
-#  artifacts:
-#    paths:
-#    - openrgb*.deb
-#    exclude:
-#    - openrgb-dbgsym*.deb
-#    expire_in: 30 days
-#
-##-----------------------------------------------------------------------#
-## Linux (.deb) 64-bit Build Target                                      #
-##-----------------------------------------------------------------------#
-#build_linux_deb64:
-#  <<: *ccache_init
-#  image: ubuntu:bionic
-#  stage: build
-#  script:
-#  - apt install -y debhelper
-#  - dpkg-architecture -l
-#  - dpkg-buildpackage -us -B
-#  - rm -v ../openrgb-dbgsym*.ddeb
-#  - mv -v ../openrgb*.deb ./
-#
-#  artifacts:
-#    paths:
-#    - openrgb*.deb
-#    exclude:
-#    - openrgb-dbgsym*.deb
-#    expire_in: 30 days
-
 #-----------------------------------------------------------------------#
 # Windows (32-bit) Build Target                                         #
 #-----------------------------------------------------------------------#
@@ -161,9 +115,9 @@ build_windows_32:
   - nmake
   - _fold_final_
   
-  - _fold_start_ 'run windeployqt to automatically copy the needed dll files'
-  - ..\_qt\5.15.0\msvc2019\bin\windeployqt --no-webkit2 --no-angle --no-translations --no-opengl-sw --no-system-d3d-compiler --no-compiler-runtime .\release\
-  - _fold_final_
+#  - _fold_start_ 'run windeployqt to automatically copy the needed dll files'
+#  - ..\_qt\5.15.0\msvc2019\bin\windeployqt --no-webkit2 --no-angle --no-translations --no-opengl-sw --no-system-d3d-compiler --no-compiler-runtime release
+#  - _fold_final_
   
   - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
   - mv release 'ORGBUpdatePlugin_32bit'
@@ -238,7 +192,7 @@ build_windows_64:
   - _fold_final_
 
   - _fold_start_ 'run windeployqt to automatically copy the needed dll files'
-  - ..\_qt\5.15.0\msvc2019\bin\windeployqt --no-webkit2 --no-angle --no-translations --no-opengl-sw --no-system-d3d-compiler --no-compiler-runtime .\release\
+  - ..\_qt\5.15.0\msvc2019\bin\windeployqt --no-webkit2 --no-angle --no-translations --no-opengl-sw --no-system-d3d-compiler --no-compiler-runtime release
   - _fold_final_
 
   - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
