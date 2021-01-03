@@ -12,7 +12,6 @@
   tags:
   - shared-windows
   - windows
-  - windows-1809
 
 stages:
   - build
@@ -245,8 +244,8 @@ build_windows_64:
   - _fold_final_
 
   - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
-  - mv release 'ORGBUpdatePlugin'
-  - 7z a -mx9 -r -y "ORGBPlugin_Auto_Update_64.7z" 'ORGBUpdatePlugin'
+  - mv release ORGBUpdatePlugin # Rename it
+  - 7z a -mx9 -r -y "ORGBPlugin_Auto_Update_64.7z" ORGBUpdatePlugin # Zip it up
   - _fold_final_
 #  cache:
 #    key: same-key
