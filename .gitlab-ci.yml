@@ -240,7 +240,7 @@ build_windows_64:
   - _fold_final_
   
   - _fold_start_ 'start the actual build with jom instead of nmake; for speed'
-  - ..\_qt\jom
+  - ..\_qt\nmake
   - _fold_final_
 
   - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
