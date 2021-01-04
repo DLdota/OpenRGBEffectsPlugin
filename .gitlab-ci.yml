@@ -181,11 +181,14 @@ build_windows_64:
   - _fold_start_ 'run qmake and generate the msvc nmake makefile'
   - mkdir _build; cd _build
   - ..\_qt\5.15.0\msvc2019_64\bin\qmake ..\ORGBUpdatePlugin.pro
-  - ..\_qt\5.15.0\msvc2019_64\bin\qmake configure -static
   - _fold_final_
   
   - _fold_start_ 'start the actual build with jom instead of nmake; for speed'
   - nmake
+  - _fold_final_
+
+  - _fold_start_ 'Copy Qt5Network to distrobution folder'
+  - cp ..\_qt\5.15.0\msvc2019_64\bin\Qt5Network.dll release
   - _fold_final_
 
   - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
