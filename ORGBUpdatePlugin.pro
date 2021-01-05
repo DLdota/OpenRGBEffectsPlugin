@@ -16,11 +16,10 @@ CONFIG += c++11
 
 INCLUDEPATH +=                                                                                  \
     OpenRGB/                                                                                    \
-    OpenRGB/dependencies/json                                                                   \
-    OpenRGB/i2c_smbus                                                                           \
-    OpenRGB/net_port                                                                            \
-    OpenRGB/RGBController                                                                       \
-
+    OpenRGB/dependencies/json/                                                                  \
+    OpenRGB/i2c_smbus/                                                                          \
+    OpenRGB/net_port/                                                                           \
+    OpenRGB/RGBController/
 
 HEADERS +=                                                                                      \
     OpenRGB/NetworkClient.h                                                                     \
