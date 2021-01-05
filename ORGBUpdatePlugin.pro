@@ -19,7 +19,8 @@ INCLUDEPATH +=                                                                  
     OpenRGB/dependencies/json/                                                                  \
     OpenRGB/i2c_smbus/                                                                          \
     OpenRGB/net_port/                                                                           \
-    OpenRGB/RGBController/
+    OpenRGB/RGBController/                                                                      \
+
 
 HEADERS +=                                                                                      \
     OpenRGB/NetworkClient.h                                                                     \
