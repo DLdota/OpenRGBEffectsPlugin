@@ -187,6 +187,7 @@ build_windows_64:
   - _fold_final_
   
   - _fold_start_ 'start the actual build with jom instead of nmake; for speed'
+  - dir
   - ..\_qt\jom
   - _fold_final_
 
