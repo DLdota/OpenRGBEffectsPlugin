@@ -15,7 +15,7 @@ CONFIG += c++11
 #-----------------------------------------------------------------------------------------------#
 
 INCLUDEPATH +=                                                                                  \
-    OpenRGB                                                                                     \
+    OpenRGB/                                                                                    \
     OpenRGB/dependencies/json                                                                   \
     OpenRGB/i2c_smbus                                                                           \
     OpenRGB/net_port                                                                            \
