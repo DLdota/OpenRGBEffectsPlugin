@@ -41,15 +41,16 @@ OpenRGBPluginInfo ORGBPlugin::DefineNeeded()
 
 OpenRGBPluginInfo ORGBPlugin::init(bool Dt, ResourceManagerInterface *RM)
 {
-    /*json Settings = RM->GetSettingsManager()->GetSettings("Updates");
+    json Settings = RM->GetSettingsManager()->GetSettings("Updates");
     if (Settings.contains("branch"))
     {
         ORGBPlugin::branch = Settings["branch"];
+        //qDebug() << QString().fromStdString(ORGBPlugin::branch);
     }
     if (Settings.contains("fork"))
     {
         ORGBPlugin::fork = Settings["fork"];
-    }*/
+    }
     ORGBPlugin::DarkTheme = Dt;
 
     ORGBPlugin::PInfo.PluginLabel = TabLabel();

@@ -44,7 +44,6 @@ HEADERS +=                                                                      
     OpenRGB/NetworkServer.h                                                                     \
     OpenRGB/ProfileManager.h                                                                    \
     OpenRGB/ResourceManager.h                                                                   \
-    OpenRGB/ResourceManagerInterface.h                                                          \
     OpenRGB/SettingsManager.h                                                                   \
     OpenRGB/dependencies/json/json.hpp                                                          \
     OpenRGB/i2c_smbus/i2c_smbus.h                                                               \
