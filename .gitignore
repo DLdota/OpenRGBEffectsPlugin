@@ -7,3 +7,5 @@ Makefile
 OpenRGB-x86_64.AppImage
 .qmake.stash
 .vscode
+build
+Ship
