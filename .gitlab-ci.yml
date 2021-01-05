@@ -28,19 +28,19 @@ reusable templates
 #-----------------------------------------------------------------------#
 # Linux (AppImage) 32-bit Build Target                                  #
 #-----------------------------------------------------------------------#
-build_linux_32:
-  <<: *ccache_init
-  image: i386/ubuntu:bionic
-  stage: build
-  script:
-  - export $(dpkg-architecture)
-  - ./build.sh
-  
-  artifacts:
-    paths:
-    - Ship/
-    expire_in: 30 days
-
+#build_linux_32:
+#  <<: *ccache_init
+#  image: i386/ubuntu:bionic
+#  stage: build
+#  script:
+#  - export $(dpkg-architecture)
+#  - ./build.sh
+#  
+#  artifacts:
+#    paths:
+#    - libORGBUpdatePlugin.so
+#    expire_in: 30 days
+#
 #-----------------------------------------------------------------------#
 # Linux (AppImage) 64-bit Build Target                                  #
 #-----------------------------------------------------------------------#
@@ -54,7 +54,7 @@ build_linux_64:
   
   artifacts:
     paths:
-    - Ship/*
+    - libORGBUpdatePlugin.so
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
