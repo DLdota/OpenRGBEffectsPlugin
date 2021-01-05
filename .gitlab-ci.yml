@@ -182,13 +182,13 @@ build_windows_64:
   - _fold_final_
   
   - _fold_start_ 'run qmake and generate the msvc nmake makefile'
+  - dir
   - mkdir _build; cd _build
   - ..\_qt\5.15.0\msvc2019_64\bin\qmake ..\ORGBUpdatePlugin.pro
   - _fold_final_
   
   - _fold_start_ 'start the actual build with jom instead of nmake; for speed'
   - dir
-  - cd OpenRGB && dir
   - ..\_qt\jom
   - _fold_final_
 
