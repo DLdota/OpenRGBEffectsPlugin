@@ -6,7 +6,7 @@
 #include "QLabel"
 #include "QDialog"
 #include "QAction"
-#include "Dependencies/ResourceManager.h"
+#include "ResourceManager.h"
 #include "ui_ORGBUpdatePlugin.h"
 #include <QDebug>
 

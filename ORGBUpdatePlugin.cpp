@@ -1,6 +1,7 @@
 #include "ORGBUpdatePlugin.h"
 #include "OpenRGBUpdateTab.h"
-#include "Dependencies/ResourceManager.h"
+#include "ResourceManager.h"
+#include "dependencies/json/json.hpp"
 
 std::string ORGBPlugin::fork      = "CalcProgrammer1";
 std::string ORGBPlugin::branch    = "master";
@@ -27,7 +28,7 @@ QLabel* TabLabel()
     return UpdateTabLabel;
 }
 
-PluginInfo ORGBPlugin::DefineNeeded()
+OpenRGBPluginInfo ORGBPlugin::DefineNeeded()
 {
     ORGBPlugin::PInfo.PluginName  = "Updates";
     ORGBPlugin::PInfo.PluginDesc  = "A Plugin that bring auto updating to OpenRGB";
@@ -35,13 +36,12 @@ PluginInfo ORGBPlugin::DefineNeeded()
 
     ORGBPlugin::PInfo.HasCustom   = true;
 
-    ORGBPlugin::PInfo.SettingName = "Updates";
-
     return ORGBPlugin::PInfo;
 }
 
-PluginInfo ORGBPlugin::init(json Settings , bool Dt, IResourceManager *RM)
+OpenRGBPluginInfo ORGBPlugin::init(bool Dt, ResourceManagerInterface *RM)
 {
+    /*json Settings = RM->GetSettingsManager()->GetSettings("Updates");
     if (Settings.contains("branch"))
     {
         ORGBPlugin::branch = Settings["branch"];
@@ -49,7 +49,7 @@ PluginInfo ORGBPlugin::init(json Settings , bool Dt, IResourceManager *RM)
     if (Settings.contains("fork"))
     {
         ORGBPlugin::fork = Settings["fork"];
-    }
+    }*/
     ORGBPlugin::DarkTheme = Dt;
 
     ORGBPlugin::PInfo.PluginLabel = TabLabel();

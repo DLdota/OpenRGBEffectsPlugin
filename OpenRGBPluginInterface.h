@@ -2,11 +2,11 @@
 
 #include <QtPlugin>
 #include <QLabel>
-#include "Dependencies/ResourceManager.h"
+#include "ResourceManager.h"
 
-#define ORGBPluginInterface_IID "com.ORGBPluginInterface"
+#define OpenRGBPluginInterface_IID "com.OpenRGBPluginInterface"
 
-struct PluginInfo
+struct OpenRGBPluginInfo
 {
     std::string                 PluginName;
     std::string                 PluginDesc;
@@ -14,22 +14,20 @@ struct PluginInfo
 
     bool                        HasCustom;
     QLabel                      *PluginLabel;
-
-    std::string                 SettingName;
 };
 
-class ORGBPluginInterface
+class OpenRGBPluginInterface
 {
 public:
-    virtual                 ~ORGBPluginInterface() {}
+    virtual                 ~OpenRGBPluginInterface() {}
 
-    PluginInfo              PInfo;
+    OpenRGBPluginInfo              PInfo;
 
-    virtual PluginInfo      DefineNeeded() = 0;
+    virtual OpenRGBPluginInfo      DefineNeeded() = 0;
 
-    virtual PluginInfo      init(json Settings , bool DarkTheme, IResourceManager *RM) = 0;
+    virtual OpenRGBPluginInfo      init(bool DarkTheme, ResourceManagerInterface *RM) = 0;
 
     virtual QWidget         *CreateGUI(QWidget *Parent) = 0;
 };
 
-Q_DECLARE_INTERFACE(ORGBPluginInterface, ORGBPluginInterface_IID)
+Q_DECLARE_INTERFACE(OpenRGBPluginInterface, OpenRGBPluginInterface_IID)

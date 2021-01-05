@@ -1,5 +1,5 @@
-#include "ORGBPluginInterface.h"
-#include "Dependencies/ResourceManager.h"
+#include "OpenRGBPluginInterface.h"
+#include "ResourceManager.h"
 #include "OpenRGBUpdateTab.h"
 
 #include <QObject>
@@ -10,26 +10,25 @@
 #include "QPushButton"
 #include "QDialog"
 #include "QAction"
-#include "Dependencies/json.hpp"
 
-class ORGBPlugin : public QObject, public ORGBPluginInterface
+class ORGBPlugin : public QObject, public OpenRGBPluginInterface
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID ORGBPluginInterface_IID)
-    Q_INTERFACES(ORGBPluginInterface)
+    Q_PLUGIN_METADATA(IID OpenRGBPluginInterface_IID)
+    Q_INTERFACES(OpenRGBPluginInterface)
 
 public:
-                    ~ORGBPlugin() override {}
+    ~ORGBPlugin()                                                               override {}
 
-    PluginInfo      DefineNeeded() override;
+    OpenRGBPluginInfo      DefineNeeded()                                       override;
 
-    PluginInfo      PInfo;
+    OpenRGBPluginInfo      PInfo;
 
-    PluginInfo      init(json Settings , bool DarkTheme, IResourceManager *RM) override;
+    OpenRGBPluginInfo      init(bool DarkTheme, ResourceManagerInterface *RM)   override;
 
-    QWidget         *CreateGUI(QWidget *Parent) override;
+    QWidget         *CreateGUI(QWidget *Parent)                                 override;
 
-    static bool     DarkTheme;
-    static std::string branch;
-    static std::string fork;
+    static bool         DarkTheme;
+    static std::string  branch;
+    static std::string  fork;
 };
