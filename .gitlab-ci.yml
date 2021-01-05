@@ -18,45 +18,45 @@ stages:
 
 before_script:
  - echo "started by ${GITLAB_USER_NAME}"
-#
-#reusable templates
-#.ccache_init: &ccache_init
-#  before_script:
-#    - apt update
-#    - apt install -y build-essential qtcreator qt5-default qtdeclarative5-dev qtwebengine5-dev libusb-1.0-0-dev libhidapi-dev pkgconf wget git
-#
-##-----------------------------------------------------------------------#
-## Linux (AppImage) 32-bit Build Target                                  #
-##-----------------------------------------------------------------------#
-#build_linux_32:
-#  <<: *ccache_init
-#  image: i386/ubuntu:bionic
-#  stage: build
-#  script:
-#  - export $(dpkg-architecture)
-#  - ./scripts/build-appimage.sh
-#  
-#  artifacts:
-#    paths:
-#    - UpdatePlugin-i386.so
-#    expire_in: 30 days
-#
-##-----------------------------------------------------------------------#
-## Linux (AppImage) 64-bit Build Target                                  #
-##-----------------------------------------------------------------------#
-#build_linux_64:
-#  <<: *ccache_init
-#  image: ubuntu:bionic
-#  stage: build
-#  script:
-#  - export $(dpkg-architecture)
-#  - ./scripts/build-appimage.sh
-#  
-#  artifacts:
-#    paths:
-#    - UpdatePlugin.so
-#    expire_in: 30 days
-#
+
+reusable templates
+.ccache_init: &ccache_init
+  before_script:
+    - apt update
+    - apt install -y build-essential qtcreator qt5-default qtdeclarative5-dev qtwebengine5-dev libusb-1.0-0-dev libhidapi-dev pkgconf wget git
+
+#-----------------------------------------------------------------------#
+# Linux (AppImage) 32-bit Build Target                                  #
+#-----------------------------------------------------------------------#
+build_linux_32:
+  <<: *ccache_init
+  image: i386/ubuntu:bionic
+  stage: build
+  script:
+  - export $(dpkg-architecture)
+  - ./build.sh
+  
+  artifacts:
+    paths:
+    - Ship/
+    expire_in: 30 days
+
+#-----------------------------------------------------------------------#
+# Linux (AppImage) 64-bit Build Target                                  #
+#-----------------------------------------------------------------------#
+build_linux_64:
+  <<: *ccache_init
+  image: ubuntu:bionic
+  stage: build
+  script:
+  - export $(dpkg-architecture)
+  - ./build.sh
+  
+  artifacts:
+    paths:
+    - Ship/
+    expire_in: 30 days
+
 #-----------------------------------------------------------------------#
 # Windows (32-bit) Build Target                                         #
 #-----------------------------------------------------------------------#
