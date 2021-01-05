@@ -11,26 +11,17 @@ DEFINES += ORGBUPDATEPLUGIN_LIBRARY
 CONFIG += c++11
 
 #-----------------------------------------------------------------------------------------------#
-# Plugin Source                                                                                 #
-#-----------------------------------------------------------------------------------------------#
-SOURCES +=                                      \
-    ORGBUpdatePlugin.cpp                        \
-    OpenRGBUpdateTab.cpp                        \
-
-HEADERS +=                                      \
-    ORGBUpdatePlugin.h                          \
-    OpenRGBPluginInterface.h \
-    OpenRGBUpdateTab.h                          \
-
-FORMS +=                                        \
-    ORGBUpdatePlugin.ui                         \
-
-RESOURCES +=                                    \
-    resources.qrc                               \
-
-#-----------------------------------------------------------------------------------------------#
 # OpenRGB Plugin SDK                                                                            #
 #-----------------------------------------------------------------------------------------------#
+
+INCLUDEPATH +=                                                                                  \
+    OpenRGB                                                                                     \
+    OpenRGB/dependencies/json                                                                   \
+    OpenRGB/i2c_smbus                                                                           \
+    OpenRGB/net_port                                                                            \
+    OpenRGB/RGBController                                                                       \
+
+
 HEADERS +=                                                                                      \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
@@ -43,12 +34,24 @@ HEADERS +=                                                                      
     OpenRGB/net_port/net_port.h                                                                 \
     OpenRGB/RGBController/RGBController.h                                                       \
 
-INCLUDEPATH +=                                                                                  \
-    OpenRGB                                                                                     \
-    OpenRGB/dependencies/json                                                                   \
-    OpenRGB/i2c_smbus                                                                           \
-    OpenRGB/net_port                                                                            \
-    OpenRGB/RGBController                                                                       \
+
+#-----------------------------------------------------------------------------------------------#
+# Plugin Source                                                                                 #
+#-----------------------------------------------------------------------------------------------#
+SOURCES +=                                      \
+    ORGBUpdatePlugin.cpp                        \
+    OpenRGBUpdateTab.cpp                        \
+
+HEADERS +=                                      \
+    ORGBUpdatePlugin.h                          \
+    OpenRGBPluginInterface.h                    \
+    OpenRGBUpdateTab.h                          \
+
+FORMS +=                                        \
+    ORGBUpdatePlugin.ui                         \
+
+RESOURCES +=                                    \
+    resources.qrc                               \
 
 win32:contains(QMAKE_TARGET.arch, x86_64) {
     LIBS +=                                                                                     \
