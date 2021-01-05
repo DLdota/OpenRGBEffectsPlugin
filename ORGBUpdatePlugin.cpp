@@ -1,7 +1,7 @@
 #include "ORGBUpdatePlugin.h"
 #include "OpenRGBUpdateTab.h"
-#include "ResourceManager.h"
-#include "dependencies/json/json.hpp"
+#include "OpenRGB/ResourceManager.h"
+#include "OpenRGB/dependencies/json/json.hpp"
 
 std::string ORGBPlugin::fork      = "CalcProgrammer1";
 std::string ORGBPlugin::branch    = "master";

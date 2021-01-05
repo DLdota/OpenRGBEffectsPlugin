@@ -32,12 +32,6 @@ RESOURCES +=                                    \
 #-----------------------------------------------------------------------------------------------#
 # OpenRGB Plugin SDK                                                                            #
 #-----------------------------------------------------------------------------------------------#
-INCLUDEPATH +=                                                                                  \
-    OpenRGB/                                                                                    \
-    OpenRGB/i2c_smbus                                                                           \
-    OpenRGB/net_port                                                                            \
-    OpenRGB/RGBController                                                                       \
-
 HEADERS +=                                                                                      \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \

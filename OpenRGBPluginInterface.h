@@ -2,7 +2,7 @@
 
 #include <QtPlugin>
 #include <QLabel>
-#include "ResourceManager.h"
+#include "OpenRGB/ResourceManager.h"
 
 #define OpenRGBPluginInterface_IID "com.OpenRGBPluginInterface"
 
