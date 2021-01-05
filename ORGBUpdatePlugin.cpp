@@ -45,7 +45,6 @@ OpenRGBPluginInfo ORGBPlugin::init(bool Dt, ResourceManagerInterface *RM)
     if (Settings.contains("branch"))
     {
         ORGBPlugin::branch = Settings["branch"];
-        //qDebug() << QString().fromStdString(ORGBPlugin::branch);
     }
     if (Settings.contains("fork"))
     {
