@@ -20,8 +20,6 @@ class ORGBPlugin : public QObject, public OpenRGBPluginInterface
 public:
     ~ORGBPlugin()                                                               override {}
 
-    OpenRGBPluginInfo      DefineNeeded()                                       override;
-
     OpenRGBPluginInfo      PInfo;
 
     OpenRGBPluginInfo      init(bool DarkTheme, ResourceManagerInterface *RM)   override;

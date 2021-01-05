@@ -23,8 +23,6 @@ public:
 
     OpenRGBPluginInfo              PInfo;
 
-    virtual OpenRGBPluginInfo      DefineNeeded() = 0;
-
     virtual OpenRGBPluginInfo      init(bool DarkTheme, ResourceManagerInterface *RM) = 0;
 
     virtual QWidget         *CreateGUI(QWidget *Parent) = 0;
