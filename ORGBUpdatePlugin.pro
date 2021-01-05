@@ -28,7 +28,6 @@ FORMS +=                                        \
 RESOURCES +=                                    \
     resources.qrc                               \
 
-
 #-----------------------------------------------------------------------------------------------#
 # OpenRGB Plugin SDK                                                                            #
 #-----------------------------------------------------------------------------------------------#
@@ -43,6 +42,13 @@ HEADERS +=                                                                      
     OpenRGB/i2c_smbus/i2c_smbus.h                                                               \
     OpenRGB/net_port/net_port.h                                                                 \
     OpenRGB/RGBController/RGBController.h                                                       \
+
+INCLUDEPATH +=                                                                                  \
+    OpenRGB                                                                                     \
+    OpenRGB/dependencies/json                                                                   \
+    OpenRGB/i2c_smbus                                                                           \
+    OpenRGB/net_port                                                                            \
+    OpenRGB/RGBController                                                                       \
 
 win32:contains(QMAKE_TARGET.arch, x86_64) {
     LIBS +=                                                                                     \

@@ -1,5 +1,5 @@
 #include "OpenRGBPluginInterface.h"
-#include "OpenRGB/ResourceManager.h"
+#include "ResourceManager.h"
 #include "OpenRGBUpdateTab.h"
 
 #include <QObject>
