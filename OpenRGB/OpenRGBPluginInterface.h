@@ -31,7 +31,7 @@ class OpenRGBPluginInterface
 public:
     virtual                    ~OpenRGBPluginInterface() {}
 
-    virtual OpenRGBPluginInfo   Initialize(bool dark_theme, ResourceManagerInterface* resource_manager_ptr)  = 0;
+    virtual OpenRGBPluginInfo   Initialize(bool dark_theme, ResourceManager* resource_manager_ptr)  = 0;
 
     virtual QWidget            *CreateGUI(QWidget* parent)                                          = 0;
 
