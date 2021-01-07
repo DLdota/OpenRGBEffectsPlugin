@@ -28,7 +28,7 @@ QLabel* TabLabel()
     return UpdateTabLabel;
 }
 
-OpenRGBPluginInfo ORGBPlugin::Initialize(bool Dt, ResourceManager *RM)
+OpenRGBPluginInfo ORGBPlugin::Initialize(bool Dt, ResourceManagerInterface *RM)
 {
     ORGBPlugin::PInfo.PluginName  = "Updates";
     ORGBPlugin::PInfo.PluginDescription  = "A Plugin that bring auto updating to OpenRGB";
@@ -36,7 +36,7 @@ OpenRGBPluginInfo ORGBPlugin::Initialize(bool Dt, ResourceManager *RM)
 
     ORGBPlugin::PInfo.HasCustom   = true;
 
-    json Settings = RM->GetSettingsManager()->GetSettings("Updates");
+    /*json Settings = RM->GetSettingsManager()->GetSettings("Updates");
     if (Settings.contains("branch"))
     {
         ORGBPlugin::branch = Settings["branch"];
@@ -44,7 +44,7 @@ OpenRGBPluginInfo ORGBPlugin::Initialize(bool Dt, ResourceManager *RM)
     if (Settings.contains("fork"))
     {
         ORGBPlugin::fork = Settings["fork"];
-    }
+    }*/
     ORGBPlugin::DarkTheme = Dt;
 
     ORGBPlugin::PInfo.PluginLabel = TabLabel();

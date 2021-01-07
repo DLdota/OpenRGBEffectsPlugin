@@ -22,7 +22,7 @@ public:
 
     OpenRGBPluginInfo      PInfo;
 
-    OpenRGBPluginInfo      Initialize(bool dark_theme, ResourceManager* resource_manager_ptr)   override;
+    OpenRGBPluginInfo      Initialize(bool dark_theme, ResourceManagerInterface* resource_manager_ptr)   override;
 
     QWidget         *CreateGUI(QWidget *Parent)                                                 override;
 
