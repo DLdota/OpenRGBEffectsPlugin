@@ -18,13 +18,13 @@ class ORGBPlugin : public QObject, public OpenRGBPluginInterface
     Q_INTERFACES(OpenRGBPluginInterface)
 
 public:
-    ~ORGBPlugin()                                                               override {}
+    ~ORGBPlugin()
 
     OpenRGBPluginInfo      PInfo;
 
-    OpenRGBPluginInfo      init(bool DarkTheme, ResourceManagerInterface *RM)   override;
+    OpenRGBPluginInfo      Initialize(bool dark_theme, ResourceManager* resource_manager_ptr)   override;
 
-    QWidget         *CreateGUI(QWidget *Parent)                                 override;
+    QWidget         *CreateGUI(QWidget *Parent)                                                 override;
 
     static bool         DarkTheme;
     static std::string  branch;

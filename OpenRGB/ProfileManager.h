@@ -28,8 +28,7 @@ protected:
     virtual ~ProfileManagerInterface() {};
 };
 
-class ProfileManager:
-public ProfileManagerInterface
+class ProfileManager: public ProfileManagerInterface
 {
 public:
     ProfileManager(std::string config_dir);
