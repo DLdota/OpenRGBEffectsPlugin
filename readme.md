@@ -1,8 +1,4 @@
-# OpenRGB Plugins
-
-There isn't much of a reason for this document to exist but some plugins may require special installation
-
-## Auto Updates
+# Auto Updates
 
 You may notice that the windows version ships with the plugin itself (``ORGBUpdatePlugin.dll``) and 3 other dll files (``Openssl.dll``/``libcrypto.dll`` and ``Qt5Network.dll``)\
 
