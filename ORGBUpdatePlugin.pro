@@ -13,19 +13,18 @@ CONFIG += c++11
 #-----------------------------------------------------------------------------------------------#
 # OpenRGB Plugin SDK                                                                            #
 #-----------------------------------------------------------------------------------------------#
-
 INCLUDEPATH +=                                                                                  \
     OpenRGB/                                                                                    \
-    OpenRGB/dependencies/json/                                                                  \
-    OpenRGB/i2c_smbus/                                                                          \
-    OpenRGB/net_port/                                                                           \
-    OpenRGB/RGBController/                                                                      \
-
+    OpenRGB/dependencies/json                                                                   \
+    OpenRGB/i2c_smbus                                                                           \
+    OpenRGB/net_port                                                                            \
+    OpenRGB/RGBController                                                                       \
 
 HEADERS +=                                                                                      \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
+    OpenRGB/OpenRGBPluginInterface.h                                                            \
     OpenRGB/ProfileManager.h                                                                    \
     OpenRGB/ResourceManager.h                                                                   \
     OpenRGB/SettingsManager.h                                                                   \
@@ -33,7 +32,6 @@ HEADERS +=                                                                      
     OpenRGB/i2c_smbus/i2c_smbus.h                                                               \
     OpenRGB/net_port/net_port.h                                                                 \
     OpenRGB/RGBController/RGBController.h                                                       \
-
 
 #-----------------------------------------------------------------------------------------------#
 # Plugin Source                                                                                 #

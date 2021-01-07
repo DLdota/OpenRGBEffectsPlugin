@@ -30,12 +30,9 @@
 
 #define CONTROLLER_LIST_HID 0
 
-struct hid_device_info;
-
 typedef std::function<void(std::vector<i2c_smbus_interface*>&)>                                 I2CBusDetectorFunction;
 typedef std::function<void(std::vector<RGBController*>&)>                                       DeviceDetectorFunction;
 typedef std::function<void(std::vector<i2c_smbus_interface*>&, std::vector<RGBController*>&)>   I2CDeviceDetectorFunction;
-typedef std::function<void(hid_device_info*, const std::string&)>                               HIDDeviceDetectorFunction;
 
 typedef void (*DeviceListChangeCallback)(void *);
 typedef void (*DetectionProgressCallback)(void *);
@@ -72,21 +69,21 @@ class ResourceManager: public ResourceManagerInterface
 {
 public:
     static ResourceManager *get();
-
+    
     ResourceManager();
     ~ResourceManager();
-
+    
     void RegisterI2CBus(i2c_smbus_interface *);
     std::vector<i2c_smbus_interface*> & GetI2CBusses();
-
+    
     void RegisterRGBController(RGBController *rgb_controller);
 
     std::vector<RGBController*> & GetRGBControllers();
-
+    
     void RegisterI2CBusDetector         (I2CBusDetectorFunction     detector);
     void RegisterDeviceDetector         (std::string name, DeviceDetectorFunction     detector);
     void RegisterI2CDeviceDetector      (std::string name, I2CDeviceDetectorFunction  detector);
-
+    
     void RegisterDeviceListChangeCallback(DeviceListChangeCallback new_callback, void * new_callback_arg);
     void RegisterDetectionProgressCallback(DetectionProgressCallback new_callback, void * new_callback_arg);
     void RegisterI2CBusListChangeCallback(I2CBusListChangeCallback new_callback, void * new_callback_arg);

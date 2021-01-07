@@ -34,7 +34,7 @@ OpenRGBPluginInfo ORGBPlugin::Initialize(bool Dt, ResourceManager *RM)
     ORGBPlugin::PInfo.PluginDescription  = "A Plugin that bring auto updating to OpenRGB";
     ORGBPlugin::PInfo.PluginLocation  = "InformationTab";
 
-    ORGBPlugin::PInfo.HasCustomIcon   = true;
+    ORGBPlugin::PInfo.HasCustom   = true;
 
     json Settings = RM->GetSettingsManager()->GetSettings("Updates");
     if (Settings.contains("branch"))
