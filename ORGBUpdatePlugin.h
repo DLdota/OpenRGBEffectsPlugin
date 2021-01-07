@@ -18,7 +18,7 @@ class ORGBPlugin : public QObject, public OpenRGBPluginInterface
     Q_INTERFACES(OpenRGBPluginInterface)
 
 public:
-    ~ORGBPlugin() {}
+    ~ORGBPlugin() {};
 
     OpenRGBPluginInfo      PInfo;
 
