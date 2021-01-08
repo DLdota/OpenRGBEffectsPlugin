@@ -40,11 +40,13 @@ OpenRGBUpdateInfoPage::OpenRGBUpdateInfoPage(QWidget *Parent) :
         ui->GitCommitInfoTable->setSelectionMode(QAbstractItemView::NoSelection);
         ui->GitCommitInfoTable->setCornerButtonEnabled(false);
         ui->GitCommitInfoTable->setRowCount(12);
+        ui->GitCommitInfoTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
         for (int i = 0; i < 5; i++)
         {
             ui->GitCommitInfoTable->setColumnWidth(i, HeaderWidth[i].toInt());
         }
+        ui->GitCommitInfoTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
         OpenRGBUpdateInfoPage::CheckBranch = QString().fromStdString(ORGBPlugin::branch);
         OpenRGBUpdateInfoPage::Fork = QString().fromStdString(ORGBPlugin::fork);
     }
