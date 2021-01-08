@@ -2,8 +2,12 @@
 #define OPENRGBEFFECTTAB_H
 
 #include <QWidget>
+#include "ui_OpenRGBEffectTab.h"
 #include "ORGBEffectPlugin.h"
+
 #include "RGBEffect.h"
+#include "SpectrumCycling.h"
+
 namespace Ui {
 class OpenRGBEffectTab;
 }
@@ -17,10 +21,10 @@ public:
     ~OpenRGBEffectTab();
 
     std::vector<RGBController*> RGBControllerList;
-
+    void DefineEffects();
 private:
     Ui::OpenRGBEffectTab            *ui;
-    static std::vector<RGBEffect>   EffectList;
+    static std::vector<RGBEffect*>   EffectList;
 };
 
 #endif // OPENRGBEFFECTTAB_H

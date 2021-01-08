@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QCheckBox>
 
+#include "OpenRGBEffectTab.h"
+#include "ui_OpenRGBEffectPage.h"
+
 namespace Ui {
 class OpenRGBEffectPage;
 }
@@ -13,7 +16,7 @@ class OpenRGBEffectPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit OpenRGBEffectPage(QWidget *parent = nullptr);
+    explicit OpenRGBEffectPage(QWidget *parent = nullptr, RGBEffect* EFCT = nullptr);
     ~OpenRGBEffectPage();
 
     void CreateDeviceSelection(std::string DeviceName);

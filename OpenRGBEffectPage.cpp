@@ -1,6 +1,4 @@
 #include "OpenRGBEffectPage.h"
-#include "OpenRGBEffectTab.h"
-#include "ui_OpenRGBEffectPage.h"
 
 void OpenRGBEffectPage::CreateDeviceSelection(std::string DeviceName)
 {
@@ -20,7 +18,7 @@ void OpenRGBEffectPage::CreateDeviceSelection(std::string DeviceName)
     return;
 }
 
-OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent):
+OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT):
     QWidget(parent),
     ui(new Ui::OpenRGBEffectPage)
 {
@@ -29,6 +27,16 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent):
     ui->SelectDevices->setColumnCount(3);
     ui->SelectDevices->setHorizontalHeaderLabels({"Device","Enabled","Reversed"});
 
+    ui->EffectName->setText(QString().fromStdString(EFCT->EffectDetails.EffectName));
+    ui->EffectDesciption->setText(QString().fromStdString(EFCT->EffectDetails.EffectDescription));
+
+    if (EFCT->EffectDetails.MinSpeed < EFCT->EffectDetails.MaxSpeed)
+    {
+        QSlider* SpeedSlider = new QSlider(Qt::Horizontal,ui->OptionFrame);
+        SpeedSlider->setMaximum(EFCT->EffectDetails.MaxSpeed);
+        SpeedSlider->setMinimum(EFCT->EffectDetails.MinSpeed);
+        SpeedSlider->show();
+    }
 }
 
 OpenRGBEffectPage::~OpenRGBEffectPage()

@@ -16,13 +16,12 @@ struct EffectInfo
 class RGBEffect
 {
 public:
-    virtual ~RGBEffect() {};
-    virtual EffectInfo DefineEffectDetails();
-    virtual void       StartEffect();
-    virtual void       StopEffect();
+    virtual EffectInfo DefineEffectDetails() = 0;
+    virtual void       StartEffect()         = 0;
+    virtual void       StopEffect()          = 0;
 
     std::vector<RGBController*> OwnedDevices;
-    EffectInfo                  PluginDetails;
+    EffectInfo                  EffectDetails;
 };
 
 #endif // RGBEFFECT_H

@@ -10,6 +10,8 @@
 #include "QDialog"
 #include "QAction"
 
+#pragma once
+
 class ORGBPlugin : public QObject, public OpenRGBPluginInterface
 {
     Q_OBJECT

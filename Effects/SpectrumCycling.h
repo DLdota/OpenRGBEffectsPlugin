@@ -9,11 +9,11 @@ public RGBEffect
 public:
     SpectrumCycling() {};
     ~SpectrumCycling() {};
-    EffectInfo  DefineEffectDetails()       override;
-    void        StartEffect()               override;
-    void        StopEffect()                override;
+    EffectInfo  DefineEffectDetails()   override;
+    void        StartEffect()           override;
+    void        StopEffect()            override;
 
-    EffectInfo PluginDetails;
+    EffectInfo EffectDetails;
 private:
     std::vector<RGBController*> OwnedDevices;
     bool StopNextLoop = false;

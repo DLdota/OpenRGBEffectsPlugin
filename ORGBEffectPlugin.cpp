@@ -1,5 +1,5 @@
 #include "ORGBEffectPlugin.h"
-#include "ResourceManager.h"
+#include "OpenRGBEffectTab.h"
 #include "json.hpp"
 
 bool ORGBPlugin::DarkTheme = false;
@@ -30,9 +30,9 @@ OpenRGBPluginInfo ORGBPlugin::Initialize(bool Dt, ResourceManager *RM)
 
 QWidget* ORGBPlugin::CreateGUI(QWidget *Parent)
 {
-    QWidget* BlankReturn = new QWidget();
-    //OpenRGBUpdateInfoPage *UpdatePage = NULL;
-    //UpdatePage = new OpenRGBUpdateInfoPage(Parent);
+    //QWidget* BlankReturn = new QWidget();
+    OpenRGBEffectTab* EETab = NULL;
+    EETab = new OpenRGBEffectTab(nullptr,ORGBPlugin::RMPointer);
 
-    return BlankReturn;
+    return EETab;
 }
