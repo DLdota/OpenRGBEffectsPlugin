@@ -1,6 +1,5 @@
 #include "OpenRGBPluginInterface.h"
 #include "ResourceManager.h"
-#include "OpenRGBUpdateTab.h"
 
 #include <QObject>
 #include <QString>
@@ -27,6 +26,6 @@ public:
     QWidget         *CreateGUI(QWidget *Parent)                                                 override;
 
     static bool         DarkTheme;
-    static std::string  branch;
-    static std::string  fork;
+
+    ResourceManager* RMPointer;
 };

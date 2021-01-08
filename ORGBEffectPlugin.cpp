@@ -1,64 +1,38 @@
-#include "ORGBUpdatePlugin.h"
-#include "OpenRGBUpdateTab.h"
+#include "ORGBEffectPlugin.h"
 #include "ResourceManager.h"
 #include "json.hpp"
 
-std::string ORGBPlugin::fork      = "CalcProgrammer1";
-std::string ORGBPlugin::branch    = "master";
-bool        ORGBPlugin::DarkTheme = false;
+bool ORGBPlugin::DarkTheme = false;
 
 QLabel* TabLabel()
 {
-    QString UpdateLabelTabString = "<html><table><tr><td width='30'><img src='";
-    UpdateLabelTabString += ":/Update";
-    if(ORGBPlugin::DarkTheme) UpdateLabelTabString += "_dark";
-    UpdateLabelTabString += ".png' height='16' width='16'></td><td>Updates</td></tr></table></html>";
-
-    QLabel *UpdateTabLabel = new QLabel();
-    UpdateTabLabel->setText(UpdateLabelTabString);
-    UpdateTabLabel->setIndent(20);
-    if(ORGBPlugin::DarkTheme)
-    {
-        UpdateTabLabel->setGeometry(0, 25, 200, 50);
-    }
-    else
-    {
-        UpdateTabLabel->setGeometry(0, 0, 200, 25);
-    }
-    return UpdateTabLabel;
+    QLabel* Label = new QLabel();
+    Label->setText("Effects");
+    return Label;
 }
 
 OpenRGBPluginInfo ORGBPlugin::Initialize(bool Dt, ResourceManager *RM)
 {
-    ORGBPlugin::PInfo.PluginName  = "Updates";
-    ORGBPlugin::PInfo.PluginDescription  = "A Plugin that bring auto updating to OpenRGB";
-    ORGBPlugin::PInfo.PluginLocation  = "InformationTab";
+    ORGBPlugin::PInfo.PluginName         = "Effects";
+    ORGBPlugin::PInfo.PluginDescription  = "A Canned Effects Plugin";
+    ORGBPlugin::PInfo.PluginLocation     = "TopTabBar";
 
     ORGBPlugin::PInfo.HasCustom   = true;
 
-    json Settings = RM->GetSettingsManager()->GetSettings("Updates");
-    if (Settings.contains("branch"))
-    {
-        ORGBPlugin::branch = Settings["branch"];
-    }
-    if (Settings.contains("fork"))
-    {
-        ORGBPlugin::fork = Settings["fork"];
-    }
     ORGBPlugin::DarkTheme = Dt;
 
     ORGBPlugin::PInfo.PluginLabel = TabLabel();
+
+    ORGBPlugin::RMPointer = RM;
 
     return ORGBPlugin::PInfo;
 }
 
 QWidget* ORGBPlugin::CreateGUI(QWidget *Parent)
 {
-    OpenRGBUpdateInfoPage *UpdatePage = NULL;
-    /*-------------------------------------------------*\
-    | Get prefered Branch/Fork from settings manager    |
-    \*-------------------------------------------------*/
-    UpdatePage = new OpenRGBUpdateInfoPage(Parent);
+    QWidget* BlankReturn = new QWidget();
+    //OpenRGBUpdateInfoPage *UpdatePage = NULL;
+    //UpdatePage = new OpenRGBUpdateInfoPage(Parent);
 
-    return UpdatePage;
+    return BlankReturn;
 }

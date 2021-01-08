@@ -2,23 +2,24 @@ QT +=                  \
     gui                \
     widgets            \
     core               \
-    network            \
-    webenginewidgets   \
 
 TEMPLATE = lib
-DEFINES += ORGBUPDATEPLUGIN_LIBRARY
+DEFINES += ORGBEFFECTPLUGIN_LIBRARY
 
 CONFIG += c++11
 
-#-----------------------------------------------------------------------------------------------#
-# OpenRGB Plugin SDK                                                                            #
-#-----------------------------------------------------------------------------------------------#
+
 INCLUDEPATH +=                                                                                  \
+    Effects/                                                                                    \
     OpenRGB/                                                                                    \
     OpenRGB/dependencies/json                                                                   \
     OpenRGB/i2c_smbus                                                                           \
     OpenRGB/net_port                                                                            \
     OpenRGB/RGBController                                                                       \
+
+#-----------------------------------------------------------------------------------------------#
+# OpenRGB Plugin SDK                                                                            #
+#-----------------------------------------------------------------------------------------------#
 
 HEADERS +=                                                                                      \
     OpenRGB/NetworkClient.h                                                                     \
@@ -32,24 +33,23 @@ HEADERS +=                                                                      
     OpenRGB/i2c_smbus/i2c_smbus.h                                                               \
     OpenRGB/net_port/net_port.h                                                                 \
     OpenRGB/RGBController/RGBController.h                                                       \
+    OpenRGBEffectPage.h                                                                         \
+    OpenRGBEffectTab.h
 
 #-----------------------------------------------------------------------------------------------#
 # Plugin Source                                                                                 #
 #-----------------------------------------------------------------------------------------------#
-SOURCES +=                                      \
-    ORGBUpdatePlugin.cpp                        \
-    OpenRGBUpdateTab.cpp                        \
+SOURCES +=                                                                                      \
+    Effects/SpectrumCycling.cpp                                                                 \
+    ORGBEffectPlugin.cpp                                                                        \
+    OpenRGBEffectPage.cpp                                                                       \
+    OpenRGBEffectTab.cpp
 
-HEADERS +=                                      \
-    ORGBUpdatePlugin.h                          \
-    OpenRGBPluginInterface.h                    \
-    OpenRGBUpdateTab.h                          \
-
-FORMS +=                                        \
-    ORGBUpdatePlugin.ui                         \
-
-RESOURCES +=                                    \
-    resources.qrc                               \
+HEADERS +=                                                                                      \
+    ORGBEffectPlugin.h                                                                          \
+    OpenRGBPluginInterface.h                                                                    \
+    Effects/RGBEffect.h                                                                         \
+    Effects/SpectrumCycling.h                                                                   \
 
 win32:contains(QMAKE_TARGET.arch, x86_64) {
     LIBS +=                                                                                     \
@@ -95,3 +95,7 @@ win32:contains(QMAKE_TARGET.arch, x86) {
     export(copydata.commands)
     QMAKE_EXTRA_TARGETS += first copydata
 }
+
+FORMS += \
+    OpenRGBEffectPage.ui \
+    OpenRGBEffectTab.ui
