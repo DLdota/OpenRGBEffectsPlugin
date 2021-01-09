@@ -1,7 +1,8 @@
 #include "OpenRGBEffectTab.h"
 #include "OpenRGBEffectPage.h"
 
-std::vector<RGBEffect*> OpenRGBEffectTab::EffectList;
+std::vector<RGBEffect*>     OpenRGBEffectTab::EffectList;
+std::vector<RGBController*> OpenRGBEffectTab::RGBControllerList;
 
 void OpenRGBEffectTab::DefineEffects()
 {
@@ -14,6 +15,7 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent, ResourceManager* RMPointer) 
     ui(new Ui::OpenRGBEffectTab)
 {
     ui->setupUi(this);
+    RMPointer->WaitForDeviceDetection();
     RGBControllerList = RMPointer->GetRGBControllers();
 
     DefineEffects();

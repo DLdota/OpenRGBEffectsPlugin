@@ -24,18 +24,31 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT):
 {
     ui->setupUi(this);
 
+    ui->SpeedFrame->hide();
+
     ui->SelectDevices->setColumnCount(3);
     ui->SelectDevices->setHorizontalHeaderLabels({"Device","Enabled","Reversed"});
+    std::vector<int> CollumnSizes = {165 , 75, 75};
+    for (int i = 0; i < int(CollumnSizes.size()); i++)
+    {
+        ui->SelectDevices->setColumnWidth(i,CollumnSizes[i]);
+    }
+
+    qDebug() << OpenRGBEffectTab::RGBControllerList.size();
+
+    for (int i = 0; i < int(OpenRGBEffectTab::RGBControllerList.size()); i++)
+    {
+        CreateDeviceSelection(OpenRGBEffectTab::RGBControllerList[i]->name);
+    }
 
     ui->EffectName->setText(QString().fromStdString(EFCT->EffectDetails.EffectName));
     ui->EffectDesciption->setText(QString().fromStdString(EFCT->EffectDetails.EffectDescription));
 
     if (EFCT->EffectDetails.MinSpeed < EFCT->EffectDetails.MaxSpeed)
     {
-        QSlider* SpeedSlider = new QSlider(Qt::Horizontal,ui->OptionFrame);
-        SpeedSlider->setMaximum(EFCT->EffectDetails.MaxSpeed);
-        SpeedSlider->setMinimum(EFCT->EffectDetails.MinSpeed);
-        SpeedSlider->show();
+        ui->SpeedSlider->setMaximum(EFCT->EffectDetails.MaxSpeed);
+        ui->SpeedSlider->setMinimum(EFCT->EffectDetails.MinSpeed);
+        ui->SpeedSlider->show();
     }
 }
 

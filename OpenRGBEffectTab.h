@@ -20,7 +20,7 @@ public:
     explicit OpenRGBEffectTab(QWidget *parent = nullptr, ResourceManager* RMPointer = nullptr);
     ~OpenRGBEffectTab();
 
-    std::vector<RGBController*> RGBControllerList;
+    static std::vector<RGBController*> RGBControllerList;
     void DefineEffects();
 private:
     Ui::OpenRGBEffectTab            *ui;
