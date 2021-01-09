@@ -15,10 +15,22 @@ EffectInfo SpectrumCycling::DefineEffectDetails()
 
 void SpectrumCycling::StartEffect()
 {
-
+    qDebug() << "Effect started";
 }
 
 void SpectrumCycling::StopEffect()
 {
+    qDebug() << "Effect Stopped";
+}
 
+void SpectrumCycling::SetSpeed(int Speed)
+{
+    SpectrumCycling::Speed = Speed;
+}
+
+void SpectrumCycling::SetUserColors(std::vector<UserColor>)
+{
+    /*--------------------------------------*\
+    | This mode doesn't support user colors  |
+    \*--------------------------------------*/
 }

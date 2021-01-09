@@ -21,8 +21,17 @@ public:
 
     void CreateDeviceSelection(std::string DeviceName);
 
+    bool HasSpeed = false;
+
+private slots:
+    void on_StartButton_clicked();
+    void on_StopButton_clicked();
+    void on_SpeedSlider_valueChanged(int value);
 private:
     Ui::OpenRGBEffectPage *ui;
+    RGBEffect* EFCT;
+
+    void on_ValueChanged();
 };
 
 #endif // OPENRGBEFFECTPAGE_H
