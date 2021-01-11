@@ -42,14 +42,6 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT):
         ui->SelectDevices->setColumnWidth(i,CollumnSizes[i]);
     }
 
-    /*---------------------*\
-    | Add Devices to list   |
-    \*---------------------*/
-    for (int i = 0; i < int(OpenRGBEffectTab::RGBControllerList.size()); i++)
-    {
-        CreateDeviceSelection(OpenRGBEffectTab::RGBControllerList[i]->name);
-    }
-
     /*---------------------------------*\
     | Fill in top description and name  |
     \*---------------------------------*/
@@ -67,6 +59,9 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT):
         ui->SpeedFrame->show();
         OpenRGBEffectPage::HasSpeed = true;
     }
+
+    ORGBPlugin::RMPointer->RegisterDeviceListChangeCallback(DeviceListChangedCallback, this);
+    ORGBPlugin::RMPointer->RegisterDetectionProgressCallback(DeviceListChangedCallback, this);
 }
 
 OpenRGBEffectPage::~OpenRGBEffectPage()
@@ -80,6 +75,24 @@ void OpenRGBEffectPage::on_StartButton_clicked()
     ui->StartButton->setDisabled(true);
     ui->StopButton->setDisabled(false);
     ui->RunningStatus->setText("Running");
+
+    std::vector<RGBController*> RequestLock;
+
+    for (int i = 0; i < ui->SelectDevices->rowCount(); i++)
+    {
+        /*-----------------------------------------------------*\
+        | For row in table widget                               |
+        |   If checkbox is checked                              |
+        |       Add the Device to the list that will be locked  |
+        \*-----------------------------------------------------*/
+        QCheckBox *Selectedbox = qobject_cast<QCheckBox *>(ui->SelectDevices->cellWidget(i,1));
+        if (Selectedbox->isChecked())
+        {
+            qDebug() << QString().fromStdString(ORGBPlugin::RMPointer->GetRGBControllers()[i]->name);
+            RequestLock.push_back(ORGBPlugin::RMPointer->GetRGBControllers()[i]);
+        }
+    }
+    OpenRGBEffectPage::OwnedController = OpenRGBEffectTab::LockControllers(RequestLock);
 }
 
 void OpenRGBEffectPage::on_StopButton_clicked()
@@ -93,4 +106,26 @@ void OpenRGBEffectPage::on_StopButton_clicked()
 void OpenRGBEffectPage::on_SpeedSlider_valueChanged(int value)
 {
     OpenRGBEffectPage::EFCT->SetSpeed(value);
+}
+
+void OpenRGBEffectPage::DeviceListChangedCallback(void* ptr)
+{
+    OpenRGBEffectPage * this_obj = (OpenRGBEffectPage *)ptr;
+
+    //OpenRGBEffectPage::DeviceListChanged();
+    QMetaObject::invokeMethod(this_obj, "DeviceListChanged", Qt::QueuedConnection);
+}
+
+void OpenRGBEffectPage::DeviceListChanged()
+{
+    std::vector<RGBController*> RGBControllers = ORGBPlugin::RMPointer->GetRGBControllers();
+    /*---------------------*\
+    | Add Devices to list   |
+    \*---------------------*/
+    ui->SelectDevices->setRowCount(0);
+    qDebug() << RGBControllers.size();
+    for (int i = 0; i < int(RGBControllers.size()); i++)
+    {
+        CreateDeviceSelection(RGBControllers[i]->name);
+    }
 }

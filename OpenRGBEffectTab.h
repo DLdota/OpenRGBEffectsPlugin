@@ -17,14 +17,18 @@ class OpenRGBEffectTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit OpenRGBEffectTab(QWidget *parent = nullptr, ResourceManager* RMPointer = nullptr);
+    explicit OpenRGBEffectTab(QWidget *parent = nullptr);
     ~OpenRGBEffectTab();
 
-    static std::vector<RGBController*> RGBControllerList;
     void DefineEffects();
+
+    static std::vector<RGBController*> LockControllers(std::vector<RGBController*>);
+    static void                        UnlockControllers(std::vector<RGBController*>);
+
 private:
-    Ui::OpenRGBEffectTab            *ui;
-    static std::vector<RGBEffect*>   EffectList;
+    Ui::OpenRGBEffectTab                *ui;
+    static std::vector<RGBEffect*>      EffectList;
+    static std::vector<RGBController*>  LockedControllers;
 };
 
 #endif // OPENRGBEFFECTTAB_H

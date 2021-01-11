@@ -3,6 +3,7 @@
 #include "json.hpp"
 
 bool ORGBPlugin::DarkTheme = false;
+ResourceManager* ORGBPlugin::RMPointer = nullptr;
 
 QLabel* TabLabel()
 {
@@ -28,12 +29,10 @@ OpenRGBPluginInfo ORGBPlugin::Initialize(bool Dt, ResourceManager *RM)
     return ORGBPlugin::PInfo;
 }
 
-QWidget* ORGBPlugin::CreateGUI(QWidget *Parent)
+QWidget* ORGBPlugin::CreateGUI(QWidget*)
 {
-    //QWidget* BlankReturn = new QWidget();
     OpenRGBEffectTab* EETab = NULL;
-    //RMPointer->WaitForDeviceDetection();
-    EETab = new OpenRGBEffectTab(nullptr,ORGBPlugin::RMPointer);
+    EETab = new OpenRGBEffectTab(nullptr);
 
     return EETab;
 }

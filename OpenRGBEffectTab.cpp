@@ -1,8 +1,8 @@
 #include "OpenRGBEffectTab.h"
 #include "OpenRGBEffectPage.h"
 
-std::vector<RGBEffect*>     OpenRGBEffectTab::EffectList;
-std::vector<RGBController*> OpenRGBEffectTab::RGBControllerList;
+std::vector<RGBController*> OpenRGBEffectTab::LockedControllers;
+std::vector<RGBEffect*> OpenRGBEffectTab::EffectList;
 
 void OpenRGBEffectTab::DefineEffects()
 {
@@ -10,13 +10,11 @@ void OpenRGBEffectTab::DefineEffects()
     OpenRGBEffectTab::EffectList.push_back(SpecCycle);
 }
 
-OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent, ResourceManager* RMPointer) :
+OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::OpenRGBEffectTab)
 {
     ui->setupUi(this);
-    RMPointer->WaitForDeviceDetection();
-    RGBControllerList = RMPointer->GetRGBControllers();
 
     DefineEffects();
     for (int i = 0; i < int(EffectList.size()); i++)
@@ -45,10 +43,50 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent, ResourceManager* RMPointer) 
         ui->LeftTabBar->tabBar()->setTabButton(ui->LeftTabBar->count() -1, QTabBar::LeftSide,EffectTabLabel);
 
     }
-
 }
 
 OpenRGBEffectTab::~OpenRGBEffectTab()
 {
     delete ui;
+}
+
+std::vector<RGBController*> OpenRGBEffectTab::LockControllers(std::vector<RGBController*> ToLock)
+{
+    std::vector<RGBController*> SuccessFullyLocked;
+    for(int LockIndex = 0; LockIndex < int(ToLock.size()); LockIndex++)
+    {
+        bool FoundMatch = false;
+        for (int i = 0; i < int(OpenRGBEffectTab::LockedControllers.size()); i++)
+        {
+            /*-----------------------------------------------------------------------------------*\
+            | If any of the items in the devicelist are == to the controller trying to be locked  |
+            \*-----------------------------------------------------------------------------------*/
+            if(ToLock[LockIndex] == OpenRGBEffectTab::LockedControllers[i])
+            {
+                FoundMatch = true;
+                break;
+            }
+        }
+        if (!FoundMatch)
+        {
+            OpenRGBEffectTab::LockedControllers.push_back(ToLock[LockIndex]);
+            SuccessFullyLocked.push_back(ToLock[LockIndex]);
+        }
+    }
+    return SuccessFullyLocked;
+}
+
+void OpenRGBEffectTab::UnlockControllers(std::vector<RGBController*> ToUnlock)
+{
+    for(int UnlockIndex = 0; UnlockIndex < int(ToUnlock.size()); UnlockIndex++)
+    {
+        for (int i = 0; i < int(OpenRGBEffectTab::LockedControllers.size()); i++)
+        {
+            if(ToUnlock[UnlockIndex] == OpenRGBEffectTab::LockedControllers[i])
+            {
+                OpenRGBEffectTab::LockedControllers.erase(LockedControllers.begin()+UnlockIndex);
+                break;
+            }
+        }
+    }
 }

@@ -1,6 +1,7 @@
 #ifndef RGBEFFECT_H
 #define RGBEFFECT_H
 #include "ORGBEffectPlugin.h"
+#include "hsv.h"
 
 struct EffectInfo
 {

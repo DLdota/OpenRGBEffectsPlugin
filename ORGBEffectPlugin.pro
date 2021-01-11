@@ -10,6 +10,7 @@ CONFIG += c++11
 
 
 INCLUDEPATH +=                                                                                  \
+    Effects/HSV/                                                                                \
     Effects/                                                                                    \
     OpenRGB/                                                                                    \
     OpenRGB/dependencies/json                                                                   \
@@ -40,12 +41,14 @@ HEADERS +=                                                                      
 # Plugin Source                                                                                 #
 #-----------------------------------------------------------------------------------------------#
 SOURCES +=                                                                                      \
+    Effects/HSV/hsv.cpp                                                                         \
     Effects/SpectrumCycling.cpp                                                                 \
     ORGBEffectPlugin.cpp                                                                        \
     OpenRGBEffectPage.cpp                                                                       \
     OpenRGBEffectTab.cpp
 
 HEADERS +=                                                                                      \
+    Effects/HSV/hsv.h                                                                           \
     ORGBEffectPlugin.h                                                                          \
     OpenRGBPluginInterface.h                                                                    \
     Effects/RGBEffect.h                                                                         \

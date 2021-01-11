@@ -29,5 +29,5 @@ public:
 
     static bool         DarkTheme;
 
-    ResourceManager* RMPointer;
+    static ResourceManager* RMPointer;
 };

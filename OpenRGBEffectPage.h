@@ -27,11 +27,15 @@ private slots:
     void on_StartButton_clicked();
     void on_StopButton_clicked();
     void on_SpeedSlider_valueChanged(int value);
+
+    void        DeviceListChanged();
 private:
     Ui::OpenRGBEffectPage *ui;
     RGBEffect* EFCT;
 
-    void on_ValueChanged();
+    std::vector<RGBController*> OwnedController;
+
+    static void DeviceListChangedCallback(void* ptr);
 };
 
 #endif // OPENRGBEFFECTPAGE_H
