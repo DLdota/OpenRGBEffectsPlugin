@@ -92,8 +92,12 @@ void OpenRGBEffectPage::on_StartButton_clicked()
         }
     }
     OpenRGBEffectPage::OwnedController = OpenRGBEffectTab::LockControllers(RequestLock);
+    if (OpenRGBEffectPage::OwnedController.size() > 0)
+    {
 
-    //std::thread EffectThread(OpenRGBEffectPage::EFCT->StartEffect());
+        // Here is where it SHOULD be running the effect in a different thread
+
+    }
 }
 
 void OpenRGBEffectPage::on_StopButton_clicked()

@@ -21,7 +21,7 @@ public:
 private:
     std::vector<RGBController*> OwnedDevices;
     bool StopNextLoop = false;
-    int Speed;
+    int  Speed;
 };
 
 #endif // SPECTRUMCYCLING_H
