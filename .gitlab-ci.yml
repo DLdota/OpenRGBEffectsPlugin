@@ -138,6 +138,7 @@ build_windows_64:
   - .shared_windows_runners
   stage: build
   script:
+  - powershell
   - $esc = "$([char]27)"
   - $count = 0
   - function _unix_tmsec_ { [int64](([datetime]::UtcNow)-(get-date "1/1/1970")).TotalSeconds }
@@ -162,7 +163,7 @@ build_windows_64:
   - curl.exe -LJ -o qt-declare.7z     'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5150/qt.qt5.5150.win64_msvc2019_64/5.15.0-0-202005150700qtdeclarative-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86_64.7z'
   - curl.exe -LJ -o qt-location.7z    'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5150/qt.qt5.5150.win64_msvc2019_64/5.15.0-0-202005150700qtlocation-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86_64.7z'
   - _fold_final_
-  
+
   - _fold_start_ 'extracting the downloaded qt binaries'
   - 7z x qt-base.7z        '-o../_qt' -y
   - 7z x qt-tools.7z       '-o../_qt' -y
@@ -179,6 +180,10 @@ build_windows_64:
   - Pop-Location
   - _fold_final_
   
+  - _fold_start_ "Find the .pro\'s name"
+  - $FNAME = (dir *.pro)
+  - _fold_final_
+
   - _fold_start_ 'run qmake and generate the msvc nmake makefile'
   - mkdir _build; cd _build
   - ..\_qt\5.15.0\msvc2019_64\bin\qmake ..\ORGBUpdatePlugin.pro
@@ -188,13 +193,14 @@ build_windows_64:
   - nmake
   - _fold_final_
 
-  - _fold_start_ 'Copy Qt5Network to distrobution folder'
-  - cp ..\_qt\5.15.0\msvc2019_64\bin\Qt5Network.dll release
+  - _fold_start_ 'Copy Qt5Network to distrobution folder if it matches a string'
+  - if ($FNAME -contains 'Update'){cp ..\_qt\5.15.0\msvc2019_64\bin\Qt5Network.dll release}
   - _fold_final_
 
   - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
-  - mv release ORGBUpdatePlugin # Rename it
-  - 7z a -mx9 -r -y "ORGBPlugin_Auto_Update_64.7z" ORGBUpdatePlugin # Zip it up
+  - $PLUGINNAME = $FNAME -replace '.pro',''
+  - mv release PLUGINNAME # Rename it
+  - 7z a -mx9 -r -y "ORGBPlugin_%$PLUGINNAME%_RELEASE_64.7z" PLUGINNAME # Zip it up
   - _fold_final_
 
   artifacts:

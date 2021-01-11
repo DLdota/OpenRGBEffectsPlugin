@@ -71,7 +71,6 @@ OpenRGBEffectPage::~OpenRGBEffectPage()
 
 void OpenRGBEffectPage::on_StartButton_clicked()
 {
-    OpenRGBEffectPage::EFCT->StartEffect();
     ui->StartButton->setDisabled(true);
     ui->StopButton->setDisabled(false);
     ui->RunningStatus->setText("Running");
@@ -93,6 +92,8 @@ void OpenRGBEffectPage::on_StartButton_clicked()
         }
     }
     OpenRGBEffectPage::OwnedController = OpenRGBEffectTab::LockControllers(RequestLock);
+
+    //std::thread EffectThread(OpenRGBEffectPage::EFCT->StartEffect());
 }
 
 void OpenRGBEffectPage::on_StopButton_clicked()
