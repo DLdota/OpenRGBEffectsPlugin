@@ -180,13 +180,14 @@ build_windows_64:
   - _fold_final_
   
   - _fold_start_ "Find the .pro's name"
-  - $TOCLEAN = (dir *.pro)
+  - $PATHCLEAN = (dir *.pro)
+  - $TOCLEAN = ($PATHCLEAN -replace '.*\\' , '')
   - $FNAME = ($TOCLEAN -replace '.pro.','.pro')
   - _fold_final_
 
   - _fold_start_ 'run qmake and generate the msvc nmake makefile'
   - mkdir _build; cd _build
-  - ..\_qt\5.15.0\msvc2019_64\bin\qmake $FNAME
+  - ..\_qt\5.15.0\msvc2019_64\bin\qmake ../$FNAME
   - _fold_final_
   
   - _fold_start_ 'start the actual build with jom instead of nmake; for speed'
