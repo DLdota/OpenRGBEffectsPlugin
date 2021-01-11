@@ -181,6 +181,7 @@ build_windows_64:
   
   - _fold_start_ "Find the .pro\'s name"
   - $FNAME = (dir *.pro)
+  - $FNAME = ($FNAME -replace '.pro.','.pro')
   - _fold_final_
 
   - _fold_start_ 'run qmake and generate the msvc nmake makefile'
