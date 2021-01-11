@@ -106,9 +106,15 @@ build_windows_32:
   - Pop-Location
   - _fold_final_
   
+  - _fold_start_ "Find the .pro's name"
+  - $PATHCLEAN = (dir *.pro)
+  - $TOCLEAN = ($PATHCLEAN -replace '.*\\' , '')
+  - $FNAME = ($TOCLEAN -replace '.pro.','.pro')
+  - _fold_final_
+
   - _fold_start_ 'run qmake and generate the msvc nmake makefile'
   - mkdir _build; cd _build
-  - ..\_qt\5.15.0\msvc2019\bin\qmake ..\ORGBUpdatePlugin.pro
+  - ..\_qt\5.15.0\msvc2019\bin\qmake ../$FNAME
   - _fold_final_
   
   - _fold_start_ 'start the actual build with jom instead of nmake; for speed'
@@ -116,13 +122,13 @@ build_windows_32:
   - _fold_final_
 
   - _fold_start_ 'Copy Qt5Network to distrobution folder'
-  - cp ..\_qt\5.15.0\msvc2019\bin\Qt5Network.dll release
+  - - if ($FNAME -contains 'Update'){cp ..\_qt\5.15.0\msvc2019\bin\Qt5Network.dll release}
   - _fold_final_
 
   - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
-  - mv release ORGBUpdatePlugin_32bit
+  - mv release $PLUGINNAME_32bit
   - ${revision} = ((git rev-parse --short HEAD) | Out-String).Trim()
-  - 7z a -mx9 -r -y "ORGBUpdatePlugin_32bit_${revision}.7z" ORGBUpdatePlugin_32bit
+  - 7z a -mx9 -r -y "ORGBUpdatePlugin_32bit_${revision}.7z" $PLUGINNAME_32bit
   - _fold_final_
 
   artifacts:
@@ -200,8 +206,8 @@ build_windows_64:
 
   - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
   - $PLUGINNAME = $FNAME -replace '.pro',''
-  - mv release PLUGINNAME # Rename it
-  - 7z a -mx9 -r -y "$PLUGINNAME_RELEASE_64.7z" PLUGINNAME # Zip it up
+  - mv release $PLUGINNAME # Rename it
+  - 7z a -mx9 -r -y "$PLUGINNAME_RELEASE_64.7z" $PLUGINNAME # Zip it up
   - _fold_final_
 
   artifacts:
