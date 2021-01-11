@@ -201,7 +201,7 @@ build_windows_64:
   - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
   - $PLUGINNAME = $FNAME -replace '.pro',''
   - mv release PLUGINNAME # Rename it
-  - 7z a -mx9 -r -y "ORGBPlugin_%$PLUGINNAME%_RELEASE_64.7z" PLUGINNAME # Zip it up
+  - 7z a -mx9 -r -y "$PLUGINNAME_RELEASE_64.7z" PLUGINNAME # Zip it up
   - _fold_final_
 
   artifacts:
