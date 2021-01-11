@@ -138,7 +138,6 @@ build_windows_64:
   - .shared_windows_runners
   stage: build
   script:
-  - powershell
   - $esc = "$([char]27)"
   - $count = 0
   - function _unix_tmsec_ { [int64](([datetime]::UtcNow)-(get-date "1/1/1970")).TotalSeconds }
