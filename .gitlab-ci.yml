@@ -50,6 +50,7 @@ build_linux_64:
   stage: build
   script:
   - export $(dpkg-architecture)
+  - chmod +X scripts/scripts_build-plugin.sh
   - ./scripts/scripts_build-plugin.sh
   - fname = ("*.so")
   
