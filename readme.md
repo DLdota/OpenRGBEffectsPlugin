@@ -1,9 +1,7 @@
-# Auto Updates
+# Effects
 
-You may notice that the windows version ships with the plugin itself (``ORGBUpdatePlugin.dll``) and 3 other dll files (``Openssl.dll``/``libcrypto.dll`` and ``Qt5Network.dll``)\
+There are no special installation instructions for this plugin
 
-The other 3 go in the folder with the executable for OpenRGB
+Just drag and drop the ``.so``/``.dll`` to the ``plugins`` folder in the OpenRGB Config folder (``C:\Users\Username\appdata\roaming\OpenRGB\plugins`` on windows and ``~/.config/OpenRGB/plugins`` on linux)
 
-Otherwise the plugin *will not load*
-
-With only Qt5Network it may load but it will spit a failed to parse initial commit page error if you don't also have the 2 OpenSSL DLLs with it
+You may need to create the folder if you haven't already
