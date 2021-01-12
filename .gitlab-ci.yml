@@ -51,7 +51,7 @@ build_linux_64:
   script:
   - export $(dpkg-architecture)
   - chmod +X scripts/scripts_build-plugin.sh
-  - ./scripts/scripts_build-plugin.sh
+  - sudo ./scripts/scripts_build-plugin.sh
   - fname = ("*.so")
   
   artifacts:
