@@ -95,7 +95,7 @@ void OpenRGBEffectPage::on_StartButton_clicked()
     if (OpenRGBEffectPage::OwnedController.size() > 0)
     {
         // Here is where it SHOULD be running the effect in a different thread
-        std::thread EffectThread(OpenRGBEffectPage::EFCT->StartEffect());
+        //std::thread EffectThread(OpenRGBEffectPage::EFCT->StartEffect());
     }
 }
 
