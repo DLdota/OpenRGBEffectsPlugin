@@ -53,10 +53,13 @@ build_linux_64:
   #- chmod +X scripts/scripts_build-plugin.sh
   - ./scripts/scripts_build-plugin.sh
   - fname=*.so
+  - mkdir ship
+  - cd ship
+  - cp ../$fname ./
   
   artifacts:
     paths:
-    - ./$fname
+    - ./ship
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
