@@ -52,7 +52,7 @@ build_linux_64:
   - export $(dpkg-architecture)
   #- chmod +X scripts/scripts_build-plugin.sh
   - ./scripts/scripts_build-plugin.sh
-  - fname = "*.so"
+  - fname=*.so
   
   artifacts:
     paths:
