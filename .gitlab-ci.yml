@@ -56,7 +56,7 @@ build_linux_64:
   
   artifacts:
     paths:
-    - $fname
+    - ./$fname
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
