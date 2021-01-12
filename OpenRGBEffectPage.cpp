@@ -87,16 +87,15 @@ void OpenRGBEffectPage::on_StartButton_clicked()
         QCheckBox *Selectedbox = qobject_cast<QCheckBox *>(ui->SelectDevices->cellWidget(i,1));
         if (Selectedbox->isChecked())
         {
-            qDebug() << QString().fromStdString(ORGBPlugin::RMPointer->GetRGBControllers()[i]->name);
+            //qDebug() << QString().fromStdString(ORGBPlugin::RMPointer->GetRGBControllers()[i]->name);
             RequestLock.push_back(ORGBPlugin::RMPointer->GetRGBControllers()[i]);
         }
     }
     OpenRGBEffectPage::OwnedController = OpenRGBEffectTab::LockControllers(RequestLock);
     if (OpenRGBEffectPage::OwnedController.size() > 0)
     {
-
         // Here is where it SHOULD be running the effect in a different thread
-
+        std::thread EffectThread(OpenRGBEffectPage::EFCT->StartEffect());
     }
 }
 
@@ -128,7 +127,7 @@ void OpenRGBEffectPage::DeviceListChanged()
     | Add Devices to list   |
     \*---------------------*/
     ui->SelectDevices->setRowCount(0);
-    qDebug() << RGBControllers.size();
+    //qDebug() << RGBControllers.size();
     for (int i = 0; i < int(RGBControllers.size()); i++)
     {
         CreateDeviceSelection(RGBControllers[i]->name);

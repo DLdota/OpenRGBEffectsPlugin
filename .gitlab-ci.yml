@@ -42,7 +42,7 @@ before_script:
 #    expire_in: 30 days
 #
 #-----------------------------------------------------------------------#
-# Linux (AppImage) 64-bit Build Target                                  #
+# Linux 64-bit Build Target                                             #
 #-----------------------------------------------------------------------#
 build_linux_64:
   <<: *ccache_init
@@ -50,11 +50,12 @@ build_linux_64:
   stage: build
   script:
   - export $(dpkg-architecture)
-  - ./build.sh
+  - ./scripts/scripts_build-plugin.sh
+  - fname = ("*.so")
   
   artifacts:
     paths:
-    - libORGBUpdatePlugin.so
+    - $fname
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
@@ -126,6 +127,7 @@ build_windows_32:
   - _fold_final_
 
   - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
+  - ${PLUGINNAME} = (${FNAME} -replace '.pro' , '')
   - mv release ${PLUGINNAME}_32bit
   - ${revision} = ((git rev-parse --short HEAD) | Out-String).Trim()
   - 7z a -mx9 -r -y "${PLUGINNAME}_32bit_${revision}.7z" ${PLUGINNAME}_32bit
@@ -206,7 +208,7 @@ build_windows_64:
 
   - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
   - ${revision} = ((git rev-parse --short HEAD) | Out-String).Trim()
-  - ${PLUGINNAME} = ${FNAME} -replace '.pro',''
+  - ${PLUGINNAME} = (${FNAME} -replace '.pro' , '')
   - mv release ${PLUGINNAME} # Rename it
   - 7z a -mx9 -r -y "${PLUGINNAME}_64_${revision}.7z" ${PLUGINNAME} # Zip it up
   - _fold_final_

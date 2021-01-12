@@ -15,7 +15,7 @@ EffectInfo SpectrumCycling::DefineEffectDetails()
 
 void SpectrumCycling::StartEffect()
 {
-    qDebug() << "Effect started";
+    //qDebug() << "Effect started";
     hsv_t HSVVal;
     HSVVal.value = 255;
     HSVVal.saturation = 255;
@@ -43,7 +43,7 @@ void SpectrumCycling::StartEffect()
 
 void SpectrumCycling::StopEffect()
 {
-    qDebug() << "Effect Stopped";
+    //qDebug() << "Effect Stopped";
 }
 
 void SpectrumCycling::SetSpeed(int Speed)
