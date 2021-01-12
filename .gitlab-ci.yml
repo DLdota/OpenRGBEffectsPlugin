@@ -28,19 +28,23 @@ before_script:
 #-----------------------------------------------------------------------#
 # Linux (AppImage) 32-bit Build Target                                  #
 #-----------------------------------------------------------------------#
-#build_linux_32:
-#  <<: *ccache_init
-#  image: i386/ubuntu:bionic
-#  stage: build
-#  script:
-#  - export $(dpkg-architecture)
-#  - ./build.sh
-#  
-#  artifacts:
-#    paths:
-#    - libORGBUpdatePlugin.so
-#    expire_in: 30 days
-#
+build_linux_32:
+  <<: *ccache_init
+  image: ubuntu:bionic
+  stage: build
+  script:
+  - export $(dpkg-architecture)
+  - ./scripts/scripts_build-plugin.sh
+  - fname=*.so
+  - mkdir ship
+  - cd ship
+  - cp ../$fname ./
+  
+  artifacts:
+    paths:
+    - ./ship
+    expire_in: 30 days
+
 #-----------------------------------------------------------------------#
 # Linux 64-bit Build Target                                             #
 #-----------------------------------------------------------------------#
@@ -50,7 +54,6 @@ build_linux_64:
   stage: build
   script:
   - export $(dpkg-architecture)
-  #- chmod +X scripts/scripts_build-plugin.sh
   - ./scripts/scripts_build-plugin.sh
   - fname=*.so
   - mkdir ship
@@ -75,7 +78,6 @@ build_windows_32:
   - function _unix_tmsec_ { [int64](([datetime]::UtcNow)-(get-date "1/1/1970")).TotalSeconds }
   - function _fold_start_ { param( [string]$TEXT_TAG ) $t=_unix_tmsec_; $global:count += 1; Write-Host -NoNewLine "`r`n`r`nsection_start:${t}:sect_${count}`r${esc}[0K${esc}[33m${TEXT_TAG}${esc}[39m`r`n"; }
   - function _fold_final_ {                            $t=_unix_tmsec_;                     Write-Host -NoNewLine   "`r`n`r`nsection_end:${t}:sect_${count}`r${esc}[0K`r`n"           ; }
-
 
   - _fold_start_ 'configuring the msvc environment variables'
   - Push-Location "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Auxiliary/Build"
@@ -155,7 +157,6 @@ build_windows_64:
   - function _unix_tmsec_ { [int64](([datetime]::UtcNow)-(get-date "1/1/1970")).TotalSeconds }
   - function _fold_start_ { param( [string]$TEXT_TAG ) $t=_unix_tmsec_; $global:count += 1; Write-Host -NoNewLine "`r`n`r`nsection_start:${t}:sect_${count}`r${esc}[0K${esc}[33m${TEXT_TAG}${esc}[39m`r`n"; }
   - function _fold_final_ {                            $t=_unix_tmsec_;                     Write-Host -NoNewLine   "`r`n`r`nsection_end:${t}:sect_${count}`r${esc}[0K`r`n"           ; }
-
 
   - _fold_start_ 'configuring the msvc environment variables'
   - Push-Location "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Auxiliary/Build"
