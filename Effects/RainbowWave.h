@@ -19,6 +19,9 @@ public:
     EffectInfo EffectDetails;
 private:
     int Speed;
+
+    int Progress;
+    int HUE;
 };
 
 #endif // RAINBOWWAVE_H

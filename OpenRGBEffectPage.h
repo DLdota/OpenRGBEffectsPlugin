@@ -38,8 +38,6 @@ private:
     Ui::OpenRGBEffectPage *ui;
     RGBEffect* EFCT;
 
-    std::thread* EffectThread;
-
     std::vector<RGBController*> OwnedController;
 };
 

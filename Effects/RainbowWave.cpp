@@ -15,7 +15,36 @@ EffectInfo RainbowWave::DefineEffectDetails()
 
 void RainbowWave::StepEffect(std::vector<RGBController*> Controllers, int Step)
 {
-    // Nothing in here yet.
+    for (int DeviceIndex = 0; DeviceIndex < int(Controllers.size()); DeviceIndex++)
+    {
+        for (int ZoneIndex = 0; ZoneIndex < int(Controllers[DeviceIndex]->zones.size()); ZoneIndex++)
+        {
+            zone_type ZoneType = Controllers[DeviceIndex]->zones[ZoneIndex].type;
+            for (int LEDIndex = 0; LEDIndex < int(Controllers[DeviceIndex]->zones[ZoneIndex].leds_count); LEDIndex++)
+            {
+                if ( ZoneType == ZONE_TYPE_SINGLE)
+                {
+                    //HUE = 1000 %
+                }
+                else if (ZoneType == ZONE_TYPE_LINEAR)
+                {
+
+                }
+                else if ( ZoneType == ZONE_TYPE_MATRIX)
+                {
+
+                }
+            }
+        }
+    }
+    if (Progress < 100)
+    {
+        Progress += Speed;
+    }
+    else if (Progress >= 100)
+    {
+        Progress = 0;
+    }
 }
 
 void RainbowWave::SetSpeed(int Speed)

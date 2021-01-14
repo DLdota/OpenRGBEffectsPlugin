@@ -2,6 +2,10 @@
 #define OPENRGBEFFECTTAB_H
 
 #include <QWidget>
+#include <QTreeView>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+
 #include "ui_OpenRGBEffectTab.h"
 #include "ORGBEffectPlugin.h"
 
