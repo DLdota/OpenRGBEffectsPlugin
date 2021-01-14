@@ -36,7 +36,7 @@ public:
     static void SetEffectActive(RGBEffect* Effect);
     static void SetEffectUnActive(RGBEffect* Effect);
 
-    void CreateDeviceSelection(std::string DeviceName);
+    void CreateDeviceSelection(std::string DeviceName, bool HasDirectMode);
 private slots:
     void DeviceListChanged();
     void DeviceSelectionChanged();

@@ -24,6 +24,7 @@ struct UserColor
 struct BetterController
 {
     RGBController*  Controller;
+    bool            HasDirect;
     int             Index;
     bool            Locked;
     std::string     OwnedBy;
