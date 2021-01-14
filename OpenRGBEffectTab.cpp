@@ -239,41 +239,55 @@ void OpenRGBEffectTab::DeviceSelectionChanged()
         QCheckBox *Selectedbox = qobject_cast<QCheckBox *>(ui->SelectDevices->cellWidget(i,1));
         if ((Selectedbox->isChecked()) && (Selectedbox->isEnabled()) )
         {
-            EffectList[CurrentTab].OwnedControllers.push_back(Controllers[i].Controller);
-            /*-------------------------------------------------------------*\
-            | Set the lock status to true                                   |
-            | as well as set the effect it is owned by for use in tooltips  |
-            \*-------------------------------------------------------------*/
-            Controllers[i].Locked = true;
-            Controllers[i].OwnedBy = EffectList[CurrentTab].EffectInst->EffectDetails.EffectName;
-
-            /*----------------------------------------------------*\
-            | If the device is selected and has direct mode...     |
-            |       Set to direct mode                             |
-            | Else doesn't have direct mode...                     |
-            |       Try to set to Static                           |
-            \*----------------------------------------------------*/
-            if (Controllers[i].HasDirect)
+            bool AlreadyOwned = false;
+            /*------------------------------*\
+            | Make sure it doesn't add Dupes |
+            \*------------------------------*/
+            for (int AlreadyIn = 0; AlreadyIn < int(EffectList[CurrentTab].OwnedControllers.size()); AlreadyIn++)
             {
-                for (int ModeNum = 0; ModeNum < int(Controllers[i].Controller->modes.size()); ModeNum++)
+                if (Controllers[i].Controller == EffectList[CurrentTab].OwnedControllers[AlreadyIn])
                 {
-                    if (Controllers[i].Controller->modes[ModeNum].name == "Direct")
-                    {
-                        Controllers[i].Controller->SetMode(ModeNum);
-                        Controllers[i].Controller->UpdateMode();
-                        break;
-                    }
+                    AlreadyOwned = true;
                 }
             }
-            else
+            if (!AlreadyOwned)
             {
-                for (int ModeNum = 0; ModeNum < int(Controllers[i].Controller->modes.size()); ModeNum++)
+                EffectList[CurrentTab].OwnedControllers.push_back(Controllers[i].Controller);
+                /*-------------------------------------------------------------*\
+                | Set the lock status to true                                   |
+                | as well as set the effect it is owned by for use in tooltips  |
+                \*-------------------------------------------------------------*/
+                Controllers[i].Locked = true;
+                Controllers[i].OwnedBy = EffectList[CurrentTab].EffectInst->EffectDetails.EffectName;
+
+                /*----------------------------------------------------*\
+                | If the device is selected and has direct mode...     |
+                |       Set to direct mode                             |
+                | Else doesn't have direct mode...                     |
+                |       Try to set to Static                           |
+                \*----------------------------------------------------*/
+                if (Controllers[i].HasDirect)
                 {
-                    if (Controllers[i].Controller->modes[ModeNum].name == "Static")
+                    for (int ModeNum = 0; ModeNum < int(Controllers[i].Controller->modes.size()); ModeNum++)
                     {
-                        Controllers[i].Controller->SetMode(ModeNum);
-                        Controllers[i].Controller->UpdateMode();
-                        break;
+                        if (Controllers[i].Controller->modes[ModeNum].name == "Direct")
+                        {
+                            Controllers[i].Controller->SetMode(ModeNum);
+                            Controllers[i].Controller->UpdateMode();
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int ModeNum = 0; ModeNum < int(Controllers[i].Controller->modes.size()); ModeNum++)
+                    {
+                        if (Controllers[i].Controller->modes[ModeNum].name == "Static")
+                        {
+                            Controllers[i].Controller->SetMode(ModeNum);
+                            Controllers[i].Controller->UpdateMode();
+                            break;
+                        }
                     }
                 }
             }

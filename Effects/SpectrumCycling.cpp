@@ -6,7 +6,7 @@ EffectInfo SpectrumCycling::DefineEffectDetails()
     SpectrumCycling::EffectDetails.EffectDescription = "Goes through every solid color";
 
     SpectrumCycling::EffectDetails.IsReversable = false;
-    SpectrumCycling::EffectDetails.MaxSpeed     = 10;
+    SpectrumCycling::EffectDetails.MaxSpeed     = 7;
     SpectrumCycling::EffectDetails.MinSpeed     = 1;
     SpectrumCycling::EffectDetails.UserColors   = 0;
 
@@ -15,7 +15,7 @@ EffectInfo SpectrumCycling::DefineEffectDetails()
 
 void SpectrumCycling::StepEffect(std::vector<RGBController*> PassedTo, int Step)
 {
-    if (Step%Speed == 0)
+    if (Step%10 == 0) // 10 FPS
     {
         hsv_t HSVVal;
         HSVVal.value = 255;

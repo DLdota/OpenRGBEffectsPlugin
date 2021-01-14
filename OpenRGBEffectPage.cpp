@@ -37,18 +37,17 @@ OpenRGBEffectPage::~OpenRGBEffectPage()
 
 void OpenRGBEffectPage::on_StartButton_clicked()
 {
+    OpenRGBEffectTab::SetEffectActive(EFCT);
+
     ui->StartButton->setDisabled(true);
     ui->StopButton->setDisabled(false);
     ui->RunningStatus->setText("Running");
-
-    std::vector<RGBController*> RequestLock;
-
-    OpenRGBEffectTab::SetEffectActive(EFCT);
 }
 
 void OpenRGBEffectPage::on_StopButton_clicked()
 {
     OpenRGBEffectTab::SetEffectUnActive(EFCT);
+
     ui->StartButton->setDisabled(false);
     ui->StopButton->setDisabled(true);
     ui->RunningStatus->setText("Stopped");
