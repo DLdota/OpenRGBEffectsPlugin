@@ -55,8 +55,8 @@ private:
     | Effect Handling (Stepping and active)     |
     \*-----------------------------------------*/
     static std::vector<RGBEffect*>      ActiveEffects;
-    std::thread                         StepEffectThread;
-    void                                StepAllAtiveEffects();
+    std::thread*                        StepEffectThread;
+    void                                EffectStepTimer();
 
     static void DeviceListChangedCallback(void* ptr);
 };

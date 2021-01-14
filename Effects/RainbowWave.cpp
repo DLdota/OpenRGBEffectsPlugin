@@ -13,7 +13,19 @@ EffectInfo RainbowWave::DefineEffectDetails()
     return RainbowWave::EffectDetails;
 }
 
-void RainbowWave::StepEffect(std::vector<RGBController*> Controllers)
+void RainbowWave::StepEffect(std::vector<RGBController*> Controllers, int Step)
 {
     // Nothing in here yet.
+}
+
+void RainbowWave::SetSpeed(int Speed)
+{
+    RainbowWave::Speed = Speed;
+}
+
+void RainbowWave::SetUserColors(std::vector<RGBColor>)
+{
+    /*------------------------------------------------*\
+    | This effect does not support user chosen colors  |
+    \*------------------------------------------------*/
 }

@@ -43,10 +43,7 @@ void OpenRGBEffectPage::on_StartButton_clicked()
 
     std::vector<RGBController*> RequestLock;
 
-    if (OpenRGBEffectPage::OwnedController.size() > 0)
-    {
-        OpenRGBEffectTab::SetEffectActive(EFCT);
-    }
+    OpenRGBEffectTab::SetEffectActive(EFCT);
 }
 
 void OpenRGBEffectPage::on_StopButton_clicked()
@@ -59,23 +56,5 @@ void OpenRGBEffectPage::on_StopButton_clicked()
 
 void OpenRGBEffectPage::on_SpeedSlider_valueChanged(int value)
 {
-    //OpenRGBEffectPage::EFCT->SetSpeed(value);
+    OpenRGBEffectPage::EFCT->SetSpeed(value);
 }
-
-/*void OpenRGBEffectPage::DeviceLockedByOther(BetterController ID, std::string EffectName)
-{
-    if (EFCT->EffectDetails.EffectName != EffectName)
-    {
-        ui->SelectDevices->cellWidget(ID.Index,1)->setDisabled(true);
-        ui->SelectDevices->cellWidget(ID.Index,1)->setToolTip(QString().fromStdString("Owned by " + ID.OwnedBy));
-
-        ui->SelectDevices->cellWidget(ID.Index,2)->setDisabled(true);
-        ui->SelectDevices->cellWidget(ID.Index,2)->setToolTip(QString().fromStdString("Owned by " + ID.OwnedBy));
-    }
-}*/
-
-/*void OpenRGBEffectPage::DeviceSelectionChanged()
-{
-
-}
-*/

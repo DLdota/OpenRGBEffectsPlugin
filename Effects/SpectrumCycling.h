@@ -10,12 +10,16 @@ public RGBEffect
 public:
     SpectrumCycling() {};
     ~SpectrumCycling() {};
-    EffectInfo DefineEffectDetails()                   override;
-    void       StepEffect(std::vector<RGBController*>) override;
+    EffectInfo DefineEffectDetails()                             override;
+    void       StepEffect(std::vector<RGBController*>, int Step) override;
+
+    void        SetSpeed(int Speed)                              override;
+    void        SetUserColors(std::vector<RGBColor>)             override;
 
     EffectInfo EffectDetails;
 private:
-    int CurrentProgress = 0;
+    int CurrentHue = 0;
+    int Speed;
 };
 
 #endif // SPECTRUMCYCLING_H

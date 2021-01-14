@@ -32,8 +32,11 @@ struct BetterController
 class RGBEffect
 {
 public:
-    virtual EffectInfo DefineEffectDetails()                    = 0;
-    virtual void       StepEffect(std::vector<RGBController*>)  = 0;
+    virtual EffectInfo  DefineEffectDetails()                               = 0;
+    virtual void        StepEffect(std::vector<RGBController*>, int Step)   = 0;
+
+    virtual void        SetSpeed(int Speed)                                 = 0;
+    virtual void        SetUserColors(std::vector<RGBColor>)                = 0;
 
     EffectInfo                  EffectDetails;
 };
