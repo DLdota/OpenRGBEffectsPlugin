@@ -26,19 +26,21 @@ public:
 
     bool HasSpeed = false;
 
+    void DeviceListChanged(std::vector<BetterController> Devices);
+
 private slots:
     void on_StartButton_clicked();
     void on_StopButton_clicked();
     void on_SpeedSlider_valueChanged(int value);
 
-    void        DeviceListChanged();
+
 private:
     Ui::OpenRGBEffectPage *ui;
     RGBEffect* EFCT;
 
-    std::vector<RGBController*> OwnedController;
+    std::thread* EffectThread;
 
-    static void DeviceListChangedCallback(void* ptr);
+    std::vector<RGBController*> OwnedController;
 };
 
 #endif // OPENRGBEFFECTPAGE_H

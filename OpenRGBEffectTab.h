@@ -6,7 +6,18 @@
 #include "ORGBEffectPlugin.h"
 
 #include "RGBEffect.h"
+#include "RGBController.h"
+
 #include "SpectrumCycling.h"
+#include "RainbowWave.h"
+
+#pragma once
+
+struct EffectInstStruct
+{
+    RGBEffect* EffectInst;
+    std::vector<RGBController*> OwnedControllers;
+};
 
 namespace Ui {
 class OpenRGBEffectTab;
@@ -22,13 +33,32 @@ public:
 
     void DefineEffects();
 
-    static std::vector<RGBController*> LockControllers(std::vector<RGBController*>);
-    static void                        UnlockControllers(std::vector<RGBController*>);
+    static void SetEffectActive(RGBEffect* Effect);
+    static void SetEffectUnActive(RGBEffect* Effect);
 
+    void CreateDeviceSelection(std::string DeviceName);
+private slots:
+    void DeviceListChanged();
+    void DeviceSelectionChanged();
+
+    void on_TabChange(int Tab);
 private:
     Ui::OpenRGBEffectTab                *ui;
-    static std::vector<RGBEffect*>      EffectList;
-    static std::vector<RGBController*>  LockedControllers;
+    int                                 CurrentTab;
+    /*
+    | List of static items (Possible effects and controllers)
+    */
+    static std::vector<EffectInstStruct>        EffectList;
+    static std::vector<BetterController>        Controllers;
+
+    /*-----------------------------------------*\
+    | Effect Handling (Stepping and active)     |
+    \*-----------------------------------------*/
+    static std::vector<RGBEffect*>      ActiveEffects;
+    std::thread                         StepEffectThread;
+    void                                StepAllAtiveEffects();
+
+    static void DeviceListChangedCallback(void* ptr);
 };
 
 #endif // OPENRGBEFFECTTAB_H

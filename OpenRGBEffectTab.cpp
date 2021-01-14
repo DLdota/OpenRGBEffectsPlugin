@@ -1,16 +1,45 @@
 #include "OpenRGBEffectTab.h"
 #include "OpenRGBEffectPage.h"
 
-std::vector<RGBController*> OpenRGBEffectTab::LockedControllers;
-std::vector<RGBEffect*> OpenRGBEffectTab::EffectList;
+
+std::vector<RGBEffect*> OpenRGBEffectTab::ActiveEffects;
+std::vector<BetterController> OpenRGBEffectTab::Controllers;
+
+std::vector<EffectInstStruct> OpenRGBEffectTab::EffectList;
 
 void OpenRGBEffectTab::DefineEffects()
 {
+    EffectInstStruct SpecInst;
     SpectrumCycling *SpecCycle = new SpectrumCycling;
-    OpenRGBEffectTab::EffectList.push_back(SpecCycle);
+    SpecInst.EffectInst = SpecCycle;
+    OpenRGBEffectTab::EffectList.push_back(SpecInst);
+
+    EffectInstStruct RBWaveInst;
+    RainbowWave * RBWave = new RainbowWave;
+    RBWaveInst.EffectInst = RBWave;
+    OpenRGBEffectTab::EffectList.push_back(RBWaveInst);
 }
 
-OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent) :
+void OpenRGBEffectTab::CreateDeviceSelection(std::string DeviceName)
+{
+    int NewRow = ui->SelectDevices->rowCount();
+    ui->SelectDevices->setRowCount(NewRow + 1);
+
+    QTableWidgetItem* NewItem = new QTableWidgetItem(QString().fromStdString(DeviceName));
+    ui->SelectDevices->setItem(NewRow,0,NewItem);
+
+    QCheckBox* SelectedBox = new QCheckBox();
+    ui->SelectDevices->setCellWidget(NewRow,1,SelectedBox);
+
+
+    QCheckBox* ReversedBox = new QCheckBox();
+    ui->SelectDevices->setCellWidget(NewRow,2,ReversedBox);
+
+    connect(SelectedBox,SIGNAL(clicked()),this,SLOT(DeviceSelectionChanged()));
+    return;
+}
+
+OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     QWidget(parent),
     ui(new Ui::OpenRGBEffectTab)
 {
@@ -22,13 +51,13 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent) :
         /*--------------------------------*\
         | Fill in the details              |
         \*--------------------------------*/
-        EffectList[i]->EffectDetails = EffectList[i]->DefineEffectDetails();
+        EffectList[i].EffectInst->EffectDetails = EffectList[i].EffectInst->DefineEffectDetails();
 
         /*--------------------*\
         | Make the label       |
         \*--------------------*/
         QLabel* EffectTabLabel = new QLabel();
-        EffectTabLabel->setText(QString().fromStdString(EffectList[i]->EffectDetails.EffectName));
+        EffectTabLabel->setText(QString().fromStdString(EffectList[i].EffectInst->EffectDetails.EffectName));
         EffectTabLabel->setIndent(20);
         if(ORGBPlugin::DarkTheme)
         {
@@ -38,10 +67,28 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent) :
         {
             EffectTabLabel->setGeometry(0, 0, 200, 25);
         }
-        OpenRGBEffectPage* EffectPage = new OpenRGBEffectPage(nullptr,EffectList[i]);
+        OpenRGBEffectPage* EffectPage = new OpenRGBEffectPage(nullptr,EffectList[i].EffectInst);
         ui->LeftTabBar->addTab(EffectPage,"");
         ui->LeftTabBar->tabBar()->setTabButton(ui->LeftTabBar->count() -1, QTabBar::LeftSide,EffectTabLabel);
 
+        connect(ui->LeftTabBar,SIGNAL(currentChanged(int)),this,SLOT(on_TabChange(int)));
+        CurrentTab = 0;
+        /*
+        | Make the Device view
+        */
+        ui->SelectDevices->setMinimumWidth(317);
+        ui->SelectDevices->setColumnCount(3);
+        ui->SelectDevices->setHorizontalHeaderLabels({"Device","Enabled","Reversed"});
+        /*-------------------*\
+        | Set collumn sizes   |
+        \*-------------------*/
+        std::vector<int> CollumnSizes = {165 , 75, 75};
+        for (int i = 0; i < int(CollumnSizes.size()); i++)
+        {
+            ui->SelectDevices->setColumnWidth(i,CollumnSizes[i]);
+        }
+        ORGBPlugin::RMPointer->RegisterDeviceListChangeCallback(DeviceListChangedCallback, this);
+        ORGBPlugin::RMPointer->RegisterDetectionProgressCallback(DeviceListChangedCallback, this);
     }
 }
 
@@ -50,43 +97,117 @@ OpenRGBEffectTab::~OpenRGBEffectTab()
     delete ui;
 }
 
-std::vector<RGBController*> OpenRGBEffectTab::LockControllers(std::vector<RGBController*> ToLock)
+/*----------------------------------*\
+| Set an Effect to Active/Unactive   |
+\*----------------------------------*/
+void OpenRGBEffectTab::SetEffectActive(RGBEffect* Effect)
 {
-    std::vector<RGBController*> SuccessFullyLocked;
-    for(int LockIndex = 0; LockIndex < int(ToLock.size()); LockIndex++)
-    {
-        bool FoundMatch = false;
-        for (int i = 0; i < int(OpenRGBEffectTab::LockedControllers.size()); i++)
-        {
-            /*-----------------------------------------------------------------------------------*\
-            | If any of the items in the devicelist are == to the controller trying to be locked  |
-            \*-----------------------------------------------------------------------------------*/
-            if(ToLock[LockIndex] == OpenRGBEffectTab::LockedControllers[i])
-            {
-                FoundMatch = true;
-                break;
-            }
-        }
-        if (!FoundMatch)
-        {
-            OpenRGBEffectTab::LockedControllers.push_back(ToLock[LockIndex]);
-            SuccessFullyLocked.push_back(ToLock[LockIndex]);
-        }
-    }
-    return SuccessFullyLocked;
+
 }
 
-void OpenRGBEffectTab::UnlockControllers(std::vector<RGBController*> ToUnlock)
+void OpenRGBEffectTab::SetEffectUnActive(RGBEffect *Effect)
 {
-    for(int UnlockIndex = 0; UnlockIndex < int(ToUnlock.size()); UnlockIndex++)
+
+}
+
+/*
+| Device list change handling |
+*/
+void OpenRGBEffectTab::DeviceListChangedCallback(void* ptr)
+{
+    OpenRGBEffectTab * this_obj = (OpenRGBEffectTab *)ptr;
+
+    QMetaObject::invokeMethod(this_obj, "DeviceListChanged", Qt::QueuedConnection);
+}
+
+void OpenRGBEffectTab::DeviceListChanged()
+{
+    /*-----------------------------*\
+    | Wipe the list of controllers  |
+    \*-----------------------------*/
+    OpenRGBEffectTab::Controllers.erase(OpenRGBEffectTab::Controllers.begin(),OpenRGBEffectTab::Controllers.end());
+
+    /*--------------------------------------------------------*\
+    | Grab new controllers and start making entries for them   |
+    \*--------------------------------------------------------*/
+    std::vector<RGBController*> NewControllers = ORGBPlugin::RMPointer->GetRGBControllers();
+    for (int i = 0; i < int(NewControllers.size()); i++)
     {
-        for (int i = 0; i < int(OpenRGBEffectTab::LockedControllers.size()); i++)
+        BetterController NewItem;
+        NewItem.Controller  = NewControllers[i];
+        NewItem.Index       = i;
+        NewItem.Locked      = false;
+
+        OpenRGBEffectTab::Controllers.push_back(NewItem);
+    }
+
+    /*---------------------*\
+    | Add Devices to list   |
+    \*---------------------*/
+    ui->SelectDevices->setRowCount(0);
+    for (int i = 0; i < int(OpenRGBEffectTab::Controllers.size()); i++)
+    {
+        CreateDeviceSelection(OpenRGBEffectTab::Controllers[i].Controller->name);
+    }
+}
+
+void OpenRGBEffectTab::DeviceSelectionChanged()
+{
+    for (int i = 0; i < ui->SelectDevices->rowCount(); i++)
+    {
+        /*-----------------------------------------------------*\
+        | For row in table widget                               |
+        |   If checkbox is checked                              |
+        |       Add the Device to the list that will be locked  |
+        \*-----------------------------------------------------*/
+        QCheckBox *Selectedbox = qobject_cast<QCheckBox *>(ui->SelectDevices->cellWidget(i,1));
+        if ((Selectedbox->isChecked()) && (Selectedbox->isEnabled()) )
         {
-            if(ToUnlock[UnlockIndex] == OpenRGBEffectTab::LockedControllers[i])
+            EffectList[CurrentTab].OwnedControllers.push_back(Controllers[i].Controller);
+            Controllers[i].Locked = true;
+            Controllers[i].OwnedBy = EffectList[CurrentTab].EffectInst->EffectDetails.EffectName;
+        }
+        else if (!(Selectedbox->isChecked()) && (Selectedbox->isEnabled()))
+        {
+            if (EffectList[CurrentTab].OwnedControllers.size() > 0)
             {
-                OpenRGBEffectTab::LockedControllers.erase(LockedControllers.begin()+UnlockIndex);
-                break;
+                for (int CheckNoLongerOwned = 0; CheckNoLongerOwned < int(EffectList[CurrentTab].OwnedControllers.size()); CheckNoLongerOwned++)
+                {
+                    if (Controllers[i].Controller == EffectList[CurrentTab].OwnedControllers[CheckNoLongerOwned])
+                    {
+                        EffectList[CurrentTab].OwnedControllers.erase(EffectList[CurrentTab].OwnedControllers.begin() + CheckNoLongerOwned);
+                    }
+                }
             }
+            Controllers[i].Locked = false;
+            Controllers[i].OwnedBy = "";
+        }
+    }
+}
+
+void OpenRGBEffectTab::on_TabChange(int Tab)
+{
+    OpenRGBEffectTab::CurrentTab = Tab;
+    for (int ControllerIndex = 0; ControllerIndex < int(Controllers.size()); ControllerIndex++)
+    {
+        /*---------------------------------------------------------------*\
+        | If it is locked and it is not owned by the current tab then...  |
+        \*---------------------------------------------------------------*/
+        if ((Controllers[ControllerIndex].Locked) && !(Controllers[ControllerIndex].OwnedBy == EffectList[CurrentTab].EffectInst->EffectDetails.EffectName))
+        {
+            ui->SelectDevices->cellWidget(Controllers[ControllerIndex].Index, 1)->setDisabled(true);
+            ui->SelectDevices->cellWidget(Controllers[ControllerIndex].Index, 1)->setToolTip(QString().fromStdString("In use by " + Controllers[ControllerIndex].OwnedBy));
+
+            ui->SelectDevices->cellWidget(Controllers[ControllerIndex].Index, 2)->setDisabled(true);
+            ui->SelectDevices->cellWidget(Controllers[ControllerIndex].Index, 2)->setToolTip(QString().fromStdString("In use by " + Controllers[ControllerIndex].OwnedBy));
+        }
+        else
+        {
+            ui->SelectDevices->cellWidget(Controllers[ControllerIndex].Index, 1)->setDisabled(false);
+            ui->SelectDevices->cellWidget(Controllers[ControllerIndex].Index, 1)->setToolTip("");
+
+            ui->SelectDevices->cellWidget(Controllers[ControllerIndex].Index, 2)->setDisabled(false);
+            ui->SelectDevices->cellWidget(Controllers[ControllerIndex].Index, 2)->setToolTip("");
         }
     }
 }

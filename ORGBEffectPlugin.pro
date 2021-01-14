@@ -23,6 +23,7 @@ INCLUDEPATH +=                                                                  
 #-----------------------------------------------------------------------------------------------#
 
 HEADERS +=                                                                                      \
+    Effects/RainbowWave.h \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -42,6 +43,7 @@ HEADERS +=                                                                      
 #-----------------------------------------------------------------------------------------------#
 SOURCES +=                                                                                      \
     Effects/HSV/hsv.cpp                                                                         \
+    Effects/RainbowWave.cpp \
     Effects/SpectrumCycling.cpp                                                                 \
     ORGBEffectPlugin.cpp                                                                        \
     OpenRGBEffectPage.cpp                                                                       \
