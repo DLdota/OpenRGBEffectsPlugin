@@ -7,6 +7,9 @@ std::vector<BetterController> OpenRGBEffectTab::Controllers;
 
 std::vector<EffectInstStruct> OpenRGBEffectTab::EffectList;
 
+/*-------------------------*\
+| Define all of the effects |
+\*-------------------------*/
 void OpenRGBEffectTab::DefineEffects()
 {
     EffectInstStruct SpecInst;
@@ -20,6 +23,10 @@ void OpenRGBEffectTab::DefineEffects()
     OpenRGBEffectTab::EffectList.push_back(RBWaveInst);
 }
 
+
+/*--------------------*\
+| List entry Creation  |
+\*--------------------*/
 void OpenRGBEffectTab::CreateDeviceSelection(std::string DeviceName, bool HasDirectMode)
 {
     int NewRow = ui->SelectDevices->rowCount();
@@ -44,9 +51,11 @@ void OpenRGBEffectTab::CreateDeviceSelection(std::string DeviceName, bool HasDir
     return;
 }
 
-OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
-    QWidget(parent),
-    ui(new Ui::OpenRGBEffectTab)
+
+/*------------------------*\
+| Contructor / Destructor  |
+\*------------------------*/
+OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent): QWidget(parent), ui(new Ui::OpenRGBEffectTab)
 {
     ui->setupUi(this);
 
@@ -114,6 +123,7 @@ OpenRGBEffectTab::~OpenRGBEffectTab()
 {
     delete ui;
 }
+
 
 /*----------------------------------*\
 | Set an Effect to Active/Unactive   |
