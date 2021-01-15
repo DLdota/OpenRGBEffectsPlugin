@@ -15,6 +15,7 @@ EffectInfo RainbowWave::DefineEffectDetails()
 
 void RainbowWave::StepEffect(std::vector<RGBController*> Controllers, int Step)
 {
+    qDebug() << "RBWave called";
     for (int DeviceIndex = 0; DeviceIndex < int(Controllers.size()); DeviceIndex++)
     {
         for (int ZoneIndex = 0; ZoneIndex < int(Controllers[DeviceIndex]->zones.size()); ZoneIndex++)

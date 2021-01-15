@@ -58,6 +58,8 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
         \*--------------------------------*/
         EffectList[i].EffectInst->EffectDetails = EffectList[i].EffectInst->DefineEffectDetails();
 
+        qDebug() << QString().fromStdString(EffectList[i].EffectInst->EffectDetails.EffectName);
+
         /*--------------------*\
         | Make the label       |
         \*--------------------*/
@@ -75,34 +77,37 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
         OpenRGBEffectPage* EffectPage = new OpenRGBEffectPage(nullptr,EffectList[i].EffectInst);
         ui->LeftTabBar->addTab(EffectPage,"");
         ui->LeftTabBar->tabBar()->setTabButton(ui->LeftTabBar->count() -1, QTabBar::LeftSide,EffectTabLabel);
-
-        connect(ui->LeftTabBar,SIGNAL(currentChanged(int)),this,SLOT(on_TabChange(int)));
-        CurrentTab = 0;
-
-        /*-----------------------*\
-        | Make the Device view    |
-        \*-----------------------*/
-        ui->SelectDevices->setMinimumWidth(317);
-        ui->SelectDevices->setColumnCount(3);
-        ui->SelectDevices->setHorizontalHeaderLabels({"Device","Enabled","Reversed"});
-
-        std::vector<int> CollumnSizes = {165 , 75, 75};
-        for (int i = 0; i < int(CollumnSizes.size()); i++)
-        {
-            /*-------------------*\
-            | Set collumn sizes   |
-            \*-------------------*/
-            ui->SelectDevices->setColumnWidth(i,CollumnSizes[i]);
-        }
-
-        /*------------------------------------------------*\
-        | Register for callbacks and create effect thread  |
-        \*------------------------------------------------*/
-        ORGBPlugin::RMPointer->RegisterDeviceListChangeCallback(DeviceListChangedCallback, this);
-        ORGBPlugin::RMPointer->RegisterDetectionProgressCallback(DeviceListChangedCallback, this);
-
-        StepEffectThread = new std::thread(&OpenRGBEffectTab::EffectStepTimer,this);
     }
+
+    connect(ui->LeftTabBar,SIGNAL(currentChanged(int)),this,SLOT(on_TabChange(int)));
+    CurrentTab = 0;
+
+    /*-----------------------*\
+    | Make the Device view    |
+    \*-----------------------*/
+    ui->SelectDevices->setMinimumWidth(317);
+    ui->SelectDevices->setColumnCount(3);
+    ui->SelectDevices->setHorizontalHeaderLabels({"Device","Enabled","Reversed"});
+
+    /*-------------------*\
+    | Set collumn sizes   |
+    \*-------------------*/
+    std::vector<int> CollumnSizes = {165 , 75, 75};
+    for (int i = 0; i < int(CollumnSizes.size()); i++)
+    {
+        ui->SelectDevices->setColumnWidth(i,CollumnSizes[i]);
+    }
+
+    /*------------------------------------------------*\
+    | Register for callbacks and create effect thread  |
+    \*------------------------------------------------*/
+    ORGBPlugin::RMPointer->RegisterDeviceListChangeCallback(DeviceListChangedCallback, this);
+    ORGBPlugin::RMPointer->RegisterDetectionProgressCallback(DeviceListChangedCallback, this);
+
+    /*----------------------------------*\
+    | Create the effect handling thread  |
+    \*----------------------------------*/
+    StepEffectThread = new std::thread(&OpenRGBEffectTab::EffectStepTimer,this);
 }
 
 OpenRGBEffectTab::~OpenRGBEffectTab()
@@ -115,16 +120,24 @@ OpenRGBEffectTab::~OpenRGBEffectTab()
 \*----------------------------------*/
 void OpenRGBEffectTab::SetEffectActive(RGBEffect* Effect)
 {
+    for (int i = 0; i < int(ActiveEffects.size()); i++)
+    {
+        if ( ActiveEffects[i] == Effect)
+        {
+            return;
+        }
+    }
     ActiveEffects.push_back(Effect);
 }
 
-void OpenRGBEffectTab::SetEffectUnActive(RGBEffect *Effect)
+void OpenRGBEffectTab::SetEffectUnActive(RGBEffect* Effect)
 {
     for (int i = 0; i < int(ActiveEffects.size()); i++)
     {
         if (ActiveEffects[i] == Effect)
         {
             ActiveEffects.erase(ActiveEffects.begin() + i);
+            return;
         }
     }
 }
@@ -139,7 +152,7 @@ void OpenRGBEffectTab::EffectStepTimer()
             {
                 for (int EffectIndex = 0; EffectIndex < int(OpenRGBEffectTab::ActiveEffects.size()); EffectIndex++)
                 {
-                    OpenRGBEffectTab::EffectList[EffectIndex].EffectInst->StepEffect(OpenRGBEffectTab::EffectList[EffectIndex].OwnedControllers,EffectStep);
+                    OpenRGBEffectTab::ActiveEffects[EffectIndex]->StepEffect(OpenRGBEffectTab::EffectList[EffectIndex].OwnedControllers,EffectStep);
                 }
 
                 /*---------------------------*\

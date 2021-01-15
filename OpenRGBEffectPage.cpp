@@ -37,7 +37,7 @@ OpenRGBEffectPage::~OpenRGBEffectPage()
 
 void OpenRGBEffectPage::on_StartButton_clicked()
 {
-    OpenRGBEffectTab::SetEffectActive(OpenRGBEffectPage::EFCT);
+    OpenRGBEffectTab::SetEffectActive(EFCT);
 
     ui->StartButton->setDisabled(true);
     ui->StopButton->setDisabled(false);

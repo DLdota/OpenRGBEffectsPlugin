@@ -5,7 +5,6 @@
 #include <QCheckBox>
 
 #include <thread>
-#include <QThread>
 
 #include "OpenRGBEffectTab.h"
 #include "ui_OpenRGBEffectPage.h"
