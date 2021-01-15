@@ -22,7 +22,6 @@ void SpectrumCycling::StepEffect(std::vector<RGBController*> PassedTo, int Step)
         HSVVal.saturation = 255;
 
         HSVVal.hue = CurrentHue;
-        qDebug() << HSVVal.hue;
         for (int i = 0; i < int(PassedTo.size()); i++)
         {
             PassedTo[i]->SetAllLEDs(RGBColor(hsv2rgb(&HSVVal)));

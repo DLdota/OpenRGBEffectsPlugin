@@ -67,8 +67,6 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent): QWidget(parent), ui(new Ui:
         \*--------------------------------*/
         EffectList[i].EffectInst->EffectDetails = EffectList[i].EffectInst->DefineEffectDetails();
 
-        qDebug() << QString().fromStdString(EffectList[i].EffectInst->EffectDetails.EffectName);
-
         /*--------------------*\
         | Make the label       |
         \*--------------------*/
