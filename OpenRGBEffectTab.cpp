@@ -27,12 +27,12 @@ void OpenRGBEffectTab::DefineEffects()
 /*--------------------*\
 | List entry Creation  |
 \*--------------------*/
-void OpenRGBEffectTab::CreateDeviceSelection(std::string DeviceName, bool HasDirectMode)
+void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, bool HasDirectMode)
 {
     int NewRow = ui->SelectDevices->rowCount();
-    ui->SelectDevices->setRowCount(NewRow + 1);
+    ui->SelectDevices->setRowCount(NewRow + 2);
 
-    QTableWidgetItem* NewItem = new QTableWidgetItem(QString().fromStdString(DeviceName));
+    QTableWidgetItem* NewItem = new QTableWidgetItem(QString().fromStdString(Controller->name));
     if (!HasDirectMode)
     {
         NewItem->setForeground(Qt::red);
@@ -48,6 +48,52 @@ void OpenRGBEffectTab::CreateDeviceSelection(std::string DeviceName, bool HasDir
     ui->SelectDevices->setCellWidget(NewRow,2,ReversedBox);
 
     connect(SelectedBox,SIGNAL(clicked()),this,SLOT(DeviceSelectionChanged()));
+
+    /*----------------------*\
+    | Create the Zone table  |
+    \*----------------------*/
+    QTableWidget* ZoneTableChecks = new QTableWidget;
+
+    ZoneTableChecks->setColumnCount(3);
+
+    ZoneTableChecks->setFixedWidth(317);
+
+    ZoneTableChecks->setEditTriggers(QTableWidget::NoEditTriggers);
+    ZoneTableChecks->setSelectionMode(QTableWidget::NoSelection);
+    ZoneTableChecks->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    std::vector<int> CollumnSizes = {165 , 75, 75};
+    for (int i = 0; i < int(CollumnSizes.size()); i++)
+    {
+        ZoneTableChecks->setColumnWidth(i,CollumnSizes[i]);
+    }
+
+    ZoneTableChecks->verticalHeader()->hide();
+    ZoneTableChecks->horizontalHeader()->hide();
+
+    int RowHeight = 0;
+    for (int ZoneNum = 0; ZoneNum < int(Controller->zones.size()); ZoneNum++)
+    {
+        ZoneTableChecks->setRowCount(ZoneTableChecks->rowCount() + 1);
+
+        QTableWidgetItem* NewZoneName = new QTableWidgetItem(QString().fromStdString( ( "        " + Controller->zones[ZoneNum].name) ) ) ;
+
+        ZoneTableChecks->setItem(ZoneNum, 0, NewZoneName);
+
+        /*----------------------------------------------------------*\
+        | Create Zone selection checkbox                             |
+        | Connect the click signal to the SelectionChanged function  |
+        | Push it to the nested TableWidget                          |
+        \*----------------------------------------------------------*/
+        QCheckBox* ZoneSelected = new QCheckBox();
+        connect(ZoneSelected,SIGNAL(clicked()),this,SLOT(DeviceSelectionChanged()));
+
+        ZoneTableChecks->setCellWidget(ZoneNum,1,ZoneSelected);
+        RowHeight += 1;
+    }
+
+    ui->SelectDevices->setCellWidget((NewRow + 1),0,ZoneTableChecks);
+    ui->SelectDevices->setRowHeight((NewRow + 1),(31*RowHeight) );
     return;
 }
 
@@ -96,6 +142,8 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent): QWidget(parent), ui(new Ui:
     ui->SelectDevices->setColumnCount(3);
     ui->SelectDevices->setHorizontalHeaderLabels({"Device","Enabled","Reversed"});
 
+    ui->SelectDevices->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     /*-------------------*\
     | Set collumn sizes   |
     \*-------------------*/
@@ -125,6 +173,7 @@ OpenRGBEffectTab::~OpenRGBEffectTab()
 
 /*----------------------------------*\
 | Set an Effect to Active/Unactive   |
+| Effect Step thread function        |
 \*----------------------------------*/
 void OpenRGBEffectTab::SetEffectActive(RGBEffect* Effect)
 {
@@ -238,7 +287,7 @@ void OpenRGBEffectTab::DeviceListChanged()
     ui->SelectDevices->setRowCount(0);
     for (int i = 0; i < int(Controllers.size()); i++)
     {
-        CreateDeviceSelection(Controllers[i].Controller->name, Controllers[i].HasDirect);
+        CreateDeviceSelection(Controllers[i].Controller, Controllers[i].HasDirect);
     }
 }
 
@@ -248,7 +297,8 @@ void OpenRGBEffectTab::DeviceListChanged()
 \*-------------------------*/
 void OpenRGBEffectTab::DeviceSelectionChanged()
 {
-    for (int i = 0; i < ui->SelectDevices->rowCount(); i++)
+    int TrueIndex = 0;
+    for (int i = 0; i < (ui->SelectDevices->rowCount()/2); i++)
     {
         /*-----------------------------------------------------*\
         | For row in table widget                               |
@@ -257,7 +307,7 @@ void OpenRGBEffectTab::DeviceSelectionChanged()
         |   Else if the box is not check but still enabled      |
         |       Make sure that it isn't set to owned by current |
         \*-----------------------------------------------------*/
-        QCheckBox *Selectedbox = qobject_cast<QCheckBox *>(ui->SelectDevices->cellWidget(i,1));
+        QCheckBox *Selectedbox = qobject_cast<QCheckBox *>(ui->SelectDevices->cellWidget(TrueIndex,1));
         if ((Selectedbox->isChecked()) && (Selectedbox->isEnabled()) )
         {
             bool AlreadyOwned = false;
@@ -266,7 +316,7 @@ void OpenRGBEffectTab::DeviceSelectionChanged()
             \*------------------------------*/
             for (int AlreadyIn = 0; AlreadyIn < int(EffectList[CurrentTab].OwnedControllers.size()); AlreadyIn++)
             {
-                if (Controllers[i].Controller == EffectList[CurrentTab].OwnedControllers[AlreadyIn])
+                if (Controllers[TrueIndex].Controller == EffectList[CurrentTab].OwnedControllers[AlreadyIn])
                 {
                     AlreadyOwned = true;
                 }
@@ -328,6 +378,7 @@ void OpenRGBEffectTab::DeviceSelectionChanged()
             Controllers[i].Locked = false;
             Controllers[i].OwnedBy = "";
         }
+        TrueIndex += 1;
     }
 }
 

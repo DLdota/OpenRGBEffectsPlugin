@@ -23,11 +23,12 @@ struct UserColor
 
 struct BetterController
 {
-    RGBController*  Controller;
-    bool            HasDirect;
-    int             Index;
-    bool            Locked;
-    std::string     OwnedBy;
+    RGBController*      Controller;
+    bool                HasDirect;
+    int                 Index;
+    bool                Locked;
+    std::vector<int>    LockedZones;
+    std::string         OwnedBy;
 };
 
 class RGBEffect
@@ -39,7 +40,7 @@ public:
     virtual void        SetSpeed(int Speed)                                 = 0;
     virtual void        SetUserColors(std::vector<RGBColor>)                = 0;
 
-    EffectInfo                  EffectDetails;
+    EffectInfo          EffectDetails;
 };
 
 #endif // RGBEFFECT_H
