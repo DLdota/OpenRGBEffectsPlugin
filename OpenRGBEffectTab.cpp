@@ -43,11 +43,12 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
     QCheckBox* ReversedBox = new QCheckBox();
     ui->SelectDevices->setCellWidget(NewRow,2,ReversedBox);
 
-    QSignalMapper* SelectionMapper = new QSignalMapper(SelectedBox);
-    SelectionMapper->setMapping(SelectedBox, (QString().fromStdString(Controller->name) + QString().number(Index)) );
+    // Map the button press to send a string with the device name and index to the function
+    QSignalMapper* DeviceSelectionMapper = new QSignalMapper(SelectedBox);
+    DeviceSelectionMapper->setMapping(SelectedBox, (QString().fromStdString(Controller->name) + QString().number(Index)) );
 
-    connect(SelectedBox,SIGNAL(clicked()),SelectionMapper,SLOT(map()));
-    connect(SelectionMapper,SIGNAL(mappedString(QString)),this,SLOT( DeviceSelectionChanged(QString) ) );
+    connect(SelectedBox,SIGNAL(clicked()),DeviceSelectionMapper,SLOT(map()));
+    connect(DeviceSelectionMapper,SIGNAL(mappedString(QString)),this,SLOT( DeviceSelectionChanged(QString) ) );
 
     /*----------------------*\
     | Create the Zone table  |
@@ -92,7 +93,13 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
         | Push it to the nested TableWidget                          |
         \*----------------------------------------------------------*/
         QCheckBox* ZoneSelected = new QCheckBox();
-        connect(ZoneSelected,SIGNAL(clicked()),this,SLOT(ZoneSelectionChanged()));
+
+        // Same mapping, Just to a different function
+        QSignalMapper* ZoneSelectionMapper = new QSignalMapper(ZoneSelected);
+        ZoneSelectionMapper->setMapping(ZoneSelected, (QString().fromStdString(Controller->name) + QString().number(Index)) );
+
+        connect(ZoneSelected,SIGNAL(clicked()),ZoneSelectionMapper,SLOT(map()));
+        connect(ZoneSelectionMapper,SIGNAL(mappedString(QString)),this,SLOT( ZoneSelectionChanged(QString) ) );
 
         ZoneTableChecks->setCellWidget(ZoneNum,1,ZoneSelected);
         RowHeight += 1;
@@ -215,8 +222,6 @@ void OpenRGBEffectTab::EffectStepTimer()
             {
                 for (int EffectIndex = 0; EffectIndex < int(OpenRGBEffectTab::ActiveEffects.size()); EffectIndex++)
                 {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
                     std::vector<OwnedControllerAndZones> PassControllerList;
 
                     // For controller in the list of controllers
@@ -245,6 +250,11 @@ void OpenRGBEffectTab::EffectStepTimer()
 
                     OpenRGBEffectTab::ActiveEffects[EffectIndex]->StepEffect(PassControllerList,EffectStep);
                 }
+                for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
+                {
+                    Controllers[ControllerID].Controller->UpdateLEDs();
+                    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                }
 
                 /*---------------------------*\
                 | Progress the Step counter   |
@@ -257,7 +267,7 @@ void OpenRGBEffectTab::EffectStepTimer()
                 {
                     EffectStep = 1;
                 }
-                std::this_thread::sleep_for(std::chrono::milliseconds(16)); // 60 FPS
+                std::this_thread::sleep_for(std::chrono::milliseconds(20)); // 50 FPS
             }
         }
     }).detach();
@@ -288,11 +298,13 @@ void OpenRGBEffectTab::DeviceListChanged()
     for (int i = 0; i < int(NewControllers.size()); i++)
     {
         bool HasDirectMode = false;
+        int  DirectID = 0;
         for (int ModeIndex = 0; ModeIndex < int(NewControllers[i]->modes.size()); ModeIndex++ )
         {
             if (NewControllers[i]->modes[ModeIndex].name == "Direct")
             {
                 HasDirectMode = true;
+                DirectID   = ModeIndex;
                 break;
             }
         }
@@ -301,6 +313,7 @@ void OpenRGBEffectTab::DeviceListChanged()
         NewItem.Controller  = NewControllers[i];
         NewItem.Index       = i;
         NewItem.HasDirect   = HasDirectMode;
+        NewItem.DirectIndex = DirectID;
 
         Controllers.push_back(NewItem);
     }
@@ -329,7 +342,6 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
         QTableWidgetItem* DeviceName = ui->SelectDevices->item(DeviceID,0);
         if ((DeviceName->text() + QString().number(Controllers[TempDevID].Index)) == DName)
         {
-            qDebug() << DeviceName->text();
             DevIndex = DeviceID;
             break;
         }
@@ -342,6 +354,13 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
     QCheckBox* DeviceSelected = qobject_cast<QCheckBox* >(ui->SelectDevices->cellWidget(DevTabIndex,1));
     if ((DeviceSelected->isEnabled()) && (DeviceSelected->isChecked()))
     {
+        // Make sure that the mode is direct
+        if (Controllers[DevIndex].HasDirect && (Controllers[DevIndex].Controller->GetMode() != Controllers[DevIndex].DirectIndex))
+        {
+            Controllers[DevIndex].Controller->SetMode(Controllers[DevIndex].DirectIndex);
+            Controllers[DevIndex].Controller->UpdateMode();
+        }
+
         QTableWidget* ZoneTable = qobject_cast<QTableWidget*>(ui->SelectDevices->cellWidget( (DevTabIndex + 1), 0));
         /*-----------------------------------------*\
         | Add all non owned zones to the list       |
@@ -366,7 +385,7 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
         /*-----------------------------------------*\
         | Add all non owned zones to the list       |
         \*-----------------------------------------*/
-        for (int ZoneID = 0; ZoneID < int(Controllers[DevIndex/2].Controller->zones.size()); ZoneID++)
+        for (int ZoneID = 0; ZoneID < ZoneTable->rowCount(); ZoneID++)
         {
             QCheckBox* ZoneCheckBox = qobject_cast<QCheckBox*>(ZoneTable->cellWidget(ZoneID,1));
             if (ZoneCheckBox->isEnabled() && ZoneCheckBox->isChecked())
@@ -393,12 +412,116 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
     }
 }
 
-void OpenRGBEffectTab::ZoneSelectionChanged()
+void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
 {
-    //QCheckBox* CheckBox = qobject_cast<QCheckBox* >();
+    int DevIndex = 0;
+    for (int DeviceID = 0; DeviceID < ui->SelectDevices->rowCount(); DeviceID++)
+    {
+        if (DeviceID%2) continue;
+        int TempDevID = DeviceID/2;
+        QTableWidgetItem* DeviceName = ui->SelectDevices->item(DeviceID,0);
+        if ((DeviceName->text() + QString().number(Controllers[TempDevID].Index)) == DName)
+        {
+            DevIndex = DeviceID;
+            break;
+        }
+        continue;
+    }
+
+    int DevTabIndex = DevIndex + 1; // This is the index of the tab holding the device. It is mismatched because of the zone boxes
+    DevIndex = DevIndex/2; // This is the actual index of the device
+
+    // Grab the Zone table from the main device table
+    QTableWidget* ZoneTable = qobject_cast<QTableWidget*>(ui->SelectDevices->cellWidget(DevTabIndex,0));
+
+    bool CalledDirect = false;
+    for (int ZoneID = 0; ZoneID < int(Controllers[DevIndex].Controller->zones.size()); ZoneID++)
+    {
+        // Grab the checkbox at the zone index
+        QCheckBox* ZoneSelected = qobject_cast<QCheckBox*>(ZoneTable->cellWidget(ZoneID,1));
+
+        if (ZoneSelected->isEnabled() && ZoneSelected->isChecked())
+        {
+            if (!CalledDirect)
+            {
+                // Make sure that the device is in direct mode
+                if (Controllers[DevIndex].HasDirect && (Controllers[DevIndex].Controller->GetMode() != Controllers[DevIndex].DirectIndex))
+                {
+                    Controllers[DevIndex].Controller->SetMode(Controllers[DevIndex].DirectIndex);
+                    Controllers[DevIndex].Controller->UpdateMode();
+                }
+                CalledDirect = true;
+            }
+
+            bool AlreadyLocked = false;
+            for (int CheckLockedZones = 0; CheckLockedZones < int(Controllers[DevIndex].OwnedZones.size()); CheckLockedZones++)
+            {
+                if (Controllers[DevIndex].OwnedZones[CheckLockedZones].Zone == ZoneID)
+                {
+                    AlreadyLocked = true;
+                }
+            }
+
+            if (!AlreadyLocked)
+            {
+                qDebug() << "Added Zone " << ZoneID << " to the list";
+                // Create an identifier for the zone lock (Name and index)
+                ZoneOwnedBy ZoneLock;
+                ZoneLock.EffectName = EffectList[CurrentTab]->EffectDetails.EffectName;
+                ZoneLock.Zone = ZoneID;
+
+                Controllers[DevIndex].OwnedZones.push_back(ZoneLock);
+            }
+        }
+        else if (ZoneSelected->isEnabled() && !ZoneSelected->isChecked())
+        {
+            for (int CheckLockedZones = 0; CheckLockedZones < int(Controllers[DevIndex].OwnedZones.size()); CheckLockedZones++)
+            {
+                if
+                (
+                     (Controllers[DevIndex].OwnedZones[CheckLockedZones].Zone == ZoneID) &&
+                     Controllers[DevIndex].OwnedZones[CheckLockedZones].EffectName == EffectList[CurrentTab]->EffectDetails.EffectName
+                )
+                {
+                    qDebug() << "Removed Zone " << ZoneID << " From list";
+                    Controllers[DevIndex].OwnedZones.erase(Controllers[DevIndex].OwnedZones.begin() + CheckLockedZones);
+                }
+            }
+        }
+    }
 }
 
 void OpenRGBEffectTab::on_TabChange(int Tab)
 {
     OpenRGBEffectTab::CurrentTab = Tab;
+    for (int RowID = 0; RowID < ui->SelectDevices->rowCount()/2; RowID++)
+    {
+        int ZoneBox = RowID * 2 + 1;
+        QTableWidget* ZoneTable = qobject_cast<QTableWidget*>(ui->SelectDevices->cellWidget(ZoneBox,0));
+
+        bool AllChecked = true;
+
+        for (int ZoneID = 0; ZoneID < ZoneTable->rowCount(); ZoneID++)
+        {
+            QCheckBox* ZoneBox = qobject_cast<QCheckBox*>(ZoneTable->cellWidget(ZoneID,1));
+
+            for (int CheckOwnedZones = 0; CheckOwnedZones < int(Controllers[RowID].OwnedZones.size()); CheckOwnedZones++)
+            {
+                if  (Controllers[RowID].OwnedZones[CheckOwnedZones].Zone == ZoneID)
+                {
+                    if (Controllers[RowID].OwnedZones[CheckOwnedZones].EffectName == EffectList[CurrentTab]->EffectDetails.EffectName)
+                    {
+                        ZoneBox->setDisabled(false);
+                        ZoneBox->setToolTip("");
+                    }
+                    else
+                    {
+                        ZoneBox->setDisabled(true);
+                        ZoneBox->setToolTip(QString().fromStdString("Owned by " + Controllers[RowID].OwnedZones[CheckOwnedZones].EffectName));
+                        AllChecked = false;
+                    }
+                }
+            }
+        }
+    }
 }

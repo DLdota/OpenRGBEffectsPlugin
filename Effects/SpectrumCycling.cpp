@@ -24,9 +24,10 @@ void SpectrumCycling::StepEffect(std::vector<OwnedControllerAndZones> PassedTo, 
         HSVVal.hue = CurrentHue;
         for (int i = 0; i < int(PassedTo.size()); i++)
         {
-            for (int ZoneID = 0; ZoneID < PassedTo[i].OwnedZones.size(); ZoneID++)
+            for (int ZoneID = 0; ZoneID < int(PassedTo[i].OwnedZones.size()); ZoneID++)
             {
                 PassedTo[i].Controller->SetAllZoneLEDs(PassedTo[i].OwnedZones[ZoneID],RGBColor(hsv2rgb(&HSVVal)));
+                std::this_thread::sleep_for(std::chrono::microseconds(10));
             }
         }
         if (CurrentHue < 360)

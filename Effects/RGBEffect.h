@@ -37,6 +37,7 @@ struct BetterController
 {
     RGBController*              Controller;
     bool                        HasDirect;
+    int                         DirectIndex;
     int                         Index;
     std::vector<ZoneOwnedBy>    OwnedZones;
 };

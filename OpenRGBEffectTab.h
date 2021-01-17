@@ -40,7 +40,7 @@ private slots:
     void DeviceListChanged();
 
     void DeviceSelectionChanged(QString DName);
-    void ZoneSelectionChanged();
+    void ZoneSelectionChanged(QString DName);
 
     void on_TabChange(int Tab);
 private:
