@@ -5,6 +5,7 @@
 #include <QTreeView>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QSignalMapper>
 
 #include "ui_OpenRGBEffectTab.h"
 #include "ORGBEffectPlugin.h"
@@ -16,12 +17,6 @@
 #include "RainbowWave.h"
 
 #pragma once
-
-struct EffectInstStruct
-{
-    RGBEffect* EffectInst;
-    std::vector<RGBController*> OwnedControllers;
-};
 
 namespace Ui {
 class OpenRGBEffectTab;
@@ -40,10 +35,12 @@ public:
     static void SetEffectActive(RGBEffect* Effect);
     static void SetEffectUnActive(RGBEffect* Effect);
 
-    void CreateDeviceSelection(RGBController* Controller, bool HasDirectMode);
+    void CreateDeviceSelection(RGBController* Controller, int Index, bool HasDirectMode);
 private slots:
     void DeviceListChanged();
-    void DeviceSelectionChanged();
+
+    void DeviceSelectionChanged(QString DName);
+    void ZoneSelectionChanged();
 
     void on_TabChange(int Tab);
 private:
@@ -52,7 +49,7 @@ private:
     /*
     | List of static items (Possible effects and controllers)
     */
-    static std::vector<EffectInstStruct>        EffectList;
+    static std::vector<RGBEffect*>              EffectList;
     static std::vector<BetterController>        Controllers;
 
     /*-----------------------------------------*\

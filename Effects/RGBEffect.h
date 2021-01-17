@@ -21,21 +21,31 @@ struct UserColor
     int B;
 };
 
-struct BetterController
+struct OwnedControllerAndZones
 {
     RGBController*      Controller;
-    bool                HasDirect;
-    int                 Index;
-    bool                Locked;
-    std::vector<int>    LockedZones;
-    std::string         OwnedBy;
+    std::vector<int>    OwnedZones;
+};
+
+struct ZoneOwnedBy
+{
+    int Zone;
+    std::string EffectName;
+};
+
+struct BetterController
+{
+    RGBController*              Controller;
+    bool                        HasDirect;
+    int                         Index;
+    std::vector<ZoneOwnedBy>    OwnedZones;
 };
 
 class RGBEffect
 {
 public:
     virtual EffectInfo  DefineEffectDetails()                               = 0;
-    virtual void        StepEffect(std::vector<RGBController*>, int Step)   = 0;
+    virtual void        StepEffect(std::vector<OwnedControllerAndZones>, int Step)   = 0;
 
     virtual void        SetSpeed(int Speed)                                 = 0;
     virtual void        SetUserColors(std::vector<RGBColor>)                = 0;

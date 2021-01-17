@@ -13,7 +13,7 @@ EffectInfo SpectrumCycling::DefineEffectDetails()
     return SpectrumCycling::EffectDetails;
 }
 
-void SpectrumCycling::StepEffect(std::vector<RGBController*> PassedTo, int Step)
+void SpectrumCycling::StepEffect(std::vector<OwnedControllerAndZones> PassedTo, int Step)
 {
     if (Step%10 == 0) // 10 FPS
     {
@@ -24,8 +24,10 @@ void SpectrumCycling::StepEffect(std::vector<RGBController*> PassedTo, int Step)
         HSVVal.hue = CurrentHue;
         for (int i = 0; i < int(PassedTo.size()); i++)
         {
-            PassedTo[i]->SetAllLEDs(RGBColor(hsv2rgb(&HSVVal)));
-            PassedTo[i]->UpdateLEDs();
+            for (int ZoneID = 0; ZoneID < PassedTo[i].OwnedZones.size(); ZoneID++)
+            {
+                PassedTo[i].Controller->SetAllZoneLEDs(PassedTo[i].OwnedZones[ZoneID],RGBColor(hsv2rgb(&HSVVal)));
+            }
         }
         if (CurrentHue < 360)
         {

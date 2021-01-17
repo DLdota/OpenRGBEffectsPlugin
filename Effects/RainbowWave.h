@@ -10,11 +10,11 @@ public:
     RainbowWave() {};
     ~RainbowWave() {};
 
-    EffectInfo  DefineEffectDetails()                               override;
-    void        StepEffect(std::vector<RGBController*>, int Step)   override;
+    EffectInfo  DefineEffectDetails()                                       override;
+    void        StepEffect(std::vector<OwnedControllerAndZones>, int Step)  override;
 
-    void        SetSpeed(int Speed)                                 override;
-    void        SetUserColors(std::vector<RGBColor>)                override;
+    void        SetSpeed(int Speed)                                         override;
+    void        SetUserColors(std::vector<RGBColor>)                        override;
 
     EffectInfo EffectDetails;
 private:
