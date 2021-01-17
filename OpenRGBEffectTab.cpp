@@ -224,6 +224,7 @@ void OpenRGBEffectTab::EffectStepTimer()
                 {
                     std::vector<OwnedControllerAndZones> PassControllerList;
 
+                    qDebug() << "Creating list";
                     // For controller in the list of controllers
                     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
                     {
@@ -250,24 +251,28 @@ void OpenRGBEffectTab::EffectStepTimer()
 
                     OpenRGBEffectTab::ActiveEffects[EffectIndex]->StepEffect(PassControllerList,EffectStep);
                 }
+
+                // After running through all of the effects proceed to set all of the LEDs on a per zone basis
                 for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
                 {
-                    Controllers[ControllerID].Controller->UpdateLEDs();
-                    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                    for (int LockedZone = 0; LockedZone < int(Controllers[ControllerID].OwnedZones.size()); LockedZone++)
+                    {
+                        Controllers[ControllerID].Controller->UpdateZoneLEDs(Controllers[ControllerID].OwnedZones[LockedZone].Zone);
+                    }
                 }
 
                 /*---------------------------*\
                 | Progress the Step counter   |
                 \*---------------------------*/
-                if (EffectStep < 10)
+                if (EffectStep < 60)
                 {
                     EffectStep += 1;
                 }
-                else if (EffectStep >= 10)
+                else if (EffectStep >= 60)
                 {
                     EffectStep = 1;
                 }
-                std::this_thread::sleep_for(std::chrono::milliseconds(20)); // 50 FPS
+                std::this_thread::sleep_for(std::chrono::milliseconds(16)); // 60 FPS
             }
         }
     }).detach();
@@ -442,6 +447,7 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
 
         if (ZoneSelected->isEnabled() && ZoneSelected->isChecked())
         {
+            // Set direct if it is available
             if (!CalledDirect)
             {
                 // Make sure that the device is in direct mode
@@ -464,7 +470,8 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
 
             if (!AlreadyLocked)
             {
-                qDebug() << "Added Zone " << ZoneID << " to the list";
+                //qDebug() << "Added Zone" << ZoneID << "to the list";
+
                 // Create an identifier for the zone lock (Name and index)
                 ZoneOwnedBy ZoneLock;
                 ZoneLock.EffectName = EffectList[CurrentTab]->EffectDetails.EffectName;
@@ -483,7 +490,7 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
                      Controllers[DevIndex].OwnedZones[CheckLockedZones].EffectName == EffectList[CurrentTab]->EffectDetails.EffectName
                 )
                 {
-                    qDebug() << "Removed Zone " << ZoneID << " From list";
+                    //qDebug() << "Removed Zone" << ZoneID << "From list";
                     Controllers[DevIndex].OwnedZones.erase(Controllers[DevIndex].OwnedZones.begin() + CheckLockedZones);
                 }
             }

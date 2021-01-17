@@ -15,7 +15,7 @@ EffectInfo SpectrumCycling::DefineEffectDetails()
 
 void SpectrumCycling::StepEffect(std::vector<OwnedControllerAndZones> PassedTo, int Step)
 {
-    if (Step%10 == 0) // 10 FPS
+    if (Step%6 == 0) // 10 FPS
     {
         hsv_t HSVVal;
         HSVVal.value = 255;
@@ -27,7 +27,6 @@ void SpectrumCycling::StepEffect(std::vector<OwnedControllerAndZones> PassedTo, 
             for (int ZoneID = 0; ZoneID < int(PassedTo[i].OwnedZones.size()); ZoneID++)
             {
                 PassedTo[i].Controller->SetAllZoneLEDs(PassedTo[i].OwnedZones[ZoneID],RGBColor(hsv2rgb(&HSVVal)));
-                std::this_thread::sleep_for(std::chrono::microseconds(10));
             }
         }
         if (CurrentHue < 360)
