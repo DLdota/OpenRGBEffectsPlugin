@@ -241,9 +241,9 @@ void OpenRGBEffectTab::EffectStepTimer()
                 // After running through all of the effects proceed to set all of the LEDs on a per zone basis
                 for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
                 {
-                    for (int LockedZone = 0; LockedZone < int(Controllers[ControllerID].OwnedZones.size()); LockedZone++)
+                    if (Controllers[ControllerID].OwnedZones.size() > 0)
                     {
-                        Controllers[ControllerID].Controller->UpdateZoneLEDs(Controllers[ControllerID].OwnedZones[LockedZone].Zone);
+                        Controllers[ControllerID].Controller->UpdateLEDs();
                         std::this_thread::sleep_for(std::chrono::milliseconds(1));
                     }
                 }
