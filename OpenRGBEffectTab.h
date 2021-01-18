@@ -49,8 +49,10 @@ private:
     /*
     | List of static items (Possible effects and controllers)
     */
-    static std::vector<RGBEffect*>              EffectList;
-    static std::vector<BetterController>        Controllers;
+    static std::vector<RGBEffect*>                              EffectList;
+    static std::vector<std::vector<OwnedControllerAndZones>>    RespectiveToPass;
+
+    static std::vector<BetterController>                        Controllers;
 
     /*-----------------------------------------*\
     | Effect Handling (Stepping and active)     |

@@ -2,8 +2,9 @@
 #include "OpenRGBEffectPage.h"
 
 
-std::vector<RGBEffect*> OpenRGBEffectTab::ActiveEffects;
-std::vector<BetterController> OpenRGBEffectTab::Controllers;
+std::vector<RGBEffect*>                             OpenRGBEffectTab::ActiveEffects;
+std::vector<BetterController>                       OpenRGBEffectTab::Controllers;
+std::vector<std::vector<OwnedControllerAndZones>>   OpenRGBEffectTab::RespectiveToPass;
 
 std::vector<RGBEffect*> OpenRGBEffectTab::EffectList;
 
@@ -125,6 +126,10 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent): QWidget(parent), ui(new Ui:
         | Fill in the details              |
         \*--------------------------------*/
         EffectList[i]->EffectDetails = EffectList[i]->DefineEffectDetails();
+        EffectList[i]->EffectDetails.EffectIndex = i;
+
+        std::vector<OwnedControllerAndZones> BlankStarter;
+        RespectiveToPass.push_back(BlankStarter);
 
         /*--------------------*\
         | Make the label       |
@@ -228,6 +233,9 @@ void OpenRGBEffectTab::EffectStepTimer()
                     // For controller in the list of controllers
                     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
                     {
+                        // If the zone doesn't have any owned controllers than pass it
+                        if (Controllers[ControllerID].OwnedZones.size() == 0) continue;
+
                         // Create and empty struct and set the controller object
                         OwnedControllerAndZones PassController;
                         PassController.Controller = Controllers[ControllerID].Controller;
@@ -246,7 +254,6 @@ void OpenRGBEffectTab::EffectStepTimer()
                         {
                             PassControllerList.push_back(PassController);
                         }
-
                     }
 
                     OpenRGBEffectTab::ActiveEffects[EffectIndex]->StepEffect(PassControllerList,EffectStep);
@@ -264,16 +271,17 @@ void OpenRGBEffectTab::EffectStepTimer()
                 /*---------------------------*\
                 | Progress the Step counter   |
                 \*---------------------------*/
-                if (EffectStep < 60)
+                if (EffectStep < 30)
                 {
                     EffectStep += 1;
                 }
-                else if (EffectStep >= 60)
+                else if (EffectStep >= 30)
                 {
                     EffectStep = 1;
                 }
-                std::this_thread::sleep_for(std::chrono::milliseconds(16)); // 60 FPS
+                std::this_thread::sleep_for(std::chrono::milliseconds(33)); // 30 FPS
             }
+            else std::this_thread::sleep_for(std::chrono::milliseconds(800));
         }
     }).detach();
 }

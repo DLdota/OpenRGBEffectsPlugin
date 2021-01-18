@@ -7,6 +7,7 @@ struct EffectInfo
 {
     std::string EffectName;
     std::string EffectDescription;
+    int         EffectIndex;
 
     bool IsReversable;
     int  MaxSpeed;
@@ -24,6 +25,7 @@ struct UserColor
 struct OwnedControllerAndZones
 {
     RGBController*      Controller;
+    bool                Active;
     std::vector<int>    OwnedZones;
 };
 
