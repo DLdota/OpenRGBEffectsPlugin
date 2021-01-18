@@ -227,36 +227,7 @@ void OpenRGBEffectTab::EffectStepTimer()
             {
                 for (int EffectIndex = 0; EffectIndex < int(OpenRGBEffectTab::ActiveEffects.size()); EffectIndex++)
                 {
-                    std::vector<OwnedControllerAndZones> PassControllerList;
-
-                    qDebug() << "Creating list";
-                    // For controller in the list of controllers
-                    for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
-                    {
-                        // If the zone doesn't have any owned controllers than pass it
-                        if (Controllers[ControllerID].OwnedZones.size() == 0) continue;
-
-                        // Create and empty struct and set the controller object
-                        OwnedControllerAndZones PassController;
-                        PassController.Controller = Controllers[ControllerID].Controller;
-
-                        // For zone in Controller's Zone list. If the controller is owned by the effect then add it to the list of owned zones
-                        for (int ZoneID = 0; ZoneID < int(Controllers[ControllerID].OwnedZones.size()); ZoneID++)
-                        {
-                            if (Controllers[ControllerID].OwnedZones[ZoneID].EffectName == ActiveEffects[EffectIndex]->EffectDetails.EffectName)
-                            {
-                                PassController.OwnedZones.push_back(ZoneID);
-                            }
-                        }
-
-                        // If the zones owned is greater than 0, Add it to the list of owned controllers
-                        if (PassController.OwnedZones.size() != 0)
-                        {
-                            PassControllerList.push_back(PassController);
-                        }
-                    }
-
-                    OpenRGBEffectTab::ActiveEffects[EffectIndex]->StepEffect(PassControllerList,EffectStep);
+                    OpenRGBEffectTab::ActiveEffects[EffectIndex]->StepEffect(RespectiveToPass[EffectIndex],EffectStep);
                 }
 
                 // After running through all of the effects proceed to set all of the LEDs on a per zone basis
@@ -265,6 +236,7 @@ void OpenRGBEffectTab::EffectStepTimer()
                     for (int LockedZone = 0; LockedZone < int(Controllers[ControllerID].OwnedZones.size()); LockedZone++)
                     {
                         Controllers[ControllerID].Controller->UpdateZoneLEDs(Controllers[ControllerID].OwnedZones[LockedZone].Zone);
+                        std::this_thread::sleep_for(std::chrono::milliseconds(1));
                     }
                 }
 
@@ -281,7 +253,7 @@ void OpenRGBEffectTab::EffectStepTimer()
                 }
                 std::this_thread::sleep_for(std::chrono::milliseconds(33)); // 30 FPS
             }
-            else std::this_thread::sleep_for(std::chrono::milliseconds(800));
+            else std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     }).detach();
 }
@@ -303,6 +275,11 @@ void OpenRGBEffectTab::DeviceListChanged()
     | Wipe the list of controllers  |
     \*-----------------------------*/
     Controllers.erase(Controllers.begin(),Controllers.end());
+
+    for (int EffectIndex = 0; EffectIndex < int(EffectList.size()); EffectIndex++)
+    {
+        RespectiveToPass[EffectIndex].clear();
+    }
 
     /*--------------------------------------------------------*\
     | Grab new controllers and start making entries for them   |
@@ -329,6 +306,14 @@ void OpenRGBEffectTab::DeviceListChanged()
         NewItem.DirectIndex = DirectID;
 
         Controllers.push_back(NewItem);
+
+        for (int EffectIndex = 0; EffectIndex < int(EffectList.size()); EffectIndex++)
+        {
+            OwnedControllerAndZones NewZoneMap;
+            NewZoneMap.Controller = NewControllers[i];
+            RespectiveToPass[EffectIndex].push_back(NewZoneMap);
+        }
+
     }
 
     /*---------------------*\
@@ -388,6 +373,8 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
                 Identifier.Zone = ZoneID;
                 Controllers[DevIndex].OwnedZones.push_back(Identifier);
 
+                RespectiveToPass[CurrentTab][DevIndex].OwnedZones.push_back(ZoneID);
+
                 ZoneCheckBox->setCheckState(Qt::Checked);
             }
         }
@@ -415,6 +402,14 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
                     if ((CheckAgainst.EffectName == Identifier.EffectName) && (CheckAgainst.Zone == Identifier.Zone))
                     {
                         Controllers[DevIndex].OwnedZones.erase(Controllers[DevIndex].OwnedZones.begin() + OwnedZoneIndex);
+                        for (int RMZone = 0; RMZone < int(RespectiveToPass[CurrentTab][DevIndex].OwnedZones.size()); RMZone++)
+                        {
+                            if (RespectiveToPass[CurrentTab][DevIndex].OwnedZones[RMZone] == ZoneID)
+                            {
+                                RespectiveToPass[CurrentTab][DevIndex].OwnedZones.erase(RespectiveToPass[CurrentTab][DevIndex].OwnedZones.begin() + RMZone);
+                                break;
+                            }
+                        }
                         break;
                     }
                 }
@@ -486,6 +481,9 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
                 ZoneLock.Zone = ZoneID;
 
                 Controllers[DevIndex].OwnedZones.push_back(ZoneLock);
+
+                // Add this to the list of owned zones for a controller/effect
+                RespectiveToPass[CurrentTab][DevIndex].OwnedZones.push_back(ZoneID);
             }
         }
         else if (ZoneSelected->isEnabled() && !ZoneSelected->isChecked())
@@ -500,6 +498,15 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
                 {
                     //qDebug() << "Removed Zone" << ZoneID << "From list";
                     Controllers[DevIndex].OwnedZones.erase(Controllers[DevIndex].OwnedZones.begin() + CheckLockedZones);
+
+                    for (int RMZone = 0; RMZone < int(RespectiveToPass[CurrentTab][DevIndex].OwnedZones.size()); RMZone++)
+                    {
+                        if (RespectiveToPass[CurrentTab][DevIndex].OwnedZones[RMZone] == ZoneID)
+                        {
+                            // Remove this from the list of owned zones for a controller/effect
+                            RespectiveToPass[CurrentTab][DevIndex].OwnedZones.erase(RespectiveToPass[CurrentTab][DevIndex].OwnedZones.begin() + RMZone);
+                        }
+                    }
                 }
             }
         }
