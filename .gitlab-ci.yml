@@ -132,16 +132,16 @@ build_windows_32:
   - - if (${FNAME} -contains 'Update'){cp ..\_qt\5.15.0\msvc2019\bin\Qt5Network.dll release}
   - _fold_final_
 
-  - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
-  - ${PLUGINNAME} = (${FNAME} -replace '.pro' , '')
-  - mv release ${PLUGINNAME}_32bit
-  - ${revision} = ((git rev-parse --short HEAD) | Out-String).Trim()
-  - 7z a -mx9 -r -y "${PLUGINNAME}_32bit_${revision}.7z" ${PLUGINNAME}_32bit
-  - _fold_final_
+  #- _fold_start_ 'compressing the release folder so that we can upload it as artifact'
+  #- ${PLUGINNAME} = (${FNAME} -replace '.pro' , '')
+  #- mv release ${PLUGINNAME}_32bit
+  #- ${revision} = ((git rev-parse --short HEAD) | Out-String).Trim()
+  #- 7z a -mx9 -r -y "${PLUGINNAME}_32bit_${revision}.7z" ${PLUGINNAME}_32bit
+  #- _fold_final_
 
   artifacts:
     paths:
-    - _build/*.7z
+    - _build/*.dll
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
@@ -211,14 +211,14 @@ build_windows_64:
   - if (${FNAME} -contains 'Update'){cp ..\_qt\5.15.0\msvc2019_64\bin\Qt5Network.dll release}
   - _fold_final_
 
-  - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
-  - ${revision} = ((git rev-parse --short HEAD) | Out-String).Trim()
-  - ${PLUGINNAME} = (${FNAME} -replace '.pro' , '')
-  - mv release ${PLUGINNAME} # Rename it
-  - 7z a -mx9 -r -y "${PLUGINNAME}_64_${revision}.7z" ${PLUGINNAME} # Zip it up
-  - _fold_final_
+  #- _fold_start_ 'compressing the release folder so that we can upload it as artifact'
+  #- ${revision} = ((git rev-parse --short HEAD) | Out-String).Trim()
+  #- ${PLUGINNAME} = (${FNAME} -replace '.pro' , '')
+  #- mv release ${PLUGINNAME} # Rename it
+  #- 7z a -mx9 -r -y "${PLUGINNAME}_64_${revision}.7z" ${PLUGINNAME} # Zip it up
+  #- _fold_final_
 
   artifacts:
     paths:
-    - _build/*.7z
+    - _build/*.dll
     expire_in: 30 days
