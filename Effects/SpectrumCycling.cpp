@@ -15,7 +15,7 @@ EffectInfo SpectrumCycling::DefineEffectDetails()
 
 void SpectrumCycling::StepEffect(std::vector<OwnedControllerAndZones> PassedTo, int Step)
 {
-    if (Step%6 == 0) // 10 FPS
+    if (Step%3 == 0) // 10 FPS
     {
         hsv_t HSVVal;
         HSVVal.value = 255;
