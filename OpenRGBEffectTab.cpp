@@ -357,6 +357,7 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
     int DevTabIndex = DevIndex; // This is the index of the tab holding the device. It is mismatched because of the zone boxes
     DevIndex = DevIndex/2; // This is the actual index of the device
 
+    // Grab the Device checkbox
     QCheckBox* DeviceSelected = qobject_cast<QCheckBox* >(ui->SelectDevices->cellWidget(DevTabIndex,1));
     if (Controllers[DevIndex].Controller->zones.size() > 1)
     {
@@ -376,8 +377,8 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
             \*-----------------------------------------*/
             for (int ZoneID = 0; ZoneID < int(Controllers[DevIndex].Controller->zones.size()); ZoneID++)
             {
-                QCheckBox* ZoneCheckBox = qobject_cast<QCheckBox*>(ZoneTable->cellWidget(ZoneID,1));
-                if (ZoneCheckBox->isEnabled() && !ZoneCheckBox->isChecked())
+                QCheckBox* ZoneSelected = qobject_cast<QCheckBox*>(ZoneTable->cellWidget(ZoneID,1));
+                if (ZoneSelected->isEnabled() && !ZoneSelected->isChecked())
                 {
                     ZoneOwnedBy Identifier;
                     Identifier.EffectName = EffectList[CurrentTab]->EffectDetails.EffectName;
@@ -386,7 +387,7 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
 
                     RespectiveToPass[CurrentTab][DevIndex].OwnedZones.push_back(ZoneID);
 
-                    ZoneCheckBox->setCheckState(Qt::Checked);
+                    ZoneSelected->setCheckState(Qt::Checked);
                 }
             }
         }
@@ -464,7 +465,7 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
         continue;
     }
 
-    int DevTabIndex = DevIndex + 1; // This is the index of the tab holding the device. It is mismatched because of the zone boxes
+    int DevTabIndex = DevIndex + 1; // This is the index of the table holding the device zones.
     DevIndex = DevIndex/2; // This is the actual index of the device
 
     // Grab the Zone table from the main device table
@@ -492,9 +493,9 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
             }
 
             bool AlreadyLocked = false;
-            for (int CheckLockedZones = 0; CheckLockedZones < int(Controllers[DevIndex].OwnedZones.size()); CheckLockedZones++)
+            for (int OwnedZoneIndex = 0; OwnedZoneIndex < int(Controllers[DevIndex].OwnedZones.size()); OwnedZoneIndex++)
             {
-                if (Controllers[DevIndex].OwnedZones[CheckLockedZones].Zone == ZoneID)
+                if (Controllers[DevIndex].OwnedZones[OwnedZoneIndex].Zone == ZoneID)
                 {
                     AlreadyLocked = true;
                 }
@@ -518,16 +519,16 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
         else if (ZoneSelected->isEnabled() && !ZoneSelected->isChecked())
         {
             AllSelected = false;
-            for (int CheckLockedZones = 0; CheckLockedZones < int(Controllers[DevIndex].OwnedZones.size()); CheckLockedZones++)
+            for (int OwnedZoneIndex = 0; OwnedZoneIndex < int(Controllers[DevIndex].OwnedZones.size()); OwnedZoneIndex++)
             {
                 if
                 (
-                     (Controllers[DevIndex].OwnedZones[CheckLockedZones].Zone == ZoneID) &&
-                     Controllers[DevIndex].OwnedZones[CheckLockedZones].EffectName == EffectList[CurrentTab]->EffectDetails.EffectName
+                     (Controllers[DevIndex].OwnedZones[OwnedZoneIndex].Zone == ZoneID) &&
+                     Controllers[DevIndex].OwnedZones[OwnedZoneIndex].EffectName == EffectList[CurrentTab]->EffectDetails.EffectName
                 )
                 {
                     //qDebug() << "Removed Zone" << ZoneID << "From list";
-                    Controllers[DevIndex].OwnedZones.erase(Controllers[DevIndex].OwnedZones.begin() + CheckLockedZones);
+                    Controllers[DevIndex].OwnedZones.erase(Controllers[DevIndex].OwnedZones.begin() + OwnedZoneIndex);
 
                     for (int RMZone = 0; RMZone < int(RespectiveToPass[CurrentTab][DevIndex].OwnedZones.size()); RMZone++)
                     {
@@ -569,10 +570,10 @@ void OpenRGBEffectTab::on_TabChange(int Tab)
 
             for (int ZoneID = 0; ZoneID < ZoneTable->rowCount(); ZoneID++)
             {
-                QCheckBox* ZoneBox = qobject_cast<QCheckBox*>(ZoneTable->cellWidget(ZoneID,1));
+                QCheckBox* ZoneSelected = qobject_cast<QCheckBox*>(ZoneTable->cellWidget(ZoneID,1));
 
                 // If the controller isn't owned and it also isn't selected then set AllSelect to false
-                if (!ZoneBox->isChecked())
+                if (!ZoneSelected->isChecked())
                 {
                     AllSelected = false;
                 }
@@ -583,40 +584,40 @@ void OpenRGBEffectTab::on_TabChange(int Tab)
                     {
                         if (Controllers[RowID].OwnedZones[CheckOwnedZones].EffectName == EffectList[CurrentTab]->EffectDetails.EffectName)
                         {
-                            ZoneBox->setDisabled(false);
-                            ZoneBox->setToolTip("");
+                            ZoneSelected->setDisabled(false);
+                            ZoneSelected->setToolTip("");
                         }
                         else
                         {
-                            ZoneBox->setDisabled(true);
-                            ZoneBox->setToolTip(QString().fromStdString("Owned by " + Controllers[RowID].OwnedZones[CheckOwnedZones].EffectName));
+                            ZoneSelected->setDisabled(true);
+                            ZoneSelected->setToolTip(QString().fromStdString("Owned by " + Controllers[RowID].OwnedZones[CheckOwnedZones].EffectName));
                         }
                     }
                 }
-                if (ZoneBox->isEnabled())
+                if (ZoneSelected->isEnabled())
                 {
                     AllLocked = false;
                 }
             }
             int DevSelect = ZoneBoxIndex - 1;
-            QCheckBox* DevBox = qobject_cast<QCheckBox*>(ui->SelectDevices->cellWidget(DevSelect,1));
+            QCheckBox* DeviceSelected = qobject_cast<QCheckBox*>(ui->SelectDevices->cellWidget(DevSelect,1));
             if (AllSelected)
             {
-                DevBox->setCheckState(Qt::Checked);
+                DeviceSelected->setCheckState(Qt::Checked);
             }
             else if (!AllSelected)
             {
-                DevBox->setCheckState(Qt::Unchecked);
+                DeviceSelected->setCheckState(Qt::Unchecked);
             }
             if (AllLocked)
             {
-                DevBox->setDisabled(true);
-                DevBox->setToolTip("No zones to select");
+                DeviceSelected->setDisabled(true);
+                DeviceSelected->setToolTip("No zones to select");
             }
             else if (!AllLocked)
             {
-                DevBox->setDisabled(false);
-                DevBox->setToolTip("");
+                DeviceSelected->setDisabled(false);
+                DeviceSelected->setToolTip("");
             }
         }
         else
