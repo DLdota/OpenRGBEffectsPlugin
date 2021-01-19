@@ -11,17 +11,15 @@ public:
     ~RainbowWave() {};
 
     EffectInfo  DefineEffectDetails()                                       override;
-    void        StepEffect(std::vector<OwnedControllerAndZones>, int Step)  override;
+    void        StepEffect(std::vector<OwnedControllerAndZones> LocalControllers, int Step)  override;
 
     void        SetSpeed(int Speed)                                         override;
     void        SetUserColors(std::vector<RGBColor>)                        override;
 
     EffectInfo EffectDetails;
 private:
-    int Speed;
-
-    int Progress;
-    int HUE;
+    int     Speed;
+    int     Progress = 0;
 };
 
 #endif // RAINBOWWAVE_H

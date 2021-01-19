@@ -245,7 +245,7 @@ void OpenRGBEffectTab::EffectStepTimer()
             {
                 for (int EffectIndex = 0; EffectIndex < int(OpenRGBEffectTab::ActiveEffects.size()); EffectIndex++)
                 {
-                    OpenRGBEffectTab::ActiveEffects[EffectIndex]->StepEffect(RespectiveToPass[EffectIndex],OpenRGBEffectTab::FPS);
+                    OpenRGBEffectTab::ActiveEffects[EffectIndex]->StepEffect(RespectiveToPass[OpenRGBEffectTab::ActiveEffects[EffectIndex]->EffectDetails.EffectIndex],OpenRGBEffectTab::FPS);
                 }
 
                 // After running through all of the effects proceed to set all of the LEDs on a per zone basis
@@ -448,6 +448,9 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
             ZO.Zone       = 0;
             Controllers[DevIndex].OwnedZones.push_back(ZO);
             RespectiveToPass[CurrentTab][DevIndex].OwnedZones.push_back(0);
+
+            qDebug() << "Added zone" << 0 << "to effect" << QString().fromStdString(EffectList[CurrentTab]->EffectDetails.EffectName);
+
         }
         else if (DeviceSelected->isEnabled() && !DeviceSelected->isChecked())
         {
