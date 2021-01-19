@@ -43,6 +43,8 @@ private slots:
     void ZoneSelectionChanged(QString DName);
 
     void on_TabChange(int Tab);
+
+    void FPSSlider(int SpeedIndex);
 private:
     Ui::OpenRGBEffectTab                *ui;
     int                                 CurrentTab;
@@ -53,6 +55,13 @@ private:
     static std::vector<std::vector<OwnedControllerAndZones>>    RespectiveToPass;
 
     static std::vector<BetterController>                        Controllers;
+
+    /*
+    | FPS list/current
+    */
+    int                                 FPS;
+
+    static std::vector<int>             GetSpeed;
 
     /*-----------------------------------------*\
     | Effect Handling (Stepping and active)     |

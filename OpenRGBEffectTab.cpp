@@ -8,6 +8,8 @@ std::vector<std::vector<OwnedControllerAndZones>>   OpenRGBEffectTab::Respective
 
 std::vector<RGBEffect*> OpenRGBEffectTab::EffectList;
 
+std::vector<int> OpenRGBEffectTab::GetSpeed = {1,2,3,4,5,6,7,8,10,15,20,25,30,40,50,60};
+
 /*-------------------------*\
 | Define all of the effects |
 \*-------------------------*/
@@ -185,6 +187,14 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent): QWidget(parent), ui(new Ui:
     ORGBPlugin::RMPointer->RegisterDeviceListChangeCallback(DeviceListChangedCallback, this);
     ORGBPlugin::RMPointer->RegisterDetectionProgressCallback(DeviceListChangedCallback, this);
 
+
+    OpenRGBEffectTab::FPS = 1000;
+    ui->FPSCount->setText(QString().number(1));
+
+    ui->FPSSlider->setMaximum(int(OpenRGBEffectTab::GetSpeed.size()) - 1);
+    ui->FPSSlider->setMinimum(0);
+    connect(ui->FPSSlider,SIGNAL(valueChanged(int)),this,SLOT(FPSSlider(int)));
+
     /*----------------------------------*\
     | Create the effect handling thread  |
     \*----------------------------------*/
@@ -259,13 +269,22 @@ void OpenRGBEffectTab::EffectStepTimer()
                 {
                     EffectStep = 1;
                 }
-                std::this_thread::sleep_for(std::chrono::milliseconds(33)); // 30 FPS
+                std::this_thread::sleep_for(std::chrono::milliseconds(OpenRGBEffectTab::FPS)); // 30 FPS
             }
             else std::this_thread::sleep_for(std::chrono::seconds(2));
         }
     }).detach();
 }
 
+
+/*--------------*\
+| FPS Handling   |
+\*--------------*/
+void OpenRGBEffectTab::FPSSlider(int NewFPS)
+{
+    OpenRGBEffectTab::FPS = 1000/GetSpeed[NewFPS];
+    ui->FPSCount->setText(QString().number(GetSpeed[NewFPS]));
+}
 
 /*---------------------------*\
 | Device list change handling |
