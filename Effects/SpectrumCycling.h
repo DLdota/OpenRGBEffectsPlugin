@@ -18,8 +18,8 @@ public:
 
     EffectInfo EffectDetails;
 private:
-    int CurrentHue = 0;
-    int Speed;
+    float  CurrentHue = 0.0000;
+    int    Speed;
 };
 
 #endif // SPECTRUMCYCLING_H

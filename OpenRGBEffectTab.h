@@ -59,6 +59,7 @@ private:
     /*
     | FPS list/current
     */
+    int                                 FPSDelay;
     int                                 FPS;
 
     static std::vector<int>             GetSpeed;

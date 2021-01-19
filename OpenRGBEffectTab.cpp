@@ -188,7 +188,8 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent): QWidget(parent), ui(new Ui:
     ORGBPlugin::RMPointer->RegisterDetectionProgressCallback(DeviceListChangedCallback, this);
 
 
-    OpenRGBEffectTab::FPS = 1000;
+    OpenRGBEffectTab::FPSDelay = 1000; // 1 second delay
+    OpenRGBEffectTab::FPS      = 1;
     ui->FPSCount->setText(QString().number(1));
 
     ui->FPSSlider->setMaximum(int(OpenRGBEffectTab::GetSpeed.size()) - 1);
@@ -239,13 +240,12 @@ void OpenRGBEffectTab::EffectStepTimer()
 {
     std::thread([=]()
     {
-        int EffectStep = 1;
         while (true) {
             if (int(OpenRGBEffectTab::ActiveEffects.size()) > 0)
             {
                 for (int EffectIndex = 0; EffectIndex < int(OpenRGBEffectTab::ActiveEffects.size()); EffectIndex++)
                 {
-                    OpenRGBEffectTab::ActiveEffects[EffectIndex]->StepEffect(RespectiveToPass[EffectIndex],EffectStep);
+                    OpenRGBEffectTab::ActiveEffects[EffectIndex]->StepEffect(RespectiveToPass[EffectIndex],OpenRGBEffectTab::FPS);
                 }
 
                 // After running through all of the effects proceed to set all of the LEDs on a per zone basis
@@ -257,19 +257,7 @@ void OpenRGBEffectTab::EffectStepTimer()
                         std::this_thread::sleep_for(std::chrono::milliseconds(1));
                     }
                 }
-
-                /*---------------------------*\
-                | Progress the Step counter   |
-                \*---------------------------*/
-                if (EffectStep < 30)
-                {
-                    EffectStep += 1;
-                }
-                else if (EffectStep >= 30)
-                {
-                    EffectStep = 1;
-                }
-                std::this_thread::sleep_for(std::chrono::milliseconds(OpenRGBEffectTab::FPS)); // 30 FPS
+                std::this_thread::sleep_for(std::chrono::milliseconds(OpenRGBEffectTab::FPSDelay));
             }
             else std::this_thread::sleep_for(std::chrono::seconds(2));
         }
@@ -282,7 +270,8 @@ void OpenRGBEffectTab::EffectStepTimer()
 \*--------------*/
 void OpenRGBEffectTab::FPSSlider(int NewFPS)
 {
-    OpenRGBEffectTab::FPS = 1000/GetSpeed[NewFPS];
+    OpenRGBEffectTab::FPSDelay = 1000/GetSpeed[NewFPS];
+    OpenRGBEffectTab::FPS      = GetSpeed[NewFPS];
     ui->FPSCount->setText(QString().number(GetSpeed[NewFPS]));
 }
 

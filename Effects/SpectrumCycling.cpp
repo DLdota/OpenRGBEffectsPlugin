@@ -1,4 +1,5 @@
 #include "SpectrumCycling.h"
+#include <iostream>
 
 EffectInfo SpectrumCycling::DefineEffectDetails()
 {
@@ -6,38 +7,38 @@ EffectInfo SpectrumCycling::DefineEffectDetails()
     SpectrumCycling::EffectDetails.EffectDescription = "Goes through every solid color";
 
     SpectrumCycling::EffectDetails.IsReversable = false;
-    SpectrumCycling::EffectDetails.MaxSpeed     = 7;
+    SpectrumCycling::EffectDetails.MaxSpeed     = 100;
     SpectrumCycling::EffectDetails.MinSpeed     = 1;
     SpectrumCycling::EffectDetails.UserColors   = 0;
 
     return SpectrumCycling::EffectDetails;
 }
 
-void SpectrumCycling::StepEffect(std::vector<OwnedControllerAndZones> PassedTo, int Step)
+void SpectrumCycling::StepEffect(std::vector<OwnedControllerAndZones> PassedTo, int FPS)
 {
-    if (Step%3 == 0) // 10 FPS
-    {
-        hsv_t HSVVal;
-        HSVVal.value = 255;
-        HSVVal.saturation = 255;
+    hsv_t HSVVal;
+    HSVVal.value = 255;
+    HSVVal.saturation = 255;
 
-        HSVVal.hue = CurrentHue;
-        for (int i = 0; i < int(PassedTo.size()); i++)
+    HSVVal.hue = CurrentHue;
+    for (int i = 0; i < int(PassedTo.size()); i++)
+    {
+        for (int ZoneID = 0; ZoneID < int(PassedTo[i].OwnedZones.size()); ZoneID++)
         {
-            for (int ZoneID = 0; ZoneID < int(PassedTo[i].OwnedZones.size()); ZoneID++)
-            {
-                PassedTo[i].Controller->SetAllZoneLEDs(PassedTo[i].OwnedZones[ZoneID],RGBColor(hsv2rgb(&HSVVal)));
-            }
-        }
-        if (CurrentHue < 360)
-        {
-            CurrentHue += Speed;
-        }
-        else
-        {
-            CurrentHue = 0;
+            PassedTo[i].Controller->SetAllZoneLEDs(PassedTo[i].OwnedZones[ZoneID],RGBColor(hsv2rgb(&HSVVal)));
         }
     }
+
+
+    if (CurrentHue < 360)
+    {
+        CurrentHue = CurrentHue + ((float)Speed / (float)FPS);
+    }
+    else
+    {
+        CurrentHue = 0.0000;
+    }
+
     return;
 }
 
