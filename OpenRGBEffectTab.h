@@ -43,7 +43,7 @@ private slots:
     void ZoneSelectionChanged(QString DName);
 
     void DeviceReversalChanged(QString DName);
-    //void ZoneReversalChanged(QString DName);
+    void ZoneReversalChanged(QString DName);
 
     void on_TabChange(int Tab);
 

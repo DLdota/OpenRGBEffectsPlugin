@@ -21,15 +21,15 @@ struct EffectInfo
 
 struct OwnedControllerAndZones
 {
-    RGBController*      Controller;
-    bool                Active;
-    std::vector<int>    OwnedZones;
+    RGBController*     Controller;
+    std::vector<int>   OwnedZones;
 };
 
 struct ZoneOwnedBy
 {
     int Zone;
     std::string EffectName;
+    bool IsReversed;
 };
 
 struct BetterController
@@ -39,6 +39,7 @@ struct BetterController
     int                         DirectIndex;
     int                         Index;
     std::vector<ZoneOwnedBy>    OwnedZones;
+    std::vector<bool>           ReversedZones;
 };
 
 class RGBEffect
