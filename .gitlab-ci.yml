@@ -222,5 +222,5 @@ build_windows_64:
 
   artifacts:
     paths:
-    - _build/*.dll
+    - _build/*.7z
     expire_in: 30 days
