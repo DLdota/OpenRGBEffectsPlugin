@@ -10,7 +10,16 @@ EffectInfo RainbowWave::DefineEffectDetails()
     RainbowWave::EffectDetails.MinSpeed     = 1;
     RainbowWave::EffectDetails.UserColors   = 0;
 
+    RainbowWave::EffectDetails.MinSlider2Val = 5;
+    RainbowWave::EffectDetails.MaxSlider2Val = 50;
+    RainbowWave::EffectDetails.Slider2Name   = "Width";
+
     return RainbowWave::EffectDetails;
+}
+
+void RainbowWave::DefineExtraOptions(QWidget* Parent)
+{
+    return;
 }
 
 void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
@@ -21,22 +30,19 @@ void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
 
     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
     {
-        qDebug() << Controllers[ControllerID].OwnedZones.size();
         for (int ZoneID = 0; ZoneID < int(Controllers[ControllerID].OwnedZones.size()); ZoneID++)
         {
             zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
-            qDebug() << ZT;
             if (ZT == ZONE_TYPE_SINGLE)
             {
 
             }
             else if (ZT == ZONE_TYPE_LINEAR)
             {
-                qDebug() << "linear zone";
                 int SetLEDIndex = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
                 for (int LedID = 0; LedID < int(Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count); LedID++)
                 {
-                    uint HUE = ((Progress + LedID) * Speed);
+                    int HUE = ((Progress + LedID) * Width);
 
                     HSVVal.hue = HUE;
 
@@ -52,7 +58,7 @@ void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
 
     if (Progress < 360)
     {
-        Progress += float(float(1) * float(FPS));
+        Progress += float(float(Speed) / float(FPS));
     }
     else if (Progress >= 360)
     {
@@ -72,3 +78,11 @@ void RainbowWave::SetUserColors(std::vector<RGBColor>)
     | This effect does not support user chosen colors  |
     \*------------------------------------------------*/
 }
+
+void RainbowWave::Slider2Changed(int NewWidth)
+{
+    Width = NewWidth;
+}
+/*--------------*\
+| Extra Options  |
+\*--------------*/

@@ -11,7 +11,19 @@ EffectInfo SpectrumCycling::DefineEffectDetails()
     SpectrumCycling::EffectDetails.MinSpeed     = 1;
     SpectrumCycling::EffectDetails.UserColors   = 0;
 
+    SpectrumCycling::EffectDetails.MaxSlider2Val = 0;
+    SpectrumCycling::EffectDetails.MinSlider2Val = 0;
+    SpectrumCycling::EffectDetails.Slider2Name   = "";
+
     return SpectrumCycling::EffectDetails;
+}
+
+void SpectrumCycling::DefineExtraOptions(QWidget* Parent)
+{
+    /*----------------------------------------*\
+    | No special options for spectrum cycling  |
+    \*----------------------------------------*/
+    return;
 }
 
 void SpectrumCycling::StepEffect(std::vector<OwnedControllerAndZones> PassedTo, int FPS)
@@ -52,4 +64,10 @@ void SpectrumCycling::SetUserColors(std::vector<RGBColor>)
     /*------------------------------------------------*\
     | This effect does not support user chosen colors  |
     \*------------------------------------------------*/
+}
+
+void SpectrumCycling::Slider2Changed(int)
+{
+    // Not used
+    return;
 }

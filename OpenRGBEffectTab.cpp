@@ -448,9 +448,6 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
             ZO.Zone       = 0;
             Controllers[DevIndex].OwnedZones.push_back(ZO);
             RespectiveToPass[CurrentTab][DevIndex].OwnedZones.push_back(0);
-
-            qDebug() << "Added zone" << 0 << "to effect" << QString().fromStdString(EffectList[CurrentTab]->EffectDetails.EffectName);
-
         }
         else if (DeviceSelected->isEnabled() && !DeviceSelected->isChecked())
         {

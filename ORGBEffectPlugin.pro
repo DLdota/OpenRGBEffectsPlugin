@@ -23,7 +23,6 @@ INCLUDEPATH +=                                                                  
 #-----------------------------------------------------------------------------------------------#
 
 HEADERS +=                                                                                      \
-    Effects/RainbowWave.h \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -41,10 +40,14 @@ HEADERS +=                                                                      
 #-----------------------------------------------------------------------------------------------#
 # Plugin Source                                                                                 #
 #-----------------------------------------------------------------------------------------------#
+INCLUDEPATH +=                                                                                  \
+    Effects/SpectrumCycling/                                                                    \
+    Effects/RainbowWave/                                                                        \
+
 SOURCES +=                                                                                      \
     Effects/HSV/hsv.cpp                                                                         \
-    Effects/RainbowWave.cpp \
-    Effects/SpectrumCycling.cpp                                                                 \
+    Effects/RainbowWave/RainbowWave.cpp                                                         \
+    Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
     ORGBEffectPlugin.cpp                                                                        \
     OpenRGBEffectPage.cpp                                                                       \
     OpenRGBEffectTab.cpp
@@ -54,7 +57,8 @@ HEADERS +=                                                                      
     ORGBEffectPlugin.h                                                                          \
     OpenRGBPluginInterface.h                                                                    \
     Effects/RGBEffect.h                                                                         \
-    Effects/SpectrumCycling.h                                                                   \
+    Effects/SpectrumCycling/SpectrumCycling.h                                                   \
+    Effects/RainbowWave/RainbowWave.h                                                           \
 
 win32:CONFIG(debug, debug|release) {
     win32:DESTDIR = debug
@@ -73,4 +77,4 @@ win32:UI_DIR      = _intermediate_$$DESTDIR/.ui
 
 FORMS += \
     OpenRGBEffectPage.ui \
-    OpenRGBEffectTab.ui
+    OpenRGBEffectTab.ui  \

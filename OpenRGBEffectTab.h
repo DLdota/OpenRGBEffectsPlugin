@@ -48,17 +48,17 @@ private slots:
 private:
     Ui::OpenRGBEffectTab                *ui;
     int                                 CurrentTab;
-    /*
-    | List of static items (Possible effects and controllers)
-    */
+    /*--------------------------------------------------------*\
+    | List of static items (Possible effects and controllers)  |
+    \*--------------------------------------------------------*/
     static std::vector<RGBEffect*>                              EffectList;
     static std::vector<std::vector<OwnedControllerAndZones>>    RespectiveToPass;
 
     static std::vector<BetterController>                        Controllers;
 
-    /*
-    | FPS list/current
-    */
+    /*------------------*\
+    | FPS list/current   |
+    \*------------------*/
     int                                 FPSDelay;
     int                                 FPS;
 

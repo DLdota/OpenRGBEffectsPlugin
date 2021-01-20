@@ -11,15 +11,20 @@ public:
     ~RainbowWave() {};
 
     EffectInfo  DefineEffectDetails()                                       override;
+    void        DefineExtraOptions(QWidget* Parent)                         override;
     void        StepEffect(std::vector<OwnedControllerAndZones> LocalControllers, int Step)  override;
 
     void        SetSpeed(int Speed)                                         override;
     void        SetUserColors(std::vector<RGBColor>)                        override;
+    void        Slider2Changed(int)                                         override;
+
+    void        SetWidth(int NewWidth);
 
     EffectInfo EffectDetails;
 private:
     int     Speed;
-    int     Progress = 0;
+    int     Width;
+    float   Progress = 0;
 };
 
 #endif // RAINBOWWAVE_H

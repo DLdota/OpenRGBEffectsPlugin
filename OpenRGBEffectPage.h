@@ -31,6 +31,7 @@ private slots:
     void on_StartButton_clicked();
     void on_StopButton_clicked();
     void on_SpeedSlider_valueChanged(int value);
+    void on_Slider2_valueChanged(int value);
 
 
 private:

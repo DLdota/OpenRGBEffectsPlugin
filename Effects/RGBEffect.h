@@ -13,13 +13,10 @@ struct EffectInfo
     int  MaxSpeed;
     int  MinSpeed;
     int  UserColors;
-};
 
-struct UserColor
-{
-    int R;
-    int G;
-    int B;
+    int         MaxSlider2Val;
+    int         MinSlider2Val;
+    std::string Slider2Name;
 };
 
 struct OwnedControllerAndZones
@@ -47,11 +44,13 @@ struct BetterController
 class RGBEffect
 {
 public:
-    virtual EffectInfo  DefineEffectDetails()                               = 0;
+    virtual EffectInfo  DefineEffectDetails()                                        = 0;
+    virtual void        DefineExtraOptions(QWidget* Parent)                          = 0;
     virtual void        StepEffect(std::vector<OwnedControllerAndZones>, int Step)   = 0;
 
-    virtual void        SetSpeed(int Speed)                                 = 0;
-    virtual void        SetUserColors(std::vector<RGBColor>)                = 0;
+    virtual void        SetSpeed(int Speed)                                          = 0;
+    virtual void        SetUserColors(std::vector<RGBColor>)                         = 0;
+    virtual void        Slider2Changed(int)                                          = 0;
 
     EffectInfo          EffectDetails;
 };
