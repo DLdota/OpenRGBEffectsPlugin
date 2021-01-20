@@ -36,6 +36,8 @@ public:
     static void SetEffectUnActive(RGBEffect* Effect);
 
     void CreateDeviceSelection(RGBController* Controller, int Index, bool HasDirectMode);
+
+    static bool CheckReversed (int DeviceIndex, int ZoneIndex);
 private slots:
     void DeviceListChanged();
 

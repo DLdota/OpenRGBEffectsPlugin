@@ -1,4 +1,5 @@
 #include "RainbowWave.h"
+#include "OpenRGBEffectTab.h"
 
 EffectInfo RainbowWave::DefineEffectDetails()
 {
@@ -37,6 +38,7 @@ void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
             \*-------------------*/
             int SetLEDIndex = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
             zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
+            bool RVRS = OpenRGBEffectTab::CheckReversed(ControllerID, Controllers[ControllerID].OwnedZones[ZoneID]);
 
             /*----------------------------------------------------*\
             | Adjust how it applies for the specific type of zone  |
@@ -54,9 +56,12 @@ void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
 
             else if (ZT == ZONE_TYPE_LINEAR)
             {
-                for (int LedID = 0; LedID < int(Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count); LedID++)
+                int LEDCOUNT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count;
+                for (int LedID = 0; LedID < LEDCOUNT; LedID++)
                 {
-                    int HUE = ((Progress + LedID) * Width);
+                    int HUE;
+                    if (RVRS) HUE = ((Progress + ( (LEDCOUNT - 1) - LedID) ) * Width);
+                    else HUE = ((Progress + LedID) * Width);
 
                     HSVVal.hue = HUE;
 
@@ -71,7 +76,16 @@ void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
 
                 for (int CollumnID = 0; CollumnID < CollumnCount; CollumnID++)
                 {
-                    int HUE = ((Progress + (int)CollumnID) * Width);
+                    int HUE;
+                    if (RVRS)
+                    {
+                        HUE = ((Progress + (int)( (CollumnCount - 1) - CollumnID)) * Width);
+                    }
+                    else
+                    {
+                        HUE = ((Progress + (int)CollumnID) * Width);
+                    }
+
                     HSVVal.hue = HUE;
 
                     for (int RowID = 0; RowID < RowCount; RowID++)
@@ -81,6 +95,7 @@ void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
                     }
                 }
             }
+
         }
     }
 

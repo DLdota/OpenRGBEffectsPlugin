@@ -1,5 +1,8 @@
 #ifndef RGBEFFECT_H
 #define RGBEFFECT_H
+
+#pragma once
+
 #include "ORGBEffectPlugin.h"
 #include "hsv.h"
 
