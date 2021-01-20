@@ -43,10 +43,13 @@ void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
             \*----------------------------------------------------*/
             if (ZT == ZONE_TYPE_SINGLE)
             {
-                int HUE = (Progress * Width);
-                HSVVal.hue = HUE;
+                for (int LedID = 0; LedID < int(Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count); LedID++)
+                {
+                    int HUE = (Progress * Width);
+                    HSVVal.hue = HUE;
 
-                Controllers[ControllerID].Controller->SetLED(SetLEDIndex,RGBColor(hsv2rgb(&HSVVal)));
+                    Controllers[ControllerID].Controller->SetLED((SetLEDIndex + LedID),RGBColor(hsv2rgb(&HSVVal)));
+                }
             }
 
             else if (ZT == ZONE_TYPE_LINEAR)
@@ -74,7 +77,7 @@ void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
                     for (int RowID = 0; RowID < RowCount; RowID++)
                     {
                         int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((RowID * CollumnCount) + CollumnID)];
-                        Controllers[ControllerID].Controller->SetLED(LedID,RGBColor(hsv2rgb(&HSVVal)));
+                        Controllers[ControllerID].Controller->SetLED(SetLEDIndex + LedID,RGBColor(hsv2rgb(&HSVVal)));
                     }
                 }
             }

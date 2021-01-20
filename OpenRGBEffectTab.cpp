@@ -564,6 +564,11 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
     }
 }
 
+void OpenRGBEffectTab::DeviceReversalChanged(QString DName)
+{
+
+}
+
 void OpenRGBEffectTab::on_TabChange(int Tab)
 {
     OpenRGBEffectTab::CurrentTab = Tab;
