@@ -1,8 +1,9 @@
 #include "OpenRGBEffectPage.h"
 
-OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT):
-    QWidget(parent),
-    ui(new Ui::OpenRGBEffectPage)
+/*-----------------------*\
+| Constructor/Destructor  |
+\*-----------------------*/
+OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT): QWidget(parent), ui(new Ui::OpenRGBEffectPage)
 {
     ui->setupUi(this);
 
@@ -49,7 +50,7 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT):
         {
             RGBColor UserColor = ToRGBColor(255,255,255);
             UserColors.push_back(UserColor);
-            ui->UserColorNum->addItem("Color " + QString().number(UserColorIndex));
+            ui->UserColorNum->addItem("Color " + QString().number(UserColorIndex + 1));
         }
         ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(255) + "," + QString().number(255) + "," + QString().number(255) + ")");
 
@@ -63,6 +64,10 @@ OpenRGBEffectPage::~OpenRGBEffectPage()
     delete ui;
 }
 
+
+/*--------*\
+| Slots    |
+\*--------*/
 void OpenRGBEffectPage::on_StartButton_clicked()
 {
     OpenRGBEffectTab::SetEffectActive(EFCT);
@@ -91,17 +96,31 @@ void OpenRGBEffectPage::on_Slider2_valueChanged(int value)
     EFCT->Slider2Changed(value);
 }
 
-void OpenRGBEffectPage::on_toolButton_clicked()
+void OpenRGBEffectPage::on_UserColorNum_currentIndexChanged(int NewIndex)
+{
+    CurrentColor = NewIndex;
+    int Red   = (UserColors[NewIndex] & 0x00ff0000) >> 16;
+    int Green = (UserColors[NewIndex] & 0x0000ff00) >> 8;
+    int Blue  = (UserColors[NewIndex] & 0x000000ff);
+
+    ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(Red) + "," + QString().number(Green) + "," + QString().number(Blue) + ")");
+}
+
+void OpenRGBEffectPage::on_ColorPickerButton_clicked()
 {
     QColorDialog* GUColor = new QColorDialog();
+
+    GUColor->setPalette(this->palette());
     GUColor->setModal(true);
+
     QColor UserColor = GUColor->getColor();
     int Red = UserColor.red();
     int Green = UserColor.green();
     int Blue = UserColor.blue();
+
     unsigned int rgb = (  Red<<16 )|( Green<<8 )|( Blue );
-    RGBColor NewUserColor = rgb;
+
+    UserColors[CurrentColor] = rgb;
     ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(Red) + "," + QString().number(Green) + "," + QString().number(Blue) + ")");
 
 }
-
