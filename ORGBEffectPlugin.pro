@@ -23,6 +23,7 @@ INCLUDEPATH +=                                                                  
 #-----------------------------------------------------------------------------------------------#
 
 HEADERS +=                                                                                      \
+    Effects/StarryNight/StarryNight.h \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -43,11 +44,13 @@ HEADERS +=                                                                      
 INCLUDEPATH +=                                                                                  \
     Effects/SpectrumCycling/                                                                    \
     Effects/RainbowWave/                                                                        \
+    Effects/StarryNight/                                                                        \
 
 SOURCES +=                                                                                      \
     Effects/HSV/hsv.cpp                                                                         \
     Effects/RainbowWave/RainbowWave.cpp                                                         \
     Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
+    Effects/StarryNight/StarryNight.cpp \
     ORGBEffectPlugin.cpp                                                                        \
     OpenRGBEffectPage.cpp                                                                       \
     OpenRGBEffectTab.cpp

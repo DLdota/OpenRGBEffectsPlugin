@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QCheckBox>
+#include <QColorDialog>
 
 #include <thread>
 
@@ -32,6 +33,7 @@ private slots:
     void on_StopButton_clicked();
     void on_SpeedSlider_valueChanged(int value);
     void on_Slider2_valueChanged(int value);
+    void on_toolButton_clicked();
 
 
 private:
@@ -39,6 +41,8 @@ private:
     RGBEffect* EFCT;
 
     std::vector<RGBController*> OwnedController;
+
+    std::vector<RGBColor> UserColors;
 };
 
 #endif // OPENRGBEFFECTPAGE_H

@@ -15,6 +15,7 @@
 
 #include "SpectrumCycling.h"
 #include "RainbowWave.h"
+#include "StarryNight.h"
 
 #pragma once
 

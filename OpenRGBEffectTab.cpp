@@ -15,11 +15,14 @@ std::vector<int> OpenRGBEffectTab::GetSpeed = {1,2,3,4,5,6,7,8,10,15,20,25,30,40
 \*-------------------------*/
 void OpenRGBEffectTab::DefineEffects()
 {
-    SpectrumCycling *SpecCycle = new SpectrumCycling;
+    SpectrumCycling* SpecCycle = new SpectrumCycling;
     OpenRGBEffectTab::EffectList.push_back(SpecCycle);
 
-    RainbowWave * RBWave = new RainbowWave;
+    RainbowWave* RBWave = new RainbowWave;
     OpenRGBEffectTab::EffectList.push_back(RBWave);
+
+    StarryNight* STRYNGHT = new StarryNight;
+    OpenRGBEffectTab::EffectList.push_back(STRYNGHT);
 }
 
 

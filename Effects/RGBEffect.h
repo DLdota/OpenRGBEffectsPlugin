@@ -32,7 +32,6 @@ struct ZoneOwnedBy
 {
     int Zone;
     std::string EffectName;
-    bool IsReversed;
 };
 
 struct BetterController
@@ -50,7 +49,7 @@ class RGBEffect
 public:
     virtual EffectInfo  DefineEffectDetails()                                        = 0;
     virtual void        DefineExtraOptions(QWidget* Parent)                          = 0;
-    virtual void        StepEffect(std::vector<OwnedControllerAndZones>, int Step)   = 0;
+    virtual void        StepEffect(std::vector<OwnedControllerAndZones>, int FPS)    = 0;
 
     virtual void        SetSpeed(int Speed)                                          = 0;
     virtual void        SetUserColors(std::vector<RGBColor>)                         = 0;

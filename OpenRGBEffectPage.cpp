@@ -42,6 +42,20 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT):
 
     EFCT->DefineExtraOptions(ui->OptionFrame);
 
+    if (EFCT->EffectDetails.UserColors > 0)
+    {
+        ui->UserColorNum->setMaxCount(EFCT->EffectDetails.UserColors);
+        for (int UserColorIndex = 0; UserColorIndex < EFCT->EffectDetails.UserColors; UserColorIndex++)
+        {
+            RGBColor UserColor = ToRGBColor(255,255,255);
+            UserColors.push_back(UserColor);
+            ui->UserColorNum->addItem("Color " + QString().number(UserColorIndex));
+        }
+        ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(255) + "," + QString().number(255) + "," + QString().number(255) + ")");
+
+        ui->UserColorFrame->setHidden(false);
+    }
+
 }
 
 OpenRGBEffectPage::~OpenRGBEffectPage()
@@ -76,3 +90,18 @@ void OpenRGBEffectPage::on_Slider2_valueChanged(int value)
 {
     EFCT->Slider2Changed(value);
 }
+
+void OpenRGBEffectPage::on_toolButton_clicked()
+{
+    QColorDialog* GUColor = new QColorDialog();
+    GUColor->setModal(true);
+    QColor UserColor = GUColor->getColor();
+    int Red = UserColor.red();
+    int Green = UserColor.green();
+    int Blue = UserColor.blue();
+    unsigned int rgb = (  Red<<16 )|( Green<<8 )|( Blue );
+    RGBColor NewUserColor = rgb;
+    ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(Red) + "," + QString().number(Green) + "," + QString().number(Blue) + ")");
+
+}
+
