@@ -487,8 +487,6 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
 
 void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
 {
-    qDebug() << DName;
-    qDebug() << "Zone Selection Changed";
     int DevIndex = 0;
     for (int DeviceID = 0; DeviceID < ui->SelectDevices->rowCount(); DeviceID++)
     {
@@ -498,7 +496,6 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
         if ((DeviceName->text() + QString().number(Controllers[TempDevID].Index)) == DName)
         {
             DevIndex = DeviceID;
-            qDebug() << "Found device";
             break;
         }
         continue;
