@@ -113,7 +113,7 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
 
             // Same mapping, Just to a different function
             QSignalMapper* ZoneSelectionMapper = new QSignalMapper(ZoneSelected);
-            ZoneSelectionMapper->setMapping(ZoneSelected, (QString().fromStdString(Controller->name) + QString().number(Index) + "_0") );
+            ZoneSelectionMapper->setMapping(ZoneSelected, (QString().fromStdString(Controller->name) + QString().number(Index)) );
 
             connect(ZoneSelected,SIGNAL(clicked()),ZoneSelectionMapper,SLOT(map()));
             connect(ZoneSelectionMapper,SIGNAL(mapped(QString)),this,SLOT( ZoneSelectionChanged(QString) ) );
@@ -124,7 +124,7 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
             QCheckBox* ZoneReversed = new QCheckBox();
 
             QSignalMapper* ZoneReversalMapper = new QSignalMapper(ZoneReversed);
-            ZoneReversalMapper->setMapping(ZoneReversed, (QString().fromStdString(Controller->name) + QString().number(Index) + "_1") );
+            ZoneReversalMapper->setMapping(ZoneReversed, (QString().fromStdString(Controller->name) + QString().number(Index)) );
 
             connect(ZoneReversed,SIGNAL(clicked()),ZoneReversalMapper,SLOT(map()));
             connect(ZoneReversalMapper,SIGNAL(mapped(QString)),this,SLOT( ZoneReversalChanged(QString) ) );
@@ -358,7 +358,6 @@ void OpenRGBEffectTab::DeviceListChanged()
             NewZoneMap.Controller = NewControllers[i];
             RespectiveToPass[EffectIndex].push_back(NewZoneMap);
         }
-
     }
 
     /*---------------------*\
@@ -488,6 +487,8 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
 
 void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
 {
+    qDebug() << DName;
+    qDebug() << "Zone Selection Changed";
     int DevIndex = 0;
     for (int DeviceID = 0; DeviceID < ui->SelectDevices->rowCount(); DeviceID++)
     {
@@ -497,6 +498,7 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
         if ((DeviceName->text() + QString().number(Controllers[TempDevID].Index)) == DName)
         {
             DevIndex = DeviceID;
+            qDebug() << "Found device";
             break;
         }
         continue;

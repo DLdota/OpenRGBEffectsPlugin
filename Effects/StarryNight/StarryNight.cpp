@@ -10,8 +10,8 @@ EffectInfo StarryNight::DefineEffectDetails()
     StarryNight::EffectDetails.MinSpeed = 1;
     StarryNight::EffectDetails.UserColors = 5;
 
-    StarryNight::EffectDetails.MaxSlider2Val = 10;
-    StarryNight::EffectDetails.MinSlider2Val = 1;
+    StarryNight::EffectDetails.MaxSlider2Val = 20;
+    StarryNight::EffectDetails.MinSlider2Val = 5;
     StarryNight::EffectDetails.Slider2Name   = "Star Count";
 
     return StarryNight::EffectDetails;
@@ -35,6 +35,7 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
                 int MakeStarCount = rand() % CurrentStars.size() + LEDPerCycle;
                 for (int StarCountProgress = 0; StarCountProgress < MakeStarCount; StarCountProgress++)
                 {
+                    qDebug() << "Creating a new star";
                     int RandRangeMin = Controllers[ControllerID].Controller->zones[ZoneID].start_idx;
                     int RandRangeMax = RandRangeMin + Controllers[ControllerID].Controller->zones[ZoneID].leds_count;
 
@@ -49,31 +50,32 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
                     CurrentStars.push_back(LEDStar);
                 }
             }
+        }
+    }
+    std::vector<int> ToBeDeleted;
+    for (int StarIndex = 0; StarIndex < (int)CurrentStars.size(); StarIndex++)
+    {
+        /*-------*\
+        | Setup   |
+        \*-------*/
+        int CTRLR = CurrentStars[StarIndex].ControllerIndex;
+        bool ToBeDeleted = false;
+        hsv_t SetColor;
+        rgb2hsv(CurrentStars[StarIndex].Color,&SetColor);
 
-            for (int StarIndex = 0; StarIndex < (int)CurrentStars.size(); StarIndex++)
-            {
-                /*-------*\
-                | Setup   |
-                \*-------*/
-                int CTRLR = CurrentStars[StarIndex].ControllerIndex;
-                bool ToBeDeleted = false;
-                hsv_t SetColor;
-                rgb2hsv(CurrentStars[StarIndex].Color,&SetColor);
 
-
-                float NewValue = (CurrentStars[StarIndex].state - ( Speed / (1000/FPS) ) );
-                if ((NewValue < 1) || (NewValue > 255))
-                {
-                    ToBeDeleted = true;
-                    SetColor.value = 0;
-                    Controllers[CTRLR].Controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
-                }
-                {
-                    SetColor.value = CurrentStars[StarIndex].state;
-                    Controllers[CTRLR].Controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
-                    CurrentStars[StarIndex].state = (CurrentStars[StarIndex].state - ( Speed / (1000/FPS) ) );
-                }
-            }
+        float NewValue = (CurrentStars[StarIndex].state - ( Speed / (1000/FPS) ) );
+        if ((NewValue < 1) || (NewValue > 255))
+        {
+            ToBeDeleted = true;
+            SetColor.value = 0;
+            Controllers[CTRLR].Controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
+        }
+        else
+        {
+            SetColor.value = CurrentStars[StarIndex].state;
+            Controllers[CTRLR].Controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
+            CurrentStars[StarIndex].state = (CurrentStars[StarIndex].state - ( Speed / (1000/FPS) ) );
         }
     }
     return;
