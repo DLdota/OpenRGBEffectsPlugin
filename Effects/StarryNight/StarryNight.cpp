@@ -35,7 +35,7 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
                 int MakeStarCount = rand() % CurrentStars.size() + LEDPerCycle;
                 for (int StarCountProgress = 0; StarCountProgress < MakeStarCount; StarCountProgress++)
                 {
-                    qDebug() << "Creating a new star";
+                    //qDebug() << "Creating a new star";
                     int RandRangeMin = Controllers[ControllerID].Controller->zones[ZoneID].start_idx;
                     int RandRangeMax = RandRangeMin + Controllers[ControllerID].Controller->zones[ZoneID].leds_count;
 
