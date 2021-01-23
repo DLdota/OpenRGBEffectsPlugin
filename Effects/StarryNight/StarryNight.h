@@ -2,6 +2,16 @@
 #define STARRYNIGHT_H
 
 #include "RGBEffect.h"
+#include <stdlib.h>
+#include <hsv.h>
+
+struct NewStar
+{
+    int         ControllerIndex;
+    int         LED;
+    float       state;
+    RGBColor    Color;
+};
 
 class StarryNight: public RGBEffect
 {
@@ -18,9 +28,13 @@ public:
 
     EffectInfo          EffectDetails;
 private:
-    int Speed;
-    int LEDPerCycle;
-    std::vector<RGBColor> UserColors;
+    int                                         Speed;
+    int                                         FPS;
+    int                                         LEDPerCycle = 1;
+    std::vector<RGBColor>                       UserColors;
+    //std::vector<OwnedControllerAndZones>        PreviousControllers;
+
+    std::vector<NewStar>                           CurrentStars;
 };
 
 #endif // STARRYNIGHT_H

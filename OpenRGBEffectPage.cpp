@@ -123,4 +123,6 @@ void OpenRGBEffectPage::on_ColorPickerButton_clicked()
     UserColors[CurrentColor] = rgb;
     ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(Red) + "," + QString().number(Green) + "," + QString().number(Blue) + ")");
 
+    EFCT->SetUserColors(OpenRGBEffectPage::UserColors);
+
 }
