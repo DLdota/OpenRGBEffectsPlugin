@@ -50,7 +50,7 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
     DeviceSelectionMapper->setMapping(SelectedBox, (QString().fromStdString(Controller->name) + QString().number(Index)) );
 
     connect(SelectedBox,SIGNAL(clicked()),DeviceSelectionMapper,SLOT(map()));
-    connect(DeviceSelectionMapper,SIGNAL(mappedString(QString)),this,SLOT( DeviceSelectionChanged(QString) ) );
+    connect(DeviceSelectionMapper,SIGNAL(mapped(QString)),this,SLOT( DeviceSelectionChanged(QString) ) );
 
     /*---------------------------------------------------*\
     | Map the reverse button if there is more than 1 zone |
@@ -62,7 +62,7 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
     DeviceReversalMapper->setMapping(ReversedBox, (QString().fromStdString(Controller->name) + QString().number(Index)) );
 
     connect(ReversedBox,SIGNAL(clicked()),DeviceReversalMapper,SLOT(map()));
-    connect(DeviceReversalMapper,SIGNAL(mappedString(QString)),this,SLOT( DeviceReversalChanged(QString) ) );
+    connect(DeviceReversalMapper,SIGNAL(mapped(QString)),this,SLOT( DeviceReversalChanged(QString) ) );
 
     /*----------------------*\
     | Create the Zone table  |
@@ -116,7 +116,7 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
             ZoneSelectionMapper->setMapping(ZoneSelected, (QString().fromStdString(Controller->name) + QString().number(Index) + "_0") );
 
             connect(ZoneSelected,SIGNAL(clicked()),ZoneSelectionMapper,SLOT(map()));
-            connect(ZoneSelectionMapper,SIGNAL(mappedString(QString)),this,SLOT( ZoneSelectionChanged(QString) ) );
+            connect(ZoneSelectionMapper,SIGNAL(mapped(QString)),this,SLOT( ZoneSelectionChanged(QString) ) );
 
             /*------------------------------------*\
             | Make mapping for reverse Checkbox    |
@@ -127,7 +127,7 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
             ZoneReversalMapper->setMapping(ZoneReversed, (QString().fromStdString(Controller->name) + QString().number(Index) + "_1") );
 
             connect(ZoneReversed,SIGNAL(clicked()),ZoneReversalMapper,SLOT(map()));
-            connect(ZoneReversalMapper,SIGNAL(mappedString(QString)),this,SLOT( ZoneReversalChanged(QString) ) );
+            connect(ZoneReversalMapper,SIGNAL(mapped(QString)),this,SLOT( ZoneReversalChanged(QString) ) );
 
             /*----------------*\
             | Add the widgets  |
