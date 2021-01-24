@@ -476,6 +476,11 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
             ZO.Zone       = 0;
             Controllers[DevIndex].OwnedZones.push_back(ZO);
             RespectiveToPass[CurrentTab][DevIndex].OwnedZones.push_back(0);
+            if (Controllers[DevIndex].HasDirect)
+            {
+                Controllers[DevIndex].Controller->SetMode(Controllers[DevIndex].DirectIndex);
+                Controllers[DevIndex].Controller->UpdateMode();
+            }
         }
         else if (DeviceSelected->isEnabled() && !DeviceSelected->isChecked())
         {
