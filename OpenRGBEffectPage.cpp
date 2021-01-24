@@ -52,9 +52,10 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT): QWidget(
             UserColors.push_back(UserColor);
             ui->UserColorNum->addItem("Color " + QString().number(UserColorIndex + 1));
         }
-        ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(255) + "," + QString().number(255) + "," + QString().number(255) + ")");
-
+        ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(255) + "," + QString().number(255) + "," + QString().number(255) + ")");        
         ui->UserColorFrame->setHidden(false);
+
+        EFCT->SetUserColors(UserColors);
     }
 
 }

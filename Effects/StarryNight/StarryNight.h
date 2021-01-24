@@ -34,7 +34,7 @@ private:
     std::vector<RGBColor>                       UserColors;
     //std::vector<OwnedControllerAndZones>        PreviousControllers;
 
-    std::vector<NewStar>                           CurrentStars;
+    static std::vector<NewStar>                 CurrentStars;
 };
 
 #endif // STARRYNIGHT_H

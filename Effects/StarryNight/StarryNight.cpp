@@ -1,5 +1,7 @@
 #include "StarryNight.h"
 
+std::vector<NewStar> StarryNight::CurrentStars = {};
+
 EffectInfo StarryNight::DefineEffectDetails()
 {
     StarryNight::EffectDetails.EffectName = "Starry Night";
@@ -7,7 +9,7 @@ EffectInfo StarryNight::DefineEffectDetails()
 
     StarryNight::EffectDetails.IsReversable = false;
     StarryNight::EffectDetails.MaxSpeed = 100;
-    StarryNight::EffectDetails.MinSpeed = 1;
+    StarryNight::EffectDetails.MinSpeed = 20;
     StarryNight::EffectDetails.UserColors = 5;
 
     StarryNight::EffectDetails.MaxSlider2Val = 20;
@@ -25,33 +27,40 @@ void StarryNight::DefineExtraOptions(QWidget *Parent)
 
 void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
-    return;
+    int AmountMadeThisCycle = 0;
     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
     {
-        for (int ZoneID = 0; ZoneID < (int)Controllers[ControllerID].OwnedZones.size(); ZoneID++)
+        if (rand() % 2)
         {
-            if ((int)CurrentStars.size() < LEDPerCycle)
+            for (int ZoneID = 0; ZoneID < (int)Controllers[ControllerID].OwnedZones.size(); ZoneID++)
             {
-                int MakeStarCount = rand() % CurrentStars.size() + LEDPerCycle;
-                for (int StarCountProgress = 0; StarCountProgress < MakeStarCount; StarCountProgress++)
+                if (rand() % 2)
                 {
-                    //qDebug() << "Creating a new star";
-                    int RandRangeMin = Controllers[ControllerID].Controller->zones[ZoneID].start_idx;
-                    int RandRangeMax = RandRangeMin + Controllers[ControllerID].Controller->zones[ZoneID].leds_count;
+                    int MakeForZone = rand() % (LEDPerCycle - (int(CurrentStars.size())));
+                    if ((int(CurrentStars.size()) < LEDPerCycle))
+                    {
+                        for (int ZonesMade = 0; ZonesMade < MakeForZone; ZonesMade++)
+                        {
+                            int RandRangeMin = Controllers[ControllerID].Controller->zones[ZoneID].start_idx;
+                            int RandRangeMax = RandRangeMin + Controllers[ControllerID].Controller->zones[ZoneID].leds_count;
 
-                    int RandomLedID = rand() % RandRangeMax + RandRangeMin;
+                            int RandomLedID = rand() % RandRangeMax + RandRangeMin;
 
-                    NewStar LEDStar;
-                    LEDStar.ControllerIndex = ControllerID;
-                    LEDStar.LED = RandomLedID;
-                    LEDStar.state = 255;
-                    LEDStar.Color = UserColors[rand() % 4];
+                            NewStar LEDStar;
+                            LEDStar.ControllerIndex = ControllerID;
+                            LEDStar.LED = RandomLedID;
+                            LEDStar.state = 255;
+                            LEDStar.Color = UserColors[rand() % 4];
 
-                    CurrentStars.push_back(LEDStar);
+                            CurrentStars.push_back(LEDStar);
+                            AmountMadeThisCycle += 1;
+                        }
+                    }
                 }
             }
         }
     }
+
     std::vector<int> ToBeDeleted;
     for (int StarIndex = 0; StarIndex < (int)CurrentStars.size(); StarIndex++)
     {
@@ -59,15 +68,14 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
         | Setup   |
         \*-------*/
         int CTRLR = CurrentStars[StarIndex].ControllerIndex;
-        bool ToBeDeleted = false;
         hsv_t SetColor;
         rgb2hsv(CurrentStars[StarIndex].Color,&SetColor);
 
 
-        float NewValue = (CurrentStars[StarIndex].state - ( Speed / (1000/FPS) ) );
+        float NewValue = (CurrentStars[StarIndex].state - ( (float)Speed / (float)(1000/(float)FPS) ) );
         if ((NewValue < 1) || (NewValue > 255))
         {
-            ToBeDeleted = true;
+            ToBeDeleted.push_back(StarIndex);
             SetColor.value = 0;
             Controllers[CTRLR].Controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
         }
@@ -75,9 +83,16 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
         {
             SetColor.value = CurrentStars[StarIndex].state;
             Controllers[CTRLR].Controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
-            CurrentStars[StarIndex].state = (CurrentStars[StarIndex].state - ( Speed / (1000/FPS) ) );
+            CurrentStars[StarIndex].state -= (float(Speed) / float(FPS) );
         }
     }
+
+    // Go from the front back so that the index doesn't change
+    for (int ToDeleteIndex = int(ToBeDeleted.size() - 1); ToDeleteIndex > 0; ToDeleteIndex--)
+    {
+        CurrentStars.erase(CurrentStars.begin() + ToBeDeleted[ToDeleteIndex]);
+    }
+
     return;
 }
 
