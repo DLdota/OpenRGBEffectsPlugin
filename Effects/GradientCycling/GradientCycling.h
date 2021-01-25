@@ -29,8 +29,6 @@ private:
 
     std::vector<std::vector<float>> Progress;
     std::vector<RGBColor>           UserColors;
-    hsv_t                           StartingColor;
-    hsv_t                           EndingColor;
 
 
 };

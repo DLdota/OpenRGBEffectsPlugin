@@ -17,14 +17,6 @@ EffectInfo GradientCycling::DefineEffectDetails()
     GradientCycling::EffectDetails.MaxSlider2Val = 0;
     GradientCycling::EffectDetails.Slider2Name   = "";
 
-    hsv_t BlankColor;
-    BlankColor.hue = 0;
-    BlankColor.saturation = 255;
-    BlankColor.value = 255;
-
-    StartingColor = BlankColor;
-    EndingColor = BlankColor;
-
     return GradientCycling::EffectDetails;
 }
 
@@ -63,10 +55,34 @@ void GradientCycling::StepEffect(std::vector<OwnedControllerAndZones> Controller
             zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
             int StartIndex = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
             int LEDCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count;
-            //bool RVRS = OpenRGBEffectTab::CheckReversed(ControllerID, Controllers[ControllerID].OwnedZones[ZoneID]);
+            bool RVRS = OpenRGBEffectTab::CheckReversed(ControllerID, Controllers[ControllerID].OwnedZones[ZoneID]);
 
+            if (ZT == ZONE_TYPE_SINGLE)
+            {
+                for (int LedID = 0; LedID < LEDCount; LedID++)
+                {
+                    float GetGradientPos;
+                    if (Progress[ControllerID][ZoneID] > FPS) GetGradientPos = (FPS - (Progress[ControllerID][ZoneID] - FPS));
+                    else GetGradientPos = Progress[ControllerID][ZoneID];
 
-            if (ZT == ZONE_TYPE_LINEAR)
+                    if (GetGradientPos <= 0)
+                    {
+                        GetGradientPos *= -1;
+                    }
+
+                    int RGBCol[3];
+                    for (int CVal = 0; CVal < 3; CVal++)
+                    {
+                        RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(FPS))*(F[CVal]-S[CVal]));
+                    }
+                    Controllers[ControllerID].Controller->SetLED((RVRS ? (LEDCount - 1) - LedID : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
+                }
+
+                if (Progress[ControllerID][ZoneID] < FPS*2) Progress[ControllerID][ZoneID] = Progress[ControllerID][ZoneID] + ((float)Speed/(float)FPS);
+                else if (Progress[ControllerID][ZoneID] >= FPS*2) Progress[ControllerID][ZoneID] = 0;
+            }
+
+            else if (ZT == ZONE_TYPE_LINEAR)
             {
                 for (int LedID = 0; LedID < LEDCount; LedID++)
                 {
@@ -84,20 +100,46 @@ void GradientCycling::StepEffect(std::vector<OwnedControllerAndZones> Controller
                     {
                         RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(LEDCount))*(F[CVal]-S[CVal]));
                     }
-                    Controllers[ControllerID].Controller->SetLED(StartIndex + LedID, ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
+                    Controllers[ControllerID].Controller->SetLED((RVRS ? (LEDCount - 1) - LedID : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
                 }
+
+                if (Progress[ControllerID][ZoneID] < (LEDCount*2)) Progress[ControllerID][ZoneID] += ((float)Speed / (float)FPS);
+                else if (Progress[ControllerID][ZoneID] >= (LEDCount*2)) Progress[ControllerID][ZoneID] = 0;
             }
+
             else if (ZT == ZONE_TYPE_MATRIX)
             {
+                int CollumnCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
+                int RowCount     = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
 
+                for (int CollumnID = 0; CollumnID < CollumnCount; CollumnID++)
+                {
+                    float GetGradientPos;
+                    if ((Progress[ControllerID][ZoneID] + CollumnID) > CollumnCount) GetGradientPos = (CollumnCount - ( (Progress[ControllerID][ZoneID] + CollumnID) - CollumnCount));
+                    else GetGradientPos = (Progress[ControllerID][ZoneID] + CollumnID);
+
+                    if (GetGradientPos <= 0)
+                    {
+                        GetGradientPos *= -1;
+                    }
+
+                    int RGBCol[3];
+                    for (int CVal = 0; CVal < 3; CVal++)
+                    {
+                        RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(CollumnCount))*(F[CVal]-S[CVal]));
+                    }
+
+                    for (int RowID = 0; RowID < RowCount; RowID++)
+                    {
+                        int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((RowID * CollumnCount) + (RVRS ? (CollumnCount - 1) - CollumnID: CollumnID ) )];
+                        Controllers[ControllerID].Controller->SetLED(StartIndex + LedID,ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
+                    }
+                }
+
+                if (Progress[ControllerID][ZoneID] < (CollumnCount*2)) Progress[ControllerID][ZoneID] += ((float)Speed / (float)FPS);
+                else if (Progress[ControllerID][ZoneID] >= (CollumnCount*2)) Progress[ControllerID][ZoneID] = 0;
             }
-            else if (ZT == ZONE_TYPE_SINGLE)
-            {
 
-            }
-
-            if (Progress[ControllerID][ZoneID] < (LEDCount*2)) Progress[ControllerID][ZoneID] += ((float)Speed / (float)FPS);
-            else if (Progress[ControllerID][ZoneID] >= (LEDCount*2)) Progress[ControllerID][ZoneID] = 0;
         }
     }
 }
@@ -110,26 +152,6 @@ void GradientCycling::SetSpeed(int Speed)
 void GradientCycling::SetUserColors(std::vector<RGBColor> NewColors)
 {
     GradientCycling::UserColors = NewColors;
-    hsv_t Comp1;
-    hsv_t Comp2;
-    rgb2hsv(UserColors[0],&Comp1);
-    rgb2hsv(UserColors[1],&Comp2);
-
-    if (Comp1.hue < Comp2.hue)
-    {
-        EndingColor.hue = Comp2.hue;
-        StartingColor.hue = Comp1.hue;
-    }
-    else if (Comp1.hue > Comp2.hue)
-    {
-        EndingColor.hue = Comp1.hue;
-        StartingColor.hue = Comp2.hue;
-    }
-    else if (Comp1.hue == Comp2.hue)
-    {
-        EndingColor.hue = Comp1.hue;
-        StartingColor.hue = Comp2.hue + 1;
-    }
 }
 
 void GradientCycling::Slider2Changed(int NewWidth)
