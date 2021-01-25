@@ -23,7 +23,8 @@ INCLUDEPATH +=                                                                  
 #-----------------------------------------------------------------------------------------------#
 
 HEADERS +=                                                                                      \
-    Effects/StarryNight/StarryNight.h \
+    Effects/GradientCycling/GradientCycling.h                                                   \
+    Effects/StarryNight/StarryNight.h                                                           \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -45,12 +46,14 @@ INCLUDEPATH +=                                                                  
     Effects/SpectrumCycling/                                                                    \
     Effects/RainbowWave/                                                                        \
     Effects/StarryNight/                                                                        \
+    Effects/GradientCycling/                                                                    \
 
 SOURCES +=                                                                                      \
+    Effects/GradientCycling/GradientCycling.cpp                                                 \
     Effects/HSV/hsv.cpp                                                                         \
     Effects/RainbowWave/RainbowWave.cpp                                                         \
     Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
-    Effects/StarryNight/StarryNight.cpp \
+    Effects/StarryNight/StarryNight.cpp                                                         \
     ORGBEffectPlugin.cpp                                                                        \
     OpenRGBEffectPage.cpp                                                                       \
     OpenRGBEffectTab.cpp

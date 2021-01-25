@@ -23,6 +23,9 @@ void OpenRGBEffectTab::DefineEffects()
 
     StarryNight* STRYNGHT = new StarryNight;
     OpenRGBEffectTab::EffectList.push_back(STRYNGHT);
+
+    GradientCycling* GRDNTCYCLNG = new GradientCycling;
+    OpenRGBEffectTab::EffectList.push_back(GRDNTCYCLNG);
 }
 
 
