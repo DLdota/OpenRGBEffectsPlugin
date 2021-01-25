@@ -126,6 +126,8 @@ void RainbowWave::Slider2Changed(int NewWidth)
 {
     Width = NewWidth;
 }
-/*--------------*\
-| Extra Options  |
-\*--------------*/
+
+void RainbowWave::ASelectionWasChanged()
+{
+
+}

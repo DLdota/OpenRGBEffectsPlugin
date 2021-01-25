@@ -25,6 +25,7 @@ public:
     void        SetSpeed(int Speed) override;
     void        SetUserColors(std::vector<RGBColor>) override;
     void        Slider2Changed(int) override;
+    void        ASelectionWasChanged() override;
 
     EffectInfo          EffectDetails;
 private:

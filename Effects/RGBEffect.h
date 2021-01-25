@@ -54,6 +54,7 @@ public:
     virtual void        SetSpeed(int Speed)                                          = 0;
     virtual void        SetUserColors(std::vector<RGBColor>)                         = 0;
     virtual void        Slider2Changed(int)                                          = 0;
+    virtual void        ASelectionWasChanged()                                       = 0;
 
     EffectInfo          EffectDetails;
 };

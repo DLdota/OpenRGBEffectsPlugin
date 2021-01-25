@@ -18,16 +18,19 @@ public:
     void        Slider2Changed(int)                                         override;
 
     void        SetWidth(int NewWidth);
+    void        ASelectionWasChanged() override;
 
     EffectInfo EffectDetails;
 private:
+    static std::vector<OwnedControllerAndZones> PrevControllers;
+
     int                     Speed;
     float                   Width;
-    float                   Progress = 1;
 
-    std::vector<RGBColor>   UserColors;
-    hsv_t                   StartingColor;
-    hsv_t                   EndingColor;
+    std::vector<std::vector<float>> Progress;
+    std::vector<RGBColor>           UserColors;
+    hsv_t                           StartingColor;
+    hsv_t                           EndingColor;
 
 
 };

@@ -110,3 +110,8 @@ void StarryNight::Slider2Changed(int LEDCount)
 {
     StarryNight::LEDPerCycle = LEDCount;
 }
+
+void StarryNight::ASelectionWasChanged()
+{
+    CurrentStars.clear();
+}
