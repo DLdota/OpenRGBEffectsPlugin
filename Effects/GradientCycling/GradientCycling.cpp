@@ -79,8 +79,6 @@ void GradientCycling::StepEffect(std::vector<OwnedControllerAndZones> Controller
                         GetGradientPos *= -1;
                     }
 
-                    qDebug() << GetGradientPos;
-
                     int RGBCol[3];
                     for (int CVal = 0; CVal < 3; CVal++)
                     {
