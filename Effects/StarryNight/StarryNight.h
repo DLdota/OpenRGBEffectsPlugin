@@ -27,6 +27,10 @@ public:
     void        Slider2Changed(int) override;
     void        ASelectionWasChanged() override;
 
+    int                     GetSpeed()      override {return Speed;        };
+    int                     GetSlider2Val() override {return LEDPerCycle;  };
+    std::vector<RGBColor>   GetUserColors() override {return UserColors;   };
+
     EffectInfo          EffectDetails;
 private:
     int                                         Speed;

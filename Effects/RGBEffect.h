@@ -56,6 +56,10 @@ public:
     virtual void        Slider2Changed(int)                                          = 0;
     virtual void        ASelectionWasChanged()                                       = 0;
 
+    virtual int                     GetSpeed()                                       = 0;
+    virtual int                     GetSlider2Val()                                  = 0;
+    virtual std::vector<RGBColor>   GetUserColors()                                  = 0;
+
     EffectInfo          EffectDetails;
 };
 

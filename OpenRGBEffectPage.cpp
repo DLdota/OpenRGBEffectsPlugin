@@ -52,11 +52,13 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT): QWidget(
             UserColors.push_back(UserColor);
             ui->UserColorNum->addItem("Color " + QString().number(UserColorIndex + 1));
         }
-        ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(255) + "," + QString().number(255) + "," + QString().number(255) + ")");        
+        ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(255) + "," + QString().number(255) + "," + QString().number(255) + ")");
         ui->UserColorFrame->setHidden(false);
 
         EFCT->SetUserColors(UserColors);
     }
+
+    OpenRGBEffectPage::StartupSettings();
 
 }
 
@@ -126,4 +128,110 @@ void OpenRGBEffectPage::on_ColorPickerButton_clicked()
 
     EFCT->SetUserColors(OpenRGBEffectPage::UserColors);
 
+}
+
+
+/*---------*\
+| Settings  |
+\*---------*/
+void OpenRGBEffectPage::StartupSettings()
+{
+    json UserSettings = LoadPrevSetting();
+
+    if(UserSettings.contains("Effects"))
+    {
+        if (UserSettings["Effects"][EFCT->EffectDetails.EffectIndex].contains("EffectName"))
+        {
+            // Sliders
+            int SpeedMax = EFCT->EffectDetails.MaxSpeed;
+            int SpeedMin = EFCT->EffectDetails.MinSpeed;
+            if (SpeedMin <= UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Speed"] <= SpeedMax)
+            {
+                ui->SpeedSlider->setValue(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Speed"]);
+            }
+
+            int Slider2Max = EFCT->EffectDetails.MaxSlider2Val;
+            int Slider2Min = EFCT->EffectDetails.MinSlider2Val;
+            if ( Slider2Min <= UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Slider2Val"] <= Slider2Max)
+            {
+                ui->Slider2->setValue(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Slider2Val"]);
+            }
+
+            // User colors
+            std::vector<RGBColor> NewUserColors;
+            for (int UserColorIndex = 0; UserColorIndex < EFCT->EffectDetails.UserColors; UserColorIndex++)
+            {
+                NewUserColors.push_back(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["UserColors"][UserColorIndex]);
+            }
+            if (EFCT->EffectDetails.UserColors > 0)
+            {
+                EFCT->SetUserColors(NewUserColors);
+                UserColors = NewUserColors;
+
+                /*----------------*\
+                | Set color frame  |
+                \*----------------*/
+                int R = (UserColors[CurrentColor] & 0x00ff0000) >> 16;
+                int G = (UserColors[CurrentColor] & 0x0000ff00) >> 8;
+                int B = (UserColors[CurrentColor] & 0x000000ff);
+                ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(R) + "," + QString().number(G) + "," + QString().number(B) + ")");
+            }
+
+        }
+    }
+}
+
+json OpenRGBEffectPage::LoadPrevSetting()
+{
+    json SettingsJson;
+
+    /*---------------------------------------------------------*\
+    | Open input file in binary mode                            |
+    \*---------------------------------------------------------*/
+    std::ifstream SFile(ORGBPlugin::RMPointer->GetConfigurationDirectory() + "/plugins/EffectSettings.json", std::ios::in | std::ios::binary);
+
+    /*---------------------------------------------------------*\
+    | Read settings into JSON store                             |
+    \*---------------------------------------------------------*/
+    if(SFile)
+    {
+        try
+        {
+            SFile >> SettingsJson;
+            SFile.close();
+        }
+        catch(std::exception e){}
+    }
+    return SettingsJson;
+}
+
+void OpenRGBEffectPage::on_SaveSettings_clicked()
+{
+    json PrevSettings = LoadPrevSetting();
+
+    PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectName"] = EFCT->EffectDetails.EffectName;
+
+    std::vector<RGBColor> UserColors = EFCT->GetUserColors();
+    for (int UserColorIndex = 0; UserColorIndex < EFCT->EffectDetails.UserColors; UserColorIndex++)
+    {
+        PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["UserColors"][UserColorIndex] = UserColors[UserColorIndex];
+    }
+
+    PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Speed"] = EFCT->GetSpeed();
+    PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Slider2Val"] = EFCT->GetSlider2Val();
+
+    std::ofstream EffectFile((ORGBPlugin::RMPointer->GetConfigurationDirectory() + "/plugins/EffectSettings.json"), std::ios::out | std::ios::binary);
+    if(EffectFile)
+    {
+        try
+        {
+            EffectFile << PrevSettings.dump(4);
+        }
+        catch(std::exception e)
+        {
+
+        }
+
+        EffectFile.close();
+    }
 }

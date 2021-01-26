@@ -19,6 +19,10 @@ public:
     void        Slider2Changed(int)                                        override;
     void        ASelectionWasChanged()                                     override;
 
+    int                     GetSpeed()      override {return Speed;  };
+    int                     GetSlider2Val() override {return 0;      };
+    std::vector<RGBColor>   GetUserColors() override {return {};     };
+
     EffectInfo EffectDetails;
 private:
     float  CurrentHue = 0.0000;

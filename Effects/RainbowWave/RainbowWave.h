@@ -21,6 +21,10 @@ public:
 
     void        SetWidth(int NewWidth);
 
+    int                     GetSpeed()      override {return Speed; };
+    int                     GetSlider2Val() override {return Width; };
+    std::vector<RGBColor>   GetUserColors() override {return {};    };
+
     EffectInfo EffectDetails;
 private:
     int     Speed;

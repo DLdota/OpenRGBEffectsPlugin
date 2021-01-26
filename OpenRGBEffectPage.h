@@ -6,10 +6,21 @@
 #include <QColorDialog>
 #include <QApplication>
 
+#include <fstream>
+#include <iostream>
+
 #include <thread>
 
+#include "ORGBEffectPlugin.h"
 #include "OpenRGBEffectTab.h"
 #include "ui_OpenRGBEffectPage.h"
+
+struct EffectSettings
+{
+    std::vector<RGBColor> UserColors;
+    int                   SpeedSliderVal;
+    int                   Slider2Val;
+};
 
 namespace Ui {
 class OpenRGBEffectPage;
@@ -36,7 +47,7 @@ private slots:
     void on_Slider2_valueChanged(int value);
     void on_UserColorNum_currentIndexChanged(int NewIndex);
     void on_ColorPickerButton_clicked();
-
+    void on_SaveSettings_clicked();
 
 private:
     Ui::OpenRGBEffectPage *ui;
@@ -46,6 +57,9 @@ private:
 
     std::vector<RGBColor> UserColors;
     int                   CurrentColor = 0;
+
+    json LoadPrevSetting();
+    void StartupSettings();
 };
 
 #endif // OPENRGBEFFECTPAGE_H
