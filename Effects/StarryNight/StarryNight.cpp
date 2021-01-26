@@ -30,10 +30,6 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
     if (LEDPerCycle != TempLEDPerCycle)
     {
         LEDPerCycle = TempLEDPerCycle;
-        if (int(CurrentStars.size()) > TempLEDPerCycle)
-        {
-            CurrentStars.erase(CurrentStars.end() - TempLEDPerCycle, CurrentStars.end());
-        }
     }
     int AmountMadeThisCycle = 0;
     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)

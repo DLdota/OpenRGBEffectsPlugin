@@ -143,6 +143,12 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="FPSLayout">
+        <property name="spacing">
+         <number>5</number>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
         <property name="topMargin">
          <number>2</number>
         </property>
