@@ -1,4 +1,5 @@
 #include "OpenRGBEffectPage.h"
+#include "ColorWheel.h"
 
 /*-----------------------*\
 | Constructor/Destructor  |
@@ -111,23 +112,65 @@ void OpenRGBEffectPage::on_UserColorNum_currentIndexChanged(int NewIndex)
 
 void OpenRGBEffectPage::on_ColorPickerButton_clicked()
 {
-    QColorDialog* GUColor = new QColorDialog();
+    QDialog* GUColor = new QDialog();
 
-    GUColor->setPalette(this->palette());
+    if (ORGBPlugin::DarkTheme)
+    {
+        QPalette pal;
+        pal.setColor(QPalette::WindowText, Qt::white);
+        GUColor->setPalette(pal);
+        QFile darkTheme(":/windows_dark.qss");
+        darkTheme.open(QFile::ReadOnly);
+        GUColor->setStyleSheet(darkTheme.readAll());
+        darkTheme.close();
+    }
+
+    GUColor->setMinimumSize(300,320);
+
     GUColor->setModal(true);
 
-    QColor UserColor = GUColor->getColor();
-    int Red = UserColor.red();
-    int Green = UserColor.green();
-    int Blue = UserColor.blue();
+    QVBoxLayout* MainLayout = new QVBoxLayout(GUColor);
 
-    unsigned int rgb = (  Red<<16 )|( Green<<8 )|( Blue );
+    ColorWheel* CWheel = new ColorWheel(GUColor);
+    MainLayout->addWidget(CWheel);
 
-    UserColors[CurrentColor] = rgb;
-    ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(Red) + "," + QString().number(Green) + "," + QString().number(Blue) + ")");
+    /*--------------*\
+    | Create buttons |
+    \*--------------*/
+    QHBoxLayout* HoriButtonLayout = new QHBoxLayout();
 
-    EFCT->SetUserColors(OpenRGBEffectPage::UserColors);
+    QPushButton* AcceptButton = new QPushButton();
+    AcceptButton->setText("Set Color");
+    GUColor->connect(AcceptButton,SIGNAL(clicked()),GUColor,SLOT(accept()));
+    HoriButtonLayout->addWidget(AcceptButton);
 
+    QPushButton* DenyButton = new QPushButton();
+    DenyButton->setText("Cancel");
+    GUColor->connect(DenyButton,SIGNAL(clicked()),GUColor,SLOT(reject()));
+    HoriButtonLayout->addWidget(DenyButton);
+
+    MainLayout->addLayout(HoriButtonLayout);
+
+    bool ReturnState = GUColor->exec();
+
+    if (ReturnState)
+    {
+
+        QColor UserColor = CWheel->color();
+        int Red = UserColor.red();
+        int Green = UserColor.green();
+        int Blue = UserColor.blue();
+
+        unsigned int rgb = (  Red<<16 )|( Green<<8 )|( Blue );
+
+        UserColors[CurrentColor] = rgb;
+        ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(Red) + "," + QString().number(Green) + "," + QString().number(Blue) + ")");
+
+        EFCT->SetUserColors(OpenRGBEffectPage::UserColors);
+
+        delete GUColor;
+    }
+    else{}
 }
 
 

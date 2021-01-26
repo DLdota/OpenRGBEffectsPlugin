@@ -10,7 +10,9 @@ CONFIG += c++11
 
 
 INCLUDEPATH +=                                                                                  \
-    Effects/HSV/                                                                                \
+    Dependencies/                                                                               \
+    Dependencies/HSV/                                                                           \
+    Dependencies/ColorWheel/                                                                    \
     Effects/                                                                                    \
     OpenRGB/                                                                                    \
     OpenRGB/dependencies/json                                                                   \
@@ -23,6 +25,8 @@ INCLUDEPATH +=                                                                  
 #-----------------------------------------------------------------------------------------------#
 
 HEADERS +=                                                                                      \
+    Dependencies/ColorWheel/ColorWheel.h                                                        \
+    Effects/Breathing/Breathing.h                                                               \
     Effects/GradientCycling/GradientCycling.h                                                   \
     Effects/StarryNight/StarryNight.h                                                           \
     OpenRGB/NetworkClient.h                                                                     \
@@ -49,8 +53,10 @@ INCLUDEPATH +=                                                                  
     Effects/GradientCycling/                                                                    \
 
 SOURCES +=                                                                                      \
+    Dependencies/ColorWheel/ColorWheel.cpp                                                      \
+    Effects/Breathing/Breathing.cpp                                                             \
     Effects/GradientCycling/GradientCycling.cpp                                                 \
-    Effects/HSV/hsv.cpp                                                                         \
+    Dependencies//HSV/hsv.cpp                                                                   \
     Effects/RainbowWave/RainbowWave.cpp                                                         \
     Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
     Effects/StarryNight/StarryNight.cpp                                                         \
@@ -59,9 +65,8 @@ SOURCES +=                                                                      
     OpenRGBEffectTab.cpp
 
 HEADERS +=                                                                                      \
-    Effects/HSV/hsv.h                                                                           \
+    Dependencies//HSV/hsv.h                                                                     \
     ORGBEffectPlugin.h                                                                          \
-    OpenRGBPluginInterface.h                                                                    \
     Effects/RGBEffect.h                                                                         \
     Effects/SpectrumCycling/SpectrumCycling.h                                                   \
     Effects/RainbowWave/RainbowWave.h                                                           \

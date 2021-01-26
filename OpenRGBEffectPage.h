@@ -1,6 +1,7 @@
 #ifndef OPENRGBEFFECTPAGE_H
 #define OPENRGBEFFECTPAGE_H
 
+#include <QFile>
 #include <QWidget>
 #include <QCheckBox>
 #include <QColorDialog>
@@ -48,6 +49,7 @@ private slots:
     void on_UserColorNum_currentIndexChanged(int NewIndex);
     void on_ColorPickerButton_clicked();
     void on_SaveSettings_clicked();
+
 
 private:
     Ui::OpenRGBEffectPage *ui;
