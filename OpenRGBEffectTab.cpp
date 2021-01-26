@@ -41,7 +41,7 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
     if (!HasDirectMode)
     {
         NewItem->setForeground(Qt::red);
-        NewItem->setToolTip("This device doesn't have direct mode\nUse at your own risk as this may damage the flash of your device");
+        NewItem->setToolTip("This device doesn't have direct mode\nUsing an effect on a device WILL damage the flash or controller");
     }
     ui->SelectDevices->setItem(NewRow,0,NewItem);
 
@@ -102,7 +102,7 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
             if (!HasDirectMode)
             {
                 NewZoneName->setForeground(Qt::red);
-                NewZoneName->setToolTip("This device doesn't have direct mode\nUse at your own risk as this may damage the flash of your device");
+                NewZoneName->setToolTip("This device doesn't have direct mode\nnUsing an effect on a device WILL damage the flash or controller");
             }
 
             ZoneTableChecks->setItem(ZoneNum, 0, NewZoneName);
