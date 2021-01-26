@@ -52,6 +52,8 @@ private slots:
     void on_TabChange(int Tab);
 
     void FPSSlider(int SpeedIndex);
+
+    void on_SelectAll_clicked();
 private:
     Ui::OpenRGBEffectTab                *ui;
     int                                 CurrentTab;
@@ -79,6 +81,8 @@ private:
     void                                EffectStepTimer();
 
     static void DeviceListChangedCallback(void* ptr);
+
+    bool                                SelectsAll = true;
 };
 
 #endif // OPENRGBEFFECTTAB_H

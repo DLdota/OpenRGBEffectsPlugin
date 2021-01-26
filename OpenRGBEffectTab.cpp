@@ -377,6 +377,31 @@ void OpenRGBEffectTab::DeviceListChanged()
 /*-------------------------*\
 | Tab / Selection Handling  |
 \*-------------------------*/
+void OpenRGBEffectTab::on_SelectAll_clicked()
+{
+    for (int DIndex = 0; DIndex < (int)Controllers.size(); DIndex++)
+    {
+        QCheckBox* DeviceSelected = qobject_cast<QCheckBox*>(ui->SelectDevices->cellWidget(DIndex*2,1));
+        if (SelectsAll && DeviceSelected->isEnabled() && !DeviceSelected->isChecked())
+        {
+            DeviceSelected->click();
+        }
+        if (!SelectsAll && DeviceSelected->isEnabled() && DeviceSelected->isChecked())
+        {
+            DeviceSelected->click();
+        }
+    }
+    SelectsAll = !SelectsAll;
+    if (SelectsAll)
+    {
+        ui->SelectAll->setText("Select All");
+    }
+    else if (!SelectsAll)
+    {
+        ui->SelectAll->setText("Deselect All");
+    }
+}
+
 void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
 {
     int DevIndex = 0;
@@ -825,7 +850,7 @@ void OpenRGBEffectTab::on_TabChange(int Tab)
 /*-------------------------*\
 | For the Effects to access |
 \*-------------------------*/
-bool OpenRGBEffectTab::CheckReversed (int DeviceIndex, int ZoneIndex)
+bool OpenRGBEffectTab::CheckReversed(int DeviceIndex, int ZoneIndex)
 {
     return Controllers[DeviceIndex].ReversedZones[ZoneIndex];
 }
