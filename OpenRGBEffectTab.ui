@@ -91,11 +91,27 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="QPushButton" name="SelectAll">
-        <property name="text">
-         <string>Select all</string>
+       <layout class="QHBoxLayout" name="SelectAllSpacing">
+        <property name="leftMargin">
+         <number>5</number>
         </property>
-       </widget>
+        <property name="topMargin">
+         <number>5</number>
+        </property>
+        <property name="rightMargin">
+         <number>5</number>
+        </property>
+        <property name="bottomMargin">
+         <number>5</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="SelectAll">
+          <property name="text">
+           <string>Select all</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <widget class="QTableWidget" name="SelectDevices">
@@ -104,6 +120,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
         </property>
         <property name="lineWidth">
          <number>0</number>

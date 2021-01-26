@@ -27,6 +27,14 @@ void StarryNight::DefineExtraOptions(QWidget *Parent)
 
 void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
+    if (LEDPerCycle != TempLEDPerCycle)
+    {
+        LEDPerCycle = TempLEDPerCycle;
+        if (int(CurrentStars.size()) > TempLEDPerCycle)
+        {
+            CurrentStars.erase(CurrentStars.end() - TempLEDPerCycle, CurrentStars.end());
+        }
+    }
     int AmountMadeThisCycle = 0;
     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
     {
@@ -36,7 +44,11 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
             {
                 if (rand() % 2)
                 {
-                    int MakeForZone = rand() % (LEDPerCycle - (int(CurrentStars.size())));
+                    int MakeForZone = 0;
+                    if ((LEDPerCycle - (int(CurrentStars.size()))) > 0)
+                    {
+                        MakeForZone = rand() % (LEDPerCycle - (int(CurrentStars.size())));
+                    }
                     if ((int(CurrentStars.size()) < LEDPerCycle))
                     {
                         for (int ZonesMade = 0; ZonesMade < MakeForZone; ZonesMade++)
@@ -88,7 +100,7 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
     }
 
     // Go from the front back so that the index doesn't change
-    for (int ToDeleteIndex = int(ToBeDeleted.size() - 1); ToDeleteIndex > 0; ToDeleteIndex--)
+    for (int ToDeleteIndex = int(ToBeDeleted.size() - 1); ToDeleteIndex >= 0; ToDeleteIndex--)
     {
         CurrentStars.erase(CurrentStars.begin() + ToBeDeleted[ToDeleteIndex]);
     }
@@ -108,7 +120,7 @@ void StarryNight::SetUserColors(std::vector<RGBColor> NewColors)
 
 void StarryNight::Slider2Changed(int LEDCount)
 {
-    StarryNight::LEDPerCycle = LEDCount;
+    StarryNight::TempLEDPerCycle = LEDCount;
 }
 
 void StarryNight::ASelectionWasChanged()

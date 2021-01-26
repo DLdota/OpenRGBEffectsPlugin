@@ -1,7 +1,23 @@
 # Effects
 
-There are no special installation instructions for this plugin
+## What is this?
 
-Just drag and drop the ``.so``/``.dll`` to the ``plugins`` folder in the OpenRGB Config folder (``C:\Users\Username\appdata\roaming\OpenRGB\plugins`` on windows and ``~/.config/OpenRGB/plugins`` on linux)
+This is a plugin for [OpenRGB](https://gitlab.com/CalcProgrammer1/OpenRGB) that provides various effects that can be synced across devices
 
-You may need to create the folder if you haven't already
+## How do I install it?
+
+The installation process is very simple
+
+1. Download the [Latest release](https://gitlab.com/herosilas12/OpenRGB-Plugins/-/commits/Effects) artifacts for your OS (The green checkmark to the right side)
+
+2. Copy the file to the config folder for your specific OS
+
+   * ``C:\Users\Username\appdata\roaming\OpenRGB\plugins`` for windows
+
+   * ``~/.config/OpenRGB/plugins`` for linux
+
+   2.1 You may need to create the ``plugins`` folder (Keeping in mind that it is case sensitve)
+
+3. After running OpenRGB it should show up along the top tab bar
+
+If it doesn't show up then please make sure you have the latest pipeline build of OpenRGB as well

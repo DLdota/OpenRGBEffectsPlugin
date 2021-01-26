@@ -35,9 +35,9 @@ public:
 private:
     int                                         Speed;
     int                                         FPS;
+    int                                         TempLEDPerCycle = 1;
     int                                         LEDPerCycle = 1;
     std::vector<RGBColor>                       UserColors;
-    //std::vector<OwnedControllerAndZones>        PreviousControllers;
 
     static std::vector<NewStar>                 CurrentStars;
 };
