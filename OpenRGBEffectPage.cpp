@@ -103,11 +103,10 @@ void OpenRGBEffectPage::on_Slider2_valueChanged(int value)
 void OpenRGBEffectPage::on_UserColorNum_currentIndexChanged(int NewIndex)
 {
     CurrentColor = NewIndex;
-    int Red   = (UserColors[NewIndex] & 0x00ff0000) >> 16;
-    int Green = (UserColors[NewIndex] & 0x0000ff00) >> 8;
-    int Blue  = (UserColors[NewIndex] & 0x000000ff);
-
-    ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(Red) + "," + QString().number(Green) + "," + QString().number(Blue) + ")");
+    ui->ColorPreview->setStyleSheet("background: rgb("+
+                                    QString().number(RGBGetRValue(UserColors[NewIndex])) + "," +
+                                    QString().number(RGBGetGValue(UserColors[NewIndex])) + "," +
+                                    QString().number(RGBGetBValue(UserColors[NewIndex])) + ")");
 }
 
 void OpenRGBEffectPage::on_ColorPickerButton_clicked()
@@ -157,9 +156,9 @@ void OpenRGBEffectPage::on_ColorPickerButton_clicked()
     {
 
         QColor UserColor = CWheel->color();
-        int Red = UserColor.red();
+        int Red   = UserColor.red();
         int Green = UserColor.green();
-        int Blue = UserColor.blue();
+        int Blue  = UserColor.blue();
 
         UserColors[CurrentColor] = ToRGBColor(Red,Green,Blue);
         ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(Red) + "," + QString().number(Green) + "," + QString().number(Blue) + ")");
@@ -182,6 +181,7 @@ void OpenRGBEffectPage::on_AutoStart_clicked()
         AutoStart = false;
     }
 }
+
 
 /*---------*\
 | Settings  |
@@ -229,9 +229,9 @@ void OpenRGBEffectPage::StartupSettings()
                 /*----------------*\
                 | Set color frame  |
                 \*----------------*/
-                int R = (UserColors[CurrentColor] & 0x00ff0000) >> 16;
-                int G = (UserColors[CurrentColor] & 0x0000ff00) >> 8;
-                int B = (UserColors[CurrentColor] & 0x000000ff);
+                int R = RGBGetRValue(UserColors[CurrentColor]);
+                int G = RGBGetGValue(UserColors[CurrentColor]);
+                int B = RGBGetBValue(UserColors[CurrentColor]);
                 ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(R) + "," + QString().number(G) + "," + QString().number(B) + ")");
             }
         }

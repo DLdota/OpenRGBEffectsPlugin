@@ -28,14 +28,23 @@ void GradientCycling::DefineExtraOptions(QWidget *Parent)
 void GradientCycling::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
     int S[3];
-    S[0] = (UserColors[0] & 0x00ff0000) >> 16;
-    S[1] = (UserColors[0] & 0x0000ff00) >> 8;
-    S[2] = (UserColors[0] & 0x000000ff);
+    S[0] = RGBGetRValue(UserColors[0]);
+    //S[0] = (UserColors[0] & 0x00ff0000) >> 16;
+    S[1] = RGBGetGValue(UserColors[0]);
+    //S[1] = (UserColors[0] & 0x0000ff00) >> 8;
+    S[2] = RGBGetBValue(UserColors[0]);
+    //S[2] = (UserColors[0] & 0x000000ff);
 
     int F[3];
-    F[0] = (UserColors[1] & 0x00ff0000) >> 16;
+    F[0] = RGBGetRValue(UserColors[1]);
+    //S[0] = (UserColors[0] & 0x00ff0000) >> 16;
+    F[1] = RGBGetGValue(UserColors[1]);
+    //S[1] = (UserColors[0] & 0x0000ff00) >> 8;
+    F[2] = RGBGetBValue(UserColors[1]);
+    //S[2] = (UserColors[0] & 0x000000ff);
+    /*F[0] = (UserColors[1] & 0x00ff0000) >> 16;
     F[1] = (UserColors[1] & 0x0000ff00) >> 8;
-    F[2] = (UserColors[1] & 0x000000ff);
+    F[2] = (UserColors[1] & 0x000000ff);*/
 
     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
     {
