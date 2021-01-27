@@ -26,6 +26,9 @@ void OpenRGBEffectTab::DefineEffects()
 
     GradientCycling* GRDNTCYCLNG = new GradientCycling;
     OpenRGBEffectTab::EffectList.push_back(GRDNTCYCLNG);
+
+    Breathing* BRTHNG = new Breathing;
+    OpenRGBEffectTab::EffectList.push_back(BRTHNG);
 }
 
 
@@ -207,7 +210,7 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent): QWidget(parent), ui(new Ui:
     /*-------------------*\
     | Set collumn sizes   |
     \*-------------------*/
-    std::vector<int> CollumnSizes = {165 , 75, 75};
+    std::vector<int> CollumnSizes = {167 , 75, 75};
     for (int i = 0; i < int(CollumnSizes.size()); i++)
     {
         ui->SelectDevices->setColumnWidth(i,CollumnSizes[i]);

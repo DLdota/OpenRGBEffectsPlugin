@@ -51,6 +51,7 @@ INCLUDEPATH +=                                                                  
     Effects/RainbowWave/                                                                        \
     Effects/StarryNight/                                                                        \
     Effects/GradientCycling/                                                                    \
+    Effects/Breathing/                                                                          \
 
 SOURCES +=                                                                                      \
     Dependencies/ColorWheel/ColorWheel.cpp                                                      \

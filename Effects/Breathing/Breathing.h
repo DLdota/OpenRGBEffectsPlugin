@@ -26,8 +26,10 @@ public:
 
     EffectInfo EffectDetails;
 private:
-    int                     Speed;
+    float                   Speed;
     std::vector<RGBColor>   UserColors;
+    float                   Progress = 255;
+    bool                    Dir; /* true = down, false = up */
 };
 
 #endif // BREATHING_H

@@ -17,6 +17,7 @@
 #include "RainbowWave.h"
 #include "StarryNight.h"
 #include "GradientCycling.h"
+#include "Breathing.h"
 
 #pragma once
 

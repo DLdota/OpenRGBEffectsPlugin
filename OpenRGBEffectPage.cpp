@@ -161,9 +161,9 @@ void OpenRGBEffectPage::on_ColorPickerButton_clicked()
         int Green = UserColor.green();
         int Blue = UserColor.blue();
 
-        unsigned int rgb = (  Red<<16 )|( Green<<8 )|( Blue );
+        //unsigned int rgb = (  Red<<16 )|( Green<<8 )|( Blue );
 
-        UserColors[CurrentColor] = rgb;
+        UserColors[CurrentColor] = ToRGBColor(Red,Green,Blue);
         ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(Red) + "," + QString().number(Green) + "," + QString().number(Blue) + ")");
 
         EFCT->SetUserColors(OpenRGBEffectPage::UserColors);
