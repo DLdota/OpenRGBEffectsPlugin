@@ -13,7 +13,6 @@
 #include <QResizeEvent>
 #include <QStyleOption>
 #include <QtCore/qmath.h>
-#include <QDebug>
 #include <QPainterPath>
 
 ColorWheel::ColorWheel(QWidget *parent) :

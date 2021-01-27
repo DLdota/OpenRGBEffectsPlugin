@@ -374,8 +374,104 @@ void OpenRGBEffectTab::DeviceListChanged()
     {
         CreateDeviceSelection(Controllers[i].Controller, Controllers[i].Index, Controllers[i].HasDirect);
     }
+
+    GivePreviousDevices();
 }
 
+/*-----------*\
+| Settings    |
+\*-----------*/
+json OpenRGBEffectTab::LoadPrevSetting()
+{
+    json SettingsJson;
+
+    /*---------------------------------------------------------*\
+    | Open input file in binary mode                            |
+    \*---------------------------------------------------------*/
+    std::ifstream SFile(ORGBPlugin::RMPointer->GetConfigurationDirectory() + "/plugins/EffectSettings.json", std::ios::in | std::ios::binary);
+
+    /*---------------------------------------------------------*\
+    | Read settings into JSON store                             |
+    \*---------------------------------------------------------*/
+    if(SFile)
+    {
+        try
+        {
+            SFile >> SettingsJson;
+            SFile.close();
+        }
+        catch(std::exception e){}
+    }
+    return SettingsJson;
+}
+
+void OpenRGBEffectTab::GivePreviousDevices()
+{
+    json UserSettings = LoadPrevSetting();
+    if (UserSettings.contains("Effects"))
+    {
+        for (int EffectIndex = 0; EffectIndex < (int)EffectList.size(); EffectIndex++)
+        {
+            on_TabChange(EffectIndex);
+            if (UserSettings["Effects"][EffectIndex].contains("EffectName"))
+            {
+                json DeviceList = UserSettings["Effects"][EffectIndex]["EffectSettings"]["Controllers"];
+
+                for (int DeviceIndex = 0; DeviceIndex < (int)DeviceList.size(); DeviceIndex++)
+                {
+                    for (int ControllerID = 0; ControllerID < (int)Controllers.size(); ControllerID++)
+                    {
+                        RGBController* Comp = Controllers[ControllerID].Controller;
+
+                        /*
+                        qDebug() << QString().fromStdString(DeviceList[DeviceIndex]["ControllerName"]);
+                        qDebug() << QString().fromStdString(Comp->name);
+
+                        qDebug() << QString().fromStdString(DeviceList[DeviceIndex]["ControllerDescription"]);
+                        qDebug() << QString().fromStdString(Comp->description);
+
+                        qDebug() << QString().fromStdString(DeviceList[DeviceIndex]["ControllerLocation"]);
+                        qDebug() << QString().fromStdString(Comp->location);
+
+                        qDebug() << QString().fromStdString(DeviceList[DeviceIndex]["ControllerSerial"]);
+                        qDebug() << QString().fromStdString(Comp->serial);
+
+                        qDebug() << QString().number((int)DeviceList[DeviceIndex]["ControllerLEDCount"]);
+                        qDebug() << QString().number(Comp->colors.size());
+                        */
+
+                        if
+                        (
+                              ( DeviceList[DeviceIndex]["ControllerName"]        == Comp->name               )
+                            &&( DeviceList[DeviceIndex]["ControllerDescription"] == Comp->description        )
+                            &&( DeviceList[DeviceIndex]["ControllerLocation"]    == Comp->location           )
+                            &&( DeviceList[DeviceIndex]["ControllerSerial"]      == Comp->serial             )
+                            &&( DeviceList[DeviceIndex]["ControllerLEDCount"]    == Comp->colors.size()      )
+                        )
+                        {
+                            if (Comp->zones.size() > 1)
+                            {
+                                QTableWidget* ZoneSelectionTable = qobject_cast<QTableWidget*>(ui->SelectDevices->cellWidget(( (ControllerID * 2) + 1),0));
+                                for (int ZoneID = 0; ZoneID < (int)DeviceList[DeviceIndex]["SelectedZones"].size(); ZoneID++)
+                                {
+                                    QCheckBox* ZoneBox = qobject_cast<QCheckBox*>(ZoneSelectionTable->cellWidget(DeviceList[DeviceIndex]["SelectedZones"][ZoneID],1));
+                                    ZoneBox->click();
+                                }
+                            }
+                            else
+                            {
+                                QCheckBox* DeviceBox = qobject_cast<QCheckBox*>(ui->SelectDevices->cellWidget( (ControllerID*2), 1 ) );
+                                DeviceBox->click();
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        on_TabChange(0);
+    }
+}
 
 /*-------------------------*\
 | Tab / Selection Handling  |
@@ -856,4 +952,9 @@ void OpenRGBEffectTab::on_TabChange(int Tab)
 bool OpenRGBEffectTab::CheckReversed(int DeviceIndex, int ZoneIndex)
 {
     return Controllers[DeviceIndex].ReversedZones[ZoneIndex];
+}
+
+std::vector<OwnedControllerAndZones> OpenRGBEffectTab::GetToPass(int EffectIndex)
+{
+    return RespectiveToPass[EffectIndex];
 }

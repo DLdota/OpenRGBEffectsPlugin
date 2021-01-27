@@ -177,7 +177,7 @@ void OpenRGBEffectPage::on_ColorPickerButton_clicked()
 \*---------*/
 void OpenRGBEffectPage::StartupSettings()
 {
-    json UserSettings = LoadPrevSetting();
+    json UserSettings = OpenRGBEffectTab::LoadPrevSetting();
 
     if(UserSettings.contains("Effects"))
     {
@@ -217,38 +217,13 @@ void OpenRGBEffectPage::StartupSettings()
                 int B = (UserColors[CurrentColor] & 0x000000ff);
                 ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(R) + "," + QString().number(G) + "," + QString().number(B) + ")");
             }
-
         }
     }
-}
-
-json OpenRGBEffectPage::LoadPrevSetting()
-{
-    json SettingsJson;
-
-    /*---------------------------------------------------------*\
-    | Open input file in binary mode                            |
-    \*---------------------------------------------------------*/
-    std::ifstream SFile(ORGBPlugin::RMPointer->GetConfigurationDirectory() + "/plugins/EffectSettings.json", std::ios::in | std::ios::binary);
-
-    /*---------------------------------------------------------*\
-    | Read settings into JSON store                             |
-    \*---------------------------------------------------------*/
-    if(SFile)
-    {
-        try
-        {
-            SFile >> SettingsJson;
-            SFile.close();
-        }
-        catch(std::exception e){}
-    }
-    return SettingsJson;
 }
 
 void OpenRGBEffectPage::on_SaveSettings_clicked()
 {
-    json PrevSettings = LoadPrevSetting();
+    json PrevSettings = OpenRGBEffectTab::LoadPrevSetting();
 
     PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectName"] = EFCT->EffectDetails.EffectName;
 
@@ -256,6 +231,29 @@ void OpenRGBEffectPage::on_SaveSettings_clicked()
     for (int UserColorIndex = 0; UserColorIndex < EFCT->EffectDetails.UserColors; UserColorIndex++)
     {
         PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["UserColors"][UserColorIndex] = UserColors[UserColorIndex];
+    }
+
+    std::vector<OwnedControllerAndZones> ToPass = OpenRGBEffectTab::GetToPass(EFCT->EffectDetails.EffectIndex);
+
+    PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"] = {};
+
+    int AddedDevices = 0;
+    for (int ControllerID = 0; ControllerID < (int)ToPass.size(); ControllerID++)
+    {
+        if (ToPass[ControllerID].OwnedZones.size() > 0)
+        {
+            PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"][AddedDevices]["ControllerName"]    = ToPass[ControllerID].Controller->name;
+            PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"][AddedDevices]["ControllerDescription"] = ToPass[ControllerID].Controller->description;
+            PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"][AddedDevices]["ControllerLocation"]    = ToPass[ControllerID].Controller->location;
+            PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"][AddedDevices]["ControllerSerial"]      = ToPass[ControllerID].Controller->serial;
+            PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"][AddedDevices]["ControllerLEDCount"]    = ToPass[ControllerID].Controller->colors.size();
+
+            for(int ZoneID = 0; ZoneID < (int)ToPass[ControllerID].OwnedZones.size(); ZoneID++)
+            {
+                PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"][AddedDevices]["SelectedZones"][ZoneID] = ToPass[ControllerID].OwnedZones[ZoneID];
+            }
+            AddedDevices += 1;
+        }
     }
 
     PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Speed"] = EFCT->GetSpeed();

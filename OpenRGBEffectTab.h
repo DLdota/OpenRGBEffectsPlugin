@@ -41,6 +41,10 @@ public:
     void CreateDeviceSelection(RGBController* Controller, int Index, bool HasDirectMode);
 
     static bool CheckReversed (int DeviceIndex, int ZoneIndex);
+
+    static std::vector<OwnedControllerAndZones> GetToPass(int EffectIndex);
+
+    static json LoadPrevSetting();
 private slots:
     void DeviceListChanged();
 
@@ -55,6 +59,8 @@ private slots:
     void FPSSlider(int SpeedIndex);
 
     void on_SelectAll_clicked();
+
+
 private:
     Ui::OpenRGBEffectTab                *ui;
     int                                 CurrentTab;
@@ -84,6 +90,8 @@ private:
     static void DeviceListChangedCallback(void* ptr);
 
     bool                                SelectsAll = true;
+
+    void GivePreviousDevices();
 };
 
 #endif // OPENRGBEFFECTTAB_H

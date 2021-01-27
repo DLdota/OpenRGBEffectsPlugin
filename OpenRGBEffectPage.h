@@ -60,7 +60,6 @@ private:
     std::vector<RGBColor> UserColors;
     int                   CurrentColor = 0;
 
-    json LoadPrevSetting();
     void StartupSettings();
 };
 
