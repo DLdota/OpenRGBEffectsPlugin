@@ -308,6 +308,17 @@ void OpenRGBEffectTab::FPSSlider(int NewFPS)
     OpenRGBEffectTab::FPSDelay = 1000/GetSpeed[NewFPS];
     OpenRGBEffectTab::FPS      = GetSpeed[NewFPS];
     ui->FPSCount->setText(QString().number(GetSpeed[NewFPS]));
+
+    json PrevSettings = OpenRGBEffectTab::LoadPrevSetting();
+    PrevSettings["FPS"] = GetSpeed[NewFPS];
+
+    std::ofstream EffectFile((ORGBPlugin::RMPointer->GetConfigurationDirectory() + "/plugins/EffectSettings.json"), std::ios::out | std::ios::binary);
+    if(EffectFile)
+    {
+        try{ EffectFile << PrevSettings.dump(4); }
+        catch(std::exception e){}
+        EffectFile.close();
+    }
 }
 
 /*---------------------------*\
@@ -408,6 +419,20 @@ json OpenRGBEffectTab::LoadPrevSetting()
 void OpenRGBEffectTab::GivePreviousDevices()
 {
     json UserSettings = LoadPrevSetting();
+
+    if (UserSettings.contains("FPS"))
+    {
+        for (int FPSIdentifier = 0; FPSIdentifier < GetSpeed.size(); FPSIdentifier++)
+        {
+            if (GetSpeed[FPSIdentifier] == UserSettings["FPS"])
+            {
+                ui->FPSSlider->setSliderPosition(FPSIdentifier);
+                ui->FPSSlider->valueChanged(FPSIdentifier);
+                break;
+            }
+        }
+    }
+
     if (UserSettings.contains("Effects"))
     {
         for (int EffectIndex = 0; EffectIndex < (int)EffectList.size(); EffectIndex++)

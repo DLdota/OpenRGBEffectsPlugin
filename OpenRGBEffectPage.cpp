@@ -171,6 +171,17 @@ void OpenRGBEffectPage::on_ColorPickerButton_clicked()
     else{}
 }
 
+void OpenRGBEffectPage::on_AutoStart_clicked()
+{
+    if (ui->AutoStart->isChecked())
+    {
+        AutoStart = true;
+    }
+    else
+    {
+        AutoStart = false;
+    }
+}
 
 /*---------*\
 | Settings  |
@@ -196,6 +207,12 @@ void OpenRGBEffectPage::StartupSettings()
             if ( Slider2Min <= UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Slider2Val"] <= Slider2Max)
             {
                 ui->Slider2->setValue(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Slider2Val"]);
+            }
+
+            if(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["AutoStart"])
+            {
+                ui->StartButton->click();
+                ui->AutoStart->click();
             }
 
             // User colors
@@ -258,19 +275,13 @@ void OpenRGBEffectPage::on_SaveSettings_clicked()
 
     PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Speed"] = EFCT->GetSpeed();
     PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Slider2Val"] = EFCT->GetSlider2Val();
+    PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["AutoStart"] = AutoStart;
 
     std::ofstream EffectFile((ORGBPlugin::RMPointer->GetConfigurationDirectory() + "/plugins/EffectSettings.json"), std::ios::out | std::ios::binary);
     if(EffectFile)
     {
-        try
-        {
-            EffectFile << PrevSettings.dump(4);
-        }
-        catch(std::exception e)
-        {
-
-        }
-
+        try{ EffectFile << PrevSettings.dump(4); }
+        catch(std::exception e){}
         EffectFile.close();
     }
 }

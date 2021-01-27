@@ -49,6 +49,7 @@ private slots:
     void on_UserColorNum_currentIndexChanged(int NewIndex);
     void on_ColorPickerButton_clicked();
     void on_SaveSettings_clicked();
+    void on_AutoStart_clicked();
 
 
 private:
@@ -60,6 +61,7 @@ private:
     std::vector<RGBColor> UserColors;
     int                   CurrentColor = 0;
 
+    bool AutoStart = false;
     void StartupSettings();
 };
 
