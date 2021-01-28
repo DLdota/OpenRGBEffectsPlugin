@@ -9,26 +9,17 @@ DEFINES += ORGBEFFECTPLUGIN_LIBRARY
 CONFIG += c++11
 
 
-INCLUDEPATH +=                                                                                  \
-    Dependencies/                                                                               \
-    Dependencies/HSV/                                                                           \
-    Dependencies/ColorWheel/                                                                    \
-    Effects/                                                                                    \
-    OpenRGB/                                                                                    \
-    OpenRGB/dependencies/json                                                                   \
-    OpenRGB/i2c_smbus                                                                           \
-    OpenRGB/net_port                                                                            \
-    OpenRGB/RGBController                                                                       \
-
 #-----------------------------------------------------------------------------------------------#
 # OpenRGB Plugin SDK                                                                            #
 #-----------------------------------------------------------------------------------------------#
+INCLUDEPATH +=                                                                                  \
+    OpenRGB/                                                                                    \
+    OpenRGB/i2c_smbus                                                                           \
+    OpenRGB/net_port                                                                            \
+    OpenRGB/RGBController                                                                       \
+    OpenRGB/dependencies/json                                                                   \
 
 HEADERS +=                                                                                      \
-    Dependencies/ColorWheel/ColorWheel.h                                                        \
-    Effects/Breathing/Breathing.h                                                               \
-    Effects/GradientCycling/GradientCycling.h                                                   \
-    Effects/StarryNight/StarryNight.h                                                           \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -40,37 +31,59 @@ HEADERS +=                                                                      
     OpenRGB/i2c_smbus/i2c_smbus.h                                                               \
     OpenRGB/net_port/net_port.h                                                                 \
     OpenRGB/RGBController/RGBController.h                                                       \
-    OpenRGBEffectPage.h                                                                         \
-    OpenRGBEffectTab.h
+
 
 #-----------------------------------------------------------------------------------------------#
-# Plugin Source                                                                                 #
+# GUI and misc                                                                                  #
 #-----------------------------------------------------------------------------------------------#
-INCLUDEPATH +=                                                                                  \
-    Effects/SpectrumCycling/                                                                    \
-    Effects/RainbowWave/                                                                        \
-    Effects/StarryNight/                                                                        \
-    Effects/GradientCycling/                                                                    \
-    Effects/Breathing/                                                                          \
-
-SOURCES +=                                                                                      \
-    Dependencies/ColorWheel/ColorWheel.cpp                                                      \
-    Effects/Breathing/Breathing.cpp                                                             \
-    Effects/GradientCycling/GradientCycling.cpp                                                 \
-    Dependencies//HSV/hsv.cpp                                                                   \
-    Effects/RainbowWave/RainbowWave.cpp                                                         \
-    Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
-    Effects/StarryNight/StarryNight.cpp                                                         \
-    ORGBEffectPlugin.cpp                                                                        \
-    OpenRGBEffectPage.cpp                                                                       \
-    OpenRGBEffectTab.cpp
+INCLUDEPATH += \
+    Dependencies/                                                                               \
+    Dependencies/HSV/                                                                           \
+    Dependencies/ColorWheel/                                                                    \
 
 HEADERS +=                                                                                      \
-    Dependencies//HSV/hsv.h                                                                     \
     ORGBEffectPlugin.h                                                                          \
+    OpenRGBEffectTab.h                                                                          \
+    OpenRGBEffectPage.h                                                                         \
+    Dependencies/HSV/hsv.h                                                                      \
+    Dependencies/ColorWheel/ColorWheel.h                                                        \
+
+SOURCES +=                                                                                      \
+    ORGBEffectPlugin.cpp                                                                        \
+    OpenRGBEffectTab.cpp                                                                        \
+    OpenRGBEffectPage.cpp                                                                       \
+    Dependencies/HSV/hsv.cpp                                                                    \
+    Dependencies/ColorWheel/ColorWheel.cpp                                                      \
+
+
+#-----------------------------------------------------------------------------------------------#
+# Effects                                                                                       #
+#-----------------------------------------------------------------------------------------------#
+INCLUDEPATH +=                                                                                  \
+    Effects/                                                                                    \
+    Effects/Breathing/                                                                          \
+    Effects/RainbowWave/                                                                        \
+    Effects/StarryNight/                                                                        \
+    Effects/SpectrumCycling/                                                                    \
+    Effects/GradientCycling/                                                                    \
+
+SOURCES +=                                                                                      \
+    Effects/Rain/Rain.cpp                                                                       \
+    Effects/Breathing/Breathing.cpp                                                             \
+    Effects/StarryNight/StarryNight.cpp                                                         \
+    Effects/RainbowWave/RainbowWave.cpp                                                         \
+    Effects/GradientCycling/GradientCycling.cpp                                                 \
+    Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
+
+HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
-    Effects/SpectrumCycling/SpectrumCycling.h                                                   \
+    Effects/Rain/Rain.h                                                                         \
+    Effects/Breathing/Breathing.h                                                               \
+    Effects/StarryNight/StarryNight.h                                                           \
     Effects/RainbowWave/RainbowWave.h                                                           \
+    Effects/GradientCycling/GradientCycling.h                                                   \
+    Effects/SpectrumCycling/SpectrumCycling.h                                                   \
+
 
 win32:CONFIG(debug, debug|release) {
     win32:DESTDIR = debug
