@@ -9,7 +9,7 @@ EffectInfo Rain::DefineEffectDetails()
     Rain::EffectDetails.EffectDescription = "Picks a random zone/collumn and makes a droplet effect";
 
     Rain::EffectDetails.IsReversable = true;
-    Rain::EffectDetails.MaxSpeed = 100;
+    Rain::EffectDetails.MaxSpeed = 25;
     Rain::EffectDetails.MinSpeed = 1;
     Rain::EffectDetails.UserColors = 1;
 
@@ -24,8 +24,10 @@ void Rain::DefineExtraOptions(QWidget*){/*No Extra Options*/}
 
 void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
+
     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
     {
+        if ((int)CurrentDrops.size() >= DropCount) break;
         if (rand() % 2)
         {
             for (int ZoneID = 0; ZoneID < (int)Controllers[ControllerID].OwnedZones.size(); ZoneID++)
@@ -39,8 +41,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 
                 else if (ZT == ZONE_TYPE_LINEAR)
                 {
-                    qDebug() << "Created new drop";
-                    if ((int)CurrentDrops.size() <= DropCount)
+                    if ((int)CurrentDrops.size() < DropCount)
                     {
                         if (rand()%2)
                         {
@@ -55,7 +56,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                             NewDrop.ZT = ZONE_TYPE_LINEAR;
                             NewDrop.Reversed = OpenRGBEffectTab::CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
 
-                            if (NewDrop.Reversed) NewDrop.Progress = NewDrop.LEDCount - 1;
+                            if (NewDrop.Reversed) NewDrop.Progress = NewDrop.LEDCount;
                             else NewDrop.Progress = 0;
 
                             CurrentDrops.push_back(NewDrop);
@@ -91,7 +92,6 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                         }
                     }
                 }
-
             }
         }
     }
@@ -100,25 +100,23 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 
     for (int DropID = 0; DropID < (int)CurrentDrops.size(); DropID++)
     {
-        qDebug() << "Progressing Drop #" << DropID;
-        if (CurrentDrops[DropID].ZT == ZONE_TYPE_LINEAR)
+        int CIndex = CurrentDrops[DropID].ControllerIndex;
+        int ZIndex = CurrentDrops[DropID].ZoneIndex;
+        int SIndex = Controllers[CIndex].Controller->zones[ZIndex].start_idx;
+
+        int LedID = CurrentDrops[DropID].Progress; // Convert to int so that I can have a solid LED index
+        int integral = LedID; // Copy it to another variable so as to not mess stuff up
+
+        if (CurrentDrops[DropID].Progress < integral) integral -= 1;
+        float fractional = (CurrentDrops[DropID].Progress - integral);
+
+        //float* fractionalPTR = &fractional; // Convert to pointer so I can index it
+
+        char array[10];
+        sprintf(array, "%f", fractional);
+
+        if (array[2] == 0)
         {
-            int CIndex = CurrentDrops[DropID].ControllerIndex;
-            int ZIndex = CurrentDrops[DropID].ZoneIndex;
-            int SIndex = Controllers[CIndex].Controller->zones[ZIndex].start_idx;
-
-            int LedID = CurrentDrops[DropID].Progress; // Convert to int so that I can have a solid LED index
-
-            qDebug() << CurrentDrops[DropID].Progress;
-            qDebug() << CurrentDrops[DropID].LEDCount;
-
-
-            qDebug() << "Set to User color";
-            if (LedID > 0) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID - 1)),ToRGBColor(0,0,0));
-            Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),UserColor);
-            if (LedID < CurrentDrops[DropID].LEDCount) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID + 1)),ToRGBColor(0,0,0));
-
-
             if (CurrentDrops[DropID].Reversed)
             {
                 if (CurrentDrops[DropID].Progress > 0) CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress - Speed / (float)FPS;
@@ -129,18 +127,57 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                 if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount) CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress + Speed / (float)FPS;
                 else {ToDelete.push_back(DropID); Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),ToRGBColor(0,0,0));}
             }
+            continue;
+        }
+
+        qDebug() << array[2];
+
+        hsv_t FromUserColor;
+        rgb2hsv(UserColor, &FromUserColor);
+
+        hsv_t StartingHSV = FromUserColor;
+        hsv_t EndingHSV = FromUserColor;
+
+        StartingHSV.value = StartingHSV.value * fractional;
+        EndingHSV.value   = EndingHSV.value / fractional;
+
+        if (CurrentDrops[DropID].ZT == ZONE_TYPE_LINEAR)
+        {
+            if (CurrentDrops[DropID].Reversed)
+            {
+                //qDebug() << EndingHSV.value;
+                //if (LedID > 0) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID - 1)),hsv2rgb(&EndingHSV));
+                if (LedID < ( CurrentDrops[DropID].LEDCount - 1) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID + 1)),ToRGBColor(0,0,0));
+                Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),hsv2rgb(&EndingHSV));
+            }
+            else
+            {
+                //if (LedID < CurrentDrops[DropID].LEDCount) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),ToRGBColor(0,0,0));
+                //Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),hsv2rgb(&StartingHSV));
+            }
         }
 
         else if (CurrentDrops[DropID].ZT == ZONE_TYPE_MATRIX)
         {
 
         }
+
+
+        if (CurrentDrops[DropID].Reversed)
+        {
+            if (CurrentDrops[DropID].Progress > 0) CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress - Speed / (float)FPS;
+            else {ToDelete.push_back(DropID); Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),ToRGBColor(0,0,0));}
+        }
+        else
+        {
+            if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount) CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress + Speed / (float)FPS;
+            else {ToDelete.push_back(DropID); Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),ToRGBColor(0,0,0));}
+        }
     }
 
     if (ToDelete.size() == 0) return;
     for (int DelIndex = (ToDelete.size() - 1) ; DelIndex >= 0; DelIndex--)
     {
-        qDebug() << "Deleting #" << ToDelete[DelIndex];
         CurrentDrops.erase(CurrentDrops.begin() + ToDelete[DelIndex]);
     }
 
