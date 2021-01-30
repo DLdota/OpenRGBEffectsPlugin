@@ -110,28 +110,6 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
         if (CurrentDrops[DropID].Progress < integral) integral -= 1;
         float fractional = (CurrentDrops[DropID].Progress - integral);
 
-        //float* fractionalPTR = &fractional; // Convert to pointer so I can index it
-
-        char array[10];
-        sprintf(array, "%f", fractional);
-
-        if (array[2] == 0)
-        {
-            if (CurrentDrops[DropID].Reversed)
-            {
-                if (CurrentDrops[DropID].Progress > 0) CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress - Speed / (float)FPS;
-                else {ToDelete.push_back(DropID); Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),ToRGBColor(0,0,0));}
-            }
-            else
-            {
-                if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount) CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress + Speed / (float)FPS;
-                else {ToDelete.push_back(DropID); Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),ToRGBColor(0,0,0));}
-            }
-            continue;
-        }
-
-        qDebug() << array[2];
-
         hsv_t FromUserColor;
         rgb2hsv(UserColor, &FromUserColor);
 
@@ -139,21 +117,38 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
         hsv_t EndingHSV = FromUserColor;
 
         StartingHSV.value = StartingHSV.value * fractional;
-        EndingHSV.value   = EndingHSV.value / fractional;
+        EndingHSV.value   = EndingHSV.value * -fractional;
 
         if (CurrentDrops[DropID].ZT == ZONE_TYPE_LINEAR)
         {
+            // If the drop is reversed
             if (CurrentDrops[DropID].Reversed)
             {
-                //qDebug() << EndingHSV.value;
-                //if (LedID > 0) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID - 1)),hsv2rgb(&EndingHSV));
-                if (LedID < ( CurrentDrops[DropID].LEDCount - 1) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID + 1)),ToRGBColor(0,0,0));
-                Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),hsv2rgb(&EndingHSV));
+                    if (LedID < ( CurrentDrops[DropID].LEDCount - 3) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID + 3)),ToRGBColor(0,0,0));
+                    if (LedID < ( CurrentDrops[DropID].LEDCount - 2) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID + 2)),hsv2rgb(&StartingHSV));
+                    if (LedID < ( CurrentDrops[DropID].LEDCount - 1) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID + 1)),UserColor);
+                    if (LedID < ( CurrentDrops[DropID].LEDCount    ) )Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),hsv2rgb(&EndingHSV));
             }
             else
             {
-                //if (LedID < CurrentDrops[DropID].LEDCount) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),ToRGBColor(0,0,0));
-                //Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),hsv2rgb(&StartingHSV));
+                if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 3)
+                {
+                    if (LedID > 2 ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID - 3)),ToRGBColor(0,0,0));
+
+                    if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 2)
+                    {
+                        if (LedID > 1 ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID - 2)),hsv2rgb(&EndingHSV));
+
+                        if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 1)
+                        {
+                            if (LedID > 0 ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID - 1)),UserColor);
+                            if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount)
+                            {
+                                Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),hsv2rgb(&StartingHSV));
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -165,13 +160,13 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 
         if (CurrentDrops[DropID].Reversed)
         {
-            if (CurrentDrops[DropID].Progress > 0) CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress - Speed / (float)FPS;
-            else {ToDelete.push_back(DropID); Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),ToRGBColor(0,0,0));}
+            if ( (3 + CurrentDrops[DropID].Progress) > 0) CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress - Speed / (float)FPS;
+            else ToDelete.push_back(DropID);
         }
         else
         {
-            if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount) CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress + Speed / (float)FPS;
-            else {ToDelete.push_back(DropID); Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),ToRGBColor(0,0,0));}
+            if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 3) CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress + Speed / (float)FPS;
+            else ToDelete.push_back(DropID);
         }
     }
 

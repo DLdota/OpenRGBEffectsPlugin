@@ -18,7 +18,7 @@ EffectInfo RainbowWave::DefineEffectDetails()
     return RainbowWave::EffectDetails;
 }
 
-void RainbowWave::DefineExtraOptions(QWidget* Parent)
+void RainbowWave::DefineExtraOptions(QWidget*)
 {
     return;
 }
