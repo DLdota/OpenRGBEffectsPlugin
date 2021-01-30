@@ -18,6 +18,7 @@
 #include "StarryNight.h"
 #include "GradientCycling.h"
 #include "Breathing.h"
+#include "Rain.h"
 
 #pragma once
 

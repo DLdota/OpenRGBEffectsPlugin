@@ -61,6 +61,7 @@ SOURCES +=                                                                      
 #-----------------------------------------------------------------------------------------------#
 INCLUDEPATH +=                                                                                  \
     Effects/                                                                                    \
+    Effects/Rain/                                                                               \
     Effects/Breathing/                                                                          \
     Effects/RainbowWave/                                                                        \
     Effects/StarryNight/                                                                        \

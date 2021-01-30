@@ -29,6 +29,9 @@ void OpenRGBEffectTab::DefineEffects()
 
     Breathing* BRTHNG = new Breathing;
     OpenRGBEffectTab::EffectList.push_back(BRTHNG);
+
+    Rain* RN = new Rain;
+    OpenRGBEffectTab::EffectList.push_back(RN);
 }
 
 
@@ -422,7 +425,7 @@ void OpenRGBEffectTab::GivePreviousDevices()
 
     if (UserSettings.contains("FPS"))
     {
-        for (int FPSIdentifier = 0; FPSIdentifier < GetSpeed.size(); FPSIdentifier++)
+        for (int FPSIdentifier = 0; FPSIdentifier < (int)GetSpeed.size(); FPSIdentifier++)
         {
             if (GetSpeed[FPSIdentifier] == UserSettings["FPS"])
             {
