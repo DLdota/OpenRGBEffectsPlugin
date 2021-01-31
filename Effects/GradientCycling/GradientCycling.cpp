@@ -29,22 +29,13 @@ void GradientCycling::StepEffect(std::vector<OwnedControllerAndZones> Controller
 {
     int S[3];
     S[0] = RGBGetRValue(UserColors[0]);
-    //S[0] = (UserColors[0] & 0x00ff0000) >> 16;
     S[1] = RGBGetGValue(UserColors[0]);
-    //S[1] = (UserColors[0] & 0x0000ff00) >> 8;
     S[2] = RGBGetBValue(UserColors[0]);
-    //S[2] = (UserColors[0] & 0x000000ff);
 
     int F[3];
     F[0] = RGBGetRValue(UserColors[1]);
-    //S[0] = (UserColors[0] & 0x00ff0000) >> 16;
     F[1] = RGBGetGValue(UserColors[1]);
-    //S[1] = (UserColors[0] & 0x0000ff00) >> 8;
     F[2] = RGBGetBValue(UserColors[1]);
-    //S[2] = (UserColors[0] & 0x000000ff);
-    /*F[0] = (UserColors[1] & 0x00ff0000) >> 16;
-    F[1] = (UserColors[1] & 0x0000ff00) >> 8;
-    F[2] = (UserColors[1] & 0x000000ff);*/
 
     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
     {
@@ -109,7 +100,7 @@ void GradientCycling::StepEffect(std::vector<OwnedControllerAndZones> Controller
                     {
                         RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(LEDCount))*(F[CVal]-S[CVal]));
                     }
-                    Controllers[ControllerID].Controller->SetLED((RVRS ? (LEDCount - 1) - LedID : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
+                    Controllers[ControllerID].Controller->SetLED((RVRS ? StartIndex + ((LEDCount - 1) - LedID) : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
                 }
 
                 if (Progress[ControllerID][ZoneID] < (LEDCount*2)) Progress[ControllerID][ZoneID] += ((float)Speed / (float)FPS);

@@ -81,6 +81,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                                 NewDrop.ZoneIndex       = Controllers[ControllerID].OwnedZones[ZoneID];
 
                                 NewDrop.Collumn = Col;
+                                NewDrop.CollumnCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
                                 NewDrop.LEDCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
 
                                 NewDrop.Progress = 0;
@@ -127,7 +128,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                     if (LedID < ( CurrentDrops[DropID].LEDCount - 3) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID + 3)),ToRGBColor(0,0,0));
                     if (LedID < ( CurrentDrops[DropID].LEDCount - 2) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID + 2)),hsv2rgb(&StartingHSV));
                     if (LedID < ( CurrentDrops[DropID].LEDCount - 1) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID + 1)),UserColor);
-                    if (LedID < ( CurrentDrops[DropID].LEDCount    ) )Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),hsv2rgb(&EndingHSV));
+                    if (LedID < ( CurrentDrops[DropID].LEDCount    ) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),hsv2rgb(&EndingHSV));
             }
             else
             {
@@ -154,7 +155,74 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 
         else if (CurrentDrops[DropID].ZT == ZONE_TYPE_MATRIX)
         {
+            {
+                int RowID = LedID;
+                int CollumnID = CurrentDrops[DropID].Collumn;
+                int CollumnCount = CurrentDrops[DropID].CollumnCount;
+                int Led;
 
+                // If the drop is reversed
+                if (CurrentDrops[DropID].Reversed)
+                {
+                    if (LedID < ( CurrentDrops[DropID].LEDCount - 3) )
+                    {
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * (RowID  + 3) ) * CollumnID)];
+                        //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID + 3)];
+                        Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),ToRGBColor(0,0,0));
+                    }
+
+                    if (LedID < ( CurrentDrops[DropID].LEDCount - 2) )
+                    {
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * (RowID  + 2) ) * CollumnID)];
+                        //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID + 2)];
+                        Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),hsv2rgb(&StartingHSV));
+                    }
+
+                    if (LedID < ( CurrentDrops[DropID].LEDCount - 1) )
+                    {
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * (RowID  + 1) ) * CollumnID)];
+                        //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID + 1)];
+                        Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),UserColor);
+                    }
+
+                    if (LedID < ( CurrentDrops[DropID].LEDCount    ) )
+                    {
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * RowID ) * CollumnID)];
+                        //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID)];
+                        Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),hsv2rgb(&EndingHSV));
+                    }
+                }
+                else
+                {
+                    if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 3)
+                    {
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * RowID - 3 ) * CollumnID)];
+                        //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID - 3)];
+                        if (LedID > 2 ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),ToRGBColor(0,0,0));
+
+                        if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 2)
+                        {
+                            Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * RowID - 2 ) * CollumnID)];
+                            //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID - 2)];
+                            if (LedID > 1 ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),hsv2rgb(&EndingHSV));
+
+                            if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 1)
+                            {
+                                Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * RowID - 1 ) * CollumnID)];
+                                //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID - 1)];
+                                if (LedID > 0 ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),UserColor);
+
+                                if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount)
+                                {
+                                    Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * RowID) * CollumnID)];
+                                    //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID)];
+                                    Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),hsv2rgb(&StartingHSV));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 

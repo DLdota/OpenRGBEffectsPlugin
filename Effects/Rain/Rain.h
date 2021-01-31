@@ -15,6 +15,7 @@ struct Drops
     bool  Reversed;
 
     int    Collumn;
+    int    CollumnCount;
     float Progress;
 };
 
