@@ -16,7 +16,7 @@ struct Drops
 
     int    Collumn;
     int    CollumnCount;
-    float Progress;
+    float  Progress;
 };
 
 class Rain: public RGBEffect
@@ -49,6 +49,7 @@ private:
 
     RGBColor UserColor;
 
+    std::vector<std::vector<bool>> HasEffect;
 };
 
 #endif // RAIN_H

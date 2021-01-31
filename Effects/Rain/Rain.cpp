@@ -33,6 +33,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
             for (int ZoneID = 0; ZoneID < (int)Controllers[ControllerID].OwnedZones.size(); ZoneID++)
             {
                 zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
+                int ActualZone = Controllers[ControllerID].OwnedZones[ZoneID];
                 if (ZT == ZONE_TYPE_SINGLE)
                 {
                     // Rain won't support single LED zones
@@ -43,7 +44,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                 {
                     if ((int)CurrentDrops.size() < DropCount)
                     {
-                        if (rand()%2)
+                        if (rand()%2 && !HasEffect[ControllerID][ActualZone])
                         {
                             Drops NewDrop;
                             NewDrop.ControllerIndex = ControllerID;
@@ -59,6 +60,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                             if (NewDrop.Reversed) NewDrop.Progress = NewDrop.LEDCount;
                             else NewDrop.Progress = 0;
 
+                            HasEffect[ControllerID][ActualZone] = true;
                             CurrentDrops.push_back(NewDrop);
                         }
                     }
@@ -68,29 +70,29 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                 {
                     int MaxAllowed = (rand() % DropCount - CurrentDrops.size());
                     int AmountCreated = 0;
-                    for (int Col = 0; Col < (int)Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width; Col++)
+                    for (int Created = 0; Created < MaxAllowed; Created++)
                     {
+                        int CreateDrop = rand()%(int)Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
                         if (AmountCreated < MaxAllowed)
                         {
-                            if (rand()%2)
-                            {
-                                AmountCreated += 1;
-                                Drops NewDrop;
+                            AmountCreated += 1;
+                            Drops NewDrop;
 
-                                NewDrop.ControllerIndex = ControllerID;
-                                NewDrop.ZoneIndex       = Controllers[ControllerID].OwnedZones[ZoneID];
+                            NewDrop.ControllerIndex = ControllerID;
+                            NewDrop.ZoneIndex       = Controllers[ControllerID].OwnedZones[ZoneID];
 
-                                NewDrop.Collumn = Col;
-                                NewDrop.CollumnCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
-                                NewDrop.LEDCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
+                            NewDrop.Collumn = CreateDrop;
+                            NewDrop.CollumnCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
+                            NewDrop.LEDCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
 
-                                NewDrop.Progress = 0;
-                                NewDrop.ZT = ZONE_TYPE_MATRIX;
-                                NewDrop.Reversed = OpenRGBEffectTab::CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
+                            NewDrop.Progress = 0;
+                            NewDrop.ZT = ZONE_TYPE_MATRIX;
+                            NewDrop.Reversed = OpenRGBEffectTab::CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
 
-                                CurrentDrops.push_back(NewDrop);
-                            }
+                            CurrentDrops.push_back(NewDrop);
+
                         }
+                        else break;
                     }
                 }
             }
@@ -166,28 +168,28 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                 {
                     if (LedID < ( CurrentDrops[DropID].LEDCount - 3) )
                     {
-                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * (RowID  + 3) ) * CollumnID)];
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * (RowID  + 3) ) + CollumnID)];
                         //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID + 3)];
                         Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),ToRGBColor(0,0,0));
                     }
 
                     if (LedID < ( CurrentDrops[DropID].LEDCount - 2) )
                     {
-                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * (RowID  + 2) ) * CollumnID)];
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * (RowID  + 2) ) + CollumnID)];
                         //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID + 2)];
                         Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),hsv2rgb(&StartingHSV));
                     }
 
                     if (LedID < ( CurrentDrops[DropID].LEDCount - 1) )
                     {
-                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * (RowID  + 1) ) * CollumnID)];
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * (RowID  + 1) ) + CollumnID)];
                         //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID + 1)];
                         Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),UserColor);
                     }
 
                     if (LedID < ( CurrentDrops[DropID].LEDCount    ) )
                     {
-                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * RowID ) * CollumnID)];
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * RowID ) + CollumnID)];
                         //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID)];
                         Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),hsv2rgb(&EndingHSV));
                     }
@@ -196,27 +198,27 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                 {
                     if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 3)
                     {
-                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * RowID - 3 ) * CollumnID)];
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( ( (RowID - 3) * CollumnCount ) + CollumnID)];
                         //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID - 3)];
                         if (LedID > 2 ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),ToRGBColor(0,0,0));
 
                         if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 2)
                         {
-                            Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * RowID - 2 ) * CollumnID)];
+                            Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( ( (RowID - 2) * CollumnCount ) + CollumnID)];
                             //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID - 2)];
-                            if (LedID > 1 ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),hsv2rgb(&EndingHSV));
+                            if (LedID > 1 ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),hsv2rgb(&EndingHSV));
 
                             if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 1)
                             {
-                                Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * RowID - 1 ) * CollumnID)];
+                                Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( ( (RowID - 1) * CollumnCount ) + CollumnID)];
                                 //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID - 1)];
-                                if (LedID > 0 ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),UserColor);
+                                if (LedID > 0 ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),UserColor);
 
                                 if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount)
                                 {
-                                    Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * RowID) * CollumnID)];
+                                    Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (RowID * CollumnCount) + CollumnID)];
                                     //Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnID * CurrentDrops[DropID].LEDCount) + RowID)];
-                                    Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),hsv2rgb(&StartingHSV));
+                                    Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),hsv2rgb(&StartingHSV));
                                 }
                             }
                         }
@@ -241,6 +243,9 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
     if (ToDelete.size() == 0) return;
     for (int DelIndex = (ToDelete.size() - 1) ; DelIndex >= 0; DelIndex--)
     {
+        int CIndex = CurrentDrops[ToDelete[DelIndex]].ControllerIndex;
+        int ZIndex = CurrentDrops[ToDelete[DelIndex]].ZoneIndex;
+        HasEffect[CIndex][ZIndex] = false;
         CurrentDrops.erase(CurrentDrops.begin() + ToDelete[DelIndex]);
     }
 
@@ -268,6 +273,15 @@ void Rain::Slider2Changed(int NewDropCount)
 
 void Rain::ASelectionWasChanged()
 {
+    HasEffect.clear();
+    for (int ControllerID = 0; ControllerID < (int)ORGBPlugin::RMPointer->GetRGBControllers().size(); ControllerID++)
+    {
+        HasEffect.push_back({});
+        for (int ZoneID = 0; ZoneID < (int)ORGBPlugin::RMPointer->GetRGBControllers()[ControllerID]->zones.size(); ZoneID++)
+        {
+            HasEffect[ControllerID].push_back(false);
+        }
+    }
     CurrentDrops.clear();
 }
 
