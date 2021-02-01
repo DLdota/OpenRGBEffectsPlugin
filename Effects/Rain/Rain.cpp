@@ -24,7 +24,7 @@ void Rain::DefineExtraOptions(QWidget*){/*No Extra Options*/}
 
 void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
-
+    if (Controllers.size() != HasEffect.size()) this->ASelectionWasChanged();
     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
     {
         if ((int)CurrentDrops.size() >= DropCount) break;
