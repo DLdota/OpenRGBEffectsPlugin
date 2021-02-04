@@ -32,6 +32,9 @@ void OpenRGBEffectTab::DefineEffects()
 
     Rain* RN = new Rain;
     OpenRGBEffectTab::EffectList.push_back(RN);
+
+    Ambient* AMBNT = new Ambient;
+    OpenRGBEffectTab::EffectList.push_back(AMBNT);
 }
 
 

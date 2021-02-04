@@ -19,6 +19,7 @@
 #include "GradientCycling.h"
 #include "Breathing.h"
 #include "Rain.h"
+#include "Ambient.h"
 
 #pragma once
 

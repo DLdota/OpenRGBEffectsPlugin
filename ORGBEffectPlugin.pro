@@ -62,6 +62,7 @@ SOURCES +=                                                                      
 INCLUDEPATH +=                                                                                  \
     Effects/                                                                                    \
     Effects/Rain/                                                                               \
+    Effects/Ambient/                                                                            \
     Effects/Breathing/                                                                          \
     Effects/RainbowWave/                                                                        \
     Effects/StarryNight/                                                                        \
@@ -70,6 +71,7 @@ INCLUDEPATH +=                                                                  
 
 SOURCES +=                                                                                      \
     Effects/Rain/Rain.cpp                                                                       \
+    Effects/Ambient/Ambient.cpp                                                                 \
     Effects/Breathing/Breathing.cpp                                                             \
     Effects/StarryNight/StarryNight.cpp                                                         \
     Effects/RainbowWave/RainbowWave.cpp                                                         \
@@ -79,6 +81,7 @@ SOURCES +=                                                                      
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
     Effects/Rain/Rain.h                                                                         \
+    Effects/Ambient/Ambient.h                                                                   \
     Effects/Breathing/Breathing.h                                                               \
     Effects/StarryNight/StarryNight.h                                                           \
     Effects/RainbowWave/RainbowWave.h                                                           \
