@@ -1,7 +1,6 @@
 #include "OpenRGBEffectTab.h"
 #include "OpenRGBEffectPage.h"
 
-
 std::vector<RGBEffect*>                             OpenRGBEffectTab::ActiveEffects;
 std::vector<BetterController>                       OpenRGBEffectTab::Controllers;
 std::vector<std::vector<OwnedControllerAndZones>>   OpenRGBEffectTab::RespectiveToPass;
@@ -284,6 +283,8 @@ void OpenRGBEffectTab::EffectStepTimer()
         while (true) {
             if (int(OpenRGBEffectTab::ActiveEffects.size()) > 0)
             {
+                auto start = std::chrono::steady_clock::now();
+
                 for (int EffectIndex = 0; EffectIndex < int(OpenRGBEffectTab::ActiveEffects.size()); EffectIndex++)
                 {
                     OpenRGBEffectTab::ActiveEffects[EffectIndex]->StepEffect(RespectiveToPass[OpenRGBEffectTab::ActiveEffects[EffectIndex]->EffectDetails.EffectIndex],OpenRGBEffectTab::FPS);
@@ -295,12 +296,27 @@ void OpenRGBEffectTab::EffectStepTimer()
                     if (Controllers[ControllerID].OwnedZones.size() > 0)
                     {
                         Controllers[ControllerID].Controller->UpdateLEDs();
-                        std::this_thread::sleep_for(std::chrono::milliseconds(1));
                     }
                 }
-                std::this_thread::sleep_for(std::chrono::milliseconds(OpenRGBEffectTab::FPSDelay));
+
+                auto end = std::chrono::steady_clock::now();
+
+                int delta = OpenRGBEffectTab::FPSDelay - std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+                if(delta > 0)
+                {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(delta));
+                }
+                else
+                {
+                    // what could we really do more?
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                }
             }
-            else std::this_thread::sleep_for(std::chrono::seconds(2));
+            else
+            {
+                std::this_thread::sleep_for(std::chrono::seconds(2));
+            }
         }
     }).detach();
 }
