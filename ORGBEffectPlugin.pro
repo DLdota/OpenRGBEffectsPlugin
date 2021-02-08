@@ -68,6 +68,7 @@ INCLUDEPATH +=                                                                  
     Effects/StarryNight/                                                                        \
     Effects/SpectrumCycling/                                                                    \
     Effects/GradientCycling/                                                                    \
+    Effects/SeesawMotion/                                                                        \
 
 SOURCES +=                                                                                      \
     Effects/Rain/Rain.cpp                                                                       \
@@ -77,6 +78,7 @@ SOURCES +=                                                                      
     Effects/RainbowWave/RainbowWave.cpp                                                         \
     Effects/GradientCycling/GradientCycling.cpp                                                 \
     Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
+    Effects/SeesawMotion/SeesawMotion.cpp                                                         \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -87,6 +89,7 @@ HEADERS +=                                                                      
     Effects/RainbowWave/RainbowWave.h                                                           \
     Effects/GradientCycling/GradientCycling.h                                                   \
     Effects/SpectrumCycling/SpectrumCycling.h                                                   \
+    Effects/SeesawMotion/SeesawMotion.h                                                           \
 
 
 win32:CONFIG(debug, debug|release) {

@@ -20,6 +20,7 @@
 #include "Breathing.h"
 #include "Rain.h"
 #include "Ambient.h"
+#include "SeesawMotion.h"
 
 #pragma once
 
