@@ -8,7 +8,7 @@ This is a plugin for [OpenRGB](https://gitlab.com/CalcProgrammer1/OpenRGB) that 
 
 The installation process is very simple
 
-1. Download the [Latest release](https://gitlab.com/herosilas12/OpenRGB-Plugins/-/commits/Effects) artifacts for your OS (The green checkmark to the right side)
+1. Download the [Latest release](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectPlugin/-/commits/master) artifacts for your OS (The green checkmark to the right side)
 
 2. Copy the file to the config folder for your specific OS
 
@@ -30,4 +30,4 @@ If you check a device in Effect 1 and then go to Effect 2 and press start it won
 
 You will need to go back to Effect 1 and uncheck the device. Then go to Effect 2 and reselect the device
 
-If you don't know which Effect has the device/zone then you can hover over the checkbox and it will give you a tooltip telling you where it is
+If you don't know which Effect has the device/zone then you can hover over the checkbox and it will give you a tooltip telling you where it is\
