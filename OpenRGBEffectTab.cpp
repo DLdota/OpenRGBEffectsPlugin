@@ -228,6 +228,8 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent): QWidget(parent), ui(new Ui:
     | Create the effect handling thread  |
     \*----------------------------------*/
     StepEffectThread = new std::thread(&OpenRGBEffectTab::EffectStepTimer,this);
+
+    DeviceListChanged();
 }
 
 OpenRGBEffectTab::~OpenRGBEffectTab()
@@ -443,6 +445,55 @@ void OpenRGBEffectTab::GivePreviousDevices()
         }
     }
 
+    if (UserSettings.contains("Reversed"))
+    {
+        for (int DeviceIndex = 0; DeviceIndex < (int)UserSettings["Reversed"].size(); DeviceIndex++)
+        {
+            for (int ControllerID = 0; ControllerID < (int)ORGBPlugin::RMPointer->GetRGBControllers().size(); ControllerID++)
+            {
+                RGBController* Comp = Controllers[ControllerID].Controller;
+
+                if
+                (
+                      ( UserSettings["Reversed"][DeviceIndex]["ControllerName"]        == Comp->name               )
+                    &&( UserSettings["Reversed"][DeviceIndex]["ControllerDescription"] == Comp->description        )
+                    &&( UserSettings["Reversed"][DeviceIndex]["ControllerLocation"]    == Comp->location           )
+                    &&( UserSettings["Reversed"][DeviceIndex]["ControllerSerial"]      == Comp->serial             )
+                    &&( UserSettings["Reversed"][DeviceIndex]["ControllerLEDCount"]    == Comp->colors.size()      )
+                    &&( UserSettings["Reversed"][DeviceIndex]["ControllerZoneCount"]   == Comp->zones.size()       )
+                )
+                {
+                    /*------------------------------------*\
+                    | If the device has more than 1 zone   |
+                    | Add zones on a per zone basis        |
+                    \*------------------------------------*/
+                    if (Comp->zones.size() > 1)
+                    {
+                        QTableWidget* ZoneReverseTable = qobject_cast<QTableWidget*>(ui->SelectDevices->cellWidget(( (ControllerID * 2) + 1),0));
+                        for (int ZoneID = 0; ZoneID < (int)UserSettings["Reversed"][DeviceIndex]["ReversedZones"].size(); ZoneID++)
+                        {
+                            if (UserSettings["Reversed"][DeviceIndex]["ReversedZones"][ZoneID])
+                            {
+                                QCheckBox* ZoneBox = qobject_cast<QCheckBox*>(ZoneReverseTable->cellWidget(ZoneID,2));
+                                ZoneBox->click();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (UserSettings["Reversed"][DeviceIndex]["ReversedZones"][0])
+                        {
+                            QCheckBox* DeviceBox = qobject_cast<QCheckBox*>(ui->SelectDevices->cellWidget( (ControllerID*2), 2 ) );
+                            DeviceBox->click();
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+    }
+
     if (UserSettings.contains("Effects"))
     {
         for (int EffectIndex = 0; EffectIndex < (int)EffectList.size(); EffectIndex++)
@@ -505,6 +556,59 @@ void OpenRGBEffectTab::GivePreviousDevices()
             }
         }
         on_TabChange(0);
+    }
+}
+
+void OpenRGBEffectTab::SaveReversedSettings()
+{
+    json UserSettings = LoadPrevSetting();
+    for (int DeviceIndex = 0; DeviceIndex < ui->SelectDevices->rowCount()/2; DeviceIndex++)
+    {
+        RGBController* Comp = Controllers[DeviceIndex].Controller;
+
+        UserSettings["Reversed"][DeviceIndex]["ControllerName"]        = Comp->name;
+        UserSettings["Reversed"][DeviceIndex]["ControllerDescription"] = Comp->description;
+        UserSettings["Reversed"][DeviceIndex]["ControllerLocation"]    = Comp->location;
+        UserSettings["Reversed"][DeviceIndex]["ControllerSerial"]      = Comp->serial;
+        UserSettings["Reversed"][DeviceIndex]["ControllerLEDCount"]    = Comp->colors.size();
+        UserSettings["Reversed"][DeviceIndex]["ControllerZoneCount"]   = Comp->zones.size();
+
+        if (Controllers[DeviceIndex].Controller->zones.size() > 1)
+        {
+            QTableWidget* ZoneReversedTable = qobject_cast<QTableWidget*>(ui->SelectDevices->cellWidget( ((DeviceIndex*2)+1),0 ));
+            for (int ZoneID = 0; ZoneID < ZoneReversedTable->rowCount(); ZoneID++)
+            {
+                QCheckBox* DevReversedBox = qobject_cast<QCheckBox*>(ZoneReversedTable->cellWidget(ZoneID , 2));
+                if (DevReversedBox->isChecked())
+                {
+                    UserSettings["Reversed"][DeviceIndex]["ReversedZones"][ZoneID] = true;
+                }
+                else
+                {
+                    UserSettings["Reversed"][DeviceIndex]["ReversedZones"][ZoneID] = false;
+                }
+            }
+        }
+        else
+        {
+            QCheckBox* DevReversedBox = qobject_cast<QCheckBox*>(ui->SelectDevices->cellWidget(DeviceIndex*2 , 2));
+            if (DevReversedBox->isChecked())
+            {
+                UserSettings["Reversed"][DeviceIndex]["ReversedZones"][0] = true;
+            }
+            else
+            {
+                UserSettings["Reversed"][DeviceIndex]["ReversedZones"][0] = false;
+            }
+        }
+    }
+
+    std::ofstream EffectFile((ORGBPlugin::RMPointer->GetConfigurationDirectory() + "/plugins/EffectSettings.json"), std::ios::out | std::ios::binary);
+    if(EffectFile)
+    {
+        try{ EffectFile << UserSettings.dump(4); }
+        catch(std::exception e){}
+        EffectFile.close();
     }
 }
 
@@ -793,41 +897,47 @@ void OpenRGBEffectTab::DeviceReversalChanged(QString DName)
 
     if ((DeviceReversed->isEnabled()) && (DeviceReversed->isChecked()))
     {
-        if (Controllers[DevIndex].Controller->zones.size() == 1){Controllers[DevIndex].ReversedZones[0] = true; return;}
-        QTableWidget* ZoneReverseTable = qobject_cast<QTableWidget*>(ui->SelectDevices->cellWidget((DevTabIndex + 1), 0));
-        /*-----------------------------------------*\
-        | Add all non owned zones to the list       |
-        \*-----------------------------------------*/
-        for (int ZoneID = 0; ZoneID < int(Controllers[DevIndex].Controller->zones.size()); ZoneID++)
+        if (Controllers[DevIndex].Controller->zones.size() == 1){Controllers[DevIndex].ReversedZones[0] = true; }
+        else
         {
-            QCheckBox* ZoneReversed = qobject_cast<QCheckBox*>(ZoneReverseTable->cellWidget(ZoneID,2));
-
-            if (ZoneReversed->isEnabled() && !ZoneReversed->isChecked())
+            QTableWidget* ZoneReverseTable = qobject_cast<QTableWidget*>(ui->SelectDevices->cellWidget((DevTabIndex + 1), 0));
+            /*-----------------------------------------*\
+            | Add all non owned zones to the list       |
+            \*-----------------------------------------*/
+            for (int ZoneID = 0; ZoneID < int(Controllers[DevIndex].Controller->zones.size()); ZoneID++)
             {
-                Controllers[DevIndex].ReversedZones[ZoneID] = true;
-                ZoneReversed->setCheckState(Qt::Checked);
+                QCheckBox* ZoneReversed = qobject_cast<QCheckBox*>(ZoneReverseTable->cellWidget(ZoneID,2));
+
+                if (ZoneReversed->isEnabled() && !ZoneReversed->isChecked())
+                {
+                    Controllers[DevIndex].ReversedZones[ZoneID] = true;
+                    ZoneReversed->setCheckState(Qt::Checked);
+                }
             }
         }
     }
     else if (DeviceReversed->isEnabled() && !DeviceReversed->isChecked())
     {
-        if (Controllers[DevIndex].Controller->zones.size() == 1){Controllers[DevIndex].ReversedZones[0] = false; return;}
-        QTableWidget* ZoneReversalTable = qobject_cast<QTableWidget*>(ui->SelectDevices->cellWidget( (DevTabIndex + 1), 0));
-        /*-----------------------------------------*\
-        | Add all non reversed zones to the list    |
-        \*-----------------------------------------*/
-        for (int ZoneID = 0; ZoneID < ZoneReversalTable->rowCount(); ZoneID++)
+        if (Controllers[DevIndex].Controller->zones.size() == 1){Controllers[DevIndex].ReversedZones[0] = false;}
+        else
         {
-            QCheckBox* ZoneReverseBox = qobject_cast<QCheckBox*>(ZoneReversalTable->cellWidget(ZoneID,2));
-            if (ZoneReverseBox->isEnabled() && ZoneReverseBox->isChecked())
+            QTableWidget* ZoneReversalTable = qobject_cast<QTableWidget*>(ui->SelectDevices->cellWidget( (DevTabIndex + 1), 0));
+            /*-----------------------------------------*\
+            | Add all non reversed zones to the list    |
+            \*-----------------------------------------*/
+            for (int ZoneID = 0; ZoneID < ZoneReversalTable->rowCount(); ZoneID++)
             {
-                Controllers[DevIndex].ReversedZones[ZoneID] = false;
-                ZoneReverseBox->setCheckState(Qt::Unchecked);
+                QCheckBox* ZoneReverseBox = qobject_cast<QCheckBox*>(ZoneReversalTable->cellWidget(ZoneID,2));
+                if (ZoneReverseBox->isEnabled() && ZoneReverseBox->isChecked())
+                {
+                    Controllers[DevIndex].ReversedZones[ZoneID] = false;
+                    ZoneReverseBox->setCheckState(Qt::Unchecked);
+                }
             }
         }
     }
 
-    return;
+    SaveReversedSettings();
 }
 
 void OpenRGBEffectTab::ZoneReversalChanged(QString DName)
@@ -880,6 +990,8 @@ void OpenRGBEffectTab::ZoneReversalChanged(QString DName)
         QCheckBox* DevReversed = qobject_cast<QCheckBox*>(ui->SelectDevices->cellWidget(DevSelect,2));
         DevReversed->setCheckState(Qt::Unchecked);
     }
+
+    SaveReversedSettings();
 }
 
 void OpenRGBEffectTab::on_TabChange(int Tab)
