@@ -2,15 +2,7 @@
 #define AMBIENT_H
 
 #include "RGBEffect.h"
-
-#include <QVBoxLayout>
-#include <QMainWindow>
-#include <QMainWindow>
-#include <QGuiApplication>
-#include <QMainWindow>
-#include <QScreen>
-#include <QWindow>
-#include <QWidget>
+#include "ScreenSelection.h"
 
 class Ambient : public RGBEffect
 {
@@ -19,7 +11,7 @@ public:
     ~Ambient() {};
 
     EffectInfo              DefineEffectDetails()                                       override;
-    void                    DefineExtraOptions(QWidget*)                                override;
+    void                    DefineExtraOptions(QLayout* Parent)                         override;
     void                    StepEffect(std::vector<OwnedControllerAndZones>, int FPS)   override;
 
     void                    SetSpeed(int)                           override {};
@@ -30,12 +22,15 @@ public:
     int                     GetSpeed()                              override {return 0;}  ;
     int                     GetSlider2Val()                         override {return 0;}  ;
     std::vector<RGBColor>   GetUserColors()                         override {return {};} ;
+
+    void                    LoadCustomSettings(json)                override;
+    json                    SaveCustomSettings(json)                override;
+
+    void                    EffectStopping()                        override;
+
 private:
-    void GetScreenColor();
-
-    QPixmap ScreenShot;
-
     EffectInfo EffectDetails;
+    ScreenSelection* SCRNSLCT;
 };
 
 #endif // AMBIENT_H

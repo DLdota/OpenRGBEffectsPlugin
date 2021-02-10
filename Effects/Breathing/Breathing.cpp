@@ -14,13 +14,13 @@ EffectInfo Breathing::DefineEffectDetails()
     Breathing::EffectDetails.MinSlider2Val = 0;
     Breathing::EffectDetails.Slider2Name   = "";
 
+    Breathing::EffectDetails.HasCustomWidgets = false;
+    Breathing::EffectDetails.HasCustomSettings = false;
+
     return Breathing::EffectDetails;
 }
 
-void Breathing::DefineExtraOptions(QWidget*)
-{
-
-}
+void Breathing::DefineExtraOptions(QLayout*){}
 
 void Breathing::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {

@@ -26,7 +26,7 @@ public:
     ~Rain() {};
 
     EffectInfo  DefineEffectDetails()                                     override;
-    void        DefineExtraOptions(QWidget* Parent)                       override;
+    void        DefineExtraOptions(QLayout*)                              override;
     void        StepEffect(std::vector<OwnedControllerAndZones>, int FPS) override;
 
     void        SetSpeed(int Speed)                                       override;
@@ -38,8 +38,12 @@ public:
     int                     GetSlider2Val()                               override;
     std::vector<RGBColor>   GetUserColors()                               override;
 
-    EffectInfo              EffectDetails;
+    void                    EffectStopping()                              override {return;};
 
+    void                    LoadCustomSettings(json) override {return;};
+    json                    SaveCustomSettings(json) override {return json();};
+
+    EffectInfo              EffectDetails;
 
 private:
     float Speed; // Float so that it defaults to float opperations when doing devision by FPS

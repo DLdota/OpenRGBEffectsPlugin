@@ -20,6 +20,9 @@ struct EffectInfo
     int         MaxSlider2Val;
     int         MinSlider2Val;
     std::string Slider2Name;
+
+    bool HasCustomWidgets;
+    bool HasCustomSettings;
 };
 
 struct OwnedControllerAndZones
@@ -48,7 +51,7 @@ class RGBEffect
 {
 public:
     virtual EffectInfo  DefineEffectDetails()                                        = 0;
-    virtual void        DefineExtraOptions(QWidget* Parent)                          = 0;
+    virtual void        DefineExtraOptions(QLayout* Scaler)                          = 0;
     virtual void        StepEffect(std::vector<OwnedControllerAndZones>, int FPS)    = 0;
 
     virtual void        SetSpeed(int Speed)                                          = 0;
@@ -59,6 +62,11 @@ public:
     virtual int                     GetSpeed()                                       = 0;
     virtual int                     GetSlider2Val()                                  = 0;
     virtual std::vector<RGBColor>   GetUserColors()                                  = 0;
+
+    virtual void                    EffectStopping()                                 = 0;
+
+    virtual void                    LoadCustomSettings(json)                         = 0;
+    virtual json                    SaveCustomSettings(json)                         = 0;
 
     EffectInfo          EffectDetails;
 };

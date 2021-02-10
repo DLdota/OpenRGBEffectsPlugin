@@ -70,11 +70,12 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
 
     ZoneTableChecks->setColumnCount(3);
 
-    ZoneTableChecks->setFixedWidth(317);
+    ZoneTableChecks->setFixedWidth(320);
 
     ZoneTableChecks->setEditTriggers(QTableWidget::NoEditTriggers);
     ZoneTableChecks->setSelectionMode(QTableWidget::NoSelection);
     ZoneTableChecks->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ZoneTableChecks->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     std::vector<int> CollumnSizes = {165 , 75, 75};
     for (int i = 0; i < int(CollumnSizes.size()); i++)
@@ -194,12 +195,12 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent): QWidget(parent), ui(new Ui:
     /*-----------------------*\
     | Make the Device view    |
     \*-----------------------*/
-    ui->SelectDevices->setMinimumWidth(317);
+    ui->SelectDevices->setMinimumWidth(332);
     ui->SelectDevices->setColumnCount(3);
     ui->SelectDevices->setHorizontalHeaderLabels({"Device","Enabled","Reversed"});
 
-    ui->SelectDevices->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
+    ui->SelectDevices->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    ui->SelectDevices->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     /*-------------------*\
     | Set collumn sizes   |
     \*-------------------*/
@@ -218,7 +219,11 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent): QWidget(parent), ui(new Ui:
 
     OpenRGBEffectTab::FPSDelay = 1000; // 1 second delay
     OpenRGBEffectTab::FPS      = 1;
+    ui->FPSCount->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    ui->FPSCount->setFixedWidth(20);
     ui->FPSCount->setText(QString().number(1));
+
+    ui->FPSCount->adjustSize();
 
     ui->FPSSlider->setMaximum(int(OpenRGBEffectTab::GetSpeed.size()) - 1);
     ui->FPSSlider->setMinimum(0);
@@ -317,6 +322,7 @@ void OpenRGBEffectTab::FPSSlider(int NewFPS)
 {
     OpenRGBEffectTab::FPSDelay = 1000/GetSpeed[NewFPS];
     OpenRGBEffectTab::FPS      = GetSpeed[NewFPS];
+
     ui->FPSCount->setText(QString().number(GetSpeed[NewFPS]));
 
     json PrevSettings = OpenRGBEffectTab::LoadPrevSetting();
@@ -343,6 +349,7 @@ void OpenRGBEffectTab::DeviceListChangedCallback(void* ptr)
 
 void OpenRGBEffectTab::DeviceListChanged()
 {
+    if (ORGBPlugin::RMPointer->GetDetectionPercent() != 100) return;
     /*-----------------------------*\
     | Wipe the list of controllers  |
     \*-----------------------------*/

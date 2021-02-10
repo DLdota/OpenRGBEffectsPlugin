@@ -17,13 +17,13 @@ EffectInfo GradientCycling::DefineEffectDetails()
     GradientCycling::EffectDetails.MaxSlider2Val = 0;
     GradientCycling::EffectDetails.Slider2Name   = "";
 
+    GradientCycling::EffectDetails.HasCustomWidgets = false;
+    GradientCycling::EffectDetails.HasCustomSettings = false;
+
     return GradientCycling::EffectDetails;
 }
 
-void GradientCycling::DefineExtraOptions(QWidget *Parent)
-{
-    return;
-}
+void GradientCycling::DefineExtraOptions(QLayout*){}
 
 void GradientCycling::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {

@@ -16,14 +16,13 @@ EffectInfo StarryNight::DefineEffectDetails()
     StarryNight::EffectDetails.MinSlider2Val = 5;
     StarryNight::EffectDetails.Slider2Name   = "Star Count";
 
+    StarryNight::EffectDetails.HasCustomWidgets = false;
+    StarryNight::EffectDetails.HasCustomSettings = false;
+
     return StarryNight::EffectDetails;
 }
 
-void StarryNight::DefineExtraOptions(QWidget *Parent)
-{
-    // No extra options
-    return;
-}
+void StarryNight::DefineExtraOptions(QLayout*){}
 
 void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {

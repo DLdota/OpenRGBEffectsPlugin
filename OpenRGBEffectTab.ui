@@ -61,13 +61,13 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>317</width>
+       <width>332</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>317</width>
+       <width>332</width>
        <height>16777215</height>
       </size>
      </property>
@@ -156,24 +156,47 @@
          <number>2</number>
         </property>
         <item>
-         <widget class="QLabel" name="FPSLabel">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>30</height>
-           </size>
+         <layout class="QHBoxLayout" name="FPSLabelSizing">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetFixedSize</enum>
           </property>
-          <property name="text">
-           <string>  FPS:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="FPSCount">
-          <property name="text">
-           <string>0</string>
-          </property>
-         </widget>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="FPSLabel">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>FPS:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="FPSCount">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QSlider" name="FPSSlider">

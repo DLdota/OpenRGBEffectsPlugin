@@ -11,7 +11,7 @@ public:
     SpectrumCycling() {};
     ~SpectrumCycling() {};
     EffectInfo DefineEffectDetails()                                       override;
-    void        DefineExtraOptions(QWidget* Parent)                        override;
+    void        DefineExtraOptions(QLayout*)                               override;
     void        StepEffect(std::vector<OwnedControllerAndZones>, int Step) override;
 
     void        SetSpeed(int Speed)                                        override;
@@ -22,6 +22,11 @@ public:
     int                     GetSpeed()      override {return Speed;  };
     int                     GetSlider2Val() override {return 0;      };
     std::vector<RGBColor>   GetUserColors() override {return {};     };
+
+    void                    EffectStopping()override {return;};
+
+    void                    LoadCustomSettings(json) override {return;};
+    json                    SaveCustomSettings(json) override {return json();};
 
     EffectInfo EffectDetails;
 private:

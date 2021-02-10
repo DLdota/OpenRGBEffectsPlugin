@@ -15,16 +15,13 @@ EffectInfo SpectrumCycling::DefineEffectDetails()
     SpectrumCycling::EffectDetails.MinSlider2Val = 0;
     SpectrumCycling::EffectDetails.Slider2Name   = "";
 
+    SpectrumCycling::EffectDetails.HasCustomWidgets = false;
+    SpectrumCycling::EffectDetails.HasCustomSettings = false;
+
     return SpectrumCycling::EffectDetails;
 }
 
-void SpectrumCycling::DefineExtraOptions(QWidget* Parent)
-{
-    /*----------------------------------------*\
-    | No special options for spectrum cycling  |
-    \*----------------------------------------*/
-    return;
-}
+void SpectrumCycling::DefineExtraOptions(QLayout*){}
 
 void SpectrumCycling::StepEffect(std::vector<OwnedControllerAndZones> PassedTo, int FPS)
 {

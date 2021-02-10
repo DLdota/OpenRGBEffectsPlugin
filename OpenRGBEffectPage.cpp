@@ -42,7 +42,14 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT): QWidget(
         ui->Slider2Frame->show();
     }
 
-    EFCT->DefineExtraOptions(ui->OptionFrame);
+
+    EFCT->DefineExtraOptions(ui->ExtraOptions);
+    if (EFCT->EffectDetails.HasCustomWidgets)
+    {
+        ui->It_Goes_On_The_Bottom->changeSize(0,0,QSizePolicy::Fixed); // Gone
+        resize(this->minimumSize());
+    }
+
 
     if (EFCT->EffectDetails.UserColors > 0)
     {
@@ -234,6 +241,11 @@ void OpenRGBEffectPage::StartupSettings()
                 int B = RGBGetBValue(UserColors[CurrentColor]);
                 ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(R) + "," + QString().number(G) + "," + QString().number(B) + ")");
             }
+
+            if (EFCT->EffectDetails.HasCustomSettings)
+            {
+                EFCT->LoadCustomSettings(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["CustomSettings"]);
+            }
         }
     }
 }
@@ -276,6 +288,15 @@ void OpenRGBEffectPage::on_SaveSettings_clicked()
     PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Speed"] = EFCT->GetSpeed();
     PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Slider2Val"] = EFCT->GetSlider2Val();
     PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["AutoStart"] = AutoStart;
+
+    if (EFCT->EffectDetails.HasCustomSettings)
+    {
+        PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["CustomSettings"] =
+        EFCT->SaveCustomSettings
+        (
+            PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["CustomSettings"]
+        );
+    }
 
     std::ofstream EffectFile((ORGBPlugin::RMPointer->GetConfigurationDirectory() + "/plugins/EffectSettings.json"), std::ios::out | std::ios::binary);
     if(EffectFile)

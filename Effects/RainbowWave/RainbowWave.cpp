@@ -15,13 +15,13 @@ EffectInfo RainbowWave::DefineEffectDetails()
     RainbowWave::EffectDetails.MaxSlider2Val = 50;
     RainbowWave::EffectDetails.Slider2Name   = "Width";
 
+    RainbowWave::EffectDetails.HasCustomWidgets = false;
+    RainbowWave::EffectDetails.HasCustomSettings = false;
+
     return RainbowWave::EffectDetails;
 }
 
-void RainbowWave::DefineExtraOptions(QWidget*)
-{
-    return;
-}
+void RainbowWave::DefineExtraOptions(QLayout*){}
 
 void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {

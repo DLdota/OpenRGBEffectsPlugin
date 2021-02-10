@@ -17,10 +17,13 @@ EffectInfo Rain::DefineEffectDetails()
     Rain::EffectDetails.MinSlider2Val = 1;
     Rain::EffectDetails.Slider2Name   = "Drops";
 
+    Rain::EffectDetails.HasCustomWidgets = false;
+    Rain::EffectDetails.HasCustomSettings = false;
+
     return Rain::EffectDetails;
 }
 
-void Rain::DefineExtraOptions(QWidget*){/*No Extra Options*/}
+void Rain::DefineExtraOptions(QLayout*){}
 
 void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
@@ -68,7 +71,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 
                 else if (ZT == ZONE_TYPE_MATRIX)
                 {
-                    int MaxAllowed = (rand() % DropCount - CurrentDrops.size());
+                    int MaxAllowed = (rand() % DropCount - (int)CurrentDrops.size());
                     int AmountCreated = 0;
                     for (int Created = 0; Created < MaxAllowed; Created++)
                     {
@@ -241,7 +244,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
     }
 
     if (ToDelete.size() == 0) return;
-    for (int DelIndex = (ToDelete.size() - 1) ; DelIndex >= 0; DelIndex--)
+    for (int DelIndex = ((int)ToDelete.size() - 1) ; DelIndex >= 0; DelIndex--)
     {
         int CIndex = CurrentDrops[ToDelete[DelIndex]].ControllerIndex;
         int ZIndex = CurrentDrops[ToDelete[DelIndex]].ZoneIndex;
