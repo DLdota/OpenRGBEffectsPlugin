@@ -31,6 +31,7 @@ OpenRGBPluginInfo ORGBPlugin::Initialize(bool Dt, ResourceManager *RM)
 
 QWidget* ORGBPlugin::CreateGUI(QWidget*)
 {
+    ORGBPlugin::RMPointer->WaitForDeviceDetection();
     OpenRGBEffectTab* EETab = NULL;
     EETab = new OpenRGBEffectTab(nullptr);
 

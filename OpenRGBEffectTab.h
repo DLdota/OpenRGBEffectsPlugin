@@ -41,10 +41,7 @@ public:
     static void SetEffectActive(RGBEffect* Effect);
     static void SetEffectUnActive(RGBEffect* Effect);
 
-    void CreateDeviceSelection(RGBController* Controller, int Index, bool HasDirectMode);
-
     static bool CheckReversed (int DeviceIndex, int ZoneIndex);
-
     static std::vector<OwnedControllerAndZones> GetToPass(int EffectIndex);
 
     static json LoadPrevSetting();
@@ -91,9 +88,11 @@ private:
     void                                EffectStepTimer();
 
     static void DeviceListChangedCallback(void* ptr);
+    void CreateDeviceSelection(RGBController* Controller, int Index, bool HasDirectMode);
 
     bool                                SelectsAll = true;
 
+    void SaveReversedSettings();
     void GivePreviousDevices();
 };
 
