@@ -8,7 +8,7 @@ EffectInfo SeesawMotion::DefineEffectDetails()
     SeesawMotion::EffectDetails.EffectName = "Seesaw Motion";
     SeesawMotion::EffectDetails.EffectDescription = "A back and forth effect motion";
 
-    SeesawMotion::EffectDetails.IsReversable = true;
+    SeesawMotion::EffectDetails.IsReversable = false;
     SeesawMotion::EffectDetails.MaxSpeed     = 200;
     SeesawMotion::EffectDetails.MinSpeed     = 1;
     SeesawMotion::EffectDetails.UserColors   = 2;
@@ -17,13 +17,13 @@ EffectInfo SeesawMotion::DefineEffectDetails()
     SeesawMotion::EffectDetails.MaxSlider2Val = 20;
     SeesawMotion::EffectDetails.Slider2Name   = "Width";
 
+    SeesawMotion::EffectDetails.HasCustomWidgets = false;
+    SeesawMotion::EffectDetails.HasCustomSettings = false;
+
     return SeesawMotion::EffectDetails;
 }
 
-void SeesawMotion::DefineExtraOptions(QWidget*)
-{
-
-}
+void SeesawMotion::DefineExtraOptions(QLayout*){}
 
 void SeesawMotion::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
@@ -36,7 +36,6 @@ void SeesawMotion::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
             \*-------------------*/
             int SetLEDIndex = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
             zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
-            bool RVRS = OpenRGBEffectTab::CheckReversed(ControllerID, Controllers[ControllerID].OwnedZones[ZoneID]);
 
             /*----------------------------------------------------*\
             | Adjust how it applies for the specific type of zone  |

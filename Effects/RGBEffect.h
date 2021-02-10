@@ -63,7 +63,7 @@ public:
     virtual int                     GetSlider2Val()                                  = 0;
     virtual std::vector<RGBColor>   GetUserColors()                                  = 0;
 
-    virtual void                    EffectStopping()                                 = 0;
+    virtual void                    EffectState(bool)                                = 0;
 
     virtual void                    LoadCustomSettings(json)                         = 0;
     virtual json                    SaveCustomSettings(json)                         = 0;

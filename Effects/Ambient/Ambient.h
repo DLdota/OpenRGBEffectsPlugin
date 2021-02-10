@@ -26,7 +26,7 @@ public:
     void                    LoadCustomSettings(json)                override;
     json                    SaveCustomSettings(json)                override;
 
-    void                    EffectStopping()                        override;
+    void                    EffectState(bool)                       override;
 
 private:
     EffectInfo EffectDetails;

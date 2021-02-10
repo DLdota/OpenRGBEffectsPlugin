@@ -11,7 +11,7 @@ public:
     ~SeesawMotion() {};
 
     EffectInfo  DefineEffectDetails()                                       override;
-    void        DefineExtraOptions(QWidget* Parent)                         override;
+    void        DefineExtraOptions(QLayout*)                                override;
     void        StepEffect(std::vector<OwnedControllerAndZones> LocalControllers, int Step)  override;
 
     void        SetSpeed(int Speed)                                         override;
@@ -21,9 +21,15 @@ public:
 
     void        SetWidth(int NewWidth);
 
-    int                     GetSpeed()      override {return Speed;      };
-    int                     GetSlider2Val() override {return 0;          };
-    std::vector<RGBColor>   GetUserColors() override {return UserColors; };
+    int                     GetSpeed()      override  {return Speed;      };
+    int                     GetSlider2Val() override  {return 0;          };
+    std::vector<RGBColor>   GetUserColors() override  {return UserColors; };
+
+    void            EffectState(bool)       override  {return;};
+
+    void            LoadCustomSettings(json) override {return;};
+    json            SaveCustomSettings(json) override {return json();};
+
 
     EffectInfo EffectDetails;
 private:

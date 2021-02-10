@@ -30,7 +30,6 @@ void Ambient::DefineExtraOptions(QLayout* ParentLayout)
 
 void Ambient::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int)
 {
-    SCRNSLCT->SetAuto(false);
     SCRNSLCT->GetScreen();
     QColor C = SCRNSLCT->CalcColor();
 
@@ -46,9 +45,9 @@ void Ambient::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int)
     }
 }
 
-void Ambient::EffectStopping()
+void Ambient::EffectState(bool Auto)
 {
-    SCRNSLCT->SetAuto(true);
+    SCRNSLCT->SetAuto(!Auto);
 }
 
 void Ambient::LoadCustomSettings(json Settings)
