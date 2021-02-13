@@ -16,6 +16,7 @@ public:
     void        SetSpeed(int Speed)                                         override;
     void        SetUserColors(std::vector<RGBColor>)                        override;
     void        Slider2Changed(int)                                         override;
+    void        ToggleRandomColors(bool RandomEnabled)                      override;
 
     void        SetWidth(int NewWidth);
     void        ASelectionWasChanged() override;

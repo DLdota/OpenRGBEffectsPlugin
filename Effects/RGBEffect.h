@@ -58,7 +58,7 @@ public:
     virtual void        SetUserColors(std::vector<RGBColor>)                         = 0;
     virtual void        Slider2Changed(int)                                          = 0;
     virtual void        ASelectionWasChanged()                                       = 0;
-
+    virtual void        ToggleRandomColors(bool RandomEnabled)                       = 0;
     virtual int                     GetSpeed()                                       = 0;
     virtual int                     GetSlider2Val()                                  = 0;
     virtual std::vector<RGBColor>   GetUserColors()                                  = 0;

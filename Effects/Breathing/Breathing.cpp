@@ -25,7 +25,22 @@ void Breathing::DefineExtraOptions(QLayout*){}
 void Breathing::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
     hsv_t HSVVal;
-    rgb2hsv(UserColors[0],&HSVVal);
+    if ((RandomColors && (Progress <= 0) && !Dir) || RandomThisCycle)
+    {
+        if (RandomColors && (Progress <= 0) && !Dir)
+        {
+            RandomColor = ToRGBColor(rand() % 255, rand() % 255, rand() % 255);
+            rgb2hsv(RandomColor, &HSVVal);
+        }
+        else
+        {
+            rgb2hsv(RandomColor,&HSVVal);
+        }
+    }
+    else
+    {
+        rgb2hsv(UserColors[0],&HSVVal);
+    }
 
     if (HSVVal.value > 0)
     {
@@ -45,6 +60,14 @@ void Breathing::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
             {
                 Dir = !Dir;
                 Progress = 0;
+                if (RandomColors)
+                {
+                    RandomThisCycle = true;
+                }
+                else
+                {
+                    RandomThisCycle = false;
+                }
             }
             else {HSVVal.value = HSVVal.value - Progress;  Progress = Progress - (float(Speed) / float(FPS)); };
         }
@@ -69,12 +92,7 @@ void Breathing::SetUserColors(std::vector<RGBColor> NewUserColors)
     UserColors = NewUserColors;
 }
 
-void Breathing::Slider2Changed(int)
+void Breathing::ToggleRandomColors(bool RandomEnabled)
 {
-
-}
-
-void Breathing::ASelectionWasChanged()
-{
-
+    RandomColors = RandomEnabled;
 }

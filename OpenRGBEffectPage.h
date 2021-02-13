@@ -38,6 +38,7 @@ public:
     void CreateDeviceSelection(std::string DeviceName);
 
     bool HasSpeed = false;
+    bool RandomColors = false;
 
     void DeviceListChanged(std::vector<BetterController> Devices);
 

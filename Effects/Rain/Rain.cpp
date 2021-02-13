@@ -39,7 +39,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                 int ActualZone = Controllers[ControllerID].OwnedZones[ZoneID];
                 if (ZT == ZONE_TYPE_SINGLE)
                 {
-                    // Rain won't support single LED zones
+                    // Rain doesn't support single LED zones
                     continue;
                 }
 
@@ -55,7 +55,6 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 
                             NewDrop.LEDCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count;
                             NewDrop.StartingLED = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
-
 
                             NewDrop.ZT = ZONE_TYPE_LINEAR;
                             NewDrop.Reversed = OpenRGBEffectTab::CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);

@@ -15,8 +15,9 @@ public:
 
     void        SetSpeed(int Speed)                                         override;
     void        SetUserColors(std::vector<RGBColor>)                        override;
-    void        Slider2Changed(int)                                         override;
-    void        ASelectionWasChanged()                                      override;
+    void        Slider2Changed(int)                                         override {};
+    void        ASelectionWasChanged()                                      override {};
+    void        ToggleRandomColors(bool RandomEnabled)                      override;
 
     void        SetWidth(int NewWidth);
 
@@ -35,6 +36,9 @@ private:
     std::vector<RGBColor>   UserColors;
     float                   Progress = 255;
     bool                    Dir; /* true = down, false = up */
+    bool RandomColors = false;
+    bool RandomThisCycle;
+    RGBColor RandomColor;
 };
 
 #endif // BREATHING_H
