@@ -18,6 +18,7 @@ public:
     void                    Slider2Changed(int)                     override {};
     void                    SetUserColors(std::vector<RGBColor>)    override {};
     void                    ASelectionWasChanged()                  override {};
+    void                    ToggleRandomColors(bool)                override {};
 
     int                     GetSpeed()                              override {return 0;}  ;
     int                     GetSlider2Val()                         override {return 0;}  ;

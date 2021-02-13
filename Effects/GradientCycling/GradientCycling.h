@@ -9,25 +9,26 @@ public:
     GradientCycling() {};
     ~GradientCycling() {};
 
-    EffectInfo  DefineEffectDetails()                                       override;
-    void        DefineExtraOptions(QLayout*)                                override;
-    void        StepEffect(std::vector<OwnedControllerAndZones> LocalControllers, int Step)  override;
+    EffectInfo  DefineEffectDetails()                                                       override;
+    void        DefineExtraOptions(QLayout*)                                                override;
+    void        StepEffect(std::vector<OwnedControllerAndZones> LocalControllers, int Step) override;
 
-    void        SetSpeed(int Speed)                                         override;
-    void        SetUserColors(std::vector<RGBColor>)                        override;
-    void        Slider2Changed(int)                                         override;
+    void        SetSpeed(int Speed)                                                         override;
+    void        SetUserColors(std::vector<RGBColor>)                                        override;
+    void        Slider2Changed(int)                                                         override;
+    void        ToggleRandomColors(bool RandomEnabled)                                      override;
 
     void        SetWidth(int NewWidth);
-    void        ASelectionWasChanged() override;
+    void        ASelectionWasChanged()                                                      override;
 
-    int                     GetSpeed()       override {return Speed;     };
-    int                     GetSlider2Val()  override {return 0;         };
-    std::vector<RGBColor>   GetUserColors()  override {return UserColors;};
+    int                     GetSpeed()                                                      override {return Speed;     };
+    int                     GetSlider2Val()                                                 override {return 0;         };
+    std::vector<RGBColor>   GetUserColors()                                                 override {return UserColors;};
 
-    void                    EffectState(bool)override {return;};
+    void                    EffectState(bool)                                               override {};
 
-    void                    LoadCustomSettings(json) override {return;};
-    json                    SaveCustomSettings(json) override {return json();};
+    void                    LoadCustomSettings(json)                                        override {return;};
+    json                    SaveCustomSettings(json)                                        override {return json();};
 
     EffectInfo EffectDetails;
 private:
@@ -39,7 +40,8 @@ private:
     std::vector<std::vector<float>> Progress;
     std::vector<RGBColor>           UserColors;
 
-
+    bool RandomColors;
+    RGBColor RandomColorList[2];
 };
 
 #endif // GRADIENTCYCLING_H

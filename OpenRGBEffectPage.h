@@ -38,6 +38,7 @@ public:
     void CreateDeviceSelection(std::string DeviceName);
 
     bool HasSpeed = false;
+    bool RandomColors = false;
 
     void DeviceListChanged(std::vector<BetterController> Devices);
 
@@ -50,6 +51,7 @@ private slots:
     void on_ColorPickerButton_clicked();
     void on_SaveSettings_clicked();
     void on_AutoStart_clicked();
+    void on_RandomCheckbox_clicked();
 
 
 private:

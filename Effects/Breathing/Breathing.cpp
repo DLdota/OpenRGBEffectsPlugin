@@ -7,7 +7,7 @@ EffectInfo Breathing::DefineEffectDetails()
 
     Breathing::EffectDetails.IsReversable = false;
     Breathing::EffectDetails.MaxSpeed     = 200;
-    Breathing::EffectDetails.MinSpeed     = 30;
+    Breathing::EffectDetails.MinSpeed     = 40;
     Breathing::EffectDetails.UserColors   = 1;
 
     Breathing::EffectDetails.MaxSlider2Val = 0;
@@ -20,33 +20,59 @@ EffectInfo Breathing::DefineEffectDetails()
     return Breathing::EffectDetails;
 }
 
-void Breathing::DefineExtraOptions(QLayout*){}
-
 void Breathing::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
     hsv_t HSVVal;
-    rgb2hsv(UserColors[0],&HSVVal);
-
-    if (HSVVal.value > 0)
+    if (RandomThisCycle)
     {
-        if (Dir)
+        if (RandomColors && GoingUp && !AlreadyMade)
         {
-            if (Progress > HSVVal.value)
+            RandomColor = ToRGBColor(rand() % 255, rand() % 255, rand() % 255);
+            rgb2hsv(RandomColor, &HSVVal);
+            if (HSVVal.value < Progress)
             {
-                Dir = !Dir;
                 Progress = HSVVal.value;
-                HSVVal.value = 0;
             }
-            else {HSVVal.value = HSVVal.value - Progress; Progress = Progress + (float(Speed) / float(FPS));};
+            AlreadyMade = true;
         }
         else
         {
-            if ((Progress <= 0) || (Progress > 256) /* If it goes over 255 */ )
-            {
-                Dir = !Dir;
-                Progress = 0;
-            }
-            else {HSVVal.value = HSVVal.value - Progress;  Progress = Progress - (float(Speed) / float(FPS)); };
+            rgb2hsv(RandomColor,&HSVVal);
+        }
+    }
+    else
+    {
+        rgb2hsv(UserColors[0],&HSVVal);
+    }
+
+    if (GoingUp)
+    {
+        if (Progress > 1)
+        {
+            GoingUp = false;
+            Progress = 1;
+        }
+        else
+        {
+            HSVVal.value = HSVVal.value * Progress;
+            Progress += ((Speed / 100.0) / (float)FPS);
+        }
+    }
+    else
+    {
+        if (Progress < 0)
+        {
+            GoingUp = true;
+            if (RandomColors){RandomThisCycle = true;}
+            else{RandomThisCycle = false;}
+            AlreadyMade = false;
+            Progress = 0;
+            HSVVal.value = 0;
+        }
+        else
+        {
+            HSVVal.value = HSVVal.value * Progress;
+            Progress -= ((Speed / 100.0) / (float)FPS);
         }
     }
 
@@ -69,12 +95,7 @@ void Breathing::SetUserColors(std::vector<RGBColor> NewUserColors)
     UserColors = NewUserColors;
 }
 
-void Breathing::Slider2Changed(int)
+void Breathing::ToggleRandomColors(bool RandomEnabled)
 {
-
-}
-
-void Breathing::ASelectionWasChanged()
-{
-
+    RandomColors = RandomEnabled;
 }

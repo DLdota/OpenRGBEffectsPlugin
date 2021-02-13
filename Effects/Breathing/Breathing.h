@@ -10,13 +10,14 @@ public:
     ~Breathing() {};
 
     EffectInfo  DefineEffectDetails()                                       override;
-    void        DefineExtraOptions(QLayout*)                                override;
+    void        DefineExtraOptions(QLayout*)                                override {};
     void        StepEffect(std::vector<OwnedControllerAndZones> LocalControllers, int Step)  override;
 
     void        SetSpeed(int Speed)                                         override;
     void        SetUserColors(std::vector<RGBColor>)                        override;
-    void        Slider2Changed(int)                                         override;
-    void        ASelectionWasChanged()                                      override;
+    void        Slider2Changed(int)                                         override {};
+    void        ASelectionWasChanged()                                      override {};
+    void        ToggleRandomColors(bool RandomEnabled)                      override;
 
     void        SetWidth(int NewWidth);
 
@@ -33,8 +34,12 @@ public:
 private:
     float                   Speed;
     std::vector<RGBColor>   UserColors;
-    float                   Progress = 255;
-    bool                    Dir; /* true = down, false = up */
+    float                   Progress = 0;
+    bool                    GoingUp = false; /* true = down, false = up */
+    bool RandomColors = false;
+    bool AlreadyMade = false;
+    bool RandomThisCycle;
+    RGBColor RandomColor;
 };
 
 #endif // BREATHING_H

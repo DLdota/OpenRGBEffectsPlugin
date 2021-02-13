@@ -187,7 +187,7 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,0">
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,0,0">
          <item>
           <widget class="QComboBox" name="UserColorNum">
            <property name="minimumSize">
@@ -208,6 +208,13 @@
           <widget class="QPushButton" name="ColorPickerButton">
            <property name="text">
             <string>Select Color</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="RandomCheckbox">
+           <property name="text">
+            <string>Random</string>
            </property>
           </widget>
          </item>

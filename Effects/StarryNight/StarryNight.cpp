@@ -57,7 +57,18 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
                             LEDStar.ControllerIndex = ControllerID;
                             LEDStar.LED = RandomLedID;
                             LEDStar.state = 255;
-                            LEDStar.Color = UserColors[rand() % 4];
+                            if (RandomColors)
+                            {
+                                LEDStar.Color = ToRGBColor(
+                                            rand() % 255, /* R */
+                                            rand() % 255, /* G */
+                                            rand() % 255  /* B */
+                                            );
+                            }
+                            else
+                            {
+                                LEDStar.Color = UserColors[rand() % 4];
+                            }
 
                             CurrentStars.push_back(LEDStar);
                             AmountMadeThisCycle += 1;
@@ -121,4 +132,9 @@ void StarryNight::Slider2Changed(int LEDCount)
 void StarryNight::ASelectionWasChanged()
 {
     CurrentStars.clear();
+}
+
+void StarryNight::ToggleRandomColors(bool RandomEnabled)
+{
+    RandomColors = RandomEnabled;
 }

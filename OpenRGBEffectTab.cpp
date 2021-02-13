@@ -21,7 +21,7 @@ void OpenRGBEffectTab::DefineEffects()
     OpenRGBEffectTab::EffectList.push_back(new Breathing);
     OpenRGBEffectTab::EffectList.push_back(new Rain);
     OpenRGBEffectTab::EffectList.push_back(new Ambient);
-    OpenRGBEffectTab::EffectList.push_back(new SeesawMotion);
+    //OpenRGBEffectTab::EffectList.push_back(new SeesawMotion); // Disabled until it is FPS adjustable
 }
 
 

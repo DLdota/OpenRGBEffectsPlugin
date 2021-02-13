@@ -17,6 +17,8 @@ struct Drops
     int    Collumn;
     int    CollumnCount;
     float  Progress;
+
+    RGBColor C;
 };
 
 class Rain: public RGBEffect
@@ -33,6 +35,7 @@ public:
     void        SetUserColors(std::vector<RGBColor>)                      override;
     void        Slider2Changed(int)                                       override;
     void        ASelectionWasChanged()                                    override;
+    void        ToggleRandomColors(bool RandomEnabled)                    override;
 
     int                     GetSpeed()                                    override;
     int                     GetSlider2Val()                               override;
@@ -52,6 +55,7 @@ private:
     std::vector<Drops> CurrentDrops;
 
     RGBColor UserColor;
+    bool RandomColors = false;
 
     std::vector<std::vector<bool>> HasEffect;
 };

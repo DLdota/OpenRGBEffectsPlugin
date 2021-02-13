@@ -26,6 +26,7 @@ public:
     void        SetUserColors(std::vector<RGBColor>)                        override;
     void        Slider2Changed(int)                                         override;
     void        ASelectionWasChanged()                                      override;
+    void        ToggleRandomColors(bool RandomEnabled)                      override;
 
     int                     GetSpeed()      override {return Speed;        };
     int                     GetSlider2Val() override {return LEDPerCycle;  };
@@ -45,6 +46,7 @@ private:
     std::vector<RGBColor>                       UserColors;
 
     static std::vector<NewStar>                 CurrentStars;
+    bool RandomColors = false;
 };
 
 #endif // STARRYNIGHT_H
