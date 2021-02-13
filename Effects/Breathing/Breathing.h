@@ -10,7 +10,7 @@ public:
     ~Breathing() {};
 
     EffectInfo  DefineEffectDetails()                                       override;
-    void        DefineExtraOptions(QLayout*)                                override;
+    void        DefineExtraOptions(QLayout*)                                override {};
     void        StepEffect(std::vector<OwnedControllerAndZones> LocalControllers, int Step)  override;
 
     void        SetSpeed(int Speed)                                         override;
@@ -34,11 +34,11 @@ public:
 private:
     float                   Speed;
     std::vector<RGBColor>   UserColors;
-    float                   Progress = 255;
-    bool                    Dir; /* true = down, false = up */
+    float                   Progress = 0;
+    bool                    GoingUp = false; /* true = down, false = up */
     bool RandomColors = false;
-    bool RandomThisCycle;
     bool AlreadyMade = false;
+    bool RandomThisCycle;
     RGBColor RandomColor;
 };
 

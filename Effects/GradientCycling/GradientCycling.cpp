@@ -27,15 +27,28 @@ void GradientCycling::DefineExtraOptions(QLayout*){}
 
 void GradientCycling::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
-    int S[3];
-    S[0] = RGBGetRValue(UserColors[0]);
-    S[1] = RGBGetGValue(UserColors[0]);
-    S[2] = RGBGetBValue(UserColors[0]);
-
     int F[3];
-    F[0] = RGBGetRValue(UserColors[1]);
-    F[1] = RGBGetGValue(UserColors[1]);
-    F[2] = RGBGetBValue(UserColors[1]);
+    int S[3];
+    if (RandomColors)
+    {
+        S[0] = RGBGetRValue(RandomColorList[0]);
+        S[1] = RGBGetGValue(RandomColorList[0]);
+        S[2] = RGBGetBValue(RandomColorList[0]);
+
+        F[0] = RGBGetRValue(RandomColorList[1]);
+        F[1] = RGBGetGValue(RandomColorList[1]);
+        F[2] = RGBGetBValue(RandomColorList[1]);
+    }
+    else
+    {
+        S[0] = RGBGetRValue(UserColors[0]);
+        S[1] = RGBGetGValue(UserColors[0]);
+        S[2] = RGBGetBValue(UserColors[0]);
+
+        F[0] = RGBGetRValue(UserColors[1]);
+        F[1] = RGBGetGValue(UserColors[1]);
+        F[2] = RGBGetBValue(UserColors[1]);
+    }
 
     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
     {
@@ -162,4 +175,20 @@ void GradientCycling::Slider2Changed(int NewWidth)
 void GradientCycling::ASelectionWasChanged()
 {
     Progress.clear();
+}
+
+void GradientCycling::ToggleRandomColors(bool RandomEnabled)
+{
+    if (RandomEnabled)
+    {
+        RandomColorList[0] = ToRGBColor(rand() % 255,
+                                        rand() % 255,
+                                        rand() % 255);
+
+        RandomColorList[1] = ToRGBColor(rand() % 255,
+                                        rand() % 255,
+                                        rand() % 255);
+    }
+
+    RandomColors = RandomEnabled;
 }

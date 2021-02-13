@@ -7,7 +7,7 @@ EffectInfo Breathing::DefineEffectDetails()
 
     Breathing::EffectDetails.IsReversable = false;
     Breathing::EffectDetails.MaxSpeed     = 200;
-    Breathing::EffectDetails.MinSpeed     = 30;
+    Breathing::EffectDetails.MinSpeed     = 40;
     Breathing::EffectDetails.UserColors   = 1;
 
     Breathing::EffectDetails.MaxSlider2Val = 0;
@@ -20,14 +20,12 @@ EffectInfo Breathing::DefineEffectDetails()
     return Breathing::EffectDetails;
 }
 
-void Breathing::DefineExtraOptions(QLayout*){}
-
 void Breathing::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
     hsv_t HSVVal;
     if (RandomThisCycle)
     {
-        if (RandomColors && !Dir && !AlreadyMade)
+        if (RandomColors && GoingUp && !AlreadyMade)
         {
             RandomColor = ToRGBColor(rand() % 255, rand() % 255, rand() % 255);
             rgb2hsv(RandomColor, &HSVVal);
@@ -47,39 +45,34 @@ void Breathing::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
         rgb2hsv(UserColors[0],&HSVVal);
     }
 
-    if (HSVVal.value > 0)
+    if (GoingUp)
     {
-        if (Dir)
+        if (Progress > 1)
         {
-            if (Progress > HSVVal.value)
-            {
-                if (RandomColors)
-                {
-                    RandomThisCycle = true;
-                }
-                else
-                {
-                    RandomThisCycle = false;
-                }
-                AlreadyMade = false;
-                Dir = !Dir;
-                Progress = HSVVal.value;
-                HSVVal.value = 0;
-            }
-            else {HSVVal.value = HSVVal.value - Progress; Progress = Progress + (float(Speed) / float(FPS));};
+            GoingUp = false;
+            Progress = 1;
         }
         else
         {
-            if ((Progress <= 0) || (Progress > 256) /* If it goes over 255 */ )
-            {
-                Dir = !Dir;
-                Progress = 0;
-            }
-            else
-            {
-                HSVVal.value = HSVVal.value - Progress;
-                Progress = Progress - (float(Speed) / float(FPS));
-            }
+            HSVVal.value = HSVVal.value * Progress;
+            Progress += ((Speed / 100.0) / (float)FPS);
+        }
+    }
+    else
+    {
+        if (Progress < 0)
+        {
+            GoingUp = true;
+            if (RandomColors){RandomThisCycle = true;}
+            else{RandomThisCycle = false;}
+            AlreadyMade = false;
+            Progress = 0;
+            HSVVal.value = 0;
+        }
+        else
+        {
+            HSVVal.value = HSVVal.value * Progress;
+            Progress -= ((Speed / 100.0) / (float)FPS);
         }
     }
 

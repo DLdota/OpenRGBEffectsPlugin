@@ -1,8 +1,6 @@
 #include "Rain.h"
 #include "OpenRGBEffectTab.h"
 
-#define MAXLEDS 4
-
 EffectInfo Rain::DefineEffectDetails()
 {
     Rain::EffectDetails.EffectName = "Rain";
@@ -62,6 +60,17 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                             if (NewDrop.Reversed) NewDrop.Progress = NewDrop.LEDCount;
                             else NewDrop.Progress = 0;
 
+                            if (RandomColors)
+                            {
+                                NewDrop.C = ToRGBColor(rand() % 255,
+                                                       rand() % 255,
+                                                       rand() % 255);
+                            }
+                            else
+                            {
+                                NewDrop.C = UserColor;
+                            }
+
                             HasEffect[ControllerID][ActualZone] = true;
                             CurrentDrops.push_back(NewDrop);
                         }
@@ -108,6 +117,9 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
         int CIndex = CurrentDrops[DropID].ControllerIndex;
         int ZIndex = CurrentDrops[DropID].ZoneIndex;
         int SIndex = Controllers[CIndex].Controller->zones[ZIndex].start_idx;
+
+        // Ok so this is kinda hacky.
+        RGBColor UserColor = CurrentDrops[DropID].C;
 
         int LedID = CurrentDrops[DropID].Progress; // Convert to int so that I can have a solid LED index
         int integral = LedID; // Copy it to another variable so as to not mess stuff up
@@ -296,3 +308,8 @@ int Rain::GetSpeed(){ return Rain::Speed; }
 int Rain::GetSlider2Val(){ return Rain::DropCount; }
 
 std::vector<RGBColor> Rain::GetUserColors(){ return {Rain::UserColor}; }
+
+void Rain::ToggleRandomColors(bool RandomEnabled)
+{
+    RandomColors = RandomEnabled;
+}
