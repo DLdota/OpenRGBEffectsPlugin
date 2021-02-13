@@ -25,12 +25,17 @@ void Breathing::DefineExtraOptions(QLayout*){}
 void Breathing::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
     hsv_t HSVVal;
-    if ((RandomColors && (Progress <= 0) && !Dir) || RandomThisCycle)
+    if (RandomThisCycle)
     {
-        if (RandomColors && (Progress <= 0) && !Dir)
+        if (RandomColors && !Dir && !AlreadyMade)
         {
             RandomColor = ToRGBColor(rand() % 255, rand() % 255, rand() % 255);
             rgb2hsv(RandomColor, &HSVVal);
+            if (HSVVal.value < Progress)
+            {
+                Progress = HSVVal.value;
+            }
+            AlreadyMade = true;
         }
         else
         {
@@ -48,6 +53,15 @@ void Breathing::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
         {
             if (Progress > HSVVal.value)
             {
+                if (RandomColors)
+                {
+                    RandomThisCycle = true;
+                }
+                else
+                {
+                    RandomThisCycle = false;
+                }
+                AlreadyMade = false;
                 Dir = !Dir;
                 Progress = HSVVal.value;
                 HSVVal.value = 0;
@@ -60,16 +74,12 @@ void Breathing::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
             {
                 Dir = !Dir;
                 Progress = 0;
-                if (RandomColors)
-                {
-                    RandomThisCycle = true;
-                }
-                else
-                {
-                    RandomThisCycle = false;
-                }
             }
-            else {HSVVal.value = HSVVal.value - Progress;  Progress = Progress - (float(Speed) / float(FPS)); };
+            else
+            {
+                HSVVal.value = HSVVal.value - Progress;
+                Progress = Progress - (float(Speed) / float(FPS));
+            }
         }
     }
 

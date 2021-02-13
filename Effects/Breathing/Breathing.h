@@ -38,6 +38,7 @@ private:
     bool                    Dir; /* true = down, false = up */
     bool RandomColors = false;
     bool RandomThisCycle;
+    bool AlreadyMade = false;
     RGBColor RandomColor;
 };
 

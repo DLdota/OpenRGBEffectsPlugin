@@ -51,6 +51,7 @@ private slots:
     void on_ColorPickerButton_clicked();
     void on_SaveSettings_clicked();
     void on_AutoStart_clicked();
+    void on_RandomCheckbox_clicked();
 
 
 private:

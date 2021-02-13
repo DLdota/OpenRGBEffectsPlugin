@@ -191,6 +191,18 @@ void OpenRGBEffectPage::on_AutoStart_clicked()
     }
 }
 
+void OpenRGBEffectPage::on_RandomCheckbox_clicked()
+{
+    if (ui->RandomCheckbox->isChecked())
+    {
+        EFCT->ToggleRandomColors(true);
+    }
+    else
+    {
+        EFCT->ToggleRandomColors(false);
+    }
+
+}
 
 /*---------*\
 | Settings  |
