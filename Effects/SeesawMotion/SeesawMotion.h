@@ -35,10 +35,21 @@ public:
     EffectInfo EffectDetails;
 private:
     float                   Speed;
-    std::vector<RGBColor>   UserColors;
-    float                   Progress = 100;
-    bool                    Dir; /* true = down, false = up */
-    int                     width = 2;
+    std::vector<RGBColor>   UserColors;    
+
+    bool                   Dir = true;
+    int                      width = 10;
+    float                   Progress = 0;
+
+    hsv_t Head;
+    hsv_t Tail;
+
+    float current_head_hue;
+    float current_tail_hue;
+
+    RGBColor GetColor(int i, int count);
+
 };
 
 #endif // SeesawMotion_H
+
