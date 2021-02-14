@@ -5,16 +5,17 @@ RGBColor OFF = ToRGBColor(0,0,0);
 
 EffectInfo SeesawMotion::DefineEffectDetails()
 {
-    SeesawMotion::EffectDetails.EffectName = "Seesaw Motion";
-    SeesawMotion::EffectDetails.EffectDescription = "A back and forth effect motion";
+    SeesawMotion::EffectDetails.EffectName = "Visor";
+    SeesawMotion::EffectDetails.EffectDescription = "A back and forth effect motion, flipping colors";
 
     SeesawMotion::EffectDetails.IsReversable = false;
     SeesawMotion::EffectDetails.MaxSpeed     = 100;
     SeesawMotion::EffectDetails.MinSpeed     = 10;
+
     SeesawMotion::EffectDetails.UserColors   = 2;
 
-    SeesawMotion::EffectDetails.MinSlider2Val = 10;
-    SeesawMotion::EffectDetails.MaxSlider2Val = 100;
+    SeesawMotion::EffectDetails.MinSlider2Val = 3;
+    SeesawMotion::EffectDetails.MaxSlider2Val = 50;
     SeesawMotion::EffectDetails.Slider2Name   = "Width";
 
     SeesawMotion::EffectDetails.HasCustomWidgets = false;
@@ -118,7 +119,7 @@ void SeesawMotion::SetUserColors(std::vector<RGBColor> NewUserColors)
 
 void SeesawMotion::Slider2Changed(int NewWidth)
 {
-    width = NewWidth;
+    width = NewWidth * 2 ;
 }
 
 void SeesawMotion::ASelectionWasChanged()
