@@ -9,8 +9,8 @@ EffectInfo SeesawMotion::DefineEffectDetails()
     SeesawMotion::EffectDetails.EffectDescription = "A back and forth effect motion";
 
     SeesawMotion::EffectDetails.IsReversable = false;
-    SeesawMotion::EffectDetails.MaxSpeed     = 200;
-    SeesawMotion::EffectDetails.MinSpeed     = 1;
+    SeesawMotion::EffectDetails.MaxSpeed     = 100;
+    SeesawMotion::EffectDetails.MinSpeed     = 10;
     SeesawMotion::EffectDetails.UserColors   = 2;
 
     SeesawMotion::EffectDetails.MinSlider2Val = 10;
@@ -77,11 +77,11 @@ void SeesawMotion::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
 
     if(Dir)
     {
-        if(Progress < 100 + width)
+        if(Progress < 100)
         {
             Progress += float(float(Speed) / float(FPS));
         }
-        if(Progress >= 100 + width)
+        if(Progress >= 100)
         {
             Dir = false;
             Progress -= float(float(Speed) / float(FPS));
@@ -128,7 +128,7 @@ void SeesawMotion::ASelectionWasChanged()
 
 RGBColor SeesawMotion::GetColor(int i, int count)
 {
-    float percent = (Progress/100)*count;
+    float percent = (Progress/100)* (count+width+1);
 
     float whole;
 

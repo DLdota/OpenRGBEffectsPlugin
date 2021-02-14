@@ -34,7 +34,7 @@ public:
 
     EffectInfo EffectDetails;
 private:
-    float                   Speed;
+    float                   Speed = 10;
     std::vector<RGBColor>   UserColors;    
 
     bool                   Dir = true;
