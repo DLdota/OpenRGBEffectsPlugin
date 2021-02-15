@@ -18,7 +18,7 @@ public:
     void        SetUserColors(std::vector<RGBColor>)                        override;
     void        Slider2Changed(int)                                         override;
     void        ASelectionWasChanged()                                      override;
-    void        ToggleRandomColors(bool)                                    override {};
+    void        ToggleRandomColors(bool)                                    override;
 
     void        SetWidth(int NewWidth);
 
@@ -36,7 +36,7 @@ public:
 private:
     float                   Speed = 10;
     std::vector<RGBColor>   UserColors;    
-
+    bool                   Random = false;
     bool                   Dir = true;
     int                      width = 10;
     float                   Progress = 0;
@@ -48,6 +48,7 @@ private:
     float current_tail_hue;
 
     RGBColor GetColor(int i, int count);
+    void GenerateRandomColors();
 
 };
 

@@ -1,4 +1,4 @@
-#include "SeesawMotion.h"
+﻿#include "SeesawMotion.h"
 #include "OpenRGBEffectTab.h"
 
 RGBColor OFF = ToRGBColor(0,0,0);
@@ -59,8 +59,6 @@ void SeesawMotion::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
                 int cols = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
                 int rows = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
 
-                // int HeadProgress = (HeadProgress/100)*cols;
-
                 for (int col_id = 0; col_id < cols; col_id++)
                 {
                     RGBColor color = GetColor(col_id, cols);
@@ -76,6 +74,8 @@ void SeesawMotion::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
         }
     }
 
+    bool flipping = false;
+
     if(Dir)
     {
         if(Progress < 100)
@@ -86,6 +86,7 @@ void SeesawMotion::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
         {
             Dir = false;
             Progress -= float(float(Speed) / float(FPS));
+            flipping = true;
         }
     }
 
@@ -99,9 +100,37 @@ void SeesawMotion::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
         {
             Dir = true;
             Progress += float(float(Speed) / float(FPS));
+            flipping = true;
         }
     }
 
+    if(flipping && Random)
+    {
+        GenerateRandomColors();
+    }
+
+}
+
+void SeesawMotion::GenerateRandomColors()
+{
+    RGBColor C1 = ToRGBColor(rand() % 255,rand() % 255, rand() % 255);
+    RGBColor C2 = ToRGBColor(rand() % 255,rand() % 255, rand() % 255);
+    rgb2hsv(C1, &Head);
+    rgb2hsv(C2, &Tail);
+}
+
+void SeesawMotion::ToggleRandomColors(bool NewRandom)
+{
+    Random = NewRandom;
+
+    if(Random)
+    {
+        GenerateRandomColors();
+    }
+    else
+    {
+        SetUserColors(UserColors);
+    }
 }
 
 void SeesawMotion::SetSpeed(int NewSpeed)
@@ -113,8 +142,11 @@ void SeesawMotion::SetUserColors(std::vector<RGBColor> NewUserColors)
 {
     UserColors = NewUserColors;
 
-    rgb2hsv(UserColors[0], &Head);
-    rgb2hsv(UserColors[1], &Tail);
+    if(!Random)
+    {
+        rgb2hsv(UserColors[0], &Head);
+        rgb2hsv(UserColors[1], &Tail);
+    }
 }
 
 void SeesawMotion::Slider2Changed(int NewWidth)
@@ -132,12 +164,11 @@ RGBColor SeesawMotion::GetColor(int i, int count)
     float percent = (Progress/100)* (count+width+1);
 
     float whole;
-
-    float neg_fractional = 1.0f - pow(std::modf(percent, &whole), 1.0/3.0);
-    float fractional = pow(std::modf(percent, &whole),  3.0);
-
-    float linear_neg_fractional = 1.0f - std::modf(percent, &whole);
     float linear_fractional = std::modf(percent, &whole);
+    float linear_neg_fractional = 1.0f - linear_fractional;
+
+    float fractional = pow(linear_fractional,  3.0);
+    float neg_fractional = 1.0f - pow(linear_fractional, 1.0/3.0);
 
     int current_first_led = (int) whole;
     int half_width = width/2;
