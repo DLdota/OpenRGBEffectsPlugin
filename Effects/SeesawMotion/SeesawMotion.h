@@ -18,7 +18,7 @@ public:
     void        SetUserColors(std::vector<RGBColor>)                        override;
     void        Slider2Changed(int)                                         override;
     void        ASelectionWasChanged()                                      override;
-    void        ToggleRandomColors(bool)                                    override {};
+    void        ToggleRandomColors(bool)                                    override;
 
     void        SetWidth(int NewWidth);
 
@@ -34,11 +34,23 @@ public:
 
     EffectInfo EffectDetails;
 private:
-    float                   Speed;
-    std::vector<RGBColor>   UserColors;
-    float                   Progress = 100;
-    bool                    Dir; /* true = down, false = up */
-    int                     width = 2;
+    float                   Speed = 10;
+    std::vector<RGBColor>   UserColors;    
+    bool                   Random = false;
+    bool                   Dir = true;
+    int                      width = 10;
+    float                   Progress = 0;
+
+    hsv_t Head;
+    hsv_t Tail;
+
+    float current_head_hue;
+    float current_tail_hue;
+
+    RGBColor GetColor(int i, int count);
+    void GenerateRandomColors();
+
 };
 
 #endif // SeesawMotion_H
+
