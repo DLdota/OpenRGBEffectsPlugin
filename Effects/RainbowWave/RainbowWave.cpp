@@ -126,7 +126,7 @@ void RainbowWave::Slider2Changed(int NewWidth)
     Width = NewWidth;
 }
 
-void RainbowWave::ASelectionWasChanged()
+void RainbowWave::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
 {
 
 }

@@ -154,7 +154,7 @@ void SeesawMotion::Slider2Changed(int NewWidth)
     width = NewWidth * 2 ;
 }
 
-void SeesawMotion::ASelectionWasChanged()
+void SeesawMotion::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
 {
 
 }

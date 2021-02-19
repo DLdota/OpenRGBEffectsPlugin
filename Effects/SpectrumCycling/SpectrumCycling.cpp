@@ -69,7 +69,7 @@ void SpectrumCycling::Slider2Changed(int)
     return;
 }
 
-void SpectrumCycling::ASelectionWasChanged()
+void SpectrumCycling::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
 {
 
 }

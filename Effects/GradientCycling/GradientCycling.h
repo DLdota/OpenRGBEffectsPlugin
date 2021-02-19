@@ -11,7 +11,7 @@ public:
 
     EffectInfo  DefineEffectDetails()                                                       override;
     void        DefineExtraOptions(QLayout*)                                                override;
-    void        StepEffect(std::vector<OwnedControllerAndZones> LocalControllers, int Step) override;
+    void        StepEffect(std::vector<OwnedControllerAndZones>, int)                       override;
 
     void        SetSpeed(int Speed)                                                         override;
     void        SetUserColors(std::vector<RGBColor>)                                        override;
@@ -19,7 +19,7 @@ public:
     void        ToggleRandomColors(bool RandomEnabled)                                      override;
 
     void        SetWidth(int NewWidth);
-    void        ASelectionWasChanged()                                                      override;
+    void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>)                  override;
 
     int                     GetSpeed()                                                      override {return Speed;     };
     int                     GetSlider2Val()                                                 override {return 0;         };
@@ -34,13 +34,13 @@ public:
 private:
     static std::vector<OwnedControllerAndZones> PrevControllers;
 
-    int                     Speed;
-    float                   Width;
+    int                                         Speed;
+    float                                       Width;
 
-    std::vector<std::vector<float>> Progress;
-    std::vector<RGBColor>           UserColors;
+    std::vector<std::vector<float>>             Progress;
+    std::vector<RGBColor>                       UserColors;
 
-    bool RandomColors;
+    bool     RandomColors;
     RGBColor RandomColorList[2];
 };
 

@@ -27,24 +27,24 @@ public:
     Rain() {};
     ~Rain() {};
 
-    EffectInfo  DefineEffectDetails()                                     override;
-    void        DefineExtraOptions(QLayout*)                              override;
-    void        StepEffect(std::vector<OwnedControllerAndZones>, int FPS) override;
+    EffectInfo  DefineEffectDetails()                                      override;
+    void        DefineExtraOptions(QLayout*)                               override;
+    void        StepEffect(std::vector<OwnedControllerAndZones>, int)      override;
 
-    void        SetSpeed(int Speed)                                       override;
-    void        SetUserColors(std::vector<RGBColor>)                      override;
-    void        Slider2Changed(int)                                       override;
-    void        ASelectionWasChanged()                                    override;
-    void        ToggleRandomColors(bool RandomEnabled)                    override;
+    void        SetSpeed(int Speed)                                        override;
+    void        SetUserColors(std::vector<RGBColor>)                       override;
+    void        Slider2Changed(int)                                        override;
+    void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>) override;
+    void        ToggleRandomColors(bool RandomEnabled)                     override;
 
-    int                     GetSpeed()                                    override;
-    int                     GetSlider2Val()                               override;
-    std::vector<RGBColor>   GetUserColors()                               override;
+    int                     GetSpeed()                                     override;
+    int                     GetSlider2Val()                                override;
+    std::vector<RGBColor>   GetUserColors()                                override;
 
-    void                    EffectState(bool)                             override {return;};
+    void                    EffectState(bool)                              override {return;};
 
-    void                    LoadCustomSettings(json) override {return;};
-    json                    SaveCustomSettings(json) override {return json();};
+    void                    LoadCustomSettings(json)                       override {return;        };
+    json                    SaveCustomSettings(json)                       override {return json(); };
 
     EffectInfo              EffectDetails;
 
@@ -55,7 +55,7 @@ private:
     std::vector<Drops> CurrentDrops;
 
     RGBColor UserColor;
-    bool RandomColors = false;
+    bool     RandomColors = false;
 
     std::vector<std::vector<bool>> HasEffect;
 };

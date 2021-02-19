@@ -129,7 +129,7 @@ void StarryNight::Slider2Changed(int LEDCount)
     StarryNight::TempLEDPerCycle = LEDCount;
 }
 
-void StarryNight::ASelectionWasChanged()
+void StarryNight::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
 {
     CurrentStars.clear();
 }
