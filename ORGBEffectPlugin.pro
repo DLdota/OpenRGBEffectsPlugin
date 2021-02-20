@@ -3,6 +3,8 @@ QT +=                  \
     widgets            \
     core               \
 
+win32:CONFIG += QTPLUGIN
+
 TEMPLATE = lib
 DEFINES += ORGBEFFECTPLUGIN_LIBRARY
 
@@ -36,7 +38,7 @@ HEADERS +=                                                                      
 #-----------------------------------------------------------------------------------------------#
 # GUI and misc                                                                                  #
 #-----------------------------------------------------------------------------------------------#
-INCLUDEPATH += \
+INCLUDEPATH +=                                                                                  \
     Dependencies/                                                                               \
     Dependencies/HSV/                                                                           \
     Dependencies/ColorWheel/                                                                    \
@@ -58,6 +60,9 @@ SOURCES +=                                                                      
     Dependencies/ColorWheel/ColorWheel.cpp                                                      \
     Dependencies/ScreenSelection/ScreenSelection.cpp                                            \
 
+FORMS +=                                                                                        \
+    OpenRGBEffectPage.ui                                                                        \
+    OpenRGBEffectTab.ui                                                                         \
 
 #-----------------------------------------------------------------------------------------------#
 # Effects                                                                                       #
@@ -71,7 +76,9 @@ INCLUDEPATH +=                                                                  
     Effects/StarryNight/                                                                        \
     Effects/SpectrumCycling/                                                                    \
     Effects/GradientCycling/                                                                    \
-    Effects/SeesawMotion/                                                                        \
+    Effects/SeesawMotion/                                                                       \
+    Effects/AudioVisualizer/                                                                    \
+    Effects/AudioSync/                                                                          \
 
 SOURCES +=                                                                                      \
     Effects/Rain/Rain.cpp                                                                       \
@@ -81,7 +88,9 @@ SOURCES +=                                                                      
     Effects/RainbowWave/RainbowWave.cpp                                                         \
     Effects/GradientCycling/GradientCycling.cpp                                                 \
     Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
-    Effects/SeesawMotion/SeesawMotion.cpp                                                         \
+    Effects/SeesawMotion/SeesawMotion.cpp                                                       \
+    Effects/AudioVisualizer/AudioVisualizer.cpp                                                 \
+    Effects/AudioSync/AudioSync.cpp                                                             \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -92,8 +101,64 @@ HEADERS +=                                                                      
     Effects/RainbowWave/RainbowWave.h                                                           \
     Effects/GradientCycling/GradientCycling.h                                                   \
     Effects/SpectrumCycling/SpectrumCycling.h                                                   \
-    Effects/SeesawMotion/SeesawMotion.h                                                           \
+    Effects/SeesawMotion/SeesawMotion.h                                                         \
+    Effects/AudioVisualizer/AudioVisualizer.h                                                   \
+    Effects/AudioSync/AudioSync.h                                                               \
 
+#-----------------------------------------------------------------------------------------------#
+# AudioManager                                                                                  #
+#-----------------------------------------------------------------------------------------------#
+INCLUDEPATH +=                                                                                  \
+    Dependencies/AudioManager/                                                                  \
+
+HEADERS +=                                                                                      \
+    Dependencies/AudioManager/AudioManager.h                                                    \
+
+SOURCES +=                                                                                      \
+    Dependencies/AudioManager/AudioManager.cpp                                                  \
+
+
+#-----------------------------------------------------------------------------------------------#
+# Keyboard Visualizer https://gitlab.com/CalcProgrammer1/KeyboardVisualizer                     #
+#-----------------------------------------------------------------------------------------------#
+INCLUDEPATH +=                                                                                  \
+    Dependencies/AudioVisualizer/                                                               \
+
+HEADERS +=                                                                                      \
+    Dependencies/AudioVisualizer/Visualizer.h                                                   \
+    Dependencies/AudioVisualizer/VisualizerDefines.h                                            \
+    Dependencies/AudioVisualizer/AudioVisualizerUi.h                                            \
+
+SOURCES +=                                                                                      \
+    Dependencies/AudioVisualizer/AudioVisualizerUi.cpp                                          \
+    Dependencies/AudioVisualizer/Visualizer.cpp                                                 \
+
+FORMS +=                                                                                        \
+    Dependencies/AudioVisualizer/AudioVisualizerUi.ui                                           \
+
+#-----------------------------------------------------------------------------------------------#
+# ctkrangeslider                                                                                #
+#-----------------------------------------------------------------------------------------------#
+INCLUDEPATH +=                                                                                  \
+    Dependencies/ctkrangeslider/                                                                \
+
+SOURCES +=                                                                                      \
+    Dependencies/ctkrangeslider/ctkrangeslider.cpp                                              \
+
+HEADERS +=                                                                                      \
+    Dependencies/ctkrangeslider/ctkrangeslider.h                                                \
+
+#-----------------------------------------------------------------------------------------------#
+# chuck_fft                                                                                     #
+#-----------------------------------------------------------------------------------------------#
+INCLUDEPATH +=                                                                                  \
+    Dependencies/chuck_fft/                                                                     \
+
+SOURCES +=                                                                                      \
+    Dependencies/chuck_fft/chuck_fft.c
+
+HEADERS +=                                                                                      \
+    Dependencies/chuck_fft/chuck_fft.h                                                          \
 
 #-----------------------------------------------------------------------------------------------#
 # Xtensor (For ambient)                                                                         #
@@ -202,6 +267,9 @@ HEADERS +=                                                                      
     Dependencies/xtensor/xtl/xvariant_impl.hpp                                                  \
     Dependencies/xtensor/xtl/xvisitor.hpp                                                       \
 
+#-------------------------------------------------------------------#
+# Windows GitLab CI Configuration                                   #
+#-------------------------------------------------------------------#
 win32:CONFIG(debug, debug|release) {
     win32:DESTDIR = debug
 }
@@ -210,13 +278,40 @@ win32:CONFIG(release, debug|release) {
     win32:DESTDIR = release
 }
 
-win32:CONFIG += QTPLUGIN
-
 win32:OBJECTS_DIR = _intermediate_$$DESTDIR/.obj
 win32:MOC_DIR     = _intermediate_$$DESTDIR/.moc
 win32:RCC_DIR     = _intermediate_$$DESTDIR/.qrc
 win32:UI_DIR      = _intermediate_$$DESTDIR/.ui
 
-FORMS += \
-    OpenRGBEffectPage.ui \
-    OpenRGBEffectTab.ui  \
+win32:contains(QMAKE_TARGET.arch, x86_64) {
+    LIBS +=                                                             \
+        -lws2_32                                                        \
+        -lole32                                                         \
+}
+
+win32:contains(QMAKE_TARGET.arch, x86) {
+    LIBS +=                                                             \
+        -lws2_32                                                        \
+        -lole32                                                         \
+}
+
+win32:DEFINES +=                                                        \
+    _MBCS                                                               \
+    WIN32                                                               \
+    _CRT_SECURE_NO_WARNINGS                                             \
+    _WINSOCK_DEPRECATED_NO_WARNINGS                                     \
+    WIN32_LEAN_AND_MEAN                                                 \
+
+#-----------------------------------------------------------------------#
+# Linux-specific Configuration                                          #
+#-----------------------------------------------------------------------#
+unix:!macx {
+    LIBS += -lopenal
+}
+
+#-----------------------------------------------------------------------#
+# MacOS-specific Configuration                                          #
+#-----------------------------------------------------------------------#
+macx: {
+    LIBS += -framework OpenAL
+}

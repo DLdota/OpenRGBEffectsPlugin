@@ -21,6 +21,8 @@
 #include "Rain.h"
 #include "Ambient.h"
 #include "SeesawMotion.h"
+#include "AudioVisualizer.h"
+#include "AudioSync.h"
 
 #pragma once
 
