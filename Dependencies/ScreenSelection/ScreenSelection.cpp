@@ -20,7 +20,6 @@ ScreenSelection::ScreenSelection(QWidget* Parent) :
     YSize = 10;
 
     Display = new QLabel();
-    Display->hide();
     Display->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     Display->setAlignment(Qt::AlignCenter);
     Display->setMinimumSize(this->minimumSize() / 2);
@@ -29,7 +28,6 @@ ScreenSelection::ScreenSelection(QWidget* Parent) :
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(Display);
-
 
     /*------------*\
     | Size Sliders |
@@ -56,7 +54,7 @@ ScreenSelection::ScreenSelection(QWidget* Parent) :
 
 
     ShowHide = new QPushButton();
-    ShowHide->setText("Hide");
+    ShowHide->setText("Show Preview");
     connect(ShowHide,SIGNAL(clicked()),this,SLOT(on_ShowHide()));
     mainLayout->addWidget(ShowHide);
 
@@ -127,8 +125,8 @@ ScreenSelection::ScreenSelection(QWidget* Parent) :
 
     GetScreen();
     ToCalc = ScreenShot.toImage();
-    Display->show();
 
+    on_ShowHide();
     this->resize(this->minimumSize());
 }
 
@@ -359,7 +357,7 @@ void ScreenSelection::on_ShowHide()
         this->layout()->setSizeConstraint(QLayout::SetFixedSize);
         Display->show();
         ForMod = ScreenShot;
-        ShowHide->setText("Hide");
+        ShowHide->setText("Hide Preview");
         update();
         this->layout()->setSizeConstraint(QLayout::SetDefaultConstraint);
         this->resize(PrevSize);
@@ -369,9 +367,9 @@ void ScreenSelection::on_ShowHide()
     {
         Display->hide();
         Display->clear();
-        ShowHide->setText("Show");
-        this->resize(this->minimumSize());
         ForMod = QPixmap(0,0);
+        ShowHide->setText("Show Preview");
+        this->resize(this->minimumSize());
     }
 }
 

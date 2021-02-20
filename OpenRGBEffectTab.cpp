@@ -22,6 +22,8 @@ void OpenRGBEffectTab::DefineEffects()
     OpenRGBEffectTab::EffectList.push_back(new Rain);
     OpenRGBEffectTab::EffectList.push_back(new Ambient);
     OpenRGBEffectTab::EffectList.push_back(new SeesawMotion);
+    OpenRGBEffectTab::EffectList.push_back(new AudioVisualizer);
+    OpenRGBEffectTab::EffectList.push_back(new AudioSync);
 }
 
 
@@ -222,6 +224,7 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent): QWidget(parent), ui(new Ui:
     ui->FPSCount->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     ui->FPSCount->setFixedWidth(20);
     ui->FPSCount->setText(QString().number(1));
+    AudioManager::get()->SetDelay(OpenRGBEffectTab::FPSDelay);
 
     ui->FPSCount->adjustSize();
 
@@ -337,6 +340,8 @@ void OpenRGBEffectTab::FPSSlider(int NewFPS)
         catch(std::exception e){}
         EffectFile.close();
     }
+
+    AudioManager::get()->SetDelay(OpenRGBEffectTab::FPSDelay);
 }
 
 /*---------------------------*\
@@ -508,6 +513,7 @@ void OpenRGBEffectTab::GivePreviousDevices()
             on_TabChange(EffectIndex);
             if (UserSettings["Effects"][EffectIndex].contains("EffectName"))
             {
+                if (UserSettings["Effects"][EffectIndex]["EffectName"] != EffectList[EffectIndex]->EffectDetails.EffectName) return;
                 json DeviceList = UserSettings["Effects"][EffectIndex]["EffectSettings"]["Controllers"];
 
                 for (int DeviceIndex = 0; DeviceIndex < (int)DeviceList.size(); DeviceIndex++)
