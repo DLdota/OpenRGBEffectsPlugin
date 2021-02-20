@@ -239,6 +239,7 @@ void ScreenSelection::mouseReleaseEvent(QMouseEvent *)
 
 void ScreenSelection::resizeEvent(QResizeEvent*)
 {
+    this->layout()->setSizeConstraint(QLayout::SetMinAndMaxSize);
     QSize SZ = Display->size();
 
     imgRegion = QRegion(Display->pos().x(), Display->pos().y(),SZ.width(),SZ.height(), QRegion::Rectangle);
@@ -354,10 +355,15 @@ void ScreenSelection::on_ShowHide()
 {
     if (Display->isHidden())
     {
+        QSize PrevSize = this->size();
+        this->layout()->setSizeConstraint(QLayout::SetFixedSize);
         Display->show();
         ForMod = ScreenShot;
         ShowHide->setText("Hide");
         update();
+        this->layout()->setSizeConstraint(QLayout::SetDefaultConstraint);
+        this->resize(PrevSize);
+        this->adjustSize();
     }
     else
     {
