@@ -738,10 +738,7 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
         }
     }
 
-    for (int EffectIndex = 0; EffectIndex < int(ActiveEffects.size()); EffectIndex++)
-    {        
-        ActiveEffects[EffectIndex]->ASelectionWasChanged(RespectiveToPass[OpenRGBEffectTab::ActiveEffects[EffectIndex]->EffectDetails.EffectIndex]);
-    }
+    EffectList[CurrentTab]->ASelectionWasChanged(RespectiveToPass[OpenRGBEffectTab::EffectList[CurrentTab]->EffectDetails.EffectIndex]);
 }
 
 void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
@@ -850,10 +847,7 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
         DevBox->setCheckState(Qt::Unchecked);
     }
 
-    for (int EffectIndex = 0; EffectIndex < int(ActiveEffects.size()); EffectIndex++)
-    {
-        ActiveEffects[EffectIndex]->ASelectionWasChanged(RespectiveToPass[OpenRGBEffectTab::ActiveEffects[EffectIndex]->EffectDetails.EffectIndex]);
-    }
+    EffectList[CurrentTab]->ASelectionWasChanged(RespectiveToPass[OpenRGBEffectTab::EffectList[CurrentTab]->EffectDetails.EffectIndex]);
 }
 
 void OpenRGBEffectTab::DeviceReversalChanged(QString DName)

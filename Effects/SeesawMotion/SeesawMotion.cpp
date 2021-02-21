@@ -154,11 +154,6 @@ void SeesawMotion::Slider2Changed(int NewWidth)
     width = NewWidth * 2 ;
 }
 
-void SeesawMotion::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
-{
-
-}
-
 RGBColor SeesawMotion::GetColor(int i, int count)
 {
     float percent = (Progress/100)* (count+width+1);
