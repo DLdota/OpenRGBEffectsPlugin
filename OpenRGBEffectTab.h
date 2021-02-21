@@ -19,6 +19,7 @@
 #include "GradientCycling.h"
 #include "Breathing.h"
 #include "Rain.h"
+#include "Rave.h"
 #include "Ambient.h"
 #include "SeesawMotion.h"
 #include "AudioVisualizer.h"
