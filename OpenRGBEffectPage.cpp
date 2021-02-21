@@ -220,7 +220,8 @@ void OpenRGBEffectPage::StartupSettings()
             int SpeedMin = EFCT->EffectDetails.MinSpeed;
             if (UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("Speed"))
             {
-                if (SpeedMin <= UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Speed"] <= SpeedMax)
+                int Speed = UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Speed"];
+                if (SpeedMin <= Speed && Speed <= SpeedMax)
                 {
                     ui->SpeedSlider->setValue(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Speed"]);
                 }
@@ -230,7 +231,8 @@ void OpenRGBEffectPage::StartupSettings()
             int Slider2Min = EFCT->EffectDetails.MinSlider2Val;
             if (UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("Slider2Val"))
             {
-                if ( Slider2Min <= UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Slider2Val"] <= Slider2Max)
+                int Slider2Val = UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Slider2Val"];
+                if ( Slider2Min <= Slider2Val && Slider2Val <= Slider2Max)
                 {
                     ui->Slider2->setValue(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Slider2Val"]);
                 }
