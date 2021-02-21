@@ -14,20 +14,20 @@ public:
     void                    DefineExtraOptions(QLayout* Parent)                         override;
     void                    StepEffect(std::vector<OwnedControllerAndZones>, int FPS)   override;
 
-    void                    SetSpeed(int)                           override {};
-    void                    Slider2Changed(int)                     override {};
-    void                    SetUserColors(std::vector<RGBColor>)    override {};
-    void                    ASelectionWasChanged()                  override {};
-    void                    ToggleRandomColors(bool)                override {};
+    void                    SetSpeed(int)                                               override {};
+    void                    Slider2Changed(int)                                         override {};
+    void                    SetUserColors(std::vector<RGBColor>)                        override {};
+    void                    ASelectionWasChanged(std::vector<OwnedControllerAndZones>)  override {};
+    void                    ToggleRandomColors(bool)                                    override {};
 
-    int                     GetSpeed()                              override {return 0;}  ;
-    int                     GetSlider2Val()                         override {return 0;}  ;
-    std::vector<RGBColor>   GetUserColors()                         override {return {};} ;
+    int                     GetSpeed()                                                  override {return 0;}  ;
+    int                     GetSlider2Val()                                             override {return 0;}  ;
+    std::vector<RGBColor>   GetUserColors()                                             override {return {};} ;
 
-    void                    LoadCustomSettings(json)                override;
-    json                    SaveCustomSettings(json)                override;
+    void                    LoadCustomSettings(json)                                    override;
+    json                    SaveCustomSettings(json)                                    override;
 
-    void                    EffectState(bool)                       override;
+    void                    EffectState(bool)                                           override;
 
 private:
     EffectInfo EffectDetails;

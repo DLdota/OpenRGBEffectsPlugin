@@ -738,8 +738,8 @@ void OpenRGBEffectTab::DeviceSelectionChanged(QString DName)
     }
 
     for (int EffectIndex = 0; EffectIndex < int(ActiveEffects.size()); EffectIndex++)
-    {
-        ActiveEffects[EffectIndex]->ASelectionWasChanged();
+    {        
+        ActiveEffects[EffectIndex]->ASelectionWasChanged(RespectiveToPass[OpenRGBEffectTab::ActiveEffects[EffectIndex]->EffectDetails.EffectIndex]);
     }
 }
 
@@ -851,7 +851,7 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
 
     for (int EffectIndex = 0; EffectIndex < int(ActiveEffects.size()); EffectIndex++)
     {
-        ActiveEffects[EffectIndex]->ASelectionWasChanged();
+        ActiveEffects[EffectIndex]->ASelectionWasChanged(RespectiveToPass[OpenRGBEffectTab::ActiveEffects[EffectIndex]->EffectDetails.EffectIndex]);
     }
 }
 

@@ -25,7 +25,7 @@ void Rain::DefineExtraOptions(QLayout*){}
 
 void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
-    if (Controllers.size() != HasEffect.size()) this->ASelectionWasChanged();
+    if (Controllers.size() != HasEffect.size()) this->ASelectionWasChanged(Controllers);
     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
     {
         if ((int)CurrentDrops.size() >= DropCount) break;
@@ -285,7 +285,7 @@ void Rain::Slider2Changed(int NewDropCount)
     Rain::DropCount = NewDropCount;
 }
 
-void Rain::ASelectionWasChanged()
+void Rain::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
 {
     HasEffect.clear();
     for (int ControllerID = 0; ControllerID < (int)ORGBPlugin::RMPointer->GetRGBControllers().size(); ControllerID++)

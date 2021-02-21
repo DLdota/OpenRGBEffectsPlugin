@@ -172,7 +172,7 @@ void GradientCycling::Slider2Changed(int NewWidth)
     GradientCycling::Width = NewWidth;
 }
 
-void GradientCycling::ASelectionWasChanged()
+void GradientCycling::ASelectionWasChanged(std::vector<OwnedControllerAndZones> Controllers)
 {
     Progress.clear();
 }
