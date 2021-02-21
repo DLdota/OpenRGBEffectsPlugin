@@ -22,6 +22,9 @@ before_script:
 #reusable templates
 .ccache_init: &ccache_init
   before_script:
+    # Prevent tzdata to prompt us for a locale
+    - echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+    - TZ=UTC; ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
     - apt update
     - apt install -y build-essential qtcreator qt5-default qtdeclarative5-dev qtwebengine5-dev libusb-1.0-0-dev libhidapi-dev pkgconf wget git libopenal-dev
 
@@ -30,7 +33,7 @@ before_script:
 #-----------------------------------------------------------------------#
 build_linux_32:
   <<: *ccache_init
-  image: ubuntu:bionic
+  image: ubuntu:focal
   stage: build
   script:
   - export $(dpkg-architecture)
@@ -50,7 +53,7 @@ build_linux_32:
 #-----------------------------------------------------------------------#
 build_linux_64:
   <<: *ccache_init
-  image: ubuntu:bionic
+  image: ubuntu:focal
   stage: build
   script:
   - export $(dpkg-architecture)

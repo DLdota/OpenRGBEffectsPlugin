@@ -15,6 +15,7 @@
 #include "ORGBEffectPlugin.h"
 #include "OpenRGBEffectTab.h"
 #include "ui_OpenRGBEffectPage.h"
+#include "OpenRGBEffectSettings.h"
 
 struct EffectSettings
 {
