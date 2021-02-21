@@ -68,8 +68,3 @@ void SpectrumCycling::Slider2Changed(int)
     // Not used
     return;
 }
-
-void SpectrumCycling::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
-{
-
-}
