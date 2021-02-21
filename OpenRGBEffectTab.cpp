@@ -333,13 +333,7 @@ void OpenRGBEffectTab::FPSSlider(int NewFPS)
     json PrevSettings = OpenRGBEffectTab::LoadPrevSetting();
     PrevSettings["FPS"] = GetSpeed[NewFPS];
 
-    std::ofstream EffectFile((ORGBPlugin::RMPointer->GetConfigurationDirectory() + "/plugins/EffectSettings.json"), std::ios::out | std::ios::binary);
-    if(EffectFile)
-    {
-        try{ EffectFile << PrevSettings.dump(4); }
-        catch(std::exception e){}
-        EffectFile.close();
-    }
+    OpenRGBEffectSettings::SaveUserSettings(PrevSettings);
 
     AudioManager::get()->SetDelay(OpenRGBEffectTab::FPSDelay);
 }
@@ -417,27 +411,8 @@ void OpenRGBEffectTab::DeviceListChanged()
 | Settings    |
 \*-----------*/
 json OpenRGBEffectTab::LoadPrevSetting()
-{
-    json SettingsJson;
-
-    /*---------------------------------------------------------*\
-    | Open input file in binary mode                            |
-    \*---------------------------------------------------------*/
-    std::ifstream SFile(ORGBPlugin::RMPointer->GetConfigurationDirectory() + "/plugins/EffectSettings.json", std::ios::in | std::ios::binary);
-
-    /*---------------------------------------------------------*\
-    | Read settings into JSON store                             |
-    \*---------------------------------------------------------*/
-    if(SFile)
-    {
-        try
-        {
-            SFile >> SettingsJson;
-            SFile.close();
-        }
-        catch(std::exception e){}
-    }
-    return SettingsJson;
+{    
+    return OpenRGBEffectSettings::LoadUserSettings();
 }
 
 void OpenRGBEffectTab::GivePreviousDevices()
@@ -616,13 +591,7 @@ void OpenRGBEffectTab::SaveReversedSettings()
         }
     }
 
-    std::ofstream EffectFile((ORGBPlugin::RMPointer->GetConfigurationDirectory() + "/plugins/EffectSettings.json"), std::ios::out | std::ios::binary);
-    if(EffectFile)
-    {
-        try{ EffectFile << UserSettings.dump(4); }
-        catch(std::exception e){}
-        EffectFile.close();
-    }
+    OpenRGBEffectSettings::SaveUserSettings(UserSettings);
 }
 
 /*-------------------------*\

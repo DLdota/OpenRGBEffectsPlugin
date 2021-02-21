@@ -338,11 +338,5 @@ void OpenRGBEffectPage::on_SaveSettings_clicked()
         );
     }
 
-    std::ofstream EffectFile((ORGBPlugin::RMPointer->GetConfigurationDirectory() + "/plugins/EffectSettings.json"), std::ios::out | std::ios::binary);
-    if(EffectFile)
-    {
-        try{ EffectFile << PrevSettings.dump(4); }
-        catch(std::exception e){}
-        EffectFile.close();
-    }
+    OpenRGBEffectSettings::SaveUserSettings(PrevSettings);
 }

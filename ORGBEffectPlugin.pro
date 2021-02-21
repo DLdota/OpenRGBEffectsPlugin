@@ -8,7 +8,7 @@ win32:CONFIG += QTPLUGIN
 TEMPLATE = lib
 DEFINES += ORGBEFFECTPLUGIN_LIBRARY
 
-#CONFIG += c++11
+CONFIG += c++17
 
 
 #-----------------------------------------------------------------------------------------------#
@@ -48,6 +48,7 @@ HEADERS +=                                                                      
     ORGBEffectPlugin.h                                                                          \
     OpenRGBEffectTab.h                                                                          \
     OpenRGBEffectPage.h                                                                         \
+    OpenRGBEffectSettings.h                                                                     \
     Dependencies/HSV/hsv.h                                                                      \
     Dependencies/ColorWheel/ColorWheel.h                                                        \
     Dependencies/ScreenSelection/ScreenSelection.h                                              \
@@ -56,6 +57,7 @@ SOURCES +=                                                                      
     ORGBEffectPlugin.cpp                                                                        \
     OpenRGBEffectTab.cpp                                                                        \
     OpenRGBEffectPage.cpp                                                                       \
+    OpenRGBEffectSettings.cpp                                                                   \
     Dependencies/HSV/hsv.cpp                                                                    \
     Dependencies/ColorWheel/ColorWheel.cpp                                                      \
     Dependencies/ScreenSelection/ScreenSelection.cpp                                            \
