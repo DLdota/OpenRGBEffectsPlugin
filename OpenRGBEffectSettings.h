@@ -21,7 +21,7 @@ private:
     static bool CreateSettingsDirectory();
 
     static inline const std::string SettingsFolder     = "/plugins/settings/";
-    static inline const std::string SettingsFFileName  = "EffectSettings.json";
+    static inline const std::string SettingsFileName   = "EffectSettings.json";
 };
 
 #endif // OPENRGBEFFECTSETTINGS_H
