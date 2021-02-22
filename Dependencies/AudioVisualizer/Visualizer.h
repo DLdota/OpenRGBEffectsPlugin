@@ -175,7 +175,7 @@ public:
     int window_mode;
     int decay;
     unsigned int audio_device_idx;
-    unsigned int previous_audio_device_idx = NULL;
+    unsigned int previous_audio_device_idx;
 
     bool update_ui;
 
