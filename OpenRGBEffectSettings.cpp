@@ -9,7 +9,7 @@ void OpenRGBEffectSettings::SaveUserSettings(json Settings)
         return;
     }
 
-    std::ofstream EffectFile((ORGBPlugin::RMPointer->GetConfigurationDirectory() + SettingsFolder + SettingsFFileName), std::ios::out | std::ios::binary);
+    std::ofstream EffectFile((ORGBPlugin::RMPointer->GetConfigurationDirectory() + SettingsFolder + SettingsFileName), std::ios::out | std::ios::binary);
 
     if(EffectFile)
     {
@@ -28,7 +28,7 @@ json OpenRGBEffectSettings::LoadUserSettings()
 {
     json Settings;
 
-    std::ifstream SFile(ORGBPlugin::RMPointer->GetConfigurationDirectory() + SettingsFolder + SettingsFFileName, std::ios::in | std::ios::binary);
+    std::ifstream SFile(ORGBPlugin::RMPointer->GetConfigurationDirectory() + SettingsFolder + SettingsFileName, std::ios::in | std::ios::binary);
 
     if(SFile)
     {
