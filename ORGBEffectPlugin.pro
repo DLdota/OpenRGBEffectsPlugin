@@ -8,7 +8,11 @@ win32:CONFIG += QTPLUGIN
 TEMPLATE = lib
 DEFINES += ORGBEFFECTPLUGIN_LIBRARY
 
-CONFIG += c++17
+win32:CONFIG += c++17
+
+unix:!macx {
+  QMAKE_CXXFLAGS += -std=c++17
+}
 
 
 #-----------------------------------------------------------------------------------------------#
