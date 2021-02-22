@@ -642,7 +642,11 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
             /*----------------------------------------------------*\
             | Adjust how it applies for the specific type of zone  |
             \*----------------------------------------------------*/
-            if (ZT == ZONE_TYPE_LINEAR)
+            if (ZT == ZONE_TYPE_SINGLE)
+            {
+                Controllers[ControllerID].Controller->SetLED(0, colors_rotation[0]);
+            }
+            else if (ZT == ZONE_TYPE_LINEAR)
             {
                 int led_count = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count;
 
