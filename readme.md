@@ -8,21 +8,25 @@ This is a plugin for [OpenRGB](https://gitlab.com/CalcProgrammer1/OpenRGB) that 
 
 ## How do I install it?
 
-The installation process is very simple
+### **windows**
 
-1. Download the [Latest release](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectPlugin/-/commits/master) artifacts for your OS (The green checkmark to the right side)
+1. download the latest [Windows pipeline](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectPlugin/-/jobs/artifacts/master/download?job=build_windows_64)
 
-2. Copy the file to the config folder for your specific OS
+2. copy ``OpenRGBEffectPlugin.dll`` from the 7z file to  ``C:\Users\Username\appdata\roaming\OpenRGB\plugins``
 
-   * ``OpenRGBEffectPlugin.dll`` to  ``C:\Users\Username\appdata\roaming\OpenRGB\plugins`` for windows
+3. Run the latest [Pipeline build of OpenRGB(At least until 0.6 is out)](https://gitlab.com/Calcprogrammer1/OpenRGB/-/jobs/artifacts/master/download?job=build_windows_64)
 
-   * ``libOpenRGBEffectPlugin.so`` to ``~/.config/OpenRGB/plugins`` for linux
+### **linux**
 
-   2.1 You may need to create the ``plugins`` folder (Keeping in mind that it is case sensitve)
+1. download the latest [linux pipeline](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectPlugin/-/jobs/artifacts/master/download?job=build_linux_64)
 
-3. After running OpenRGB it should show up along the top tab bar
+2. Copy ``libOpenRGBEffectPlugin.so`` from the 7z to ``~/.config/OpenRGB/plugins``
 
-If it doesn't show up then please make sure you have the latest pipeline build of OpenRGB as well
+3. Run the latest [Pipeline build of OpenRGB(At least until 0.6 is out)](https://gitlab.com/Calcprogrammer1/OpenRGB/-/jobs/artifacts/master/download?job=build_linux_64)
+
+### **Universal**
+
+After running the OpenRGB build you downloaded from the link the effects tab should show up along the top bar
 
 ## What Effects do you have?
 
@@ -72,4 +76,4 @@ There are 3 Effects that cause this:
 
 Both of the audio effects will spike in CPU usage when opening an [S/PDIF device](https://en.wikipedia.org/wiki/S/PDIF) for reasons we still don't know. This can be fixed by switching off of the spdif device or stopping the effect
 
-The very nature of ambient is to do massive calulation to get the average or most common color on screen. Scaling using a lot of CPU so once you have selected your portion of the screen it is recommended that you hide the preview
+The very nature of ambient is to do massive calulation to get the average or most common color on screen. Scaling uses a lot of CPU so once you have selected your portion of the screen it is recommended that you hide the preview
