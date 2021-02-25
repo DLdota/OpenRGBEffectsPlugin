@@ -116,10 +116,10 @@ private:
     AudioSyncSettings current_settings;
     std::vector<AudioSyncSettings> AudioSyncPresets
     {
-     AudioSyncSettings {"Default",    0.5f,   0,     0,   256,   8,   0,   80,   1.0f,   0.5f,   1.0f,   1.0f,   1.0f},
-     AudioSyncSettings {"Techno",     0.8f,   0,     0,   256,   8,   1,   30,   1.0f,   0.75f,  0.4f,   1.0f,   1.6f},
-     AudioSyncSettings {"Rock",        0.5f, 165,   0,   256,   12,  1,   70,   1.0f,   0.9f,   1.2f,   1.4f,   1.4f},
-     AudioSyncSettings {"Classical",  0.6f,  67,    0,   256,   8,   0,   98,   1.0f,   1.0f,   0.8f,   0.8f,   1.73f}
+     AudioSyncSettings {"Default",    50,   0,     0,   256,   8,   0,   80,   1.0f,   0.5f,   1.0f,   1.0f,   1.0f},
+     AudioSyncSettings {"Techno",     80,   0,     0,   256,   8,   1,   30,   1.0f,   0.75f,  0.4f,   1.0f,   1.6f},
+     AudioSyncSettings {"Rock",        50, 165,   0,   256,   12,  1,   70,   1.0f,   0.9f,   1.2f,   1.4f,   1.4f},
+     AudioSyncSettings {"Classical",  60,  67,    0,   256,   8,   0,   98,   1.0f,   1.0f,   0.8f,   0.8f,   1.73f}
     };
 
     int amplitude_min_value = 0;
