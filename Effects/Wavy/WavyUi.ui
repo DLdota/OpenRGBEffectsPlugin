@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>16</width>
-    <height>16</height>
+    <width>828</width>
+    <height>449</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -16,108 +16,118 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <widget class="QWidget" name="verticalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>30</y>
-     <width>701</width>
-     <height>361</height>
-    </rect>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>10</number>
    </property>
-   <layout class="QVBoxLayout" name="settings_layout">
-    <property name="spacing">
-     <number>0</number>
-    </property>
-    <property name="sizeConstraint">
-     <enum>QLayout::SetDefaultConstraint</enum>
-    </property>
-    <item>
-     <layout class="QHBoxLayout" name="wave_freq_layout">
-      <item>
-       <widget class="QLabel" name="wave_freq_label">
-        <property name="minimumSize">
-         <size>
-          <width>200</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Will affect how many waves you will see</string>
-        </property>
-        <property name="text">
-         <string>Wave frequency</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="wave_freq_slider">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="wave_speed_layout">
-      <item>
-       <widget class="QLabel" name="wave_speed_label">
-        <property name="minimumSize">
-         <size>
-          <width>200</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Will affect the wave speed (left to right)</string>
-        </property>
-        <property name="text">
-         <string>Wave speed</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="wave_speed_slider">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="oscillation_speed_layout">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetDefaultConstraint</enum>
-      </property>
-      <item>
-       <widget class="QLabel" name="oscillation_speed_label">
-        <property name="minimumSize">
-         <size>
-          <width>200</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Will affect the wave duration</string>
-        </property>
-        <property name="text">
-         <string>Oscillation speed</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="oscillation_speed_slider">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="settings_layout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+     <item>
+      <layout class="QHBoxLayout" name="wave_freq_layout">
+       <item>
+        <widget class="QLabel" name="wave_freq_label">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Will affect how many waves you will see</string>
+         </property>
+         <property name="text">
+          <string>Wave frequency</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="wave_freq_slider">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="wave_speed_layout">
+       <item>
+        <widget class="QLabel" name="wave_speed_label">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Will affect the wave speed (left to right)</string>
+         </property>
+         <property name="text">
+          <string>Wave speed</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="wave_speed_slider">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="oscillation_speed_layout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
+       <item>
+        <widget class="QLabel" name="oscillation_speed_label">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Will affect the wave duration</string>
+         </property>
+         <property name="text">
+          <string>Oscillation speed</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="oscillation_speed_slider">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
