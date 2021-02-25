@@ -1,5 +1,31 @@
 #include "Wavy.h"
 
+/*------------------------------*\
+| RGBEffect Standard Functions  |
+\*-----------------------------*/
+Wavy::Wavy(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::Wavy)
+{
+    ui->setupUi(this);
+
+    ui->oscillation_speed_slider->setMinimum(1);
+    ui->oscillation_speed_slider->setMaximum(200);
+
+    ui->wave_freq_slider->setMinimum(1);
+    ui->wave_freq_slider->setMaximum(20);
+
+    ui->wave_speed_slider->setMinimum(1);
+    ui->wave_speed_slider->setMaximum(200);
+
+    GenerateRandomColors();
+}
+
+Wavy::~Wavy()
+{
+    delete ui;
+}
+
 EffectInfo Wavy::DefineEffectDetails()
 {
     Wavy::EffectDetails.EffectName = "Wavy";
@@ -20,29 +46,9 @@ EffectInfo Wavy::DefineEffectDetails()
     return Wavy::EffectDetails;
 }
 
-void Wavy::SetWaveFrequency(int value)
-{
-    WaveFrequency = value;
-}
-
-void Wavy::SetWaveSpeed(int value)
-{
-    WaveSpeed = value;
-}
-
-void Wavy::SetOscillationSpeed(int value)
-{
-    OscillationSpeed = value;
-}
-
 void Wavy::DefineExtraOptions(QLayout* layout)
 {
-    ui = new WavyUi();
-    layout->addWidget(ui);
-
-    connect(ui, SIGNAL(OnWaveFrequencyChanged(int)), SLOT(SetWaveFrequency(int)));
-    connect(ui, SIGNAL(OnWaveSpeedChanged(int)), SLOT(SetWaveSpeed(int)));
-    connect(ui, SIGNAL(OnOscillationSpeedChanged(int)), SLOT(SetOscillationSpeed(int)));
+    layout->addWidget(this);
 }
 
 void Wavy::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
@@ -137,22 +143,37 @@ void Wavy::ToggleRandomColors(bool RandomEnabled)
     IsRandomColors = RandomEnabled;
 }
 
-RGBColor Wavy::GetColor(int i, int count)
+void Wavy::LoadCustomSettings(json Settings)
 {
-    float pos = (i + (count * WaveProgress) / 100.0f)/count;
-    float rad = (360.0f * pos) * PI / 180.0f;
-    float wave_height = SineProgress * sin(WaveFrequency * rad);
-    float h = 0.5 + wave_height/2;
+    /*-------------------------------*\
+    | Load settings and apply in GUI  |
+    \*-------------------------------*/
+    if (Settings.contains("WaveFrequency"))    WaveFrequency    = Settings["WaveFrequency"];
+    if (Settings.contains("WaveSpeed"))        WaveSpeed        = Settings["WaveSpeed"];
+    if (Settings.contains("OscillationSpeed")) OscillationSpeed = Settings["OscillationSpeed"];
 
-    if(IsRandomColors)
-    {
-        return Interpolate(RandomColors[0], RandomColors[1], h);
-    }
-    else
-    {
-        return Interpolate(UserColors[0], UserColors[1], h);
-    }
+    ui->wave_freq_slider->setValue(WaveFrequency);
+    ui->wave_speed_slider->setValue(WaveSpeed);
+    ui->oscillation_speed_slider->setValue(OscillationSpeed);
+    return;
+}
 
+json Wavy::SaveCustomSettings(json Settings)
+{
+    Settings["WaveFrequency"]    = WaveFrequency;
+    Settings["WaveSpeed"]        = WaveSpeed;
+    Settings["OscillationSpeed"] = OscillationSpeed;
+    return Settings;
+}
+
+/*-----------------*\
+| Custom Functions  |
+\*-----------------*/
+void Wavy::GenerateRandomColors()
+{
+    RandomColors.clear();
+    RandomColors.push_back(RGBColor(ToRGBColor(rand() % 255,rand() % 255, rand() % 255)));
+    RandomColors.push_back(RGBColor(ToRGBColor(rand() % 255,rand() % 255, rand() % 255)));
 }
 
 RGBColor Wavy::Interpolate(RGBColor color1, RGBColor color2, float fraction)
@@ -175,27 +196,39 @@ RGBColor Wavy::Interpolate(RGBColor color1, RGBColor color2, float fraction)
     return color;
 }
 
-void Wavy::GenerateRandomColors()
+RGBColor Wavy::GetColor(int i, int count)
 {
-    RandomColors.clear();
-    RandomColors.push_back(RGBColor(ToRGBColor(rand() % 255,rand() % 255, rand() % 255)));
-    RandomColors.push_back(RGBColor(ToRGBColor(rand() % 255,rand() % 255, rand() % 255)));
+    float pos = (i + (count * WaveProgress) / 100.0f)/count;
+    float rad = (360.0f * pos) * PI / 180.0f;
+    float wave_height = SineProgress * sin(WaveFrequency * rad);
+    float h = 0.5 + wave_height/2;
+
+    if(IsRandomColors)
+    {
+        return Interpolate(RandomColors[0], RandomColors[1], h);
+    }
+    else
+    {
+        return Interpolate(UserColors[0], UserColors[1], h);
+    }
+
 }
 
-void Wavy::LoadCustomSettings(json Settings)
-{
-    if (Settings.contains("WaveFrequency"))    WaveFrequency    = Settings["WaveFrequency"];
-    if (Settings.contains("WaveSpeed"))        WaveSpeed        = Settings["WaveSpeed"];
-    if (Settings.contains("OscillationSpeed")) OscillationSpeed = Settings["OscillationSpeed"];
 
-    ui->updateUi(WaveFrequency, WaveSpeed, OscillationSpeed);
-    return;
+/*---------*\
+| UI slots  |
+\*---------*/
+void Wavy::on_wave_freq_slider_valueChanged(int NewVal)
+{
+    WaveFrequency = NewVal;
 }
 
-json Wavy::SaveCustomSettings(json Settings)
+void Wavy::on_wave_speed_slider_valueChanged(int NewVal)
 {
-    Settings["WaveFrequency"]    = WaveFrequency;
-    Settings["WaveSpeed"]        = WaveSpeed;
-    Settings["OscillationSpeed"] = OscillationSpeed;
-    return Settings;
+    WaveSpeed = NewVal;
+}
+
+void Wavy::on_oscillation_speed_slider_valueChanged(int value)
+{
+    OscillationSpeed = value;
 }

@@ -82,6 +82,7 @@ INCLUDEPATH +=                                                                  
     Effects/SeesawMotion/                                                                       \
     Effects/AudioVisualizer/                                                                    \
     Effects/AudioSync/                                                                          \
+    Effects/Wavy/                                                                               \
 
 SOURCES +=                                                                                      \
     Effects/Rain/Rain.cpp                                                                       \
@@ -95,6 +96,7 @@ SOURCES +=                                                                      
     Effects/SeesawMotion/SeesawMotion.cpp                                                       \
     Effects/AudioVisualizer/AudioVisualizer.cpp                                                 \
     Effects/AudioSync/AudioSync.cpp                                                             \
+    Effects/Wavy/Wavy.cpp                                                                       \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -109,23 +111,11 @@ HEADERS +=                                                                      
     Effects/SeesawMotion/SeesawMotion.h                                                         \
     Effects/AudioVisualizer/AudioVisualizer.h                                                   \
     Effects/AudioSync/AudioSync.h                                                               \
-
-#-----------------------------------------------------------------------------------------------#
-# Wavy effect                                                                                   #
-#-----------------------------------------------------------------------------------------------#
-INCLUDEPATH +=                                                                                  \
-    Effects/Wavy/                                                                               \
-
-HEADERS +=                                                                                      \
     Effects/Wavy/Wavy.h                                                                         \
-    Effects/Wavy/WavyUi.h                                                                       \
-
-SOURCES +=                                                                                      \
-    Effects/Wavy/Wavy.cpp                                                                       \
-    Effects/Wavy/WavyUi.cpp                                                                     \
 
 FORMS +=                                                                                        \
-    Effects/Wavy/WavyUi.ui                                                                      \
+    Effects/Wavy/Wavy.ui
+
 
 #-----------------------------------------------------------------------------------------------#
 # AudioManager                                                                                  #
@@ -158,17 +148,19 @@ SOURCES +=                                                                      
 FORMS +=                                                                                        \
     Dependencies/AudioVisualizer/AudioVisualizerUi.ui                                           \
 
+
 #-----------------------------------------------------------------------------------------------#
 # ctkrangeslider                                                                                #
 #-----------------------------------------------------------------------------------------------#
 INCLUDEPATH +=                                                                                  \
     Dependencies/ctkrangeslider/                                                                \
 
+HEADERS +=                                                                                      \
+        Dependencies/ctkrangeslider/ctkrangeslider.h                                                \
+
 SOURCES +=                                                                                      \
     Dependencies/ctkrangeslider/ctkrangeslider.cpp                                              \
 
-HEADERS +=                                                                                      \
-    Dependencies/ctkrangeslider/ctkrangeslider.h                                                \
 
 #-----------------------------------------------------------------------------------------------#
 # chuck_fft                                                                                     #
@@ -181,6 +173,7 @@ SOURCES +=                                                                      
 
 HEADERS +=                                                                                      \
     Dependencies/chuck_fft/chuck_fft.h                                                          \
+
 
 #-----------------------------------------------------------------------------------------------#
 # Xtensor (For ambient)                                                                         #
