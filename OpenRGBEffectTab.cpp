@@ -25,6 +25,7 @@ void OpenRGBEffectTab::DefineEffects()
     OpenRGBEffectTab::EffectList.push_back(new SeesawMotion);
     OpenRGBEffectTab::EffectList.push_back(new AudioVisualizer);
     OpenRGBEffectTab::EffectList.push_back(new AudioSync);
+    OpenRGBEffectTab::EffectList.push_back(new Wavy);
 }
 
 

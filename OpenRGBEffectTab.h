@@ -24,6 +24,7 @@
 #include "SeesawMotion.h"
 #include "AudioVisualizer.h"
 #include "AudioSync.h"
+#include "Wavy.h"
 
 #pragma once
 
