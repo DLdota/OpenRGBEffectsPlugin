@@ -595,10 +595,10 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
         // slowly reach immediate
         if(current_freq_hue < immediate_freq_hue)
         {
-            current_freq_hue += ((immediate_freq_hue - current_freq_hue) / current_settings.fade_step) / FPS;
+            current_freq_hue += ((immediate_freq_hue - current_freq_hue) / (1.0f - (current_settings.fade_step / 100.f))) / FPS;
         }else
         {
-            current_freq_hue -= ((current_freq_hue - immediate_freq_hue ) / current_settings.fade_step )/ FPS;
+            current_freq_hue -= ((current_freq_hue - immediate_freq_hue ) / (1.0f - (current_settings.fade_step / 100.f)) )/ FPS;
         }
 
         current_freq_sat = 255; // - 255 * pow(max_value, 9); // todo : reach white on high amplitudes
@@ -694,22 +694,6 @@ void AudioSync::LoadCustomSettings(json Settings)
     if (Settings.contains("amplitude"))           current_settings.amplitude       = Settings["amplitude"];
     if (Settings.contains("amplitude_min_value")) amplitude_min_value              = Settings["amplitude_min_value"];
     if (Settings.contains("amplitude_max_value")) amplitude_max_value              = Settings["amplitude_max_value"];
-    /*
-    current_settings.fade_step =         Settings["fade_step"];
-    current_settings.rainbow_shift =     Settings["rainbow_shift"];
-    current_settings.bypass_min =        Settings["bypass_min"];
-    current_settings.bypass_max =        Settings["bypass_max"];
-    current_settings.avg_size =          Settings["avg_size"];
-    current_settings.avg_mode =          Settings["avg_mode"];
-    current_settings.decay =             Settings["decay"];
-    current_settings.filter_constant =   Settings["filter_constant"];
-    current_settings.high =              Settings["high"];
-    current_settings.middle =            Settings["middle"];
-    current_settings.low =               Settings["low"];
-    current_settings.amplitude =         Settings["amplitude"];
-    amplitude_min_value =                Settings["amplitude_min_value"];
-    amplitude_max_value =                Settings["amplitude_max_value"];
-    */
 
     UpdateUiSettings();
     return;
@@ -769,7 +753,7 @@ void AudioSync::RainbowShiftChanged(int value)
 
 void AudioSync::FadeStepChanged(int value)
 {
-    current_settings.fade_step = 1.0f - (value / 100.f);
+    current_settings.fade_step = value;
 }
 
 void AudioSync::AvgSizeChanged(int value)
@@ -909,7 +893,7 @@ void AudioSync::UpdateUiSettings()
     bypass_slider->setMaximum(256);
     bypass_slider->setValues(current_settings.bypass_min, current_settings.bypass_max);
     rainbow_shift_slider->setValue(current_settings.rainbow_shift);
-    fade_step_slider->setValue(current_settings.fade_step * 100);
+    fade_step_slider->setValue(current_settings.fade_step);
     decay_slider->setValue(current_settings.decay);
     avg_size_slider->setValue(current_settings.avg_size);
     avg_mode_selector->setCurrentIndex(current_settings.avg_mode);
