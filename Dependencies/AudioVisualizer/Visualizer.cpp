@@ -91,26 +91,6 @@ void Visualizer::LoadSettings(json Settings)
     if (Settings.contains("SilentBackground"))     silent_bkgd        = Settings["SilentBackground"];
     if (Settings.contains("BackgroundTimeout"))    background_timeout = Settings["BackgroundTimeout"];
     if (Settings.contains("AudioDevice"))          audio_device_idx   = Settings["AudioDevice"];
-
-    /*
-    silent_bkgd        = Settings["SilentBackGround"];
-    amplitude          = Settings["Amplitude"];
-    bkgd_bright        = Settings["BackgroundBrightness"];
-    avg_size           = Settings["AverageSize"];
-    decay              = Settings["Decay"];
-    nrml_ofst          = Settings["NormalizationOffset"];
-    nrml_scl           = Settings["NormalizationScale"];
-    filter_constant    = Settings["FilterConstant"];
-    bkgd_mode          = Settings["BackgroundMode"];
-    frgd_mode          = Settings["ForegroundMode"];
-    single_color_mode  = Settings["SingleColorMode"];
-    avg_mode           = Settings["AverageMode"];
-    anim_speed         = Settings["AnimationSpeed"];
-    reactive_bkgd      = Settings["ReactiveBackground"];
-    silent_bkgd        = Settings["SilentBackground"];
-    background_timeout = Settings["BackgroundTimeout"];
-    audio_device_idx   = Settings["AudioDevice"];
-    */
 }
 
 json Visualizer::SaveSettings()
@@ -987,10 +967,9 @@ void Visualizer::StepFrame(std::vector<OwnedControllerAndZones> Controllers, int
             ZoneMaps.resize(Controllers.size());
             for (int ZM_ID = 0; ZM_ID < (int)ZoneMaps.size(); ZM_ID++)
             {
-                ZoneMaps[ZM_ID].resize(Controllers[ControllerID].Controller->zones.size());
-                for (int ZoneIndex = 0; ZoneIndex < (int)ZoneMaps[ZM_ID].size(); ZoneIndex++)
+                for (int ZoneIndex = 0; ZoneIndex < (int)Controllers[ControllerID].Controller->zones.size() + 1; ZoneIndex++)
                 {
-                    ZoneMaps[ZM_ID][ZoneIndex] = nullptr;
+                    ZoneMaps[ZM_ID].push_back(nullptr);
                 }
             }
         }
@@ -1071,4 +1050,3 @@ void Visualizer::StepFrame(std::vector<OwnedControllerAndZones> Controllers, int
         }
     }
 }
-
