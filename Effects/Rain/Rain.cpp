@@ -100,8 +100,18 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                             NewDrop.ZT = ZONE_TYPE_MATRIX;
                             NewDrop.Reversed = OpenRGBEffectTab::CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
 
-                            CurrentDrops.push_back(NewDrop);
+                            if (RandomColors)
+                            {
+                                NewDrop.C = ToRGBColor(rand() % 255,
+                                                       rand() % 255,
+                                                       rand() % 255);
+                            }
+                            else
+                            {
+                                NewDrop.C = UserColor;
+                            }
 
+                            CurrentDrops.push_back(NewDrop);
                         }
                         else break;
                     }
