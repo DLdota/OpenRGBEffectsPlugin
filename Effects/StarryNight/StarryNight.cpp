@@ -48,14 +48,13 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
                     {
                         for (int ZonesMade = 0; ZonesMade < MakeForZone; ZonesMade++)
                         {
-                            int RandRangeMin = Controllers[ControllerID].Controller->zones[ZoneID].start_idx;
-                            int RandRangeMax = RandRangeMin + Controllers[ControllerID].Controller->zones[ZoneID].leds_count;
-
-                            int RandomLedID = rand() % RandRangeMax + RandRangeMin;
+                            int ZiD = Controllers[ControllerID].OwnedZones[ZoneID];
+                            int StartingLED = Controllers[ControllerID].Controller->zones[ZiD].start_idx;
+                            int RandomLedID = rand() % Controllers[ControllerID].Controller->zones[ZiD].leds_count;
 
                             NewStar LEDStar;
                             LEDStar.ControllerIndex = ControllerID;
-                            LEDStar.LED = RandomLedID;
+                            LEDStar.LED = (StartingLED + RandomLedID);
                             LEDStar.state = 255;
                             if (RandomColors)
                             {
