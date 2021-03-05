@@ -28,6 +28,11 @@
 #include <AL/alc.h>
 #endif
 
+#ifdef __APPLE__
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#endif
+
 class AudioManager
 {
 
