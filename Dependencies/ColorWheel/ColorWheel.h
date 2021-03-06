@@ -12,10 +12,10 @@ public:
     virtual QSize sizeHint () const;
     virtual QSize minimumSizeHint () const;
     QColor color();
-    
+
 signals:
     void colorChanged(const QColor color);
-    
+
 public slots:
     void setColor(const QColor &color);
 
@@ -41,6 +41,9 @@ private:
     bool inSquare;
     int x_offset;
     int y_offset;
+
+    QPixmap CleanWheel;
+    QImage CleanSquare;
 
     QColor posColor(const QPoint &point);
     void drawWheelImage(const QSize &newSize);
