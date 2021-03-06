@@ -81,6 +81,8 @@ private slots:
     void UpdateGraph();
     void PresetChanged(int);
 
+    void ShowHide();
+
 signals:
     void UpdateGraphSignal() const;
 
@@ -90,6 +92,8 @@ private:
     /*-----*\
     | Ui    |
     \*-----*/
+    QFrame* AudioSyncFrame;
+
     QImage*         image;
     QGraphicsScene* scene;
     QPixmap         pixmap;

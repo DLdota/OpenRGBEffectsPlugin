@@ -36,7 +36,7 @@ EffectInfo AudioSync::DefineEffectDetails()
 
 void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
 {
-    QFrame* AudioSyncFrame = new QFrame();
+    AudioSyncFrame = new QFrame();
     QVBoxLayout* MainAudioSyncLayout = new QVBoxLayout;
 
     int label_width = 120;
@@ -347,8 +347,28 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     MainAudioSyncLayout->addWidget(reset_defaults_button);
     connect(reset_defaults_button,SIGNAL(clicked(bool)), this, SLOT(RestoreDefaultSettings()));
 
+    /*-----------------*\
+    | Hide/Show Button  |
+    \*-----------------*/
+    QPushButton* HideShowButton = new QPushButton("Show/Hide Settings");
+    connect(HideShowButton,SIGNAL(clicked()),this, SLOT(ShowHide()));
+
     AudioSyncFrame->setLayout(MainAudioSyncLayout);
     ParentLayout->addWidget(AudioSyncFrame);
+    ParentLayout->addWidget(HideShowButton);
+    HideShowButton->click();
+}
+
+void AudioSync::ShowHide()
+{
+    if (AudioSyncFrame->isHidden())
+    {
+        AudioSyncFrame->show();
+    }
+    else
+    {
+        AudioSyncFrame->hide();
+    }
 }
 
 void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)

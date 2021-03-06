@@ -87,7 +87,7 @@ ScreenSelection::ScreenSelection(QWidget* Parent) :
 
 
     RadioFrame->setLayout(RadioLayout);
-    RadioFrame->setFixedHeight(30);
+    RadioFrame->setFixedHeight(40);
     RadioFrame->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed);
 
 

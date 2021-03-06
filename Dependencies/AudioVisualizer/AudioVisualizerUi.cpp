@@ -3,9 +3,7 @@
 /*-------------------------*\
 | Constructor / Destructor  |
 \*-------------------------*/
-AudioVisualizerUi::AudioVisualizerUi(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::AudioVisualizerUi)
+AudioVisualizerUi::AudioVisualizerUi(QWidget *parent) : QWidget(parent), ui(new Ui::AudioVisualizerUi)
 {
     ui->setupUi(this);
 
@@ -79,6 +77,8 @@ AudioVisualizerUi::AudioVisualizerUi(QWidget *parent) :
     image = new QImage(256, 64, QImage::Format_RGB32);
     scene = new QGraphicsScene(this);
     ui->graphicsView_Visualization_Preview->setScene(scene);
+
+    ui->ShowHideSettings->click();
 }
 
 AudioVisualizerUi::~AudioVisualizerUi()
@@ -134,6 +134,123 @@ json AudioVisualizerUi::SaveSettings()
     return vis_ptr->SaveSettings();
 }
 
+void AudioVisualizerUi::on_ShowHideSettings_clicked()
+{
+    if (Hiding)
+    {
+        Hiding = false;
+        ui->label_Normalization_Offset->show();
+        ui->lineEdit_Normalization_Offset->show();
+
+        ui->label_Normalization_Scale->show();
+        ui->lineEdit_Normalization_Scale->show();
+
+        ui->label_Animation_Speed->show();
+        ui->lineEdit_Animation_Speed->show();
+
+        ui->label_Filter_Constant->show();
+        ui->lineEdit_Filter_Constant->show();
+
+        ui->label_Amplitude->show();
+        ui->lineEdit_Amplitude->show();
+
+        ui->label_Background_Brightness->show();
+        ui->lineEdit_Background_Brightness->show();
+
+        ui->label_Average_Size->show();
+        ui->lineEdit_Average_Size->show();
+
+        ui->label_Decay->show();
+        ui->lineEdit_Decay->show();
+
+        ui->label_Background_Timeout->show();
+        ui->lineEdit_Background_Timeout->show();
+
+        ui->label_FFT_Window_Mode->show();
+        ui->comboBox_FFT_Window_Mode->show();
+
+        ui->label_Background_Mode->show();
+        ui->comboBox_Background_Mode->show();
+
+        ui->label_Foreground_Mode->show();
+        ui->comboBox_Foreground_Mode->show();
+
+        ui->label_Single_Color_Mode->show();
+        ui->comboBox_Single_Color_Mode->show();
+
+        ui->label_Average_Mode->show();
+        ui->comboBox_Average_Mode->show();
+
+        ui->label_Audio_Device->show();
+        ui->comboBox_Audio_Device->show();
+
+        ui->label_Reactive_Background->show();
+        ui->checkBox_Reactive_Background->show();
+
+        ui->label_Silent_Background->show();
+        ui->checkBox_Silent_Background->show();
+
+        ui->label_Visualization_Preview->show();
+        ui->graphicsView_Visualization_Preview->show();
+    }
+    else
+    {
+        Hiding = true;
+        ui->label_Normalization_Offset->hide();
+        ui->lineEdit_Normalization_Offset->hide();
+
+        ui->label_Normalization_Scale->hide();
+        ui->lineEdit_Normalization_Scale->hide();
+
+        ui->label_Animation_Speed->hide();
+        ui->lineEdit_Animation_Speed->hide();
+
+        ui->label_Filter_Constant->hide();
+        ui->lineEdit_Filter_Constant->hide();
+
+        ui->label_Amplitude->hide();
+        ui->lineEdit_Amplitude->hide();
+
+        ui->label_Background_Brightness->hide();
+        ui->lineEdit_Background_Brightness->hide();
+
+        ui->label_Average_Size->hide();
+        ui->lineEdit_Average_Size->hide();
+
+        ui->label_Decay->hide();
+        ui->lineEdit_Decay->hide();
+
+        ui->label_Background_Timeout->hide();
+        ui->lineEdit_Background_Timeout->hide();
+
+        ui->label_FFT_Window_Mode->hide();
+        ui->comboBox_FFT_Window_Mode->hide();
+
+        ui->label_Background_Mode->hide();
+        ui->comboBox_Background_Mode->hide();
+
+        ui->label_Foreground_Mode->hide();
+        ui->comboBox_Foreground_Mode->hide();
+
+        ui->label_Single_Color_Mode->hide();
+        ui->comboBox_Single_Color_Mode->hide();
+
+        ui->label_Average_Mode->hide();
+        ui->comboBox_Average_Mode->hide();
+
+        ui->label_Audio_Device->hide();
+        ui->comboBox_Audio_Device->hide();
+
+        ui->label_Reactive_Background->hide();
+        ui->checkBox_Reactive_Background->hide();
+
+        ui->label_Silent_Background->hide();
+        ui->checkBox_Silent_Background->hide();
+
+        ui->label_Visualization_Preview->hide();
+        ui->graphicsView_Visualization_Preview->hide();
+    }
+}
 
 /*---------*\
 | Stepping  |
@@ -187,8 +304,6 @@ void AudioVisualizerUi::update()
     pixmap.convertFromImage(*image);
     scene->clear();
     scene->addPixmap(pixmap);
-
-    ui->graphicsView_Visualization_Preview->show();
 
     if(vis_ptr->update_ui)
     {

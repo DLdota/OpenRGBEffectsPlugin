@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>828</width>
-    <height>449</height>
+    <width>454</width>
+    <height>186</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -45,9 +45,15 @@
       <layout class="QHBoxLayout" name="wave_freq_layout">
        <item>
         <widget class="QLabel" name="wave_freq_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>200</width>
+           <width>100</width>
            <height>30</height>
           </size>
          </property>
@@ -72,9 +78,15 @@
       <layout class="QHBoxLayout" name="wave_speed_layout">
        <item>
         <widget class="QLabel" name="wave_speed_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>200</width>
+           <width>100</width>
            <height>30</height>
           </size>
          </property>
@@ -102,9 +114,15 @@
        </property>
        <item>
         <widget class="QLabel" name="oscillation_speed_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>200</width>
+           <width>100</width>
            <height>30</height>
           </size>
          </property>
