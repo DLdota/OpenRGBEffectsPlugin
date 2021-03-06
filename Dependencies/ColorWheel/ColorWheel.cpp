@@ -13,6 +13,7 @@
 #include <QResizeEvent>
 #include <QStyleOption>
 #include <QtCore/qmath.h>
+#include <QDebug>
 #include <QPainterPath>
 
 ColorWheel::ColorWheel(QWidget *parent) :
@@ -342,6 +343,8 @@ void ColorWheel::drawWheelImage(const QSize &newSize)
     QRegion subRe( r/2, r/2, r-tmp, r-tmp, QRegion::Ellipse );
     subRe.translate( x_offset - (r-tmp)/2, y_offset - (r-tmp)/2);
     wheelRegion -= subRe;
+
+    CleanWheel = QPixmap().fromImage(wheelImage);
 }
 
 void ColorWheel::drawSquareImage(const int &hue)
@@ -398,6 +401,7 @@ void ColorWheel::drawSquareImage(const int &hue)
     | Calculate square region                               |
     \*-----------------------------------------------------*/
     squareRegion = QRegion(x_offset + m, y_offset + m, SquareWidth, SquareWidth);
+    CleanSquare = squareImage;
 }
 
 void ColorWheel::drawIndicator(const int &hue)
@@ -460,6 +464,8 @@ void ColorWheel::drawPicker(const QColor &color)
 
 void ColorWheel::composeWheel()
 {
+    wheel = CleanWheel;
+    squareImage = CleanSquare;
     QPainter composePainter(&wheel);
     composePainter.drawImage(0, 0, wheelImage);
     composePainter.drawImage(squareRegion.boundingRect().topLeft(), squareImage);
@@ -479,12 +485,12 @@ void ColorWheel::hueChanged(const int &hue)
     int v = current.value();
     current.setHsv(hue, s, v);
 
+    drawSquareImage(hue);
+
     if(!isVisible())
     {
         return;
     }
-
-    drawSquareImage(hue);
     repaint();
 
     emit colorChanged(current);
