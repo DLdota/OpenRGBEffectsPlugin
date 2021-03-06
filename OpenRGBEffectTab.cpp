@@ -280,10 +280,14 @@ void OpenRGBEffectTab::EffectStepTimer()
 {
     std::thread([=]()
     {
+        /*----------------------*\
+        | Create 1 clock object  |
+        \*----------------------*/
+        std::chrono::steady_clock* CLK = new std::chrono::steady_clock();
         while (true) {
             if (int(OpenRGBEffectTab::ActiveEffects.size()) > 0)
             {
-                auto start = std::chrono::steady_clock::now();
+                TCount start = CLK->now();
 
                 for (int EffectIndex = 0; EffectIndex < int(OpenRGBEffectTab::ActiveEffects.size()); EffectIndex++)
                 {
@@ -299,7 +303,7 @@ void OpenRGBEffectTab::EffectStepTimer()
                     }
                 }
 
-                auto end = std::chrono::steady_clock::now();
+                TCount end = CLK->now();
 
                 int delta = OpenRGBEffectTab::FPSDelay - std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 
@@ -309,13 +313,15 @@ void OpenRGBEffectTab::EffectStepTimer()
                 }
                 else
                 {
-                    // what could we really do more?
                     std::this_thread::sleep_for(std::chrono::milliseconds(1));
                 }
             }
             else
             {
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                /*--------------------------------------------------------------------------------------*\
+                | Sleep 5 seconds so that the CPU isn't being occupied by constant effect list checking  |
+                \*--------------------------------------------------------------------------------------*/
+                std::this_thread::sleep_for(std::chrono::seconds(5));
             }
         }
     }).detach();

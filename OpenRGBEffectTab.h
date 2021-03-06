@@ -28,6 +28,11 @@
 
 #pragma once
 
+/*-----------------------------------------------------------------------------------------------*\
+| Define so we have a reasonable variable name instead of having to use auto or the full vaiable  |
+\*-----------------------------------------------------------------------------------------------*/
+typedef std::chrono::time_point<std::chrono::steady_clock,std::chrono::duration<long long, std::ratio<1,10000000000>>> TCount;
+
 namespace Ui {
 class OpenRGBEffectTab;
 }
