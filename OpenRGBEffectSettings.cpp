@@ -16,7 +16,7 @@ void OpenRGBEffectSettings::SaveUserSettings(json Settings)
         try{
             EffectFile << Settings.dump(4);
         }
-        catch(std::exception e)
+        catch(const std::exception& e)
         {
             printf("Cannot write settings.\n");
         }
@@ -37,7 +37,7 @@ json OpenRGBEffectSettings::LoadUserSettings()
             SFile >> Settings;
             SFile.close();
         }
-        catch(std::exception e)
+        catch(const std::exception& e)
         {
              printf("Cannot read settings.\n");
         }

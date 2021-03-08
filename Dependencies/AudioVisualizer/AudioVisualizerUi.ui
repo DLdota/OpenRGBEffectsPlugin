@@ -48,7 +48,7 @@
    <item row="0" column="3">
     <widget class="QComboBox" name="comboBox_FFT_Window_Mode">
      <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+      <enum>QComboBox::AdjustToContents</enum>
      </property>
     </widget>
    </item>
@@ -65,7 +65,7 @@
    <item row="5" column="3">
     <widget class="QComboBox" name="comboBox_Audio_Device">
      <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+      <enum>QComboBox::AdjustToContents</enum>
      </property>
     </widget>
    </item>
@@ -123,7 +123,7 @@
    <item row="4" column="3">
     <widget class="QComboBox" name="comboBox_Average_Mode">
      <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+      <enum>QComboBox::AdjustToContents</enum>
      </property>
     </widget>
    </item>
@@ -221,7 +221,7 @@
    <item row="3" column="3">
     <widget class="QComboBox" name="comboBox_Single_Color_Mode">
      <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+      <enum>QComboBox::AdjustToContents</enum>
      </property>
     </widget>
    </item>
@@ -266,7 +266,7 @@
    <item row="2" column="3">
     <widget class="QComboBox" name="comboBox_Foreground_Mode">
      <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+      <enum>QComboBox::AdjustToContents</enum>
      </property>
     </widget>
    </item>
@@ -280,7 +280,7 @@
    <item row="1" column="3">
     <widget class="QComboBox" name="comboBox_Background_Mode">
      <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+      <enum>QComboBox::AdjustToContents</enum>
      </property>
     </widget>
    </item>
