@@ -75,6 +75,8 @@ private slots:
     void on_checkBox_Silent_Background_clicked(bool checked);
     void on_lineEdit_Background_Timeout_textChanged(const QString &arg1);
 
+    void on_ShowHideSettings_clicked();
+
 private:
     /*---------*\
     | GUI bits  |
@@ -87,6 +89,7 @@ private:
     /*--------------*\
     | State changes  |
     \*--------------*/
+    bool Hiding = false;
     bool RegisteredForDevice = false;
     bool EffectActive = false;
     void SetDevice();
