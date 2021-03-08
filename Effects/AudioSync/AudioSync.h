@@ -139,7 +139,7 @@ private:
     float                 current_freq_val = 0;
     std::vector<int>      rainbow_hues;
     std::vector<RGBColor> colors_rotation;    
-    unsigned int          audio_device_idx;
+    int                   audio_device_idx;
     static const RGBColor OFF = ToRGBColor(0,0,0);
 
     /*-----*\
