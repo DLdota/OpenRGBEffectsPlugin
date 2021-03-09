@@ -9,3 +9,4 @@ OpenRGB-x86_64.AppImage
 .vscode
 build
 Ship
+libORGBEffectPlugin.so*
