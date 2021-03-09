@@ -20,11 +20,11 @@
 | Project Includes                                          |
 \*---------------------------------------------------------*/
 #include "VisualizerDefines.h"
+#include "RGBEffect.h"
 #include "chuck_fft.h"
 #include "AudioManager.h"
 #include "hsv.h"
 #include "net_port.h"
-#include "RGBEffect.h"
 
 /*---------------------------------------------------------*\
 | Audio Library Includes                                    |
