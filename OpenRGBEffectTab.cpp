@@ -45,13 +45,13 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
     }
     ui->SelectDevices->setItem(NewRow,0,NewItem);
 
-    /*std::string IconStr = ":Reset";
+    std::string IconStr = ":Lock";
     if (ORGBPlugin::DarkTheme) IconStr.append("_dark");
     IconStr.append(".png");
-    QPushButton* ResetButton = new QPushButton(QIcon(IconStr.c_str()),"");*/
+    QPushButton* UnlockButton = new QPushButton(QIcon(IconStr.c_str()),"");
 
     QCheckBox* SelectedBox = new QCheckBox();
-
+    SetStyleSheetMargins(SelectedBox);
     ui->SelectDevices->setCellWidget(NewRow,1,SelectedBox);
 
     // Map the button press to send a string with the device name and index to the function
@@ -65,6 +65,7 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
     | Map the reverse button if there is more than 1 zone |
     \*---------------------------------------------------*/
     QCheckBox* ReversedBox = new QCheckBox();
+    SetStyleSheetMargins(ReversedBox);
     ui->SelectDevices->setCellWidget(NewRow,2,ReversedBox);
 
     QSignalMapper* DeviceReversalMapper = new QSignalMapper(ReversedBox);
@@ -145,6 +146,10 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
             \*----------------*/
             ZoneTableChecks->setCellWidget(ZoneNum,1,ZoneSelected);
             ZoneTableChecks->setCellWidget(ZoneNum,2,ZoneReversed);
+
+            SetStyleSheetMargins(ZoneSelected);
+            SetStyleSheetMargins(ZoneReversed);
+
             RowHeight += 1;
         }
         ui->SelectDevices->setRowHeight((NewRow + 1),(31*RowHeight) );
@@ -159,6 +164,17 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
     ui->SelectDevices->setCellWidget((NewRow + 1),0,ZoneTableChecks);
 
     return;
+}
+
+void OpenRGBEffectTab::SetStyleSheetMargins(QCheckBox* CB)
+{
+    /*------------------------------------------------------------------------------------------------*\
+    | While this function isn't strictly list entry creation it does Handling setting content margins  |
+    \*------------------------------------------------------------------------------------------------*/
+    CB->setStyleSheet("                 \
+                      margin-left:30%;  \
+                      margin-right:30%; \
+                      ");
 }
 
 
@@ -428,7 +444,7 @@ void OpenRGBEffectTab::DeviceListChanged()
 | Settings    |
 \*-----------*/
 json OpenRGBEffectTab::LoadPrevSetting()
-{    
+{
     return OpenRGBEffectSettings::LoadUserSettings();
 }
 
@@ -990,7 +1006,6 @@ void OpenRGBEffectTab::ZoneReversalChanged(QString DName)
 void OpenRGBEffectTab::on_TabChange(int Tab)
 {
     OpenRGBEffectTab::CurrentTab = Tab;
-    return;
 
     for (int RowID = 0; RowID < ui->SelectDevices->rowCount()/2; RowID++)
     {

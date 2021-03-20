@@ -98,6 +98,7 @@ private:
 
     static void DeviceListChangedCallback(void* ptr);
     void CreateDeviceSelection(RGBController* Controller, int Index, bool HasDirectMode);
+    void SetStyleSheetMargins(QCheckBox* CB);
 
     bool                                SelectsAll = true;
 
