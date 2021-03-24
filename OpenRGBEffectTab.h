@@ -6,6 +6,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QSignalMapper>
+#include "ResetButton.h"
 
 #include "ui_OpenRGBEffectTab.h"
 #include "ORGBEffectPlugin.h"
@@ -69,6 +70,7 @@ private slots:
 
     void on_SelectAll_clicked();
 
+    void UnlockDevice(int Device, int Zone);
 
 private:
     Ui::OpenRGBEffectTab                *ui;
@@ -99,6 +101,9 @@ private:
     static void DeviceListChangedCallback(void* ptr);
     void CreateDeviceSelection(RGBController* Controller, int Index, bool HasDirectMode);
     void SetStyleSheetMargins(QCheckBox* CB);
+
+    QCheckBox* GetCheckboxFromFrame(QWidget*);
+    ResetButton* GetResetButtonFromFrame(QWidget*);
 
     bool                                SelectsAll = true;
 

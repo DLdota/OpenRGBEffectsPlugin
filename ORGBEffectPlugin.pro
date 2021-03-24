@@ -47,6 +47,7 @@ INCLUDEPATH +=                                                                  
     Dependencies/HSV/                                                                           \
     Dependencies/ColorWheel/                                                                    \
     Dependencies/ScreenSelection/                                                               \
+    Dependencies/ResetButton/                                                                   \
 
 HEADERS +=                                                                                      \
     ORGBEffectPlugin.h                                                                          \
@@ -56,6 +57,7 @@ HEADERS +=                                                                      
     Dependencies/HSV/hsv.h                                                                      \
     Dependencies/ColorWheel/ColorWheel.h                                                        \
     Dependencies/ScreenSelection/ScreenSelection.h                                              \
+    Dependencies/ResetButton/ResetButton.h                                                      \
 
 SOURCES +=                                                                                      \
     ORGBEffectPlugin.cpp                                                                        \
@@ -65,6 +67,7 @@ SOURCES +=                                                                      
     Dependencies/HSV/hsv.cpp                                                                    \
     Dependencies/ColorWheel/ColorWheel.cpp                                                      \
     Dependencies/ScreenSelection/ScreenSelection.cpp                                            \
+    Dependencies/ResetButton/ResetButton.cpp                                                    \
 
 FORMS +=                                                                                        \
     OpenRGBEffectPage.ui                                                                        \

@@ -2,7 +2,5 @@
     <qresource prefix="/">
         <file>Reset.png</file>
         <file>Reset_dark.png</file>
-        <file>Lock.png</file>
-        <file>Lock_dark.png</file>
     </qresource>
 </RCC>
