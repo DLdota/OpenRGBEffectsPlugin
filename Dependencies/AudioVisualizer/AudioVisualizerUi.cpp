@@ -268,6 +268,15 @@ void AudioVisualizerUi::EffectState(bool IsRunning)
 {
     EffectActive = IsRunning;
     SetDevice();
+
+    if (!IsRunning)
+    {
+        if (RegisteredForDevice)
+        {
+            AudioManager::get()->UnRegisterClient(vis_ptr->previous_audio_device_idx,this);
+            RegisteredForDevice = false;
+        }
+    }
 }
 
 void AudioVisualizerUi::SetDevice()
