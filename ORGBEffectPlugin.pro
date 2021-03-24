@@ -87,6 +87,7 @@ INCLUDEPATH +=                                                                  
     Effects/AudioVisualizer/                                                                    \
     Effects/AudioSync/                                                                          \
     Effects/Wavy/                                                                               \
+    Effects/Lightning/                                                                          \
 
 SOURCES +=                                                                                      \
     Effects/Rain/Rain.cpp                                                                       \
@@ -101,6 +102,7 @@ SOURCES +=                                                                      
     Effects/AudioVisualizer/AudioVisualizer.cpp                                                 \
     Effects/AudioSync/AudioSync.cpp                                                             \
     Effects/Wavy/Wavy.cpp                                                                       \
+    Effects/Lightning/Lightning.cpp                                                             \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -116,6 +118,7 @@ HEADERS +=                                                                      
     Effects/AudioVisualizer/AudioVisualizer.h                                                   \
     Effects/AudioSync/AudioSync.h                                                               \
     Effects/Wavy/Wavy.h                                                                         \
+    Effects/Lightning/Lightning.h                                                               \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui
