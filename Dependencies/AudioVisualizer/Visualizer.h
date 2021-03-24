@@ -174,8 +174,8 @@ public:
     int avg_size;
     int window_mode;
     int decay;
-    unsigned int audio_device_idx;
-    unsigned int previous_audio_device_idx;
+    unsigned int audio_device_idx = 0;
+    unsigned int previous_audio_device_idx = 0;
 
     bool update_ui;
 
