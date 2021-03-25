@@ -80,47 +80,47 @@ INCLUDEPATH +=                                                                  
     Effects/                                                                                    \
     Effects/Rain/                                                                               \
     Effects/Rave/                                                                               \
+    Effects/Wavy/                                                                               \
+    Effects/Visor/                                                                              \
     Effects/Ambient/                                                                            \
+    Effects/AudioSync/                                                                          \
     Effects/Breathing/                                                                          \
     Effects/RainbowWave/                                                                        \
     Effects/StarryNight/                                                                        \
+    Effects/GradientWave/                                                                       \
     Effects/SpectrumCycling/                                                                    \
-    Effects/GradientCycling/                                                                    \
-    Effects/SeesawMotion/                                                                       \
     Effects/AudioVisualizer/                                                                    \
-    Effects/AudioSync/                                                                          \
-    Effects/Wavy/                                                                               \
     Effects/Lightning/                                                                          \
 
 SOURCES +=                                                                                      \
     Effects/Rain/Rain.cpp                                                                       \
     Effects/Rave/Rave.cpp                                                                       \
-    Effects/Ambient/Ambient.cpp                                                                 \
-    Effects/Breathing/Breathing.cpp                                                             \
-    Effects/StarryNight/StarryNight.cpp                                                         \
-    Effects/RainbowWave/RainbowWave.cpp                                                         \
-    Effects/GradientCycling/GradientCycling.cpp                                                 \
-    Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
-    Effects/SeesawMotion/SeesawMotion.cpp                                                       \
-    Effects/AudioVisualizer/AudioVisualizer.cpp                                                 \
-    Effects/AudioSync/AudioSync.cpp                                                             \
     Effects/Wavy/Wavy.cpp                                                                       \
+    Effects/Visor/Visor.cpp                                                                     \
+    Effects/Ambient/Ambient.cpp                                                                 \
+    Effects/AudioSync/AudioSync.cpp                                                             \
+    Effects/Breathing/Breathing.cpp                                                             \
+    Effects/RainbowWave/RainbowWave.cpp                                                         \
+    Effects/StarryNight/StarryNight.cpp                                                         \
+    Effects/GradientWave/GradientWave.cpp                                                       \
+    Effects/AudioVisualizer/AudioVisualizer.cpp                                                 \
     Effects/Lightning/Lightning.cpp                                                             \
+    Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
     Effects/Rain/Rain.h                                                                         \
     Effects/Rave/Rave.h                                                                         \
-    Effects/Ambient/Ambient.h                                                                   \
-    Effects/Breathing/Breathing.h                                                               \
-    Effects/StarryNight/StarryNight.h                                                           \
-    Effects/RainbowWave/RainbowWave.h                                                           \
-    Effects/GradientCycling/GradientCycling.h                                                   \
-    Effects/SpectrumCycling/SpectrumCycling.h                                                   \
-    Effects/SeesawMotion/SeesawMotion.h                                                         \
-    Effects/AudioVisualizer/AudioVisualizer.h                                                   \
-    Effects/AudioSync/AudioSync.h                                                               \
     Effects/Wavy/Wavy.h                                                                         \
+    Effects/Visor/Visor.h                                                                       \
+    Effects/Ambient/Ambient.h                                                                   \
+    Effects/AudioSync/AudioSync.h                                                               \
+    Effects/Breathing/Breathing.h                                                               \
+    Effects/RainbowWave/RainbowWave.h                                                           \
+    Effects/StarryNight/StarryNight.h                                                           \
+    Effects/GradientWave/GradientWave.h                                                         \
+    Effects/SpectrumCycling/SpectrumCycling.h                                                   \
+    Effects/AudioVisualizer/AudioVisualizer.h                                                   \
     Effects/Lightning/Lightning.h                                                               \
 
 FORMS +=                                                                                        \

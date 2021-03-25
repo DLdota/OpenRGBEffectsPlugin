@@ -92,6 +92,8 @@ private:
     /*-----*\
     | Ui    |
     \*-----*/
+    QSpacerItem* ToBottom;
+    QFrame* PrimaryFrame;
     QFrame* AudioSyncFrame;
 
     QImage*         image;

@@ -57,6 +57,9 @@ private:
     RGBColor UserColor;
     bool     RandomColors = false;
 
+    int      PrevNum;
+    bool     SpeedSliderChanged = false;
+
     std::vector<std::vector<bool>> HasEffect;
 };
 

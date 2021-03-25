@@ -1,13 +1,13 @@
-#ifndef GRADIENTCYCLING_H
-#define GRADIENTCYCLING_H
+#ifndef GRADIENTWAVE_H
+#define GRADIENTWAVE_H
 
 #include "RGBEffect.h"
 
-class GradientCycling: public RGBEffect
+class GradientWave: public RGBEffect
 {
 public:
-    GradientCycling() {};
-    ~GradientCycling() {};
+    GradientWave() {};
+    ~GradientWave() {};
 
     EffectInfo  DefineEffectDetails()                                                       override;
     void        DefineExtraOptions(QLayout*)                                                override;
@@ -40,8 +40,8 @@ private:
     std::vector<std::vector<float>>             Progress;
     std::vector<RGBColor>                       UserColors;
 
-    bool     RandomColors;
+    bool     RandomColors = false;
     RGBColor RandomColorList[2];
 };
 
-#endif // GRADIENTCYCLING_H
+#endif // GRADIENTWAVE_H
