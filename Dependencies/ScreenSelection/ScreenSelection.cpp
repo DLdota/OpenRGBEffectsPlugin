@@ -9,6 +9,7 @@
 ScreenSelection::ScreenSelection(QWidget* Parent) :
     QWidget(Parent)
 {
+    ToBottom = new QSpacerItem(0,0,QSizePolicy::Fixed,QSizePolicy::Fixed);
     screen = QGuiApplication::primaryScreen();
     mouseDown = false;
     inRange = false;
@@ -27,6 +28,7 @@ ScreenSelection::ScreenSelection(QWidget* Parent) :
     const QRect ScreenSize = this->screen->geometry();
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->addSpacerItem(ToBottom);
     mainLayout->addWidget(Display);
 
     /*------------*\
@@ -111,7 +113,11 @@ ScreenSelection::ScreenSelection(QWidget* Parent) :
     {
         while (true)
         {
-            if (AutoRefresh)
+            /*-------------------------------------------*\
+            | Don't do anything if the preview is hidden  |
+            | Even if it is set to auto refresh           |
+            \*-------------------------------------------*/
+            if (AutoRefresh && !Display->isHidden())
             {
                 GetScreen();
                 std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -358,6 +364,7 @@ void ScreenSelection::on_ShowHide()
         Display->show();
         ForMod = ScreenShot;
         ShowHide->setText("Hide Preview");
+        ToBottom->changeSize(0,0,QSizePolicy::Fixed,QSizePolicy::Fixed);
         update();
         this->layout()->setSizeConstraint(QLayout::SetDefaultConstraint);
         this->resize(PrevSize);
@@ -369,6 +376,10 @@ void ScreenSelection::on_ShowHide()
         Display->clear();
         ForMod = QPixmap(0,0);
         ShowHide->setText("Show Preview");
+        if (!this->isHidden())
+        {
+            ToBottom->changeSize(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+        }
         this->resize(this->minimumSize());
     }
 }

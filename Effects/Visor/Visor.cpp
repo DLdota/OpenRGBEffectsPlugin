@@ -1,32 +1,32 @@
-﻿#include "SeesawMotion.h"
+﻿#include "Visor.h"
 #include "OpenRGBEffectTab.h"
 
 RGBColor OFF = ToRGBColor(0,0,0);
 
-EffectInfo SeesawMotion::DefineEffectDetails()
+EffectInfo Visor::DefineEffectDetails()
 {
-    SeesawMotion::EffectDetails.EffectName = "Visor";
-    SeesawMotion::EffectDetails.EffectDescription = "A back and forth effect motion, flipping colors";
+    Visor::EffectDetails.EffectName = "Visor";
+    Visor::EffectDetails.EffectDescription = "A back and forth effect motion, flipping colors";
 
-    SeesawMotion::EffectDetails.IsReversable = false;
-    SeesawMotion::EffectDetails.MaxSpeed     = 100;
-    SeesawMotion::EffectDetails.MinSpeed     = 10;
+    Visor::EffectDetails.IsReversable = false;
+    Visor::EffectDetails.MaxSpeed     = 100;
+    Visor::EffectDetails.MinSpeed     = 10;
 
-    SeesawMotion::EffectDetails.UserColors   = 2;
+    Visor::EffectDetails.UserColors   = 2;
 
-    SeesawMotion::EffectDetails.MinSlider2Val = 3;
-    SeesawMotion::EffectDetails.MaxSlider2Val = 50;
-    SeesawMotion::EffectDetails.Slider2Name   = "Width";
+    Visor::EffectDetails.MinSlider2Val = 3;
+    Visor::EffectDetails.MaxSlider2Val = 50;
+    Visor::EffectDetails.Slider2Name   = "Width";
 
-    SeesawMotion::EffectDetails.HasCustomWidgets = false;
-    SeesawMotion::EffectDetails.HasCustomSettings = false;
+    Visor::EffectDetails.HasCustomWidgets = false;
+    Visor::EffectDetails.HasCustomSettings = false;
 
-    return SeesawMotion::EffectDetails;
+    return Visor::EffectDetails;
 }
 
-void SeesawMotion::DefineExtraOptions(QLayout*){}
+void Visor::DefineExtraOptions(QLayout*){}
 
-void SeesawMotion::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
+void Visor::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {    
     current_head_hue = Dir ? Head.hue: Tail.hue;
     current_tail_hue = Dir ? Tail.hue: Head.hue;
@@ -111,7 +111,7 @@ void SeesawMotion::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
 
 }
 
-void SeesawMotion::GenerateRandomColors()
+void Visor::GenerateRandomColors()
 {
     RGBColor C1 = ToRGBColor(rand() % 255,rand() % 255, rand() % 255);
     RGBColor C2 = ToRGBColor(rand() % 255,rand() % 255, rand() % 255);
@@ -119,7 +119,7 @@ void SeesawMotion::GenerateRandomColors()
     rgb2hsv(C2, &Tail);
 }
 
-void SeesawMotion::ToggleRandomColors(bool NewRandom)
+void Visor::ToggleRandomColors(bool NewRandom)
 {
     Random = NewRandom;
 
@@ -133,12 +133,12 @@ void SeesawMotion::ToggleRandomColors(bool NewRandom)
     }
 }
 
-void SeesawMotion::SetSpeed(int NewSpeed)
+void Visor::SetSpeed(int NewSpeed)
 {
     Speed = NewSpeed;
 }
 
-void SeesawMotion::SetUserColors(std::vector<RGBColor> NewUserColors)
+void Visor::SetUserColors(std::vector<RGBColor> NewUserColors)
 {
     UserColors = NewUserColors;
 
@@ -149,12 +149,12 @@ void SeesawMotion::SetUserColors(std::vector<RGBColor> NewUserColors)
     }
 }
 
-void SeesawMotion::Slider2Changed(int NewWidth)
+void Visor::Slider2Changed(int NewWidth)
 {
     width = NewWidth * 2 ;
 }
 
-RGBColor SeesawMotion::GetColor(int i, int count)
+RGBColor Visor::GetColor(int i, int count)
 {
     float percent = (Progress/100)* (count+width+1);
 

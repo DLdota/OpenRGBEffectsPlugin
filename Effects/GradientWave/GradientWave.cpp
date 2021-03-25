@@ -1,31 +1,31 @@
-#include "GradientCycling.h"
+#include "GradientWave.h"
 #include "OpenRGBEffectTab.h"
 
-std::vector<OwnedControllerAndZones> GradientCycling::PrevControllers;
+std::vector<OwnedControllerAndZones> GradientWave::PrevControllers;
 
-EffectInfo GradientCycling::DefineEffectDetails()
+EffectInfo GradientWave::DefineEffectDetails()
 {
-    GradientCycling::EffectDetails.EffectName = "Gradient Cycling";
-    GradientCycling::EffectDetails.EffectDescription = "Similar to rainbow wave but with 2 colors";
+    GradientWave::EffectDetails.EffectName = "Gradient Wave";
+    GradientWave::EffectDetails.EffectDescription = "Similar to rainbow wave but with 2 colors";
 
-    GradientCycling::EffectDetails.IsReversable  = true;
-    GradientCycling::EffectDetails.MaxSpeed      = 30;
-    GradientCycling::EffectDetails.MinSpeed      = 1;
-    GradientCycling::EffectDetails.UserColors    = 2;
+    GradientWave::EffectDetails.IsReversable  = true;
+    GradientWave::EffectDetails.MaxSpeed      = 30;
+    GradientWave::EffectDetails.MinSpeed      = 1;
+    GradientWave::EffectDetails.UserColors    = 2;
 
-    GradientCycling::EffectDetails.MinSlider2Val = 0;
-    GradientCycling::EffectDetails.MaxSlider2Val = 0;
-    GradientCycling::EffectDetails.Slider2Name   = "";
+    GradientWave::EffectDetails.MinSlider2Val = 0;
+    GradientWave::EffectDetails.MaxSlider2Val = 0;
+    GradientWave::EffectDetails.Slider2Name   = "";
 
-    GradientCycling::EffectDetails.HasCustomWidgets = false;
-    GradientCycling::EffectDetails.HasCustomSettings = false;
+    GradientWave::EffectDetails.HasCustomWidgets = false;
+    GradientWave::EffectDetails.HasCustomSettings = false;
 
-    return GradientCycling::EffectDetails;
+    return GradientWave::EffectDetails;
 }
 
-void GradientCycling::DefineExtraOptions(QLayout*){}
+void GradientWave::DefineExtraOptions(QLayout*){}
 
-void GradientCycling::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
+void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
     int F[3];
     int S[3];
@@ -157,27 +157,27 @@ void GradientCycling::StepEffect(std::vector<OwnedControllerAndZones> Controller
     }
 }
 
-void GradientCycling::SetSpeed(int Speed)
+void GradientWave::SetSpeed(int Speed)
 {
-    GradientCycling::Speed = Speed;
+    GradientWave::Speed = Speed;
 }
 
-void GradientCycling::SetUserColors(std::vector<RGBColor> NewColors)
+void GradientWave::SetUserColors(std::vector<RGBColor> NewColors)
 {
-    GradientCycling::UserColors = NewColors;
+    GradientWave::UserColors = NewColors;
 }
 
-void GradientCycling::Slider2Changed(int NewWidth)
+void GradientWave::Slider2Changed(int NewWidth)
 {
-    GradientCycling::Width = NewWidth;
+    GradientWave::Width = NewWidth;
 }
 
-void GradientCycling::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
+void GradientWave::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
 {
     Progress.clear();
 }
 
-void GradientCycling::ToggleRandomColors(bool RandomEnabled)
+void GradientWave::ToggleRandomColors(bool RandomEnabled)
 {
     if (RandomEnabled)
     {

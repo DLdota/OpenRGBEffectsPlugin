@@ -1,14 +1,14 @@
-#ifndef SEESAWMOTION_H
-#define SEESAWMOTION_H
+#ifndef Visor_H
+#define Visor_H
 
 #include "RGBEffect.h"
 #include "OpenRGBEffectPage.h"
 
-class SeesawMotion: public RGBEffect
+class Visor: public RGBEffect
 {
 public:
-    SeesawMotion() {};
-    ~SeesawMotion() {};
+    Visor() {};
+    ~Visor() {};
 
     EffectInfo  DefineEffectDetails()                                       override;
     void        DefineExtraOptions(QLayout*)                                override;
@@ -49,5 +49,5 @@ private:
 
 };
 
-#endif // SeesawMotion_H
+#endif // Visor_H
 

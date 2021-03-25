@@ -52,6 +52,8 @@ protected:
     void paintEvent(QPaintEvent *);
 
 private:
+    QSpacerItem* ToBottom;
+
     QImage ToCalc;
 
     QPixmap ScreenShot;

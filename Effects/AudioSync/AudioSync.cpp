@@ -36,6 +36,11 @@ EffectInfo AudioSync::DefineEffectDetails()
 
 void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
 {
+    ToBottom = new QSpacerItem(0,0,QSizePolicy::Fixed, QSizePolicy::Fixed);
+    PrimaryFrame = new QFrame();
+    QVBoxLayout* PrimaryLayout = new QVBoxLayout();
+
+
     AudioSyncFrame = new QFrame();
     QVBoxLayout* MainAudioSyncLayout = new QVBoxLayout;
 
@@ -354,8 +359,13 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     connect(HideShowButton,SIGNAL(clicked()),this, SLOT(ShowHide()));
 
     AudioSyncFrame->setLayout(MainAudioSyncLayout);
-    ParentLayout->addWidget(AudioSyncFrame);
-    ParentLayout->addWidget(HideShowButton);
+    PrimaryLayout->addSpacerItem(ToBottom);
+    PrimaryLayout->addWidget(AudioSyncFrame);
+    PrimaryLayout->addWidget(HideShowButton);
+    PrimaryFrame->setLayout(PrimaryLayout);
+
+    ParentLayout->addWidget(PrimaryFrame);
+
     HideShowButton->click();
 }
 
@@ -364,10 +374,13 @@ void AudioSync::ShowHide()
     if (AudioSyncFrame->isHidden())
     {
         AudioSyncFrame->show();
+        ToBottom->changeSize(0,0,QSizePolicy::Fixed,QSizePolicy::Fixed);
     }
     else
     {
         AudioSyncFrame->hide();
+        ToBottom->changeSize(0,0,QSizePolicy::Fixed,QSizePolicy::Expanding);
+        PrimaryFrame->adjustSize();
     }
 }
 

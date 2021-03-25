@@ -17,12 +17,12 @@ void OpenRGBEffectTab::DefineEffects()
     OpenRGBEffectTab::EffectList.push_back(new SpectrumCycling);
     OpenRGBEffectTab::EffectList.push_back(new RainbowWave);
     OpenRGBEffectTab::EffectList.push_back(new StarryNight);
-    OpenRGBEffectTab::EffectList.push_back(new GradientCycling);
+    OpenRGBEffectTab::EffectList.push_back(new GradientWave);
     OpenRGBEffectTab::EffectList.push_back(new Breathing);
     OpenRGBEffectTab::EffectList.push_back(new Rain);
     OpenRGBEffectTab::EffectList.push_back(new Rave);
     OpenRGBEffectTab::EffectList.push_back(new Ambient);
-    OpenRGBEffectTab::EffectList.push_back(new SeesawMotion);
+    OpenRGBEffectTab::EffectList.push_back(new Visor);
     OpenRGBEffectTab::EffectList.push_back(new AudioVisualizer);
     OpenRGBEffectTab::EffectList.push_back(new AudioSync);
     OpenRGBEffectTab::EffectList.push_back(new Wavy);
@@ -382,9 +382,9 @@ void OpenRGBEffectTab::EffectStepTimer()
             else
             {
                 /*--------------------------------------------------------------------------------------*\
-                | Sleep 5 seconds so that the CPU isn't being occupied by constant effect list checking  |
+                | Sleep 3 seconds so that the CPU isn't being occupied by constant effect list checking  |
                 \*--------------------------------------------------------------------------------------*/
-                std::this_thread::sleep_for(std::chrono::seconds(5));
+                std::this_thread::sleep_for(std::chrono::seconds(3));
             }
         }
     }).detach();
@@ -560,7 +560,7 @@ void OpenRGBEffectTab::GivePreviousDevices()
             on_TabChange(EffectIndex);
             if (UserSettings["Effects"][EffectIndex].contains("EffectName"))
             {
-                if (UserSettings["Effects"][EffectIndex]["EffectName"] != EffectList[EffectIndex]->EffectDetails.EffectName) return;
+                if (UserSettings["Effects"][EffectIndex]["EffectName"] != EffectList[EffectIndex]->EffectDetails.EffectName) continue;
                 json DeviceList = UserSettings["Effects"][EffectIndex]["EffectSettings"]["Controllers"];
 
                 for (int DeviceIndex = 0; DeviceIndex < (int)DeviceList.size(); DeviceIndex++)
@@ -1123,6 +1123,7 @@ void OpenRGBEffectTab::UnlockDevice(int Device, int Zone)
 
 void OpenRGBEffectTab::on_TabChange(int Tab)
 {
+    bool FullSelectAll = true;
     OpenRGBEffectTab::CurrentTab = Tab;
 
     for (int RowID = 0; RowID < ui->SelectDevices->rowCount()/2; RowID++)
@@ -1259,6 +1260,12 @@ void OpenRGBEffectTab::on_TabChange(int Tab)
         | Set reverse checkbox state to enabled or disabled   |
         | depending on whether or not the effect supports it  |
         \*---------------------------------------------------*/
+
+        if (!AllSelected)
+        {
+            FullSelectAll = false;
+        }
+
         QCheckBox* DeviceReversed = qobject_cast<QCheckBox*>(ui->SelectDevices->cellWidget( (RowID * 2) ,2));
         DeviceReversed->setEnabled(EffectList[CurrentTab]->EffectDetails.IsReversable);
 
@@ -1271,6 +1278,16 @@ void OpenRGBEffectTab::on_TabChange(int Tab)
             QCheckBox* ZoneReversed = qobject_cast<QCheckBox*>(ZoneTable->cellWidget(ZoneID,2));
             ZoneReversed->setEnabled(EffectList[CurrentTab]->EffectDetails.IsReversable);
         }
+    }
+
+    SelectsAll = !FullSelectAll;
+    if (SelectsAll)
+    {
+        ui->SelectAll->setText("Select All");
+    }
+    else if (!SelectsAll)
+    {
+        ui->SelectAll->setText("Deselect All");
     }
 }
 
