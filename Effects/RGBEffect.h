@@ -34,6 +34,7 @@ struct OwnedControllerAndZones
 struct ZoneOwnedBy
 {
     int Zone;
+    int EffectIndex;
     std::string EffectName;
 };
 
