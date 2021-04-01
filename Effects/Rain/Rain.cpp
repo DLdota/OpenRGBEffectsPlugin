@@ -1,5 +1,7 @@
 #include "Rain.h"
-#include "OpenRGBEffectTab.h"
+#include "ORGBEffectPlugin.h"
+#include "EffectManager.h"
+#include "hsv.h"
 
 EffectInfo Rain::DefineEffectDetails()
 {
@@ -55,7 +57,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                             NewDrop.StartingLED = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
 
                             NewDrop.ZT = ZONE_TYPE_LINEAR;
-                            NewDrop.Reversed = OpenRGBEffectTab::CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
+                            NewDrop.Reversed = EffectManager::Get()->CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
 
                             if (NewDrop.Reversed) NewDrop.Progress = NewDrop.LEDCount;
                             else NewDrop.Progress = 0;
@@ -98,7 +100,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 
                             NewDrop.Progress = 0;
                             NewDrop.ZT = ZONE_TYPE_MATRIX;
-                            NewDrop.Reversed = OpenRGBEffectTab::CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
+                            NewDrop.Reversed = EffectManager::Get()->CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
 
                             if (RandomColors)
                             {

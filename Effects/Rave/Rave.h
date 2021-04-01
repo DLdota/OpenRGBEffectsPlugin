@@ -1,7 +1,6 @@
 #ifndef RAVE_H
 #define RAVE_H
 
-#include "OpenRGBEffectTab.h"
 #include "RGBEffect.h"
 
 struct LightList

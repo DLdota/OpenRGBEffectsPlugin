@@ -1,4 +1,7 @@
+#include "ORGBEffectPlugin.h"
+#include "EffectManager.h"
 #include "Rave.h"
+#include "hsv.h"
 
 EffectInfo Rave::DefineEffectDetails()
 {
@@ -56,7 +59,7 @@ void Rave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                                 NewLight.StartingLED = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
 
                                 NewLight.ZT = ZONE_TYPE_LINEAR;
-                                NewLight.Reversed = OpenRGBEffectTab::CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
+                                NewLight.Reversed = EffectManager::Get()->CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
 
                                 if (NewLight.Reversed) NewLight.Progress = NewLight.LEDCount;
                                 else NewLight.Progress = 0;
@@ -111,7 +114,7 @@ void Rave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 
                                 NewLight.Progress = 0;
                                 NewLight.ZT = ZONE_TYPE_MATRIX;
-                                NewLight.Reversed = OpenRGBEffectTab::CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
+                                NewLight.Reversed = EffectManager::Get()->CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
 
                                 CurrentLights.push_back(NewLight);
                             }

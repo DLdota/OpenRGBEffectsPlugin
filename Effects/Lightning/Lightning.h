@@ -1,9 +1,11 @@
 #ifndef LIGHTNING_H
 #define LIGHTNING_H
 
+#include <QWidget>
 #include <stdlib.h>
-#include "RGBEffect.h"
 
+#include "hsv.h"
+#include "RGBEffect.h"
 
 class Lightning: public QWidget, public RGBEffect
 {

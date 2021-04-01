@@ -1,4 +1,5 @@
 #include "Breathing.h"
+#include "hsv.h"
 
 EffectInfo Breathing::DefineEffectDetails()
 {

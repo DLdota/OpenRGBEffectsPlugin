@@ -1,16 +1,17 @@
-#include "OpenRGBPluginInterface.h"
-#include "ResourceManager.h"
+#ifndef ORGBEFFECTPLUGIN_H
+#define ORGBEFFECTPLUGIN_H
 
 #include <QObject>
 #include <QString>
 #include <QtPlugin>
-#include "QWidget"
-#include "QLabel"
-#include "QPushButton"
-#include "QDialog"
-#include "QAction"
+#include <QWidget>
+#include <QLabel>
+#include <QPushButton>
+#include <QDialog>
+#include <QAction>
 
-#pragma once
+#include "OpenRGBPluginInterface.h"
+#include "ResourceManager.h"
 
 class ORGBPlugin : public QObject, public OpenRGBPluginInterface
 {
@@ -31,3 +32,5 @@ public:
 
     static ResourceManager* RMPointer;
 };
+
+#endif

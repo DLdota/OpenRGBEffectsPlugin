@@ -5,10 +5,18 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
+
+#include "RGBController.h"
 #include "json.hpp"
-#include "ORGBEffectPlugin.h"
 
 using json = nlohmann::json;
+
+struct EffectSettings
+{
+    std::vector<RGBColor> UserColors;
+    int                   SpeedSliderVal;
+    int                   Slider2Val;
+};
 
 class OpenRGBEffectSettings
 {

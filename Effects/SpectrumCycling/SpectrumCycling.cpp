@@ -1,5 +1,6 @@
-#include "SpectrumCycling.h"
 #include <iostream>
+#include "SpectrumCycling.h"
+#include "hsv.h"
 
 EffectInfo SpectrumCycling::DefineEffectDetails()
 {

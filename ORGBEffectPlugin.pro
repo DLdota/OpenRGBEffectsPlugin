@@ -26,6 +26,7 @@ INCLUDEPATH +=                                                                  
     OpenRGB/dependencies/json                                                                   \
 
 HEADERS +=                                                                                      \
+    Effects/Effects.h \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -54,6 +55,7 @@ HEADERS +=                                                                      
     OpenRGBEffectTab.h                                                                          \
     OpenRGBEffectPage.h                                                                         \
     OpenRGBEffectSettings.h                                                                     \
+    EffectManager.h                                                                             \
     Dependencies/HSV/hsv.h                                                                      \
     Dependencies/ColorWheel/ColorWheel.h                                                        \
     Dependencies/ScreenSelection/ScreenSelection.h                                              \
@@ -64,6 +66,7 @@ SOURCES +=                                                                      
     OpenRGBEffectTab.cpp                                                                        \
     OpenRGBEffectPage.cpp                                                                       \
     OpenRGBEffectSettings.cpp                                                                   \
+    EffectManager.cpp                                                                           \
     Dependencies/HSV/hsv.cpp                                                                    \
     Dependencies/ColorWheel/ColorWheel.cpp                                                      \
     Dependencies/ScreenSelection/ScreenSelection.cpp                                            \

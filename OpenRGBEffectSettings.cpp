@@ -1,5 +1,5 @@
+#include "ORGBEffectPlugin.h"
 #include "OpenRGBEffectSettings.h"
-
 
 void OpenRGBEffectSettings::SaveUserSettings(json Settings)
 {
