@@ -18,6 +18,8 @@ This is a plugin for [OpenRGB](https://gitlab.com/CalcProgrammer1/OpenRGB) that 
 
 ### **linux**
 
+Make sure `libopenal` is installed first. You can use your package manager to install it (`apt`, `yum`, `pacman`, etc..).
+
 1. download the latest [linux pipeline](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectPlugin/-/jobs/artifacts/master/download?job=build_linux_64)
 
 2. Copy ``libOpenRGBEffectPlugin.so`` from the 7z to ``~/.config/OpenRGB/plugins``
