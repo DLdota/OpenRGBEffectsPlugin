@@ -6,23 +6,14 @@
 #include <QCheckBox>
 #include <QColorDialog>
 #include <QApplication>
-
 #include <fstream>
 #include <iostream>
-
 #include <thread>
 
-#include "ORGBEffectPlugin.h"
-#include "OpenRGBEffectTab.h"
 #include "ui_OpenRGBEffectPage.h"
-#include "OpenRGBEffectSettings.h"
 
-struct EffectSettings
-{
-    std::vector<RGBColor> UserColors;
-    int                   SpeedSliderVal;
-    int                   Slider2Val;
-};
+#include "RGBEffect.h"
+#include "OpenRGBEffectSettings.h"
 
 namespace Ui {
 class OpenRGBEffectPage;

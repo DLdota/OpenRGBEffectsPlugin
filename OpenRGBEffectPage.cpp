@@ -1,4 +1,6 @@
+#include "ORGBEffectPlugin.h"
 #include "OpenRGBEffectPage.h"
+#include "EffectManager.h"
 #include "ColorWheel.h"
 
 /*-----------------------*\
@@ -81,7 +83,7 @@ OpenRGBEffectPage::~OpenRGBEffectPage()
 \*--------*/
 void OpenRGBEffectPage::on_StartButton_clicked()
 {
-    OpenRGBEffectTab::SetEffectActive(EFCT);
+    EffectManager::Get()->SetEffectActive(EFCT);
     EFCT->EffectState(true);
 
     ui->StartButton->setDisabled(true);
@@ -91,7 +93,7 @@ void OpenRGBEffectPage::on_StartButton_clicked()
 
 void OpenRGBEffectPage::on_StopButton_clicked()
 {
-    OpenRGBEffectTab::SetEffectUnActive(EFCT);
+    EffectManager::Get()->SetEffectUnActive(EFCT);
     EFCT->EffectState(false);
 
     ui->StartButton->setDisabled(false);
@@ -209,7 +211,7 @@ void OpenRGBEffectPage::on_RandomCheckbox_clicked()
 \*---------*/
 void OpenRGBEffectPage::StartupSettings()
 {
-    json UserSettings = OpenRGBEffectTab::LoadPrevSetting();
+    json UserSettings = OpenRGBEffectSettings::LoadUserSettings();
 
     if(UserSettings.contains("Effects"))
     {
@@ -293,7 +295,7 @@ void OpenRGBEffectPage::StartupSettings()
 
 void OpenRGBEffectPage::on_SaveSettings_clicked()
 {
-    json PrevSettings = OpenRGBEffectTab::LoadPrevSetting();
+    json PrevSettings = OpenRGBEffectSettings::LoadUserSettings();
 
     PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectName"] = EFCT->EffectDetails.EffectName;
 
@@ -303,7 +305,7 @@ void OpenRGBEffectPage::on_SaveSettings_clicked()
         PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["UserColors"][UserColorIndex] = UserColors[UserColorIndex];
     }
 
-    std::vector<OwnedControllerAndZones> ToPass = OpenRGBEffectTab::GetToPass(EFCT->EffectDetails.EffectIndex);
+    std::vector<OwnedControllerAndZones> ToPass = EffectManager::Get()->GetToPass(EFCT->EffectDetails.EffectIndex);
 
     PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"] = {};
 

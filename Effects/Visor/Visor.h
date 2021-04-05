@@ -1,6 +1,7 @@
 #ifndef Visor_H
 #define Visor_H
 
+#include "hsv.h"
 #include "RGBEffect.h"
 #include "OpenRGBEffectPage.h"
 

@@ -1,5 +1,6 @@
 #include "RainbowWave.h"
-#include "OpenRGBEffectTab.h"
+#include "EffectManager.h"
+#include "hsv.h"
 
 EffectInfo RainbowWave::DefineEffectDetails()
 {
@@ -38,7 +39,7 @@ void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
             \*-------------------*/
             int SetLEDIndex = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
             zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
-            bool RVRS = OpenRGBEffectTab::CheckReversed(ControllerID, Controllers[ControllerID].OwnedZones[ZoneID]);
+            bool RVRS = EffectManager::Get()->CheckReversed(ControllerID, Controllers[ControllerID].OwnedZones[ZoneID]);
 
             /*----------------------------------------------------*\
             | Adjust how it applies for the specific type of zone  |

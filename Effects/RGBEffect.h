@@ -1,10 +1,11 @@
 #ifndef RGBEFFECT_H
 #define RGBEFFECT_H
 
-#pragma once
+#include <QLayout>
+#include "RGBController.h"
+#include "json.hpp"
 
-#include "ORGBEffectPlugin.h"
-#include "hsv.h"
+using json = nlohmann::json;
 
 struct EffectInfo
 {
@@ -28,13 +29,13 @@ struct EffectInfo
 struct OwnedControllerAndZones
 {
     RGBController*     Controller;
-    std::vector<int>   OwnedZones;
+    std::vector<unsigned int>   OwnedZones;
 };
 
 struct ZoneOwnedBy
 {
-    int Zone;
-    int EffectIndex;
+    unsigned int Zone;
+    unsigned int EffectIndex;
     std::string EffectName;
 };
 

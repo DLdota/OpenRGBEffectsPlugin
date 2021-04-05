@@ -1,5 +1,5 @@
 #include "GradientWave.h"
-#include "OpenRGBEffectTab.h"
+#include "EffectManager.h"
 
 std::vector<OwnedControllerAndZones> GradientWave::PrevControllers;
 
@@ -68,7 +68,7 @@ void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
             zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
             int StartIndex = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
             int LEDCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count;
-            bool RVRS = OpenRGBEffectTab::CheckReversed(ControllerID, Controllers[ControllerID].OwnedZones[ZoneID]);
+            bool RVRS = EffectManager::Get()->CheckReversed(ControllerID, Controllers[ControllerID].OwnedZones[ZoneID]);
 
             if (ZT == ZONE_TYPE_SINGLE)
             {

@@ -1,6 +1,5 @@
 #include "ORGBEffectPlugin.h"
 #include "OpenRGBEffectTab.h"
-#include "json.hpp"
 
 bool ORGBPlugin::DarkTheme = false;
 ResourceManager* ORGBPlugin::RMPointer = nullptr;
@@ -32,8 +31,6 @@ OpenRGBPluginInfo ORGBPlugin::Initialize(bool Dt, ResourceManager *RM)
 QWidget* ORGBPlugin::CreateGUI(QWidget*)
 {
     ORGBPlugin::RMPointer->WaitForDeviceDetection();
-    OpenRGBEffectTab* EETab = NULL;
-    EETab = new OpenRGBEffectTab(nullptr);
-
+    OpenRGBEffectTab* EETab = new OpenRGBEffectTab(nullptr);
     return EETab;
 }

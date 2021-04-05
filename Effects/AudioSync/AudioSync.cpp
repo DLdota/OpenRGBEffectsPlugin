@@ -50,6 +50,7 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     | Frequency preview  |
     \*------------------*/
     graphics_view = new QGraphicsView();
+    graphics_view->resize(256, 64);
     image = new QImage(256, 64, QImage::Format_RGB30);
     scene = new QGraphicsScene();
     graphics_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

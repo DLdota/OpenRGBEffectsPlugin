@@ -114,12 +114,13 @@ void Wavy::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
         else
         {
             Dir = true;
-            SineProgress += 0.01 * OscillationSpeed / FPS;
-            if(IsRandomColors)
-            {
-                GenerateRandomColors();
-            }
+            SineProgress += 0.01 * OscillationSpeed / FPS;            
         }
+    }
+
+    if(IsRandomColors && SineProgress >= -0.01f && SineProgress <= 0.01f)
+    {
+        GenerateRandomColors();
     }
 
     SineProgress = std::min<float>(SineProgress, 1.0f);
@@ -172,8 +173,12 @@ json Wavy::SaveCustomSettings(json Settings)
 void Wavy::GenerateRandomColors()
 {
     RandomColors.clear();
-    RandomColors.push_back(RGBColor(ToRGBColor(rand() % 255,rand() % 255, rand() % 255)));
-    RandomColors.push_back(RGBColor(ToRGBColor(rand() % 255,rand() % 255, rand() % 255)));
+    int r = rand() % 255;
+    int g = rand() % 255;
+    int b = rand() % 255;
+
+    RandomColors.push_back(RGBColor(ToRGBColor(r,g,b)));
+    RandomColors.push_back(RGBColor(ToRGBColor((255-r),(255-g),(255-b))));
 }
 
 RGBColor Wavy::Interpolate(RGBColor color1, RGBColor color2, float fraction)
