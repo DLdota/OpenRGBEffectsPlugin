@@ -113,8 +113,12 @@ void Visor::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS
 
 void Visor::GenerateRandomColors()
 {
-    RGBColor C1 = ToRGBColor(rand() % 255,rand() % 255, rand() % 255);
-    RGBColor C2 = ToRGBColor(rand() % 255,rand() % 255, rand() % 255);
+    int r = rand() % 255;
+    int g = rand() % 255;
+    int b = rand() % 255;
+    RGBColor C1 = ToRGBColor(r, g, b);
+    RGBColor C2 = ToRGBColor((255-r),(255-g),(255-b));
+
     rgb2hsv(C1, &Head);
     rgb2hsv(C2, &Tail);
 }
