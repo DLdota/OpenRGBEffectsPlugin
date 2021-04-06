@@ -44,7 +44,7 @@ private slots:
     void on_SaveSettings_clicked();
     void on_AutoStart_clicked();
     void on_RandomCheckbox_clicked();
-
+    void on_OnlyFirst_clicked();
 
 private:
     Ui::OpenRGBEffectPage *ui;

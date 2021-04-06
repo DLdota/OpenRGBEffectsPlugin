@@ -7,7 +7,6 @@
 #include "GradientWave.h"
 #include "Breathing.h"
 #include "Rain.h"
-#include "Rave.h"
 #include "Ambient.h"
 #include "Visor.h"
 #include "AudioVisualizer.h"

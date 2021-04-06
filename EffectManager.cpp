@@ -22,7 +22,6 @@ EffectManager::EffectManager():
         new GradientWave,
         new Breathing,
         new Rain,
-        new Rave,
         new Ambient,
         new Visor,
         new AudioVisualizer,

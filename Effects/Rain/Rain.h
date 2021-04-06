@@ -28,38 +28,19 @@ public:
     ~Rain() {};
 
     EffectInfo  DefineEffectDetails()                                      override;
-    void        DefineExtraOptions(QLayout*)                               override;
     void        StepEffect(std::vector<OwnedControllerAndZones>, int)      override;
 
-    void        SetSpeed(int Speed)                                        override;
-    void        SetUserColors(std::vector<RGBColor>)                       override;
-    void        Slider2Changed(int)                                        override;
     void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>) override;
-    void        ToggleRandomColors(bool RandomEnabled)                     override;
-
-    int                     GetSpeed()                                     override;
-    int                     GetSlider2Val()                                override;
-    std::vector<RGBColor>   GetUserColors()                                override;
-
     void                    EffectState(bool)                              override {return;};
 
     void                    LoadCustomSettings(json)                       override {return;        };
     json                    SaveCustomSettings(json)                       override {return json(); };
 
     EffectInfo              EffectDetails;
-
 private:
-    float Speed; // Float so that it defaults to float opperations when doing devision by FPS
-    int DropCount;
-
+    //int DropCount;
     std::vector<Drops> CurrentDrops;
-
-    RGBColor UserColor;
-    bool     RandomColors = false;
-
     int      PrevNum;
-    bool     SpeedSliderChanged = false;
-
     std::vector<std::vector<bool>> HasEffect;
 };
 

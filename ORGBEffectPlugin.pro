@@ -97,7 +97,6 @@ INCLUDEPATH +=                                                                  
 
 SOURCES +=                                                                                      \
     Effects/Rain/Rain.cpp                                                                       \
-    Effects/Rave/Rave.cpp                                                                       \
     Effects/Wavy/Wavy.cpp                                                                       \
     Effects/Visor/Visor.cpp                                                                     \
     Effects/Ambient/Ambient.cpp                                                                 \
@@ -113,7 +112,6 @@ SOURCES +=                                                                      
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
     Effects/Rain/Rain.h                                                                         \
-    Effects/Rave/Rave.h                                                                         \
     Effects/Wavy/Wavy.h                                                                         \
     Effects/Visor/Visor.h                                                                       \
     Effects/Ambient/Ambient.h                                                                   \

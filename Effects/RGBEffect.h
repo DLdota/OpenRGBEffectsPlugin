@@ -16,6 +16,8 @@ struct EffectInfo
     bool IsReversable;
     int  MaxSpeed;
     int  MinSpeed;
+
+    bool AllowOnlyFirst = false;
     int  UserColors;
 
     int         MaxSlider2Val;
@@ -53,24 +55,34 @@ class RGBEffect
 {
 public:
     virtual EffectInfo  DefineEffectDetails()                                        = 0;
-    virtual void        DefineExtraOptions(QLayout* Scaler)                          = 0;
+    virtual void        DefineExtraOptions(QLayout*) {};
     virtual void        StepEffect(std::vector<OwnedControllerAndZones>, int FPS)    = 0;
 
-    virtual void        SetSpeed(int Speed)                                          = 0;
-    virtual void        SetUserColors(std::vector<RGBColor>)                         = 0;
-    virtual void        Slider2Changed(int)                                          = 0;
+    virtual void        SetSpeed(int SPD)                       {Speed = SPD;};
+    virtual void        SetUserColors(std::vector<RGBColor> UC) {UserColors = UC;                     };
+    virtual void        Slider2Changed(int SVal)                {Slider2Val = SVal;                   };
     virtual void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>)   = 0;
-    virtual void        ToggleRandomColors(bool RandomEnabled)                       = 0;
-    virtual int                     GetSpeed()                                       = 0;
-    virtual int                     GetSlider2Val()                                  = 0;
-    virtual std::vector<RGBColor>   GetUserColors()                                  = 0;
+    virtual void        ToggleRandomColors(bool RandomEnabled)  {RandomColorsEnabled = RandomEnabled; };
+    virtual void        OnlyFirstChange(bool OnlyFirst)         {OnlyFirstColorEnabled = OnlyFirst;   };
+    virtual int                     GetSpeed()                  {return Speed;                        };
+    virtual int                     GetSlider2Val()             {return Slider2Val;                   };
+    virtual std::vector<RGBColor>   GetUserColors()             {return UserColors;                   };
 
-    virtual void                    EffectState(bool)                                = 0;
+    virtual void                    EffectState(bool Enabled)   {EffectEnabled = Enabled;             };
 
     virtual void                    LoadCustomSettings(json)                         = 0;
     virtual json                    SaveCustomSettings(json)                         = 0;
 
     EffectInfo          EffectDetails;
+protected:
+    float Speed = 1;
+    float Slider2Val = 1;
+
+    std::vector<RGBColor> UserColors;
+    bool RandomColorsEnabled = false;
+    bool OnlyFirstColorEnabled = false;
+
+    bool EffectEnabled;
 };
 
 #endif // RGBEFFECT_H
