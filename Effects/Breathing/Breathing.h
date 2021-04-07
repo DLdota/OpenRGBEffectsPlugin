@@ -2,6 +2,7 @@
 #define BREATHING_H
 
 #include "RGBEffect.h"
+#include "hsv.h"
 
 class Breathing: public RGBEffect
 {
@@ -35,11 +36,8 @@ private:
     float                   Speed;
     std::vector<RGBColor>   UserColors;
     float                   Progress = 0;
-    bool                    GoingUp = false; /* true = down, false = up */
     bool                    RandomColors = false;
-    bool                    AlreadyMade = false;
-    bool                    RandomThisCycle;
-    RGBColor                RandomColor;
+    hsv_t                   CurrentColor;
 };
 
 #endif // BREATHING_H

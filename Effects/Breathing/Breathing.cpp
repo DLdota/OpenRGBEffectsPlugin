@@ -22,66 +22,30 @@ EffectInfo Breathing::DefineEffectDetails()
 }
 
 void Breathing::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
-{
-    hsv_t HSVVal;
-    if (RandomThisCycle)
+{   
+    Progress += ((Speed / 100.0) / (float)FPS);
+
+    if(Progress >= 3.14159) // PI
     {
-        if (RandomColors && GoingUp && !AlreadyMade)
+        Progress -= 3.14159;
+
+        if(RandomColors)
         {
-            RandomColor = ToRGBColor(rand() % 255, rand() % 255, rand() % 255);
-            rgb2hsv(RandomColor, &HSVVal);
-            if (HSVVal.value < Progress)
-            {
-                Progress = HSVVal.value;
-            }
-            AlreadyMade = true;
+           rgb2hsv(ToRGBColor(rand() % 255, rand() % 255, rand() % 255), &CurrentColor);
         }
         else
         {
-            rgb2hsv(RandomColor,&HSVVal);
+           rgb2hsv(UserColors[0], &CurrentColor);
         }
-    }
-    else
-    {
-        rgb2hsv(UserColors[0],&HSVVal);
     }
 
-    if (GoingUp)
-    {
-        if (Progress > 1)
-        {
-            GoingUp = false;
-            Progress = 1;
-        }
-        else
-        {
-            HSVVal.value = HSVVal.value * Progress;
-            Progress += ((Speed / 100.0) / (float)FPS);
-        }
-    }
-    else
-    {
-        if (Progress < 0)
-        {
-            GoingUp = true;
-            if (RandomColors){RandomThisCycle = true;}
-            else{RandomThisCycle = false;}
-            AlreadyMade = false;
-            Progress = 0;
-            HSVVal.value = 0;
-        }
-        else
-        {
-            HSVVal.value = HSVVal.value * Progress;
-            Progress -= ((Speed / 100.0) / (float)FPS);
-        }
-    }
+    CurrentColor.value = pow(sin(Progress),3) * 255;
 
     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
     {
         for (int ZoneID = 0; ZoneID < int(Controllers[ControllerID].OwnedZones.size()); ZoneID++)
         {
-            Controllers[ControllerID].Controller->SetAllZoneLEDs(Controllers[ControllerID].OwnedZones[ZoneID],hsv2rgb(&HSVVal));
+            Controllers[ControllerID].Controller->SetAllZoneLEDs(Controllers[ControllerID].OwnedZones[ZoneID],hsv2rgb(&CurrentColor));
         }
     }
 }
@@ -94,6 +58,7 @@ void Breathing::SetSpeed(int NewSpeed)
 void Breathing::SetUserColors(std::vector<RGBColor> NewUserColors)
 {
     UserColors = NewUserColors;
+    rgb2hsv(UserColors[0], &CurrentColor);
 }
 
 void Breathing::ToggleRandomColors(bool RandomEnabled)
