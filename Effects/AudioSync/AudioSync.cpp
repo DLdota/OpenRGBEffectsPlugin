@@ -617,8 +617,6 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
         }
     }
 
-
-
     hsv_t HSVVal;
 
     if(max_idx >= current_settings.bypass_min && max_idx <= current_settings.bypass_max)
@@ -635,7 +633,7 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
             current_freq_hue -= ((current_freq_hue - immediate_freq_hue ) / (1.0f - (current_settings.fade_step / 100.f)) )/ FPS;
         }
 
-        current_freq_sat = 255; // - 255 * pow(max_value, 9); // todo : reach white on high amplitudes
+        current_freq_sat = 255 - 255 * pow(max_value, 9); // todo : reach white on high amplitudes
         current_freq_val = max_value * 255;
     }
     else
