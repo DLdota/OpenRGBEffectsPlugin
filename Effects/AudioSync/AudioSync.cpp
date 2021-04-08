@@ -82,7 +82,6 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     {
         audio_device_idx = 0;
     }
-    // todo : else -> hide ui and display a message that no audio device has been found
 
     connect(device_list_selector, SIGNAL(currentIndexChanged(int)), this, SLOT(SelectDeviceChanged(int)));
 
@@ -224,6 +223,25 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     FiltConstLayout->addWidget(filter_constant_label);
     FiltConstLayout->addWidget(filter_constant_slider);
     MainAudioSyncLayout->addLayout(FiltConstLayout);
+
+    /*-------------------*\
+    | Saturation dropdown |
+    \*-------------------*/
+    QHBoxLayout* SaturationModeLayout = new QHBoxLayout;
+    const QString saturation_mode_tooltip = "Saturation on high amplitudes";
+    QLabel *saturation_mode_label = new QLabel("Saturation");
+    saturation_mode_label->setFixedWidth(label_width);
+    saturation_mode_selector->addItem("No saturation");
+    saturation_mode_selector->addItem("Saturate high amplitudes");
+
+    connect(saturation_mode_selector, SIGNAL(currentIndexChanged(int)), this, SLOT(SaturationModeChanged(int)));
+
+    saturation_mode_label->setToolTip(saturation_mode_tooltip);
+    saturation_mode_selector->setToolTip(saturation_mode_tooltip);
+
+    SaturationModeLayout->addWidget(saturation_mode_label);
+    SaturationModeLayout->addWidget(saturation_mode_selector);
+    MainAudioSyncLayout->addLayout(SaturationModeLayout);
 
     /*------------------*\
     | Amplitude slider   |
@@ -617,8 +635,6 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
         }
     }
 
-
-
     hsv_t HSVVal;
 
     if(max_idx >= current_settings.bypass_min && max_idx <= current_settings.bypass_max)
@@ -635,7 +651,22 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
             current_freq_hue -= ((current_freq_hue - immediate_freq_hue ) / (1.0f - (current_settings.fade_step / 100.f)) )/ FPS;
         }
 
-        current_freq_sat = 255; // - 255 * pow(max_value, 9); // todo : reach white on high amplitudes
+        if(current_settings.saturation_mode == SATURATE_HIGH_AMPLITUDES)
+        {
+            if(max_value <= 0)
+            {
+                current_freq_sat += 1/(current_freq_sat * FPS);
+            }
+            else
+            {
+                current_freq_sat = 255 - 255 * pow(max_value, 3);
+            }
+        }
+        else
+        {
+             current_freq_sat = 255;
+        }
+
         current_freq_val = max_value * 255;
     }
     else
@@ -653,7 +684,6 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
 
     RGBColor color = RGBColor(hsv2rgb(&HSVVal));
 
-    // todo : insert more colors at low fps
     colors_rotation.insert(colors_rotation.begin(), color);
 
     while(colors_rotation.size()>1024)
@@ -724,6 +754,7 @@ void AudioSync::LoadCustomSettings(json Settings)
     if (Settings.contains("bypass_max"))          current_settings.bypass_max      = Settings["bypass_max"];
     if (Settings.contains("avg_size"))            current_settings.avg_size        = Settings["avg_size"];
     if (Settings.contains("avg_mode"))            current_settings.avg_mode        = Settings["avg_mode"];
+    if (Settings.contains("saturation_mode"))     current_settings.saturation_mode = Settings["saturation_mode"];
     if (Settings.contains("decay"))               current_settings.decay           = Settings["decay"];
     if (Settings.contains("filter_constant"))     current_settings.filter_constant = Settings["filter_constant"];
     if (Settings.contains("high"))                current_settings.high            = Settings["high"];
@@ -739,21 +770,21 @@ void AudioSync::LoadCustomSettings(json Settings)
 
 json AudioSync::SaveCustomSettings(json Settings)
 {
-    Settings["fade_step"]       = current_settings.fade_step;
-    Settings["rainbow_shift"]   = current_settings.rainbow_shift;
-    Settings["bypass_min"]      = current_settings.bypass_min;
-    Settings["bypass_max"]      = current_settings.bypass_max;
-    Settings["avg_size"]        = current_settings.avg_size;
-    Settings["avg_mode"]        = current_settings.avg_mode;
-    Settings["decay"]           = current_settings.decay;
-    Settings["filter_constant"] = current_settings.filter_constant;
-    Settings["high"]            = current_settings.high;
-    Settings["middle"]          = current_settings.middle;
-    Settings["low"]             = current_settings.middle;
-
-    Settings["amplitude_min_value"]   = amplitude_min_value;
-    Settings["amplitude_max_value"]   = amplitude_max_value;
-    Settings["amplitude"]       = current_settings.amplitude;
+    Settings["fade_step"]           = current_settings.fade_step;
+    Settings["rainbow_shift"]       = current_settings.rainbow_shift;
+    Settings["bypass_min"]          = current_settings.bypass_min;
+    Settings["bypass_max"]          = current_settings.bypass_max;
+    Settings["avg_size"]            = current_settings.avg_size;
+    Settings["avg_mode"]            = current_settings.avg_mode;
+    Settings["saturation_mode"]     = current_settings.saturation_mode;
+    Settings["decay"]               = current_settings.decay;
+    Settings["filter_constant"]     = current_settings.filter_constant;
+    Settings["high"]                = current_settings.high;
+    Settings["middle"]              = current_settings.middle;
+    Settings["low"]                 = current_settings.middle;
+    Settings["amplitude_min_value"] = amplitude_min_value;
+    Settings["amplitude_max_value"] = amplitude_max_value;
+    Settings["amplitude"]           = current_settings.amplitude;
 
     return Settings;
 }
@@ -802,6 +833,11 @@ void AudioSync::AvgSizeChanged(int value)
 void AudioSync::AvgModeChanged(int value)
 {
     current_settings.avg_mode = value;
+}
+
+void AudioSync::SaturationModeChanged(int value)
+{
+    current_settings.saturation_mode = value;
 }
 
 void AudioSync::DecayChanged(int value)
@@ -855,12 +891,6 @@ void AudioSync::PresetChanged(int idx)
 \*------------------------*/
 void AudioSync::ToggleAmplitudeChangeInputs()
 {
-    /*-------------------------------------------------------------------------------------------------------------*\
-    | Why is it done like this? Wouldn't it be easier to read the text off of the button? Or assign a value to it   |
-    |                                                                                                               |
-    | If it is Showing: Do a bounds check and apply new min and max values, Then set the button text                |
-    | If it isn't Showing: Show text boxes and change button text                                                   |
-    \*-------------------------------------------------------------------------------------------------------------*/
     if(amplitude_slider_min->isVisible())
     {
         if(amplitude_slider_min->value() < amplitude_slider_max->value())
@@ -935,6 +965,7 @@ void AudioSync::UpdateUiSettings()
     decay_slider->setValue(current_settings.decay);
     avg_size_slider->setValue(current_settings.avg_size);
     avg_mode_selector->setCurrentIndex(current_settings.avg_mode);
+    saturation_mode_selector->setCurrentIndex(current_settings.saturation_mode);
     filter_constant_slider->setValue(current_settings.filter_constant * 100);
     low_slider->setValue(current_settings.low*100);
     middle_slider->setValue(current_settings.middle*100);
@@ -966,6 +997,7 @@ void AudioSync::Init()
     fade_step_slider = new QSlider();
     decay_slider = new QSlider();
     avg_size_slider = new QSlider();
+    saturation_mode_selector = new QComboBox();
     avg_mode_selector = new QComboBox();
     filter_constant_slider = new QSlider();
     preset_selector = new QComboBox();
@@ -994,8 +1026,7 @@ void AudioSync::Init()
     float hue_step = (stop_hue-start_hue)/256.0f;
 
     /*---------------------------------------------------------------------------------*\
-    | Create a static list of colors to read off of when drawing                        |
-    | Using more memory is better than having to render 256 colors with CPU every cycle |
+    | Create a list of colors to read off of when drawing                        |
     \*---------------------------------------------------------------------------------*/
     for(int i = 0; i<256;i++)
     {
