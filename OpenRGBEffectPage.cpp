@@ -55,6 +55,10 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT): QWidget(
 
     if (EFCT->EffectDetails.UserColors > 0)
     {
+        if (!EFCT->EffectDetails.AllowOnlyFirst)
+        {
+            ui->OnlyFirst->hide();
+        }
         ui->UserColorNum->setMaxCount(EFCT->EffectDetails.UserColors);
         for (int UserColorIndex = 0; UserColorIndex < EFCT->EffectDetails.UserColors; UserColorIndex++)
         {
@@ -204,6 +208,11 @@ void OpenRGBEffectPage::on_RandomCheckbox_clicked()
         EFCT->ToggleRandomColors(false);
     }
 
+}
+
+void OpenRGBEffectPage::on_OnlyFirst_clicked()
+{
+    EFCT->OnlyFirstChange(ui->OnlyFirst->isChecked());
 }
 
 /*---------*\

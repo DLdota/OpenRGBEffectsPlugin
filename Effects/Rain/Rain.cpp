@@ -11,7 +11,9 @@ EffectInfo Rain::DefineEffectDetails()
     Rain::EffectDetails.IsReversable = true;
     Rain::EffectDetails.MaxSpeed = 25;
     Rain::EffectDetails.MinSpeed = 1;
-    Rain::EffectDetails.UserColors = 1;
+
+    Rain::EffectDetails.AllowOnlyFirst = true;
+    Rain::EffectDetails.UserColors = 5;
 
     Rain::EffectDetails.MaxSlider2Val = 20;
     Rain::EffectDetails.MinSlider2Val = 1;
@@ -23,14 +25,12 @@ EffectInfo Rain::DefineEffectDetails()
     return Rain::EffectDetails;
 }
 
-void Rain::DefineExtraOptions(QLayout*){}
-
 void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
     if (Controllers.size() != HasEffect.size()) this->ASelectionWasChanged(Controllers);
     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
     {
-        if ((int)CurrentDrops.size() >= DropCount) break;
+        if ((int)CurrentDrops.size() >= Slider2Val) break;
         if (rand() % 2)
         {
             for (int ZoneID = 0; ZoneID < (int)Controllers[ControllerID].OwnedZones.size(); ZoneID++)
@@ -45,7 +45,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 
                 else if (ZT == ZONE_TYPE_LINEAR)
                 {
-                    if ((int)CurrentDrops.size() < DropCount)
+                    if ((int)CurrentDrops.size() < Slider2Val)
                     {
                         if (rand()%2 && !HasEffect[ControllerID][ActualZone])
                         {
@@ -59,10 +59,9 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                             NewDrop.ZT = ZONE_TYPE_LINEAR;
                             NewDrop.Reversed = EffectManager::Get()->CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
 
-                            if (NewDrop.Reversed) NewDrop.Progress = NewDrop.LEDCount;
-                            else NewDrop.Progress = 0;
+                            NewDrop.Progress = 0;
 
-                            if (RandomColors)
+                            if (RandomColorsEnabled)
                             {
                                 NewDrop.C = ToRGBColor(rand() % 255,
                                                        rand() % 255,
@@ -70,7 +69,14 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                             }
                             else
                             {
-                                NewDrop.C = UserColor;
+                                if (OnlyFirstColorEnabled)
+                                {
+                                    NewDrop.C = UserColors[0];
+                                }
+                                else
+                                {
+                                    NewDrop.C = UserColors[rand()%this->EffectDetails.UserColors];
+                                }
                             }
 
                             HasEffect[ControllerID][ActualZone] = true;
@@ -81,7 +87,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 
                 else if (ZT == ZONE_TYPE_MATRIX)
                 {
-                    int MaxAllowed = (rand() % DropCount - (int)CurrentDrops.size());
+                    int MaxAllowed = (rand() % (int)Slider2Val - (int)CurrentDrops.size());
                     int AmountCreated = 0;
                     for (int Created = 0; Created < MaxAllowed; Created++)
                     {
@@ -102,7 +108,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                             NewDrop.ZT = ZONE_TYPE_MATRIX;
                             NewDrop.Reversed = EffectManager::Get()->CheckReversed(ControllerID,Controllers[ControllerID].OwnedZones[ZoneID]);
 
-                            if (RandomColors)
+                            if (RandomColorsEnabled)
                             {
                                 NewDrop.C = ToRGBColor(rand() % 255,
                                                        rand() % 255,
@@ -110,7 +116,14 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                             }
                             else
                             {
-                                NewDrop.C = UserColor;
+                                if (OnlyFirstColorEnabled)
+                                {
+                                    NewDrop.C = UserColors[0];
+                                }
+                                else
+                                {
+                                    NewDrop.C = UserColors[rand()%this->EffectDetails.UserColors];
+                                }
                             }
 
                             CurrentDrops.push_back(NewDrop);
@@ -129,11 +142,10 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
         int CIndex = CurrentDrops[DropID].ControllerIndex;
         int ZIndex = CurrentDrops[DropID].ZoneIndex;
         int SIndex = Controllers[CIndex].Controller->zones[ZIndex].start_idx;
+        int CCount = CurrentDrops[DropID].LEDCount;
 
         // Ok so this is kinda hacky.
         RGBColor UserColor = CurrentDrops[DropID].C;
-
-
 
         int LedID = CurrentDrops[DropID].Progress; // Convert to int so that I can have a solid LED index
         int integral = LedID; // Copy it to another variable so as to not mess stuff up
@@ -158,31 +170,18 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
             fractional = 0;
         }
 
-        if (SpeedSliderChanged)
-        {
-            if (LedID > PrevNum)
-            {
-                CurrentDrops[DropID].Progress = LedID;
-                SpeedSliderChanged = false;
-            }
-            else
-            {
-                PrevNum = LedID;
-            }
-        }
-
         StartingHSV.value = StartingHSV.value * fractional;
-        EndingHSV.value   = EndingHSV.value * -fractional;
+        EndingHSV.value   = EndingHSV.value * (1 - fractional);
 
         if (CurrentDrops[DropID].ZT == ZONE_TYPE_LINEAR)
         {
             // If the drop is reversed
             if (CurrentDrops[DropID].Reversed)
             {
-                if (LedID < ( CurrentDrops[DropID].LEDCount - 3) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID + 3)),ToRGBColor(0,0,0));
-                if (LedID < ( CurrentDrops[DropID].LEDCount - 2) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID + 2)),hsv2rgb(&StartingHSV));
-                if (LedID < ( CurrentDrops[DropID].LEDCount - 1) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + (LedID + 1)),UserColor);
-                if (LedID < ( CurrentDrops[DropID].LEDCount    ) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + LedID),hsv2rgb(&EndingHSV));
+                if (0 < ( (CCount - LedID) + 3) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + ((CCount - LedID) + 3)), ToRGBColor(0,0,0)     );
+                if (0 < ( (CCount - LedID) + 0) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + ((CCount - LedID) + 0)), hsv2rgb(&StartingHSV));
+                if (0 < ( (CCount - LedID) + 1) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + ((CCount - LedID) + 1)), UserColor            );
+                if (0 < ( (CCount - LedID) + 2) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + ((CCount - LedID) + 2)), hsv2rgb(&EndingHSV)  );
             }
             else
             {
@@ -218,29 +217,30 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
                 // If the drop is reversed
                 if (CurrentDrops[DropID].Reversed)
                 {
-                    if (LedID < ( CurrentDrops[DropID].LEDCount - 3) )
+                    if (0 < ( (CurrentDrops[DropID].LEDCount - RowID) + 3) )
                     {
-                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * (RowID  + 3) ) + CollumnID)];
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * ((CurrentDrops[DropID].LEDCount - RowID) + 3)) + CollumnID)];
                         Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),ToRGBColor(0,0,0));
                     }
 
-                    if (LedID < ( CurrentDrops[DropID].LEDCount - 2) )
+                    if (0 < ( (CurrentDrops[DropID].LEDCount - RowID) + 2) )
                     {
-                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * (RowID  + 2) ) + CollumnID)];
-                        Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),hsv2rgb(&StartingHSV));
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * ((CurrentDrops[DropID].LEDCount - RowID) + 2 )) + CollumnID)];
+                        Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),hsv2rgb(&EndingHSV));
                     }
 
-                    if (LedID < ( CurrentDrops[DropID].LEDCount - 1) )
+                    if (0 < ( (CurrentDrops[DropID].LEDCount - RowID) + 1) )
                     {
-                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * (RowID  + 1) ) + CollumnID)];
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * ((CurrentDrops[DropID].LEDCount - RowID)  + 1)) + CollumnID)];
                         Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),UserColor);
                     }
 
-                    if (LedID < ( CurrentDrops[DropID].LEDCount    ) )
+                    if (0 < ( (CurrentDrops[DropID].LEDCount - RowID) + 0) )
                     {
-                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * RowID ) + CollumnID)];
-                        Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),hsv2rgb(&EndingHSV));
+                        Led = Controllers[CIndex].Controller->zones[ZIndex].matrix_map->map[( (CollumnCount * ((CurrentDrops[DropID].LEDCount - RowID)  + 0)) + CollumnID)];
+                        Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + Led),hsv2rgb(&StartingHSV));
                     }
+
                 }
                 else
                 {
@@ -271,17 +271,8 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
             }
         }
 
-
-        if (CurrentDrops[DropID].Reversed)
-        {
-            if ( (3 + CurrentDrops[DropID].Progress) > 0) CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress - Speed / (float)FPS;
-            else ToDelete.push_back(DropID);
-        }
-        else
-        {
-            if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 3) CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress + Speed / (float)FPS;
-            else ToDelete.push_back(DropID);
-        }
+        if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 3) CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress + Speed / (float)FPS;
+        else ToDelete.push_back(DropID);
     }
 
     if (ToDelete.size() == 0) return;
@@ -296,26 +287,9 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
     return;
 }
 
-
 /*-----------------------*\
 | Setters for Effect GUI  |
 \*-----------------------*/
-void Rain::SetSpeed(int NewSpeed)
-{
-    Rain::Speed = NewSpeed;
-    SpeedSliderChanged = true;
-}
-
-void Rain::SetUserColors(std::vector<RGBColor> NewColor)
-{
-    Rain::UserColor = NewColor[0];
-}
-
-void Rain::Slider2Changed(int NewDropCount)
-{
-    Rain::DropCount = NewDropCount;
-}
-
 void Rain::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
 {
     HasEffect.clear();
@@ -328,19 +302,4 @@ void Rain::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
         }
     }
     CurrentDrops.clear();
-}
-
-
-/*--------------------------*\
-| Getters for the Effect GUI |
-\*--------------------------*/
-int Rain::GetSpeed(){ return Rain::Speed; }
-
-int Rain::GetSlider2Val(){ return Rain::DropCount; }
-
-std::vector<RGBColor> Rain::GetUserColors(){ return {Rain::UserColor}; }
-
-void Rain::ToggleRandomColors(bool RandomEnabled)
-{
-    RandomColors = RandomEnabled;
 }
