@@ -53,7 +53,7 @@ RGBColor Lightning::TriggerLightning(int n, int FPS)
 {
     float decrease = 1 + Decay/(float) FPS;
 
-    Lightnings[n].value = (rand() % 1000) > (1000 - Speed) ? std::min<unsigned char>(255, UserHSV.value) :  Lightnings[n].value > 0 ?  Lightnings[n].value / decrease : 0;
+    Lightnings[n].value = ((unsigned int)(rand() % 1000)) > (1000 - Speed) ? std::min<unsigned char>(255, UserHSV.value) :  Lightnings[n].value > 0 ?  Lightnings[n].value / decrease : 0;
 
     if(Random)
     {
