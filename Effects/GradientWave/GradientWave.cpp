@@ -1,8 +1,6 @@
 #include "GradientWave.h"
 #include "EffectManager.h"
 
-std::vector<OwnedControllerAndZones> GradientWave::PrevControllers;
-
 EffectInfo GradientWave::DefineEffectDetails()
 {
     GradientWave::EffectDetails.EffectName = "Gradient Wave";

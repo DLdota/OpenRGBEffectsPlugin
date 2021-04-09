@@ -43,7 +43,7 @@ private:
     int                         TempLEDPerCycle = 1;
     int                         LEDPerCycle = 1;
     std::vector<RGBColor>       UserColors;
-    static std::vector<NewStar> CurrentStars;
+    std::vector<NewStar>        CurrentStars;
     bool                        RandomColors = false;
 };
 
