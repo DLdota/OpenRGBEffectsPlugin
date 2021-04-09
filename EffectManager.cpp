@@ -34,31 +34,26 @@ EffectManager::EffectManager():
 }
 
 void EffectManager::SetEffectActive(RGBEffect* Effect)
-{
-    if (std::find(ActiveEffects.begin(), ActiveEffects.end(), Effect) == ActiveEffects.end())
+{    
+    if (EffectThreads.find(Effect) == EffectThreads.end())
     {
         ActiveEffects.push_back(Effect);
-    }
-
-    if(ActiveEffects.size() == 1)
-    {
-        StepEffectThread = new std::thread(&EffectManager::EffectStepTimer,this);
+        EffectThreads[Effect] = nullptr;
+        EffectThreads[Effect] = new std::thread(&EffectManager::EffectThreadFunction,this, Effect);
     }
 }
 
 void EffectManager::SetEffectUnActive(RGBEffect* Effect)
-{
-    std::vector<RGBEffect*>::iterator position = std::find(ActiveEffects.begin(), ActiveEffects.end(), Effect);
-
-    if (position != ActiveEffects.end())
+{    
+    if (EffectThreads.find(Effect) != EffectThreads.end())
     {
+        std::thread* thread = EffectThreads[Effect];
+        EffectThreads.erase(Effect);
+        thread->join();
+        delete thread;
+
+        std::vector<RGBEffect*>::iterator position = std::find(ActiveEffects.begin(), ActiveEffects.end(), Effect);
         ActiveEffects.erase(position);
-    }
-
-    if(ActiveEffects.size() == 0)
-    {
-        StepEffectThread->join();
-        delete StepEffectThread;
     }
 }
 
@@ -129,22 +124,23 @@ void EffectManager::SetFPS(int value)
     AudioManager::get()->SetDelay(FPSDelay);
 }
 
-void EffectManager::EffectStepTimer()
+void  EffectManager::EffectThreadFunction(RGBEffect* Effect)
 {
-    while (ActiveEffects.size() > 0) {
+    printf("%s thread started\n", Effect->EffectDetails.EffectName.c_str());
+
+    while (EffectThreads.find(Effect) != EffectThreads.end()) {
+
             TCount start = CLK->now();
 
-            for (int EffectIndex = 0; EffectIndex < int(ActiveEffects.size()); EffectIndex++)
-            {
-                ActiveEffects[EffectIndex]->StepEffect(RespectiveToPass[ActiveEffects[EffectIndex]->EffectDetails.EffectIndex], FPS);
-            }
+            Effect->StepEffect(RespectiveToPass[Effect->EffectDetails.EffectIndex], FPS);
 
-            // After running through all of the effects proceed to set all of the LEDs on a per zone basis
-            for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
+            std::vector<OwnedControllerAndZones> CtrlAndZones = RespectiveToPass[Effect->EffectDetails.EffectIndex];
+
+            for(OwnedControllerAndZones ocz: CtrlAndZones)
             {
-                if (Controllers[ControllerID].OwnedZones.size() > 0)
+                if (ocz.OwnedZones.size() > 0)
                 {
-                    Controllers[ControllerID].Controller->UpdateLEDs();
+                    ocz.Controller->UpdateLEDs();
                 }
             }
 
@@ -161,4 +157,6 @@ void EffectManager::EffectStepTimer()
                 std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
         }
+
+    printf("%s thread ended\n", Effect->EffectDetails.EffectName.c_str());
 }
