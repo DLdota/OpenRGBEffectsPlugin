@@ -32,8 +32,6 @@ public:
 
     EffectInfo EffectDetails;
 private:
-    static std::vector<OwnedControllerAndZones> PrevControllers;
-
     int                                         Speed;
     float                                       Width;
 

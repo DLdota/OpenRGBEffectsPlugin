@@ -1,7 +1,5 @@
 #include "StarryNight.h"
 
-std::vector<NewStar> StarryNight::CurrentStars = {};
-
 EffectInfo StarryNight::DefineEffectDetails()
 {
     StarryNight::EffectDetails.EffectName = "Starry Night";
