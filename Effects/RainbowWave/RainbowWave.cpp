@@ -112,3 +112,7 @@ void RainbowWave::SetSpeed(int value)
     Speed = value;
 }
 
+void RainbowWave::Slider2Changed(int value)
+{
+    Width = value;
+}
