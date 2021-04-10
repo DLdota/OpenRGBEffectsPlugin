@@ -13,7 +13,6 @@ class Lightning: public QWidget, public RGBEffect
 
 public:
     explicit Lightning(QWidget *parent = nullptr);
-    ~Lightning();
 
     EffectInfo  DefineEffectDetails()                                       override;
     void        DefineExtraOptions(QLayout*)                                override {};
@@ -28,10 +27,10 @@ public:
     int                     GetSlider2Val()                                 override {return Decay;      };
     std::vector<RGBColor>   GetUserColors()                                 override {return UserColors; };
 
-    void                    EffectState(bool)                               override {return;            };
+    void                    EffectState(bool)                               override {};
 
     void                    LoadCustomSettings(json)                        override {};
-    json                    SaveCustomSettings(json)                        override {return json{};};
+    json                    SaveCustomSettings(json)                        override {return json{};     };
 
     EffectInfo EffectDetails;
 

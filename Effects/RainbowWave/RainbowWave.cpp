@@ -22,8 +22,6 @@ EffectInfo RainbowWave::DefineEffectDetails()
     return RainbowWave::EffectDetails;
 }
 
-void RainbowWave::DefineExtraOptions(QLayout*){}
-
 void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
     hsv_t HSVVal;
@@ -107,23 +105,10 @@ void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
     {
         Progress = 0;
     }
-    return;
 }
 
-void RainbowWave::SetSpeed(int Speed)
+void RainbowWave::SetSpeed(int value)
 {
-    RainbowWave::Speed = Speed;
-}
-
-void RainbowWave::SetUserColors(std::vector<RGBColor>)
-{
-    /*------------------------------------------------*\
-    | This effect does not support user chosen colors  |
-    \*------------------------------------------------*/
-}
-
-void RainbowWave::Slider2Changed(int NewWidth)
-{
-    Width = NewWidth;
+    Speed = value;
 }
 

@@ -31,9 +31,9 @@ public:
     void        StepEffect(std::vector<OwnedControllerAndZones>, int)      override;
 
     void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>) override;
-    void                    EffectState(bool)                              override {return;};
+    void                    EffectState(bool)                              override {};
 
-    void                    LoadCustomSettings(json)                       override {return;        };
+    void                    LoadCustomSettings(json)                       override {};
     json                    SaveCustomSettings(json)                       override {return json(); };
 
     EffectInfo              EffectDetails;

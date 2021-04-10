@@ -22,8 +22,6 @@ EffectInfo SpectrumCycling::DefineEffectDetails()
     return SpectrumCycling::EffectDetails;
 }
 
-void SpectrumCycling::DefineExtraOptions(QLayout*){}
-
 void SpectrumCycling::StepEffect(std::vector<OwnedControllerAndZones> PassedTo, int FPS)
 {
     hsv_t HSVVal;
@@ -49,7 +47,6 @@ void SpectrumCycling::StepEffect(std::vector<OwnedControllerAndZones> PassedTo, 
         CurrentHue = 0.0000;
     }
 
-    return;
 }
 
 void SpectrumCycling::SetSpeed(int Speed)
@@ -57,15 +54,3 @@ void SpectrumCycling::SetSpeed(int Speed)
     SpectrumCycling::Speed = Speed;
 }
 
-void SpectrumCycling::SetUserColors(std::vector<RGBColor>)
-{
-    /*------------------------------------------------*\
-    | This effect does not support user chosen colors  |
-    \*------------------------------------------------*/
-}
-
-void SpectrumCycling::Slider2Changed(int)
-{
-    // Not used
-    return;
-}

@@ -187,27 +187,12 @@ void OpenRGBEffectPage::on_ColorPickerButton_clicked()
 
 void OpenRGBEffectPage::on_AutoStart_clicked()
 {
-    if (ui->AutoStart->isChecked())
-    {
-        AutoStart = true;
-    }
-    else
-    {
-        AutoStart = false;
-    }
+    AutoStart = ui->AutoStart->isChecked();
 }
 
 void OpenRGBEffectPage::on_RandomCheckbox_clicked()
 {
-    if (ui->RandomCheckbox->isChecked())
-    {
-        EFCT->ToggleRandomColors(true);
-    }
-    else
-    {
-        EFCT->ToggleRandomColors(false);
-    }
-
+    EFCT->ToggleRandomColors(ui->RandomCheckbox->isChecked());
 }
 
 void OpenRGBEffectPage::on_OnlyFirst_clicked()
@@ -262,10 +247,12 @@ void OpenRGBEffectPage::StartupSettings()
             if (UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("UserColors"))
             {
                 std::vector<RGBColor> NewUserColors;
+
                 for (int UserColorIndex = 0; UserColorIndex < EFCT->EffectDetails.UserColors; UserColorIndex++)
                 {
                     NewUserColors.push_back(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["UserColors"][UserColorIndex]);
                 }
+
                 if (EFCT->EffectDetails.UserColors > 0)
                 {
                     EFCT->SetUserColors(NewUserColors);
@@ -284,6 +271,7 @@ void OpenRGBEffectPage::StartupSettings()
             if (UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("RandomColors"))
             {
                 bool RandomColors = UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["RandomColors"];
+
                 if (RandomColors)
                 {
                     ui->RandomCheckbox->click();
@@ -309,6 +297,7 @@ void OpenRGBEffectPage::on_SaveSettings_clicked()
     PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectName"] = EFCT->EffectDetails.EffectName;
 
     std::vector<RGBColor> UserColors = EFCT->GetUserColors();
+
     for (int UserColorIndex = 0; UserColorIndex < EFCT->EffectDetails.UserColors; UserColorIndex++)
     {
         PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["UserColors"][UserColorIndex] = UserColors[UserColorIndex];
@@ -319,6 +308,7 @@ void OpenRGBEffectPage::on_SaveSettings_clicked()
     PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"] = {};
 
     int AddedDevices = 0;
+
     for (int ControllerID = 0; ControllerID < (int)ToPass.size(); ControllerID++)
     {
         if (ToPass[ControllerID].OwnedZones.size() > 0)
@@ -333,6 +323,7 @@ void OpenRGBEffectPage::on_SaveSettings_clicked()
             {
                 PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"][AddedDevices]["SelectedZones"][ZoneID] = ToPass[ControllerID].OwnedZones[ZoneID];
             }
+
             AddedDevices += 1;
         }
     }

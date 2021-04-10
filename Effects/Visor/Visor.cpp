@@ -24,8 +24,6 @@ EffectInfo Visor::DefineEffectDetails()
     return Visor::EffectDetails;
 }
 
-void Visor::DefineExtraOptions(QLayout*){}
-
 void Visor::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {    
     current_head_hue = Dir ? Head.hue: Tail.hue;

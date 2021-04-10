@@ -156,7 +156,6 @@ void Wavy::LoadCustomSettings(json Settings)
     ui->wave_freq_slider->setValue(WaveFrequency);
     ui->wave_speed_slider->setValue(WaveSpeed);
     ui->oscillation_speed_slider->setValue(OscillationSpeed);
-    return;
 }
 
 json Wavy::SaveCustomSettings(json Settings)
