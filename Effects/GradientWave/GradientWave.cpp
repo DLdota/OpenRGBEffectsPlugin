@@ -21,12 +21,11 @@ EffectInfo GradientWave::DefineEffectDetails()
     return GradientWave::EffectDetails;
 }
 
-void GradientWave::DefineExtraOptions(QLayout*){}
-
 void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
     int F[3];
     int S[3];
+
     if (RandomColors)
     {
         S[0] = RGBGetRValue(RandomColorList[0]);
@@ -73,8 +72,15 @@ void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
                 for (int LedID = 0; LedID < LEDCount; LedID++)
                 {
                     float GetGradientPos;
-                    if (Progress[ControllerID][ZoneID] > FPS) GetGradientPos = (FPS - (Progress[ControllerID][ZoneID] - FPS));
-                    else GetGradientPos = Progress[ControllerID][ZoneID];
+
+                    if (Progress[ControllerID][ZoneID] > FPS)
+                    {
+                        GetGradientPos = (FPS - (Progress[ControllerID][ZoneID] - FPS));
+                    }
+                    else
+                    {
+                        GetGradientPos = Progress[ControllerID][ZoneID];
+                    }
 
                     if (GetGradientPos <= 0)
                     {
@@ -82,15 +88,23 @@ void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
                     }
 
                     int RGBCol[3];
+
                     for (int CVal = 0; CVal < 3; CVal++)
                     {
                         RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(FPS))*(F[CVal]-S[CVal]));
                     }
+
                     Controllers[ControllerID].Controller->SetLED((RVRS ? (LEDCount - 1) - LedID : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
                 }
 
-                if (Progress[ControllerID][ZoneID] < FPS*2) Progress[ControllerID][ZoneID] = Progress[ControllerID][ZoneID] + ((float)Speed/(float)FPS);
-                else if (Progress[ControllerID][ZoneID] >= FPS*2) Progress[ControllerID][ZoneID] = 0;
+                if (Progress[ControllerID][ZoneID] < FPS*2)
+                {
+                    Progress[ControllerID][ZoneID] = Progress[ControllerID][ZoneID] + ((float)Speed/(float)FPS);
+                }
+                else if (Progress[ControllerID][ZoneID] >= FPS*2)
+                {
+                    Progress[ControllerID][ZoneID] = 0;
+                }
             }
 
             else if (ZT == ZONE_TYPE_LINEAR)
@@ -98,8 +112,15 @@ void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
                 for (int LedID = 0; LedID < LEDCount; LedID++)
                 {
                     float GetGradientPos;
-                    if ((Progress[ControllerID][ZoneID] + LedID) > LEDCount) GetGradientPos = (LEDCount - ( (Progress[ControllerID][ZoneID] + LedID) - LEDCount));
-                    else GetGradientPos = (Progress[ControllerID][ZoneID] + LedID);
+
+                    if ((Progress[ControllerID][ZoneID] + LedID) > LEDCount)
+                    {
+                        GetGradientPos = (LEDCount - ( (Progress[ControllerID][ZoneID] + LedID) - LEDCount));
+                    }
+                    else
+                    {
+                        GetGradientPos = (Progress[ControllerID][ZoneID] + LedID);
+                    }
 
                     if (GetGradientPos <= 0)
                     {
@@ -107,10 +128,12 @@ void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
                     }
 
                     int RGBCol[3];
+
                     for (int CVal = 0; CVal < 3; CVal++)
                     {
                         RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(LEDCount))*(F[CVal]-S[CVal]));
                     }
+
                     Controllers[ControllerID].Controller->SetLED((RVRS ? StartIndex + ((LEDCount - 1) - LedID) : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
                 }
 
@@ -126,8 +149,15 @@ void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
                 for (int CollumnID = 0; CollumnID < CollumnCount; CollumnID++)
                 {
                     float GetGradientPos;
-                    if ((Progress[ControllerID][ZoneID] + CollumnID) > CollumnCount) GetGradientPos = (CollumnCount - ( (Progress[ControllerID][ZoneID] + CollumnID) - CollumnCount));
-                    else GetGradientPos = (Progress[ControllerID][ZoneID] + CollumnID);
+
+                    if ((Progress[ControllerID][ZoneID] + CollumnID) > CollumnCount)
+                    {
+                        GetGradientPos = (CollumnCount - ( (Progress[ControllerID][ZoneID] + CollumnID) - CollumnCount));
+                    }
+                    else
+                    {
+                        GetGradientPos = (Progress[ControllerID][ZoneID] + CollumnID);
+                    }
 
                     if (GetGradientPos <= 0)
                     {
@@ -135,6 +165,7 @@ void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
                     }
 
                     int RGBCol[3];
+
                     for (int CVal = 0; CVal < 3; CVal++)
                     {
                         RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(CollumnCount))*(F[CVal]-S[CVal]));
@@ -147,10 +178,15 @@ void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
                     }
                 }
 
-                if (Progress[ControllerID][ZoneID] < (CollumnCount*2)) Progress[ControllerID][ZoneID] += ((float)Speed / (float)FPS);
-                else if (Progress[ControllerID][ZoneID] >= (CollumnCount*2)) Progress[ControllerID][ZoneID] = 0;
+                if (Progress[ControllerID][ZoneID] < (CollumnCount*2))
+                {
+                    Progress[ControllerID][ZoneID] += ((float)Speed / (float)FPS);
+                }
+                else if (Progress[ControllerID][ZoneID] >= (CollumnCount*2))
+                {
+                    Progress[ControllerID][ZoneID] = 0;
+                }
             }
-
         }
     }
 }

@@ -35,7 +35,6 @@ void Ambient::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int)
 
     RGBColor SetCol = ToRGBColor(C.red(),C.green(),C.blue());
 
-    //RGBColor SetCol = ToRGBColor(QRGBCol.red(), QRGBCol.green(), QRGBCol.blue());
     for (int ControllerID = 0; ControllerID < (int)Controllers.size(); ControllerID++)
     {
         for (int ZoneID = 0; ZoneID < (int)Controllers[ControllerID].OwnedZones.size(); ZoneID++)
@@ -54,7 +53,6 @@ void Ambient::LoadCustomSettings(json Settings)
 {
     SCRNSLCT->SetCalcType(Settings["CalcMode"]);
     SCRNSLCT->SetShowState(Settings["PreviewShowing"]);
-    return;
 }
 
 json Ambient::SaveCustomSettings(json Settings)

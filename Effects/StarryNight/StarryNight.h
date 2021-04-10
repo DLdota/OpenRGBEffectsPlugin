@@ -19,7 +19,7 @@ public:
     StarryNight() {};
     ~StarryNight() {};
     EffectInfo  DefineEffectDetails()                                       override;
-    void        DefineExtraOptions(QLayout*)                                override;
+    void        DefineExtraOptions(QLayout*)                                override {};
     void        StepEffect(std::vector<OwnedControllerAndZones>, int)       override;
     void        SetSpeed(int Speed)                                         override;
     void        SetUserColors(std::vector<RGBColor>)                        override;
@@ -31,9 +31,9 @@ public:
     int                     GetSlider2Val()                                 override {return LEDPerCycle; };
     std::vector<RGBColor>   GetUserColors()                                 override {return UserColors;  };
 
-    void                    EffectState(bool)                               override {return;             };
+    void                    EffectState(bool)                               override {};
 
-    void                    LoadCustomSettings(json)                        override {return;             };
+    void                    LoadCustomSettings(json)                        override {};
     json                    SaveCustomSettings(json)                        override {return json();      };
 
     EffectInfo          EffectDetails;

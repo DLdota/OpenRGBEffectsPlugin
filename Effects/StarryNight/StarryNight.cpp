@@ -20,15 +20,15 @@ EffectInfo StarryNight::DefineEffectDetails()
     return StarryNight::EffectDetails;
 }
 
-void StarryNight::DefineExtraOptions(QLayout*){}
-
 void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 {
     if (LEDPerCycle != TempLEDPerCycle)
     {
         LEDPerCycle = TempLEDPerCycle;
     }
+
     int AmountMadeThisCycle = 0;
+
     for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
     {
         if (rand() % 2)
@@ -38,10 +38,12 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
                 if (rand() % 2)
                 {
                     int MakeForZone = 0;
+
                     if ((LEDPerCycle - (int(CurrentStars.size()))) > 0)
                     {
                         MakeForZone = rand() % (LEDPerCycle - (int(CurrentStars.size())));
                     }
+
                     if ((int(CurrentStars.size()) < LEDPerCycle))
                     {
                         for (int ZonesMade = 0; ZonesMade < MakeForZone; ZonesMade++)
@@ -77,6 +79,7 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
     }
 
     std::vector<int> ToBeDeleted;
+
     for (int StarIndex = 0; StarIndex < (int)CurrentStars.size(); StarIndex++)
     {
         /*-------*\
@@ -87,7 +90,8 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
         rgb2hsv(CurrentStars[StarIndex].Color,&SetColor);
 
 
-        float NewValue = (CurrentStars[StarIndex].state - ( (float)Speed / (float)(1000/(float)FPS) ) );
+        float NewValue = (CurrentStars[StarIndex].state - ((float)Speed / (float)(1000/(float)FPS)));
+
         if ((NewValue < 1) || (NewValue > 255))
         {
             ToBeDeleted.push_back(StarIndex);
@@ -107,23 +111,21 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
     {
         CurrentStars.erase(CurrentStars.begin() + ToBeDeleted[ToDeleteIndex]);
     }
-
-    return;
 }
 
-void StarryNight::SetSpeed(int Speed)
+void StarryNight::SetSpeed(int value)
 {
-    StarryNight::Speed = Speed;
+    Speed = value;
 }
 
 void StarryNight::SetUserColors(std::vector<RGBColor> NewColors)
 {
-    StarryNight::UserColors = NewColors;
+    UserColors = NewColors;
 }
 
 void StarryNight::Slider2Changed(int LEDCount)
 {
-    StarryNight::TempLEDPerCycle = LEDCount;
+    TempLEDPerCycle = LEDCount;
 }
 
 void StarryNight::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
@@ -135,3 +137,4 @@ void StarryNight::ToggleRandomColors(bool RandomEnabled)
 {
     RandomColors = RandomEnabled;
 }
+

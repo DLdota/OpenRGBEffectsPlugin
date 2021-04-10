@@ -11,12 +11,12 @@ public:
     SpectrumCycling() {};
     ~SpectrumCycling() {};
     EffectInfo DefineEffectDetails()                                       override;
-    void        DefineExtraOptions(QLayout*)                               override;
+    void        DefineExtraOptions(QLayout*)                               override {};
     void        StepEffect(std::vector<OwnedControllerAndZones>, int)      override;
 
     void        SetSpeed(int Speed)                                        override;
-    void        SetUserColors(std::vector<RGBColor>)                       override;
-    void        Slider2Changed(int)                                        override;
+    void        SetUserColors(std::vector<RGBColor>)                       override {};
+    void        Slider2Changed(int)                                        override {};
     void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>) override {};
     void        ToggleRandomColors(bool)                                   override {};
 
@@ -24,10 +24,10 @@ public:
     int                     GetSlider2Val()                                override {return 0;      };
     std::vector<RGBColor>   GetUserColors()                                override {return {};     };
 
-    void                    EffectState(bool)                              override {return;};
+    void                    EffectState(bool)                              override {};
 
-    void                    LoadCustomSettings(json)                       override {return;};
-    json                    SaveCustomSettings(json)                       override {return json();};
+    void                    LoadCustomSettings(json)                       override {};
+    json                    SaveCustomSettings(json)                       override {return json(); };
 
     EffectInfo EffectDetails;
 

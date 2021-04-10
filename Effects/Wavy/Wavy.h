@@ -34,7 +34,7 @@ public:
     int                     GetSlider2Val()                                 override {return 0;          };
     std::vector<RGBColor>   GetUserColors()                                 override {return UserColors; };
 
-    void                    EffectState(bool)                               override {return;            };
+    void                    EffectState(bool)                               override {};
 
     void                    LoadCustomSettings(json)                        override;
     json                    SaveCustomSettings(json)                        override;

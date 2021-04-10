@@ -9,11 +9,6 @@ Lightning::Lightning(QWidget *parent) :
 
 }
 
-Lightning::~Lightning()
-{
-
-}
-
 EffectInfo Lightning::DefineEffectDetails()
 {
     Lightning::EffectDetails.EffectName = "Lightning";
@@ -107,6 +102,7 @@ void Lightning::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
             if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
             {
                 int SetLEDIndex = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
+
                 for (int LedID = 0; LedID < int(Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count); LedID++)
                 {
                     Controllers[ControllerID].Controller->SetLED((SetLEDIndex + LedID), color);
@@ -129,7 +125,6 @@ void Lightning::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
 
         }
     }
-
 }
 
 void Lightning::SetUserColors(std::vector<RGBColor> colors) {
