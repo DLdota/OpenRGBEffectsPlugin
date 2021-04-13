@@ -123,6 +123,7 @@ private:
     QSlider*        middle_slider;
     QSlider*        high_slider;
     QComboBox*      preset_selector;
+    QComboBox*      device_list_selector;
 
     /*---------*\
     | Settings  |
