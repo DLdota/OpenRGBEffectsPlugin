@@ -65,7 +65,6 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     QHBoxLayout* DeviceListLayout = new QHBoxLayout;
     const QString device_tooltip = "Switch audio device";
     QLabel *device_label = new QLabel("Device");
-    QComboBox* device_list_selector = new QComboBox();
 
     device_label->setFixedWidth(label_width);
 
@@ -748,6 +747,7 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
 
 void AudioSync::LoadCustomSettings(json Settings)
 {
+    if (Settings.contains("audio_device_idx"))    audio_device_idx                 = Settings["audio_device_idx"];
     if (Settings.contains("fade_step"))           current_settings.fade_step       = Settings["fade_step"];
     if (Settings.contains("rainbow_shift"))       current_settings.rainbow_shift   = Settings["rainbow_shift"];
     if (Settings.contains("bypass_min"))          current_settings.bypass_min      = Settings["bypass_min"];
@@ -770,6 +770,7 @@ void AudioSync::LoadCustomSettings(json Settings)
 
 json AudioSync::SaveCustomSettings(json Settings)
 {
+    Settings["audio_device_idx"]    = audio_device_idx;
     Settings["fade_step"]           = current_settings.fade_step;
     Settings["rainbow_shift"]       = current_settings.rainbow_shift;
     Settings["bypass_min"]          = current_settings.bypass_min;
@@ -781,7 +782,7 @@ json AudioSync::SaveCustomSettings(json Settings)
     Settings["filter_constant"]     = current_settings.filter_constant;
     Settings["high"]                = current_settings.high;
     Settings["middle"]              = current_settings.middle;
-    Settings["low"]                 = current_settings.middle;
+    Settings["low"]                 = current_settings.low;
     Settings["amplitude_min_value"] = amplitude_min_value;
     Settings["amplitude_max_value"] = amplitude_max_value;
     Settings["amplitude"]           = current_settings.amplitude;
@@ -957,6 +958,7 @@ void AudioSync::UpdateUiSettings()
     /*-----------------------------------------------*\
     | Set the min and max values of all GUI elements  |
     \*-----------------------------------------------*/
+    device_list_selector->setCurrentIndex(audio_device_idx >= 0 ? audio_device_idx: 0);
     bypass_slider->setMinimum(0);
     bypass_slider->setMaximum(256);
     bypass_slider->setValues(current_settings.bypass_min, current_settings.bypass_max);
@@ -988,6 +990,7 @@ void AudioSync::Init()
     /*-------------------------------------------------*\
     | Create empty versions of all of the GUI elements  |
     \*-------------------------------------------------*/
+    device_list_selector = new QComboBox();
     bypass_slider = new ctkRangeSlider(Qt::Horizontal);
     rainbow_shift_slider = new QSlider();
     high_slider = new QSlider();

@@ -200,6 +200,7 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     Speeds({1,2,3,4,5,6,7,8,10,15,20,25,30,40,50,60})
 {
     ui->setupUi(this);
+    EffectManager::Get()->SetFPS(1);
 
     for (unsigned int i = 0; i < EffectManager::Get()->EffectList.size(); i++)
     {
@@ -257,9 +258,6 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     \*------------------------------------------------*/
     ORGBPlugin::RMPointer->RegisterDeviceListChangeCallback(DeviceListChangedCallback, this);
     ORGBPlugin::RMPointer->RegisterDetectionProgressCallback(DeviceListChangedCallback, this);
-
-
-    EffectManager::Get()->SetFPS(1);
 
     ui->FPSCount->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     ui->FPSCount->setFixedWidth(20);
@@ -344,6 +342,7 @@ void OpenRGBEffectTab::DeviceListChanged()
             if (Speeds[FPSIdentifier] == UserSettings["FPS"])
             {
                 ui->FPSSlider->setSliderPosition(FPSIdentifier);
+                EffectManager::Get()->SetFPS(Speeds[FPSIdentifier]);
                 break;
             }
         }

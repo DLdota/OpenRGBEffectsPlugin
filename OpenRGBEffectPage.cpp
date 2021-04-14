@@ -234,15 +234,6 @@ void OpenRGBEffectPage::StartupSettings()
                 }
             }
 
-            if (UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("AutoStart"))
-            {
-                if(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["AutoStart"])
-                {
-                    ui->StartButton->click();
-                    ui->AutoStart->click();
-                }
-            }
-
             // User colors
             if (UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("UserColors"))
             {
@@ -278,14 +269,19 @@ void OpenRGBEffectPage::StartupSettings()
                 }
             }
 
-            if
-            (
-            EFCT->EffectDetails.HasCustomSettings &&
-            UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("CustomSettings")
-            )
+            if(EFCT->EffectDetails.HasCustomSettings &&
+                    UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("CustomSettings"))
             {
                 EFCT->LoadCustomSettings(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["CustomSettings"]);
             }
+
+            if (UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("AutoStart") &&
+                    UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["AutoStart"])
+            {
+                ui->AutoStart->click();
+                ui->StartButton->click();
+            }
+
         }
     }
 }
@@ -336,10 +332,10 @@ void OpenRGBEffectPage::on_SaveSettings_clicked()
     if (EFCT->EffectDetails.HasCustomSettings)
     {
         PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["CustomSettings"] =
-        EFCT->SaveCustomSettings
-        (
-            PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["CustomSettings"]
-        );
+                EFCT->SaveCustomSettings
+                (
+                    PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["CustomSettings"]
+                );
     }
 
     OpenRGBEffectSettings::SaveUserSettings(PrevSettings);
