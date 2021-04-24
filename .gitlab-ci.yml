@@ -38,47 +38,41 @@ before_script:
 #-----------------------------------------------------------------------#
 # Linux (AppImage) 32-bit Build Target                                  #
 #-----------------------------------------------------------------------#
-build_linux_32:
+"Linux 32":
   <<: *ccache_init
   image: ubuntu:bionic
   stage: build
   script:
   - export $(dpkg-architecture)
   - ./scripts/scripts_build-plugin.sh
-  - fname=*.so
-  - mkdir ship
-  - cd ship
-  - cp ../$fname ./
   
   artifacts:
+    name: "${CI_PROJECT_NAME}_Linux_32_${CI_COMMIT_SHORT_SHA}"
     paths:
-    - ./ship
+    - ./libORGBEffectPlugin.so.1.0.0
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
 # Linux 64-bit Build Target                                             #
 #-----------------------------------------------------------------------#
-build_linux_64:
+"Linux 64":
   <<: *ccache_init
   image: ubuntu:bionic
   stage: build
   script:
   - export $(dpkg-architecture)
   - ./scripts/scripts_build-plugin.sh
-  - fname=*.so
-  - mkdir ship
-  - cd ship
-  - cp ../$fname ./
   
   artifacts:
+    name: "${CI_PROJECT_NAME}_Linux_64_${CI_COMMIT_SHORT_SHA}"
     paths:
-    - ./ship
+    - ./libORGBEffectPlugin.so.1.0.0
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
 # Windows (32-bit) Build Target                                         #
 #-----------------------------------------------------------------------#
-build_windows_32:
+"Windows 32":
   extends:
   - .shared_windows_runners
   stage: build
@@ -142,22 +136,20 @@ build_windows_32:
   - - if (${FNAME} -contains 'Update'){cp ..\_qt\5.15.0\msvc2019\bin\Qt5Network.dll release}
   - _fold_final_
 
-  - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
-  - ${PLUGINNAME} = (${FNAME} -replace '.pro' , '')
-  - mv release ${PLUGINNAME}_32bit
-  - ${revision} = ((git rev-parse --short HEAD) | Out-String).Trim()
-  - 7z a -mx9 -r -y "${PLUGINNAME}_32bit_${revision}.7z" ${PLUGINNAME}_32bit
+  - _fold_start_ 'Preparing artifact'  
+  - mv release/ORGBEffectPlugin.dll ../
   - _fold_final_
 
   artifacts:
+    name: "${CI_PROJECT_NAME}_Windows_32_${CI_COMMIT_SHORT_SHA}"
     paths:
-    - _build/*.7z
+    - ORGBEffectPlugin.dll
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
 # Windows (64-bit) Build Target                                         #
 #-----------------------------------------------------------------------#
-build_windows_64:
+"Windows 64":
   extends:
   - .shared_windows_runners
   stage: build
@@ -223,22 +215,20 @@ build_windows_64:
   - if (${FNAME} -contains 'Update'){cp ..\_qt\5.15.0\msvc2019_64\bin\Qt5Network.dll release}
   - _fold_final_
 
-  - _fold_start_ 'compressing the release folder so that we can upload it as artifact'
-  - ${revision} = ((git rev-parse --short HEAD) | Out-String).Trim()
-  - ${PLUGINNAME} = (${FNAME} -replace '.pro' , '')
-  - mv release ${PLUGINNAME} # Rename it
-  - 7z a -mx9 -r -y "${PLUGINNAME}_64_${revision}.7z" ${PLUGINNAME} # Zip it up
+  - _fold_start_ 'Preparing artifact'  
+  - mv release/ORGBEffectPlugin.dll ../
   - _fold_final_
 
   artifacts:
+    name: "${CI_PROJECT_NAME}_Windows_64_${CI_COMMIT_SHORT_SHA}"
     paths:
-    - _build/*.7z
+    - ORGBEffectPlugin.dll
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
 # MacOS Build Target                                                    #
 #-----------------------------------------------------------------------#
-build_macos_arm64:
+"MacOS ARM64":
   tags:
   - macos
   stage: build
@@ -252,6 +242,7 @@ build_macos_arm64:
   - codesign --force --verify -s OpenRGB libORGBEffectPlugin.1.0.0.dylib
 
   artifacts:
+    name: "${CI_PROJECT_NAME}_MacOS_ARM64_${CI_COMMIT_SHORT_SHA}"
     paths:
     - libORGBEffectPlugin.1.0.0.dylib
     expire_in: 30 days
@@ -262,7 +253,7 @@ build_macos_arm64:
   - if: '$BUILD_MACOS =~ /.+/'
     when: on_success
 
-build_macos_intel:
+"MacOS Intel":
   tags:
   - macos
   stage: build
@@ -275,6 +266,7 @@ build_macos_intel:
   - arch -x86_64 install_name_tool libORGBEffectPlugin.1.0.0.dylib -change /usr/local/bin/opt/qt@5/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore
   - arch -x86_64 codesign --force --verify -s OpenRGB libORGBEffectPlugin.1.0.0.dylib
   artifacts:
+    name: "${CI_PROJECT_NAME}_MacOS_Intel_${CI_COMMIT_SHORT_SHA}"
     paths:
     - libORGBEffectPlugin.1.0.0.dylib
     expire_in: 30 days
