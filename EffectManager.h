@@ -35,8 +35,9 @@ private:
     int                     FPSDelay;
     int                     FPS;
 
-    std::thread*            StepEffectThread;
-    void                    EffectStepTimer();
+    std::map<RGBEffect*,std::thread*> EffectThreads;
+    void EffectThreadFunction(RGBEffect*);
+
     std::chrono::steady_clock* CLK;
 };
 
