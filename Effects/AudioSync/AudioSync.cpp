@@ -1,4 +1,4 @@
-﻿#include "AudioSync.h"
+#include "AudioSync.h"
 
 
 /*------------------------*\
@@ -754,7 +754,7 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
                     for (int row_id = 0; row_id < rows; row_id++)
                     {
                         int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((row_id * cols) + col_id)];
-                        Controllers[ControllerID].Controller->SetLED(SetLEDIndex + LedID, colors_rotation[current_settings.roll_mode == 0 ? LedID : 0]);
+                        Controllers[ControllerID].Controller->SetLED(SetLEDIndex + LedID, colors_rotation[current_settings.roll_mode == 0 ? col_id : 0]);
                     }
                 }
             }
