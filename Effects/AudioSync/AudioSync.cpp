@@ -172,7 +172,7 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     QLabel *avg_size_label = new QLabel("Avg size");
     avg_size_label->setFixedWidth(label_width);
     avg_size_slider->setMinimum(1);
-    avg_size_slider->setMaximum(32);
+    avg_size_slider->setMaximum(64);
     avg_size_slider->setOrientation(Qt::Horizontal);
 
     connect(avg_size_slider,SIGNAL(valueChanged(int)), this, SLOT(AvgSizeChanged(int)));
@@ -241,6 +241,25 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     SaturationModeLayout->addWidget(saturation_mode_label);
     SaturationModeLayout->addWidget(saturation_mode_selector);
     MainAudioSyncLayout->addLayout(SaturationModeLayout);
+
+    /*-------------------*\
+    | Roll mode dropdown  |
+    \*-------------------*/
+    QHBoxLayout* RollModeLayout = new QHBoxLayout;
+    const QString roll_mode_tooltip = "Change the roll mode";
+    QLabel *roll_mode_label = new QLabel("Roll mode");
+    roll_mode_label->setFixedWidth(label_width);
+    roll_mode_selector->addItem("Rolling");
+    roll_mode_selector->addItem("No roll");
+
+    connect(roll_mode_selector, SIGNAL(currentIndexChanged(int)), this, SLOT(RollModeChanged(int)));
+
+    roll_mode_label->setToolTip(roll_mode_tooltip);
+    roll_mode_selector->setToolTip(roll_mode_tooltip);
+
+    RollModeLayout->addWidget(roll_mode_label);
+    RollModeLayout->addWidget(roll_mode_selector);
+    MainAudioSyncLayout->addLayout(RollModeLayout);
 
     /*------------------*\
     | Amplitude slider   |
@@ -719,7 +738,7 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
 
                 for (int LedID = 0; LedID < led_count && LedID < colors_count; LedID++)
                 {
-                    Controllers[ControllerID].Controller->SetLED((SetLEDIndex+LedID), colors_rotation[LedID]);
+                    Controllers[ControllerID].Controller->SetLED((SetLEDIndex+LedID), colors_rotation[current_settings.roll_mode == 0 ? LedID : 0]);
                 }
             }
 
@@ -735,7 +754,7 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
                     for (int row_id = 0; row_id < rows; row_id++)
                     {
                         int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((row_id * cols) + col_id)];
-                        Controllers[ControllerID].Controller->SetLED(SetLEDIndex + LedID, colors_rotation[col_id]);
+                        Controllers[ControllerID].Controller->SetLED(SetLEDIndex + LedID, colors_rotation[current_settings.roll_mode == 0 ? LedID : 0]);
                     }
                 }
             }
@@ -755,6 +774,7 @@ void AudioSync::LoadCustomSettings(json Settings)
     if (Settings.contains("avg_size"))            current_settings.avg_size        = Settings["avg_size"];
     if (Settings.contains("avg_mode"))            current_settings.avg_mode        = Settings["avg_mode"];
     if (Settings.contains("saturation_mode"))     current_settings.saturation_mode = Settings["saturation_mode"];
+    if (Settings.contains("roll_mode"))           current_settings.roll_mode       = Settings["roll_mode"];
     if (Settings.contains("decay"))               current_settings.decay           = Settings["decay"];
     if (Settings.contains("filter_constant"))     current_settings.filter_constant = Settings["filter_constant"];
     if (Settings.contains("high"))                current_settings.high            = Settings["high"];
@@ -777,6 +797,7 @@ json AudioSync::SaveCustomSettings(json Settings)
     Settings["bypass_max"]          = current_settings.bypass_max;
     Settings["avg_size"]            = current_settings.avg_size;
     Settings["avg_mode"]            = current_settings.avg_mode;
+    Settings["roll_mode"]           = current_settings.roll_mode;
     Settings["saturation_mode"]     = current_settings.saturation_mode;
     Settings["decay"]               = current_settings.decay;
     Settings["filter_constant"]     = current_settings.filter_constant;
@@ -839,6 +860,11 @@ void AudioSync::AvgModeChanged(int value)
 void AudioSync::SaturationModeChanged(int value)
 {
     current_settings.saturation_mode = value;
+}
+
+void AudioSync::RollModeChanged(int value)
+{
+    current_settings.roll_mode = value;
 }
 
 void AudioSync::DecayChanged(int value)
@@ -967,6 +993,7 @@ void AudioSync::UpdateUiSettings()
     decay_slider->setValue(current_settings.decay);
     avg_size_slider->setValue(current_settings.avg_size);
     avg_mode_selector->setCurrentIndex(current_settings.avg_mode);
+    roll_mode_selector->setCurrentIndex(current_settings.roll_mode);
     saturation_mode_selector->setCurrentIndex(current_settings.saturation_mode);
     filter_constant_slider->setValue(current_settings.filter_constant * 100);
     low_slider->setValue(current_settings.low*100);
@@ -1001,6 +1028,7 @@ void AudioSync::Init()
     decay_slider = new QSlider();
     avg_size_slider = new QSlider();
     saturation_mode_selector = new QComboBox();
+    roll_mode_selector = new QComboBox();
     avg_mode_selector = new QComboBox();
     filter_constant_slider = new QSlider();
     preset_selector = new QComboBox();
