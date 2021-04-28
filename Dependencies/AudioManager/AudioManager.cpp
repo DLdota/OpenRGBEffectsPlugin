@@ -183,6 +183,7 @@ void AudioManager::InitAudioDeviceList()
     pMMDevices.clear();
     known_audio_devices.clear();
     isCapture.clear();
+    ContinueCapture.clear();
 
     /*------------------------*\
     | Enumerate audio outputs  |
@@ -219,8 +220,8 @@ void AudioManager::InitAudioDeviceList()
                 strncat(new_device, " (Loopback)", len);
                 known_audio_devices.push_back(new_device);
                 pMMDevices.push_back(pEndpoint);
-                isCapture[i] = false;
-                ContinueCapture[i] = false;
+                isCapture.push_back(false);
+                ContinueCapture.push_back(false);
             }
             delete varName;
             pProps->Release();
@@ -262,8 +263,8 @@ void AudioManager::InitAudioDeviceList()
                 wcstombs(new_device, varName->pwszVal, len);
                 known_audio_devices.push_back(new_device);
                 pMMDevices.push_back(pEndpoint);
-                isCapture[i] = true;
-                ContinueCapture[i] = false;
+                isCapture.push_back(true);
+                ContinueCapture.push_back(false);
             }
             delete varName;
             pProps->Release();
@@ -294,6 +295,7 @@ void AudioManager::InitAudioDeviceList()
                 char* new_device = new char[strlen(devicestring) + 1];
                 strcpy(new_device, devicestring);
                 known_audio_devices.push_back(new_device);
+                ContinueCapture.push_back(false);
             }
 
 
