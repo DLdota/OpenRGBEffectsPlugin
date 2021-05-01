@@ -1,5 +1,5 @@
 #include "AudioSync.h"
-
+#include "math.h"
 
 /*------------------------*\
 | Standard Effect Members  |
@@ -249,8 +249,9 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     const QString roll_mode_tooltip = "Change the roll mode";
     QLabel *roll_mode_label = new QLabel("Roll mode");
     roll_mode_label->setFixedWidth(label_width);
-    roll_mode_selector->addItem("Rolling");
+    roll_mode_selector->addItem("Linear");
     roll_mode_selector->addItem("No roll");
+    roll_mode_selector->addItem("Radial");
 
     connect(roll_mode_selector, SIGNAL(currentIndexChanged(int)), this, SLOT(RollModeChanged(int)));
 
@@ -718,27 +719,19 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
             /*-------------------*\
             | Setup for the loop  |
             \*-------------------*/
-            int SetLEDIndex = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
+            int start_idx = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
             zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
 
             /*----------------------------------------------------*\
             | Adjust how it applies for the specific type of zone  |
             \*----------------------------------------------------*/
-            if (ZT == ZONE_TYPE_SINGLE)
-            {
-                int led_count = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count;
-                for (int LedID = 0; LedID < led_count; LedID++)
-                {
-                    Controllers[ControllerID].Controller->SetLED(SetLEDIndex + LedID, colors_rotation[0]);
-                }
-            }
-            else if (ZT == ZONE_TYPE_LINEAR)
-            {
+            if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
+            {                
                 int led_count = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count;
 
                 for (int LedID = 0; LedID < led_count && LedID < colors_count; LedID++)
                 {
-                    Controllers[ControllerID].Controller->SetLED((SetLEDIndex+LedID), colors_rotation[current_settings.roll_mode == 0 ? LedID : 0]);
+                    Controllers[ControllerID].Controller->SetLED(start_idx + LedID, GetColor(1, LedID, led_count, 1));
                 }
             }
 
@@ -747,14 +740,13 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
                 int cols = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
                 int rows = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
 
-
                 for (int col_id = 0; col_id < cols && col_id < colors_count; col_id++)
                 {
-
                     for (int row_id = 0; row_id < rows; row_id++)
                     {
                         int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((row_id * cols) + col_id)];
-                        Controllers[ControllerID].Controller->SetLED(SetLEDIndex + LedID, colors_rotation[current_settings.roll_mode == 0 ? col_id : 0]);
+
+                        Controllers[ControllerID].Controller->SetLED(start_idx + LedID, GetColor(row_id, col_id, rows, cols));
                     }
                 }
             }
@@ -762,6 +754,29 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
         }
     }
 
+}
+
+RGBColor AudioSync::GetColor(int row, int col, int zone_width, int zone_height)
+{
+    switch(current_settings.roll_mode)
+    {
+    case RollMode::LINEAR:
+        return colors_rotation[col];
+
+    case RollMode::NONE:
+        return colors_rotation[0];
+
+    case RollMode::RADIAL:
+
+        int center_x = zone_width/2;
+        int center_y = zone_height/2;
+
+        int distance = sqrt(pow(center_x - row, 2) + pow(center_y - col, 2));
+
+        return colors_rotation[distance];
+    }
+
+    return OFF;
 }
 
 void AudioSync::LoadCustomSettings(json Settings)
