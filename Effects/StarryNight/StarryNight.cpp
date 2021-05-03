@@ -56,7 +56,7 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
                             LEDStar.ControllerIndex = ControllerID;
                             LEDStar.LED = (StartingLED + RandomLedID);
                             LEDStar.state = 255;
-                            if (RandomColors)
+                            if (RandomColorsEnabled)
                             {
                                 LEDStar.Color = ToRGBColor(
                                             rand() % 255, /* R */
@@ -113,28 +113,21 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
     }
 }
 
-void StarryNight::SetSpeed(int value)
-{
-    Speed = value;
-}
-
-void StarryNight::SetUserColors(std::vector<RGBColor> NewColors)
-{
-    UserColors = NewColors;
-}
-
 void StarryNight::Slider2Changed(int LEDCount)
 {
     TempLEDPerCycle = LEDCount;
 }
 
-void StarryNight::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
+void StarryNight::ASelectionWasChanged(std::vector<OwnedControllerAndZones> Controllers)
 {
     CurrentStars.clear();
-}
 
-void StarryNight::ToggleRandomColors(bool RandomEnabled)
-{
-    RandomColors = RandomEnabled;
+    for (int ControllerID = 0; ControllerID < (int)Controllers.size(); ControllerID++)
+    {
+        for (int ZoneID = 0; ZoneID < (int)Controllers[ControllerID].OwnedZones.size(); ZoneID++)
+        {
+            Controllers[ControllerID].Controller->SetAllZoneLEDs(Controllers[ControllerID].OwnedZones[ZoneID],ToRGBColor(0,0,0));
+        }
+        Controllers[ControllerID].Controller->UpdateLEDs();
+    }
 }
-
