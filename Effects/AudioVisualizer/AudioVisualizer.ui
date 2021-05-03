@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>874</width>
-    <height>680</height>
+    <width>478</width>
+    <height>446</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -189,7 +189,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_Average_Size"/>
+           <widget class="QLineEdit" name="lineEdit_Average_Size">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -492,7 +499,7 @@
         <item>
          <layout class="QVBoxLayout" name="ButtonLayout">
           <property name="spacing">
-           <number>0</number>
+           <number>1</number>
           </property>
           <item>
            <layout class="QHBoxLayout" name="ReactiveBGLayout">
