@@ -125,8 +125,8 @@ HEADERS +=                                                                      
     Effects/Lightning/Lightning.h                                                               \
 
 FORMS +=                                                                                        \
-    Effects/Wavy/Wavy.ui
-
+    Effects/Wavy/Wavy.ui                                                                        \
+    Effects/AudioVisualizer/AudioVisualizer.ui                                                  \
 
 #-----------------------------------------------------------------------------------------------#
 # AudioManager                                                                                  #
@@ -139,26 +139,6 @@ HEADERS +=                                                                      
 
 SOURCES +=                                                                                      \
     Dependencies/AudioManager/AudioManager.cpp                                                  \
-
-
-#-----------------------------------------------------------------------------------------------#
-# Keyboard Visualizer https://gitlab.com/CalcProgrammer1/KeyboardVisualizer                     #
-#-----------------------------------------------------------------------------------------------#
-INCLUDEPATH +=                                                                                  \
-    Dependencies/AudioVisualizer/                                                               \
-
-HEADERS +=                                                                                      \
-    Dependencies/AudioVisualizer/Visualizer.h                                                   \
-    Dependencies/AudioVisualizer/VisualizerDefines.h                                            \
-    Dependencies/AudioVisualizer/AudioVisualizerUi.h                                            \
-
-SOURCES +=                                                                                      \
-    Dependencies/AudioVisualizer/AudioVisualizerUi.cpp                                          \
-    Dependencies/AudioVisualizer/Visualizer.cpp                                                 \
-
-FORMS +=                                                                                        \
-    Dependencies/AudioVisualizer/AudioVisualizerUi.ui                                           \
-
 
 #-----------------------------------------------------------------------------------------------#
 # ctkrangeslider                                                                                #

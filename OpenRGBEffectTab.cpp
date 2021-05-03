@@ -432,7 +432,7 @@ void OpenRGBEffectTab::DeviceListChanged()
 
                         if
                                 (
-                                 ( DeviceList[DeviceIndex]["ControllerName"]        == Comp->name               )
+                                   ( DeviceList[DeviceIndex]["ControllerName"]        == Comp->name               )
                                  &&( DeviceList[DeviceIndex]["ControllerDescription"] == Comp->description        )
                                  &&( DeviceList[DeviceIndex]["ControllerLocation"]    == Comp->location           )
                                  &&( DeviceList[DeviceIndex]["ControllerSerial"]      == Comp->serial             )
@@ -444,8 +444,11 @@ void OpenRGBEffectTab::DeviceListChanged()
                                 QTableWidget* ZoneSelectionTable = qobject_cast<QTableWidget*>(ui->SelectDevices->cellWidget(( (ControllerID * 2) + 1),0));
                                 for (unsigned int ZoneID = 0; ZoneID < DeviceList[DeviceIndex]["SelectedZones"].size(); ZoneID++)
                                 {
-                                    QCheckBox* ZoneBox = GetCheckboxFromFrame(ZoneSelectionTable->cellWidget(DeviceList[DeviceIndex]["SelectedZones"][ZoneID],1));// qobject_cast<QCheckBox*>;
-                                    ZoneBox->click();
+                                    if (DeviceList[DeviceIndex]["SelectedZones"][ZoneID] < Comp->zones.size())
+                                    {
+                                        QCheckBox* ZoneBox = GetCheckboxFromFrame(ZoneSelectionTable->cellWidget(DeviceList[DeviceIndex]["SelectedZones"][ZoneID],1));// qobject_cast<QCheckBox*>;
+                                        ZoneBox->click();
+                                    }
                                 }
                             }
                             else
