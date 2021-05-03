@@ -43,6 +43,12 @@ enum SaturationMode {
     SATURATE_HIGH_AMPLITUDES = 1
 };
 
+enum RollMode {
+    LINEAR = 0,
+    NONE = 1,
+    RADIAL = 2
+};
+
 class AudioSync: public QObject, public RGBEffect
 {
     Q_OBJECT
@@ -89,7 +95,6 @@ private slots:
     void UpdateUiSettings();
     void UpdateGraph();
     void PresetChanged(int);
-
     void ShowHide();
 
 signals:
@@ -155,6 +160,8 @@ private:
     std::vector<RGBColor> colors_rotation;    
     int                   audio_device_idx;
     static const RGBColor OFF = ToRGBColor(0,0,0);
+
+    RGBColor GetColor(int, int, int, int);
 
     /*-----*\
     | FFT   |
