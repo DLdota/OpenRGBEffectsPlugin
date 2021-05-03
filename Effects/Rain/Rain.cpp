@@ -198,10 +198,10 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
             // If the drop is reversed
             if (CurrentDrops[DropID].Reversed)
             {
-                if (0 < ( (CCount - LedID) + 3) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + ((CCount - LedID) + 3)), ToRGBColor(0,0,0)     );
-                if (0 < ( (CCount - LedID) + 0) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + ((CCount - LedID) + 0)), hsv2rgb(&StartingHSV));
-                if (0 < ( (CCount - LedID) + 1) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + ((CCount - LedID) + 1)), UserColor            );
-                if (0 < ( (CCount - LedID) + 2) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + ((CCount - LedID) + 2)), hsv2rgb(&EndingHSV)  );
+                if (0 <= ( (CCount - LedID) + 3) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + ((CCount - LedID) + 3)), ToRGBColor(0,0,0)     );
+                if (0 <= ( (CCount - LedID) + 0) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + ((CCount - LedID) + 0)), hsv2rgb(&StartingHSV));
+                if (0 <= ( (CCount - LedID) + 1) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + ((CCount - LedID) + 1)), UserColor            );
+                if (0 <= ( (CCount - LedID) + 2) ) Controllers[CurrentDrops[DropID].ControllerIndex].Controller->SetLED((SIndex + ((CCount - LedID) + 2)), hsv2rgb(&EndingHSV)  );
             }
             else
             {
@@ -343,7 +343,7 @@ void Rain::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
 /*-----------------------*\
 | Setters for Effect GUI  |
 \*-----------------------*/
-void Rain::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
+void Rain::ASelectionWasChanged(std::vector<OwnedControllerAndZones> Controllers)
 {
     HasEffect.clear();
 
@@ -355,6 +355,15 @@ void Rain::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
         {
             HasEffect[ControllerID].push_back(false);
         }
+    }
+
+    for (int ControllerID = 0; ControllerID < (int)Controllers.size(); ControllerID++)
+    {
+        for (int ZoneID = 0; ZoneID < (int)Controllers[ControllerID].OwnedZones.size(); ZoneID++)
+        {
+            Controllers[ControllerID].Controller->SetAllZoneLEDs(Controllers[ControllerID].OwnedZones[ZoneID],ToRGBColor(0,0,0));
+        }
+        Controllers[ControllerID].Controller->UpdateLEDs();
     }
 
     CurrentDrops.clear();

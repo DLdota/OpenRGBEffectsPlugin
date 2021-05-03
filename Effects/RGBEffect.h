@@ -58,20 +58,20 @@ public:
     virtual void        DefineExtraOptions(QLayout*) {};
     virtual void        StepEffect(std::vector<OwnedControllerAndZones>, int FPS)    = 0;
 
-    virtual void        SetSpeed(int SPD)                       {Speed = SPD;};
-    virtual void        SetUserColors(std::vector<RGBColor> UC) {UserColors = UC;                     };
-    virtual void        Slider2Changed(int SVal)                {Slider2Val = SVal;                   };
-    virtual void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>)   = 0;
-    virtual void        ToggleRandomColors(bool RandomEnabled)  {RandomColorsEnabled = RandomEnabled; };
-    virtual void        OnlyFirstChange(bool OnlyFirst)         {OnlyFirstColorEnabled = OnlyFirst;   };
-    virtual int                     GetSpeed()                  {return Speed;                        };
-    virtual int                     GetSlider2Val()             {return Slider2Val;                   };
-    virtual std::vector<RGBColor>   GetUserColors()             {return UserColors;                   };
+    virtual void        SetSpeed(int SPD)                                          {Speed = SPD;};
+    virtual void        SetUserColors(std::vector<RGBColor> UC)                    {UserColors = UC;                     };
+    virtual void        Slider2Changed(int SVal)                                   {Slider2Val = SVal;                   };
+    virtual void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>) {                                     };
+    virtual void        ToggleRandomColors(bool RandomEnabled)                     {RandomColorsEnabled = RandomEnabled; };
+    virtual void        OnlyFirstChange(bool OnlyFirst)                            {OnlyFirstColorEnabled = OnlyFirst;   };
+    virtual int                     GetSpeed()                                     {return Speed;                        };
+    virtual int                     GetSlider2Val()                                {return Slider2Val;                   };
+    virtual std::vector<RGBColor>   GetUserColors()                                {return UserColors;                   };
 
-    virtual void                    EffectState(bool Enabled)   {EffectEnabled = Enabled;             };
+    virtual void                    EffectState(bool Enabled)                      {EffectEnabled = Enabled;             };
 
-    virtual void                    LoadCustomSettings(json)                         = 0;
-    virtual json                    SaveCustomSettings(json)                         = 0;
+    virtual void                    LoadCustomSettings(json)                       {                                     };
+    virtual json                    SaveCustomSettings(json)                       {return json();                       };
 
     EffectInfo          EffectDetails;
 protected:
