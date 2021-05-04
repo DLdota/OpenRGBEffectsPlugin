@@ -21,28 +21,14 @@ stages:
 before_script:
  - echo "started by ${GITLAB_USER_NAME}"
 
-#reusable templates
-.ccache_init: &ccache_init
-  before_script:
-    - apt update
-    - apt install -y software-properties-common
-    - add-apt-repository ppa:ubuntu-toolchain-r/test
-    - apt update
-    - apt install -y build-essential qtcreator qt5-default qtdeclarative5-dev qtwebengine5-dev libusb-1.0-0-dev libhidapi-dev pkgconf wget git libopenal-dev
-    - apt install -y gcc-9 g++-9
-    - rm /usr/bin/gcc
-    - rm /usr/bin/g++
-    - ln -s /usr/bin/gcc-9 /usr/bin/gcc
-    - ln -s /usr/bin/g++-9 /usr/bin/g++
-
 #-----------------------------------------------------------------------#
 # Linux (AppImage) 32-bit Build Target                                  #
 #-----------------------------------------------------------------------#
 "Linux 32":
-  <<: *ccache_init
-  image: ubuntu:bionic
+  image: registry.gitlab.com/openrgbdevelopers/openrgb-linux-ci-deb-builder:stretch-32
   stage: build
   script:
+  - apt install -y libopenal-dev
   - export $(dpkg-architecture)
   - ./scripts/scripts_build-plugin.sh
   
@@ -56,10 +42,10 @@ before_script:
 # Linux 64-bit Build Target                                             #
 #-----------------------------------------------------------------------#
 "Linux 64":
-  <<: *ccache_init
-  image: ubuntu:bionic
+  image: registry.gitlab.com/openrgbdevelopers/openrgb-linux-ci-deb-builder:stretch-64
   stage: build
   script:
+  - apt install libopenal-dev
   - export $(dpkg-architecture)
   - ./scripts/scripts_build-plugin.sh
   
