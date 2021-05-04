@@ -79,3 +79,11 @@ There are 3 Effects that cause this:
 Both of the audio effects will spike in CPU usage when opening an [S/PDIF device](https://en.wikipedia.org/wiki/S/PDIF) for reasons we still don't know. This can be fixed by switching off of the spdif device or stopping the effect
 
 The very nature of ambient is to do massive calulation to get the average or most common color on screen. Scaling uses a lot of CPU so once you have selected your portion of the screen it is recommended that you hide the preview
+
+## Donations
+
+This plugin is free and always will be but donations are still nice to get
+
+* CoffeeIsLife
+
+  * Venmo (@joel-fankhauser-2)
