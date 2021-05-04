@@ -143,20 +143,20 @@ void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
 
             else if (ZT == ZONE_TYPE_MATRIX)
             {
-                int CollumnCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
+                int ColumnCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
                 int RowCount     = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
 
-                for (int CollumnID = 0; CollumnID < CollumnCount; CollumnID++)
+                for (int ColumnID = 0; ColumnID < ColumnCount; ColumnID++)
                 {
                     float GetGradientPos;
 
-                    if ((Progress[ControllerID][ZoneID] + CollumnID) > CollumnCount)
+                    if ((Progress[ControllerID][ZoneID] + ColumnID) > ColumnCount)
                     {
-                        GetGradientPos = (CollumnCount - ( (Progress[ControllerID][ZoneID] + CollumnID) - CollumnCount));
+                        GetGradientPos = (ColumnCount - ( (Progress[ControllerID][ZoneID] + ColumnID) - ColumnCount));
                     }
                     else
                     {
-                        GetGradientPos = (Progress[ControllerID][ZoneID] + CollumnID);
+                        GetGradientPos = (Progress[ControllerID][ZoneID] + ColumnID);
                     }
 
                     if (GetGradientPos <= 0)
@@ -168,21 +168,21 @@ void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
 
                     for (int CVal = 0; CVal < 3; CVal++)
                     {
-                        RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(CollumnCount))*(F[CVal]-S[CVal]));
+                        RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(ColumnCount))*(F[CVal]-S[CVal]));
                     }
 
                     for (int RowID = 0; RowID < RowCount; RowID++)
                     {
-                        int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((RowID * CollumnCount) + (RVRS ? (CollumnCount - 1) - CollumnID: CollumnID ) )];
+                        int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((RowID * ColumnCount) + (RVRS ? (ColumnCount - 1) - ColumnID: ColumnID ) )];
                         Controllers[ControllerID].Controller->SetLED(StartIndex + LedID,ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
                     }
                 }
 
-                if (Progress[ControllerID][ZoneID] < (CollumnCount*2))
+                if (Progress[ControllerID][ZoneID] < (ColumnCount*2))
                 {
                     Progress[ControllerID][ZoneID] += ((float)Speed / (float)FPS);
                 }
-                else if (Progress[ControllerID][ZoneID] >= (CollumnCount*2))
+                else if (Progress[ControllerID][ZoneID] >= (ColumnCount*2))
                 {
                     Progress[ControllerID][ZoneID] = 0;
                 }

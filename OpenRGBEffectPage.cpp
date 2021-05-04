@@ -6,11 +6,9 @@
 /*-----------------------*\
 | Constructor/Destructor  |
 \*-----------------------*/
-OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT): QWidget(parent), ui(new Ui::OpenRGBEffectPage)
+OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* Effect): QWidget(parent), ui(new Ui::OpenRGBEffectPage), EFCT(Effect)
 {
     ui->setupUi(this);
-
-    OpenRGBEffectPage::EFCT = EFCT;
 
     ui->SpeedFrame->hide();
     ui->UserColorFrame->hide();
@@ -33,7 +31,7 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT): QWidget(
         ui->SpeedSlider->setMaximum(EFCT->EffectDetails.MaxSpeed);
         ui->SpeedSlider->setMinimum(EFCT->EffectDetails.MinSpeed);
         ui->SpeedFrame->show();
-        OpenRGBEffectPage::HasSpeed = true;
+        HasSpeed = true;
     }
 
     if (EFCT->EffectDetails.MinSlider2Val < EFCT->EffectDetails.MaxSlider2Val)
@@ -72,7 +70,7 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* EFCT): QWidget(
         EFCT->SetUserColors(UserColors);
     }
 
-    OpenRGBEffectPage::StartupSettings();
+    StartupSettings();
 
 }
 
@@ -107,7 +105,7 @@ void OpenRGBEffectPage::on_StopButton_clicked()
 
 void OpenRGBEffectPage::on_SpeedSlider_valueChanged(int value)
 {
-    OpenRGBEffectPage::EFCT->SetSpeed(value);
+    EFCT->SetSpeed(value);
 }
 
 void OpenRGBEffectPage::on_Slider2_valueChanged(int value)
@@ -178,7 +176,7 @@ void OpenRGBEffectPage::on_ColorPickerButton_clicked()
         UserColors[CurrentColor] = ToRGBColor(Red,Green,Blue);
         ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(Red) + "," + QString().number(Green) + "," + QString().number(Blue) + ")");
 
-        EFCT->SetUserColors(OpenRGBEffectPage::UserColors);
+        EFCT->SetUserColors(UserColors);
 
         delete GUColor;
     }

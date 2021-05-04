@@ -14,8 +14,8 @@ struct Drops
 
     bool  Reversed;
 
-    int    Collumn;
-    int    CollumnCount;
+    int    Column;
+    int    ColumnCount;
     float  Progress;
 
     RGBColor C;

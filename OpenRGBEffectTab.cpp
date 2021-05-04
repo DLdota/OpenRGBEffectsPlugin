@@ -74,10 +74,10 @@ void OpenRGBEffectTab::CreateDeviceSelection(RGBController* Controller, int Inde
     ZoneTableChecks->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ZoneTableChecks->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
-    std::vector<int> CollumnSizes = {165 , 75, 75};
-    for (unsigned int i = 0; i < CollumnSizes.size(); i++)
+    std::vector<int> ColumnSizes = {165 , 75, 75};
+    for (unsigned int i = 0; i < ColumnSizes.size(); i++)
     {
-        ZoneTableChecks->setColumnWidth(i,CollumnSizes[i]);
+        ZoneTableChecks->setColumnWidth(i,ColumnSizes[i]);
     }
 
     ZoneTableChecks->verticalHeader()->hide();
@@ -245,12 +245,12 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     ui->SelectDevices->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->SelectDevices->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     /*-------------------*\
-    | Set collumn sizes   |
+    | Set column sizes   |
     \*-------------------*/
-    std::vector<int> CollumnSizes = {167 , 75, 75};
-    for (unsigned int i = 0; i < CollumnSizes.size(); i++)
+    std::vector<int> ColumnSizes = {167 , 75, 75};
+    for (unsigned int i = 0; i < ColumnSizes.size(); i++)
     {
-        ui->SelectDevices->setColumnWidth(i,CollumnSizes[i]);
+        ui->SelectDevices->setColumnWidth(i,ColumnSizes[i]);
     }
 
     /*------------------------------------------------*\
