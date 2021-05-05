@@ -15,15 +15,12 @@ class OpenRGBEffectsPlugin : public QObject, public OpenRGBPluginInterface
 
 public:
     ~OpenRGBEffectsPlugin() {};
-
     OpenRGBPluginInfo      PInfo;
-
     OpenRGBPluginInfo      Initialize(bool dark_theme, ResourceManager* resource_manager_ptr)   override;
-
     QWidget                *CreateGUI(QWidget *Parent)                                          override;
+    static bool             DarkTheme;
+    static ResourceManager* RMPointer;
 
-    inline static bool DarkTheme = false;
-    inline static ResourceManager* RMPointer = nullptr;
 private:
     static void DeviceListChangedCallback(void* ptr);
 };

@@ -133,7 +133,7 @@ RGBColor Bubbles::GetColor(int x, int y, int w, int h)
     {
         double distance = sqrt(pow(w * centers[i].x() - x, 2) + pow(h * centers[i].y() - y, 2));
 
-        double shallow = abs(distance - bubbles[i]) / ( 0.1 * bubbles_thickness);
+        double shallow = fabs(distance - bubbles[i]) / ( 0.1 * bubbles_thickness);
 
         hsv_t hsv;
         hsv.hue = colors[i];
