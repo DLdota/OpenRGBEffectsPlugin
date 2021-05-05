@@ -9,6 +9,7 @@
 #-----------------------------------------------------------------------#
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
+  GIT_DEPTH: 1
 
 .shared_windows_runners:
   tags:
@@ -45,7 +46,7 @@ before_script:
   image: registry.gitlab.com/openrgbdevelopers/openrgb-linux-ci-deb-builder:stretch-64
   stage: build
   script:
-  - apt install libopenal-dev
+  - apt install -y libopenal-dev
   - export $(dpkg-architecture)
   - ./scripts/scripts_build-plugin.sh
   

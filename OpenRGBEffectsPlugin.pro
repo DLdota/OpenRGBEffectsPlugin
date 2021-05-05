@@ -66,6 +66,7 @@ HEADERS +=                                                                      
     OpenRGBEffectSettings.h                                                                     \
     EffectManager.h                                                                             \
     ColorPicker.h                                                                               \
+    filesystem.h                                                                                \
     Dependencies/HSV/hsv.h                                                                      \
     Dependencies/ColorWheel/ColorWheel.h                                                        \
     Dependencies/ScreenSelection/ScreenSelection.h                                              \

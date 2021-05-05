@@ -6,6 +6,9 @@
 
 unsigned int OpenRGBEffectSettings::version = 2;
 
+const std::string OpenRGBEffectSettings::SettingsFolder     = "/plugins/settings/";
+const std::string OpenRGBEffectSettings::SettingsFileName   = "EffectSettings.json";
+
 void OpenRGBEffectSettings::SaveUserSettings(json Settings)
 {
     if(!CreateSettingsDirectory())
@@ -55,10 +58,10 @@ bool OpenRGBEffectSettings::CreateSettingsDirectory()
 {
     std::string directory = OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() + SettingsFolder;
 
-    if(std::filesystem::exists(directory))
+    if(filesystem::exists(directory))
     {
             return true;
     }
 
-    return std::filesystem::create_directory(directory);
+    return filesystem::create_directory(directory);
 }

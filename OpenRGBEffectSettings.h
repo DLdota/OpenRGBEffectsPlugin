@@ -1,7 +1,11 @@
 #ifndef OPENRGBEFFECTSETTINGS_H
 #define OPENRGBEFFECTSETTINGS_H
 
-#include "RGBController.h"
+
+#include <fstream>
+#include <iostream>
+#include <string>
+#include "filesystem.h"
 #include "json.hpp"
 
 using json = nlohmann::json;
@@ -18,9 +22,8 @@ public:
 private:
     static bool CreateSettingsDirectory();
 
-    static inline const std::string SettingsFolder     = "/plugins/settings/";
-    static inline const std::string SettingsFileName   = "EffectSettings.json";
-
+    static const std::string SettingsFolder;
+    static const std::string SettingsFileName;
 };
 
 #endif // OPENRGBEFFECTSETTINGS_H
