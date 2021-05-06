@@ -74,13 +74,13 @@ private:
     std::map<int, std::array<float, 512> >   devices_buffers;
     int                                      delay;
 
-    std::map<int, bool> ContinueCapture;
+    std::vector<bool>                        ContinueCapture;
 #ifdef WIN32
     IMMDeviceEnumerator                    *pMMDeviceEnumerator;
     std::vector<IMMDevice *>               pMMDevices;
     IMMDeviceCollection                    *pMMDeviceCollection;
 
-    std::map<int, bool>                    isCapture;
+    std::vector<bool>                      isCapture;
 
     // remark: not sure about this, WAVEFORMATEX related to one device?
     WAVEFORMATEX                             *waveformat;

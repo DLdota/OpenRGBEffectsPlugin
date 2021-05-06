@@ -75,7 +75,7 @@ void AudioManager::Capture(int device_idx, float *buf)
 }
 
 void AudioManager::RegisterClient(int device_idx, void * client)
-{    
+{
     /*-------------------------------------------------*\
     | Make sure that the client didn't try to register  |
     | For a non-existent device                         |
@@ -183,6 +183,7 @@ void AudioManager::InitAudioDeviceList()
     pMMDevices.clear();
     known_audio_devices.clear();
     isCapture.clear();
+    ContinueCapture.clear();
 
     /*------------------------*\
     | Enumerate audio outputs  |
@@ -219,8 +220,8 @@ void AudioManager::InitAudioDeviceList()
                 strncat(new_device, " (Loopback)", len);
                 known_audio_devices.push_back(new_device);
                 pMMDevices.push_back(pEndpoint);
-                isCapture[i] = false;
-                ContinueCapture[i] = false;
+                isCapture.push_back(false);
+                ContinueCapture.push_back(false);
             }
             delete varName;
             pProps->Release();
@@ -262,8 +263,8 @@ void AudioManager::InitAudioDeviceList()
                 wcstombs(new_device, varName->pwszVal, len);
                 known_audio_devices.push_back(new_device);
                 pMMDevices.push_back(pEndpoint);
-                isCapture[i] = true;
-                ContinueCapture[i] = false;
+                isCapture.push_back(true);
+                ContinueCapture.push_back(false);
             }
             delete varName;
             pProps->Release();
@@ -294,6 +295,7 @@ void AudioManager::InitAudioDeviceList()
                 char* new_device = new char[strlen(devicestring) + 1];
                 strcpy(new_device, devicestring);
                 known_audio_devices.push_back(new_device);
+                ContinueCapture.push_back(false);
             }
 
 
@@ -425,7 +427,7 @@ void AudioManager::OpenDevice(int device_idx)
     /*------------*\
     | open device  |
     \*------------*/
-    if (active_audio_capture_clients.find(device_idx) == active_audio_capture_clients.end() )
+    if (device_idx < known_audio_devices.size())
     {
         IAudioCaptureClient * pAudioCaptureClient;
         IAudioClient * pAudioClient;
@@ -437,11 +439,11 @@ void AudioManager::OpenDevice(int device_idx)
 
         if (isCapture[device_idx])
         {
-            pAudioClient->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_LOOPBACK, 0, 0, waveformat, 0);
+            pAudioClient->Initialize(AUDCLNT_SHAREMODE_SHARED, 0, 0, 0, waveformat, 0);
         }
         else
         {
-            pAudioClient->Initialize(AUDCLNT_SHAREMODE_SHARED, 0, 0, 0, waveformat, 0);
+            pAudioClient->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_LOOPBACK, 0, 0, waveformat, 0);
         }
 
         pAudioClient->GetService(__uuidof(IAudioCaptureClient), (void**)&pAudioCaptureClient);
