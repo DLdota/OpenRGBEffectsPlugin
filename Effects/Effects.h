@@ -13,5 +13,6 @@
 #include "AudioSync.h"
 #include "Wavy.h"
 #include "Lightning.h"
+#include "Bubbles.h"
 
 #endif // EFFECTS_H
