@@ -1,36 +1,22 @@
 #include "ORGBEffectPlugin.h"
 #include "OpenRGBEffectTab.h"
 
-bool ORGBPlugin::DarkTheme = false;
-ResourceManager* ORGBPlugin::RMPointer = nullptr;
-
-QLabel* TabLabel()
-{
-    QLabel* Label = new QLabel();
-    Label->setText("Effects");
-    return Label;
-}
-
 OpenRGBPluginInfo ORGBPlugin::Initialize(bool Dt, ResourceManager *RM)
 {
-    ORGBPlugin::PInfo.PluginName         = "Effects";
-    ORGBPlugin::PInfo.PluginDescription  = "A Canned Effects Plugin";
-    ORGBPlugin::PInfo.PluginLocation     = "TopTabBar";
+    DarkTheme = Dt;
+    RMPointer = RM;
 
-    ORGBPlugin::PInfo.HasCustom   = true;
+    PInfo.PluginName         = "Effects";
+    PInfo.PluginDescription  = "A Canned Effects Plugin";
+    PInfo.PluginLocation     = "TopTabBar";
+    PInfo.HasCustom          = true;
+    PInfo.PluginLabel        = new QLabel("Effects");
 
-    ORGBPlugin::DarkTheme = Dt;
-
-    ORGBPlugin::PInfo.PluginLabel = TabLabel();
-
-    ORGBPlugin::RMPointer = RM;
-
-    return ORGBPlugin::PInfo;
+    return PInfo;
 }
 
 QWidget* ORGBPlugin::CreateGUI(QWidget*)
 {
     ORGBPlugin::RMPointer->WaitForDeviceDetection();
-    OpenRGBEffectTab* EETab = new OpenRGBEffectTab(nullptr);
-    return EETab;
+    return new OpenRGBEffectTab(nullptr);
 }

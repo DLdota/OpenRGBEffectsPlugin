@@ -69,26 +69,26 @@ void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
 
             else if (ZT == ZONE_TYPE_MATRIX)
             {
-                int CollumnCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
+                int ColumnCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
                 int RowCount     = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
 
-                for (int CollumnID = 0; CollumnID < CollumnCount; CollumnID++)
+                for (int ColumnID = 0; ColumnID < ColumnCount; ColumnID++)
                 {
                     int HUE;
                     if (RVRS)
                     {
-                        HUE = ((Progress + (int)( (CollumnCount - 1) - CollumnID)) * Width);
+                        HUE = ((Progress + (int)( (ColumnCount - 1) - ColumnID)) * Width);
                     }
                     else
                     {
-                        HUE = ((Progress + (int)CollumnID) * Width);
+                        HUE = ((Progress + (int)ColumnID) * Width);
                     }
 
                     HSVVal.hue = HUE;
 
                     for (int RowID = 0; RowID < RowCount; RowID++)
                     {
-                        int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((RowID * CollumnCount) + CollumnID)];
+                        int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((RowID * ColumnCount) + ColumnID)];
                         Controllers[ControllerID].Controller->SetLED(SetLEDIndex + LedID,RGBColor(hsv2rgb(&HSVVal)));
                     }
                 }

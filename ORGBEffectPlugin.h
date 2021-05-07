@@ -26,11 +26,10 @@ public:
 
     OpenRGBPluginInfo      Initialize(bool dark_theme, ResourceManager* resource_manager_ptr)   override;
 
-    QWidget         *CreateGUI(QWidget *Parent)                                                 override;
+    QWidget                *CreateGUI(QWidget *Parent)                                          override;
 
-    static bool         DarkTheme;
-
-    static ResourceManager* RMPointer;
+    inline static bool             DarkTheme = false;
+    inline static ResourceManager* RMPointer = nullptr;
 };
 
 #endif
