@@ -187,46 +187,17 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,0,0,0">
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0">
          <item>
-          <widget class="QComboBox" name="UserColorNum">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>20</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="ColorPickerButton">
-           <property name="text">
-            <string>Select Color</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QFrame" name="ColorPreview">
-           <property name="minimumSize">
-            <size>
-             <width>30</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="autoFillBackground">
-            <bool>true</bool>
+          <widget class="QFrame" name="Colors">
+           <property name="styleSheet">
+            <string notr="true">border: 0;</string>
            </property>
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
            </property>
            <property name="frameShadow">
-            <enum>QFrame::Plain</enum>
+            <enum>QFrame::Raised</enum>
            </property>
           </widget>
          </item>

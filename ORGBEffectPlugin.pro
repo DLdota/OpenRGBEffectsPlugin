@@ -56,6 +56,7 @@ HEADERS +=                                                                      
     OpenRGBEffectPage.h                                                                         \
     OpenRGBEffectSettings.h                                                                     \
     EffectManager.h                                                                             \
+    ColorPicker.h                                                                               \
     Dependencies/HSV/hsv.h                                                                      \
     Dependencies/ColorWheel/ColorWheel.h                                                        \
     Dependencies/ScreenSelection/ScreenSelection.h                                              \
@@ -67,6 +68,7 @@ SOURCES +=                                                                      
     OpenRGBEffectPage.cpp                                                                       \
     OpenRGBEffectSettings.cpp                                                                   \
     EffectManager.cpp                                                                           \
+    ColorPicker.cpp                                                                             \
     Dependencies/HSV/hsv.cpp                                                                    \
     Dependencies/ColorWheel/ColorWheel.cpp                                                      \
     Dependencies/ScreenSelection/ScreenSelection.cpp                                            \
@@ -75,6 +77,7 @@ SOURCES +=                                                                      
 FORMS +=                                                                                        \
     OpenRGBEffectPage.ui                                                                        \
     OpenRGBEffectTab.ui                                                                         \
+    ColorPicker.ui                                                                              \
 
 #-----------------------------------------------------------------------------------------------#
 # Effects                                                                                       #

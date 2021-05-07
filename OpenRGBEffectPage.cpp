@@ -1,6 +1,7 @@
 #include "ORGBEffectPlugin.h"
 #include "OpenRGBEffectPage.h"
 #include "EffectManager.h"
+#include "ColorPicker.h"
 #include "ColorWheel.h"
 
 /*-----------------------*\
@@ -51,21 +52,33 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* Effect): QWidge
     }
 
 
+    ui->UserColorFrame->setVisible(EFCT->EffectDetails.UserColors > 0);
+    ui->OnlyFirst->setVisible(EFCT->EffectDetails.AllowOnlyFirst);
+
+    ui->Colors->setLayout(new QHBoxLayout);
+
     if (EFCT->EffectDetails.UserColors > 0)
     {
-        if (!EFCT->EffectDetails.AllowOnlyFirst)
-        {
-            ui->OnlyFirst->hide();
-        }
-        ui->UserColorNum->setMaxCount(EFCT->EffectDetails.UserColors);
+        ui->OnlyFirst->setVisible(EFCT->EffectDetails.AllowOnlyFirst);
+
         for (int UserColorIndex = 0; UserColorIndex < EFCT->EffectDetails.UserColors; UserColorIndex++)
         {
             RGBColor UserColor = ToRGBColor(255,255,255);
             UserColors.push_back(UserColor);
-            ui->UserColorNum->addItem("Color " + QString().number(UserColorIndex + 1));
+
+            ColorPicker* color_picker = new ColorPicker();
+            ColorPickers.push_back(color_picker);
+
+            connect(color_picker, &ColorPicker::ColorSelected, [=](QColor color){
+               int Red   = color.red();
+               int Green = color.green();
+               int Blue  = color.blue();
+               UserColors[UserColorIndex] = ToRGBColor(Red,Green,Blue);
+               EFCT->SetUserColors(UserColors);
+            });
+
+            ui->Colors->layout()->addWidget(color_picker);
         }
-        ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(255) + "," + QString().number(255) + "," + QString().number(255) + ")");
-        ui->UserColorFrame->setHidden(false);
 
         EFCT->SetUserColors(UserColors);
     }
@@ -111,76 +124,6 @@ void OpenRGBEffectPage::on_SpeedSlider_valueChanged(int value)
 void OpenRGBEffectPage::on_Slider2_valueChanged(int value)
 {
     EFCT->Slider2Changed(value);
-}
-
-void OpenRGBEffectPage::on_UserColorNum_currentIndexChanged(int NewIndex)
-{
-    CurrentColor = NewIndex;
-    ui->ColorPreview->setStyleSheet("background: rgb("+
-                                    QString().number(RGBGetRValue(UserColors[NewIndex])) + "," +
-                                    QString().number(RGBGetGValue(UserColors[NewIndex])) + "," +
-                                    QString().number(RGBGetBValue(UserColors[NewIndex])) + ")");
-}
-
-void OpenRGBEffectPage::on_ColorPickerButton_clicked()
-{
-    QDialog* GUColor = new QDialog();
-
-    if (ORGBPlugin::DarkTheme)
-    {
-        QPalette pal;
-        pal.setColor(QPalette::WindowText, Qt::white);
-        GUColor->setPalette(pal);
-        QFile darkTheme(":/windows_dark.qss");
-        darkTheme.open(QFile::ReadOnly);
-        GUColor->setStyleSheet(darkTheme.readAll());
-        darkTheme.close();
-    }
-
-    GUColor->setMinimumSize(300,320);
-
-    GUColor->setModal(true);
-
-    QVBoxLayout* MainLayout = new QVBoxLayout(GUColor);
-
-    ColorWheel* CWheel = new ColorWheel(GUColor);
-    MainLayout->addWidget(CWheel);
-
-    /*--------------*\
-    | Create buttons |
-    \*--------------*/
-    QHBoxLayout* HoriButtonLayout = new QHBoxLayout();
-
-    QPushButton* AcceptButton = new QPushButton();
-    AcceptButton->setText("Set Color");
-    GUColor->connect(AcceptButton,SIGNAL(clicked()),GUColor,SLOT(accept()));
-    HoriButtonLayout->addWidget(AcceptButton);
-
-    QPushButton* DenyButton = new QPushButton();
-    DenyButton->setText("Cancel");
-    GUColor->connect(DenyButton,SIGNAL(clicked()),GUColor,SLOT(reject()));
-    HoriButtonLayout->addWidget(DenyButton);
-
-    MainLayout->addLayout(HoriButtonLayout);
-
-    bool ReturnState = GUColor->exec();
-
-    if (ReturnState)
-    {
-
-        QColor UserColor = CWheel->color();
-        int Red   = UserColor.red();
-        int Green = UserColor.green();
-        int Blue  = UserColor.blue();
-
-        UserColors[CurrentColor] = ToRGBColor(Red,Green,Blue);
-        ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(Red) + "," + QString().number(Green) + "," + QString().number(Blue) + ")");
-
-        EFCT->SetUserColors(UserColors);
-
-        delete GUColor;
-    }
-    else{}
 }
 
 void OpenRGBEffectPage::on_AutoStart_clicked()
@@ -247,13 +190,11 @@ void OpenRGBEffectPage::StartupSettings()
                     EFCT->SetUserColors(NewUserColors);
                     UserColors = NewUserColors;
 
-                    /*----------------*\
-                    | Set color frame  |
-                    \*----------------*/
-                    int R = RGBGetRValue(UserColors[CurrentColor]);
-                    int G = RGBGetGValue(UserColors[CurrentColor]);
-                    int B = RGBGetBValue(UserColors[CurrentColor]);
-                    ui->ColorPreview->setStyleSheet("background: rgb("+ QString().number(R) + "," + QString().number(G) + "," + QString().number(B) + ")");
+                    for(unsigned int i = 0; i < ColorPickers.size(); i++)
+                    {
+                        QColor color(RGBGetRValue(UserColors[i]), RGBGetGValue(UserColors[i]), RGBGetBValue(UserColors[i]));
+                        ColorPickers[i]->SetColor(color);
+                    }
                 }
             }
 
