@@ -14,6 +14,7 @@
 
 #include "RGBEffect.h"
 #include "OpenRGBEffectSettings.h"
+#include "ColorPicker.h"
 
 namespace Ui {
 class OpenRGBEffectPage;
@@ -39,8 +40,8 @@ private slots:
     void on_StopButton_clicked();
     void on_SpeedSlider_valueChanged(int value);
     void on_Slider2_valueChanged(int value);
-    void on_UserColorNum_currentIndexChanged(int NewIndex);
-    void on_ColorPickerButton_clicked();
+    //void on_UserColorNum_currentIndexChanged(int NewIndex);
+    //void on_ColorPickerButton_clicked();
     void on_SaveSettings_clicked();
     void on_AutoStart_clicked();
     void on_RandomCheckbox_clicked();
@@ -53,7 +54,8 @@ private:
     std::vector<RGBController*> OwnedController;
 
     std::vector<RGBColor> UserColors;
-    int                   CurrentColor = 0;
+
+    std::vector<ColorPicker*> ColorPickers;
 
     bool AutoStart = false;
     void StartupSettings();
