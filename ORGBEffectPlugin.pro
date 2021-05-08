@@ -26,7 +26,8 @@ INCLUDEPATH +=                                                                  
     OpenRGB/dependencies/json                                                                   \
 
 HEADERS +=                                                                                      \
-    Effects/Effects.h \
+    Effects/Effects.h                                                                           \
+    Effects/Bubbles/Bubbles.h                                                                   \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -62,6 +63,7 @@ HEADERS +=                                                                      
     Dependencies/ResetButton/ResetButton.h                                                      \
 
 SOURCES +=                                                                                      \
+    Effects/Bubbles/Bubbles.cpp                                                                 \
     ORGBEffectPlugin.cpp                                                                        \
     OpenRGBEffectTab.cpp                                                                        \
     OpenRGBEffectPage.cpp                                                                       \
@@ -73,6 +75,7 @@ SOURCES +=                                                                      
     Dependencies/ResetButton/ResetButton.cpp                                                    \
 
 FORMS +=                                                                                        \
+    Effects/Bubbles/Bubbles.ui                                                                  \
     OpenRGBEffectPage.ui                                                                        \
     OpenRGBEffectTab.ui                                                                         \
 
@@ -94,6 +97,7 @@ INCLUDEPATH +=                                                                  
     Effects/SpectrumCycling/                                                                    \
     Effects/AudioVisualizer/                                                                    \
     Effects/Lightning/                                                                          \
+    Effects/Bubbles/                                                                            \
 
 SOURCES +=                                                                                      \
     Effects/Rain/Rain.cpp                                                                       \

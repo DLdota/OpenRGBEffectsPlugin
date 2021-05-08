@@ -28,6 +28,7 @@ EffectManager::EffectManager():
         new AudioSync,
         new Wavy,
         new Lightning,
+        new Bubbles
     }),
     CLK(new std::chrono::steady_clock())
 {
