@@ -1,19 +1,9 @@
 #ifndef OPENRGBEFFECTPAGE_H
 #define OPENRGBEFFECTPAGE_H
 
-#include <QFile>
-#include <QWidget>
-#include <QCheckBox>
-#include <QColorDialog>
-#include <QApplication>
-#include <fstream>
-#include <iostream>
-#include <thread>
-
 #include "ui_OpenRGBEffectPage.h"
 
 #include "RGBEffect.h"
-#include "OpenRGBEffectSettings.h"
 #include "ColorPicker.h"
 
 namespace Ui {
@@ -29,10 +19,6 @@ public:
     ~OpenRGBEffectPage();
 
     void CreateDeviceSelection(std::string DeviceName);
-
-    bool HasSpeed = false;
-    bool RandomColors = false;
-
     void DeviceListChanged(std::vector<BetterController> Devices);
 
 private slots:
@@ -40,8 +26,6 @@ private slots:
     void on_StopButton_clicked();
     void on_SpeedSlider_valueChanged(int value);
     void on_Slider2_valueChanged(int value);
-    //void on_UserColorNum_currentIndexChanged(int NewIndex);
-    //void on_ColorPickerButton_clicked();
     void on_SaveSettings_clicked();
     void on_AutoStart_clicked();
     void on_RandomCheckbox_clicked();
@@ -49,16 +33,20 @@ private slots:
 
 private:
     Ui::OpenRGBEffectPage *ui;
+
     RGBEffect* EFCT;
 
     std::vector<RGBController*> OwnedController;
-
     std::vector<RGBColor> UserColors;
-
     std::vector<ColorPicker*> ColorPickers;
 
     bool AutoStart = false;
-    void StartupSettings();
+    bool RandomColors = false;
+
+    void InitUi();
+    void LoadStartupSettings();
+    void StartEffect();
+    void StopEffect();
 };
 
 #endif // OPENRGBEFFECTPAGE_H

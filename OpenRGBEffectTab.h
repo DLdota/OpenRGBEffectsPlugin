@@ -1,11 +1,6 @@
 #ifndef OPENRGBEFFECTTAB_H
 #define OPENRGBEFFECTTAB_H
 
-#include <QWidget>
-#include <QTreeView>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
-#include <QSignalMapper>
 #include <QCheckBox>
 
 #include "ui_OpenRGBEffectTab.h"
@@ -34,17 +29,15 @@ private slots:
     void DeviceReversalChanged(QString DName);
     void ZoneReversalChanged(QString DName);
 
-    void on_TabChanged(int Tab);
-
-    void FPSSliderChanged(int SpeedIndex);
-
+    void on_LeftTabBar_currentChanged(int);
+    void on_FPSSlider_valueChanged(int);
     void on_SelectAll_clicked();
 
     void UnlockDevice(int Device, int Zone);
 
 private:
     Ui::OpenRGBEffectTab                *ui;
-    int                                 CurrentTab;
+    int                                 CurrentTab = 0;
 
     static void DeviceListChangedCallback(void* ptr);
     void CreateDeviceSelection(RGBController* Controller, int Index, bool HasDirectMode);

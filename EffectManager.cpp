@@ -36,6 +36,8 @@ EffectManager::EffectManager():
 
 void EffectManager::SetEffectActive(RGBEffect* Effect)
 {    
+    Effect->EffectState(true);
+
     if (EffectThreads.find(Effect) == EffectThreads.end())
     {
         ActiveEffects.push_back(Effect);
@@ -46,6 +48,9 @@ void EffectManager::SetEffectActive(RGBEffect* Effect)
 
 void EffectManager::SetEffectUnActive(RGBEffect* Effect)
 {    
+
+    Effect->EffectState(false);
+
     if (EffectThreads.find(Effect) != EffectThreads.end())
     {
         std::thread* thread = EffectThreads[Effect];

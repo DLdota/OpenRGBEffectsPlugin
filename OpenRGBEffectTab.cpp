@@ -1,6 +1,98 @@
 #include "OpenRGBEffectTab.h"
 #include "OpenRGBEffectPage.h"
+#include "OpenRGBEffectSettings.h"
 #include "EffectManager.h"
+
+#include <QSignalMapper>
+
+/*------------------------*\
+| Contructor / Destructor  |
+\*------------------------*/
+OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
+    QWidget(parent),
+    ui(new Ui::OpenRGBEffectTab),
+    Speeds({1,2,3,4,5,6,7,8,10,15,20,25,30,40,50,60})
+{
+    ui->setupUi(this);
+    EffectManager::Get()->SetFPS(1);
+
+    for (unsigned int i = 0; i < EffectManager::Get()->EffectList.size(); i++)
+    {
+        /*--------------------------------*\
+        | Fill in the details              |
+        \*--------------------------------*/
+        EffectManager::Get()->EffectList[i]->EffectDetails = EffectManager::Get()->EffectList[i]->DefineEffectDetails();
+        EffectManager::Get()->EffectList[i]->EffectDetails.EffectIndex = i;
+
+        std::vector<OwnedControllerAndZones> BlankStarter;
+        EffectManager::Get()->RespectiveToPass.push_back(BlankStarter);
+
+        /*--------------------*\
+        | Make the label       |
+        \*--------------------*/
+        QLabel* EffectTabLabel = new QLabel(QString().fromStdString(EffectManager::Get()->EffectList[i]->EffectDetails.EffectName));
+        EffectTabLabel->setIndent(20);
+
+        if(ORGBPlugin::DarkTheme)
+        {
+            EffectTabLabel->setGeometry(0, 25, 200, 50);
+        }
+        else
+        {
+            EffectTabLabel->setGeometry(0, 0, 200, 25);
+        }
+
+        OpenRGBEffectPage* EffectPage = new OpenRGBEffectPage(nullptr,EffectManager::Get()->EffectList[i]);
+
+        ui->LeftTabBar->addTab(EffectPage,"");
+        ui->LeftTabBar->tabBar()->setTabButton(ui->LeftTabBar->count() -1, QTabBar::LeftSide,EffectTabLabel);
+    }
+
+
+    /*-----------------------*\
+    | Make the Device view    |
+    \*-----------------------*/
+    ui->SelectDevices->setColumnCount(3);
+    ui->SelectDevices->setHorizontalHeaderLabels({"Device","Enabled","Reversed"});
+
+    ui->SelectDevices->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    ui->SelectDevices->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->SelectDevices->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+
+    /*-------------------*\
+    | Set column sizes   |
+    \*-------------------*/
+    std::vector<int> ColumnSizes = {167 , 75, 75};
+    for (unsigned int i = 0; i < ColumnSizes.size(); i++)
+    {
+        ui->SelectDevices->setColumnWidth(i,ColumnSizes[i]);
+    }
+
+    /*------------------------------------------------*\
+    | Register for callbacks                           |
+    \*------------------------------------------------*/
+    ORGBPlugin::RMPointer->RegisterDeviceListChangeCallback(DeviceListChangedCallback, this);
+    ORGBPlugin::RMPointer->RegisterDetectionProgressCallback(DeviceListChangedCallback, this);
+
+    ui->FPSCount->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    ui->FPSCount->setFixedWidth(20);
+    ui->FPSCount->setText(QString().number(1));
+
+    ui->FPSCount->adjustSize();
+
+    ui->FPSSlider->setMaximum(Speeds.size() - 1);
+    ui->FPSSlider->setMinimum(0);
+
+    /*-------------------------------------*\
+    | Initial trigger (populates selectors) |
+    \*-------------------------------------*/
+    DeviceListChanged();
+}
+
+OpenRGBEffectTab::~OpenRGBEffectTab()
+{
+    delete ui;
+}
 
 /*--------------------*\
 | List entry Creation  |
@@ -191,99 +283,10 @@ ResetButton* OpenRGBEffectTab::GetResetButtonFromFrame(QWidget* w)
     return ReturnPushButton;
 }
 
-/*------------------------*\
-| Contructor / Destructor  |
-\*------------------------*/
-OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
-    QWidget(parent),
-    ui(new Ui::OpenRGBEffectTab),
-    Speeds({1,2,3,4,5,6,7,8,10,15,20,25,30,40,50,60})
-{
-    ui->setupUi(this);
-    EffectManager::Get()->SetFPS(1);
-
-    for (unsigned int i = 0; i < EffectManager::Get()->EffectList.size(); i++)
-    {
-        /*--------------------------------*\
-        | Fill in the details              |
-        \*--------------------------------*/
-        EffectManager::Get()->EffectList[i]->EffectDetails = EffectManager::Get()->EffectList[i]->DefineEffectDetails();
-        EffectManager::Get()->EffectList[i]->EffectDetails.EffectIndex = i;
-
-        std::vector<OwnedControllerAndZones> BlankStarter;
-        EffectManager::Get()->RespectiveToPass.push_back(BlankStarter);
-
-        /*--------------------*\
-        | Make the label       |
-        \*--------------------*/
-        QLabel* EffectTabLabel = new QLabel();
-        EffectTabLabel->setText(QString().fromStdString(EffectManager::Get()->EffectList[i]->EffectDetails.EffectName));
-        EffectTabLabel->setIndent(20);
-        if(ORGBPlugin::DarkTheme)
-        {
-            EffectTabLabel->setGeometry(0, 25, 200, 50);
-        }
-        else
-        {
-            EffectTabLabel->setGeometry(0, 0, 200, 25);
-        }
-        OpenRGBEffectPage* EffectPage = new OpenRGBEffectPage(nullptr,EffectManager::Get()->EffectList[i]);
-        ui->LeftTabBar->addTab(EffectPage,"");
-        ui->LeftTabBar->tabBar()->setTabButton(ui->LeftTabBar->count() -1, QTabBar::LeftSide,EffectTabLabel);
-    }
-
-    connect(ui->LeftTabBar,SIGNAL(currentChanged(int)),this,SLOT(on_TabChanged(int)));
-    CurrentTab = 0;
-
-    /*-----------------------*\
-    | Make the Device view    |
-    \*-----------------------*/
-    ui->SelectDevices->setColumnCount(3);
-    ui->SelectDevices->setHorizontalHeaderLabels({"Device","Enabled","Reversed"});
-
-    ui->SelectDevices->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    ui->SelectDevices->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->SelectDevices->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    /*-------------------*\
-    | Set column sizes   |
-    \*-------------------*/
-    std::vector<int> ColumnSizes = {167 , 75, 75};
-    for (unsigned int i = 0; i < ColumnSizes.size(); i++)
-    {
-        ui->SelectDevices->setColumnWidth(i,ColumnSizes[i]);
-    }
-
-    /*------------------------------------------------*\
-    | Register for callbacks and create effect thread  |
-    \*------------------------------------------------*/
-    ORGBPlugin::RMPointer->RegisterDeviceListChangeCallback(DeviceListChangedCallback, this);
-    ORGBPlugin::RMPointer->RegisterDetectionProgressCallback(DeviceListChangedCallback, this);
-
-    ui->FPSCount->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    ui->FPSCount->setFixedWidth(20);
-    ui->FPSCount->setText(QString().number(1));
-
-    ui->FPSCount->adjustSize();
-
-    ui->FPSSlider->setMaximum(Speeds.size() - 1);
-    ui->FPSSlider->setMinimum(0);
-    connect(ui->FPSSlider,SIGNAL(valueChanged(int)),this,SLOT(FPSSliderChanged(int)));
-
-    /*-------------------------------------*\
-    | Initial trigger (populates selectors) |
-    \*-------------------------------------*/
-    DeviceListChanged();
-}
-
-OpenRGBEffectTab::~OpenRGBEffectTab()
-{
-    delete ui;
-}
-
 /*--------------*\
 | FPS Handling   |
 \*--------------*/
-void OpenRGBEffectTab::FPSSliderChanged(int NewFPS)
+void OpenRGBEffectTab::on_FPSSlider_valueChanged(int NewFPS)
 {    
     EffectManager::Get()->SetFPS(Speeds[NewFPS]);
 
@@ -401,7 +404,8 @@ void OpenRGBEffectTab::DeviceListChanged()
     {
         for (int EffectIndex = 0; EffectIndex < (int)EffectManager::Get()->EffectList.size(); EffectIndex++)
         {
-            on_TabChanged(EffectIndex);
+            on_LeftTabBar_currentChanged(EffectIndex);
+
             if (UserSettings["Effects"][EffectIndex].contains("EffectName"))
             {
                 if (UserSettings["Effects"][EffectIndex]["EffectName"] != EffectManager::Get()->EffectList[EffectIndex]->EffectDetails.EffectName) continue;
@@ -462,7 +466,8 @@ void OpenRGBEffectTab::DeviceListChanged()
                 }
             }
         }
-        on_TabChanged(0);
+
+        on_LeftTabBar_currentChanged(0);
     }
 }
 
@@ -780,17 +785,23 @@ void OpenRGBEffectTab::ZoneSelectionChanged(QString DName)
 void OpenRGBEffectTab::DeviceReversalChanged(QString DName)
 {
     int DevIndex = 0;
+
     for (int DeviceID = 0; DeviceID < ui->SelectDevices->rowCount(); DeviceID++)
     {
-        if (DeviceID%2) continue;
+        if (DeviceID%2)
+        {
+            continue;
+        }
+
         int TempDevID = DeviceID/2;
+
         QTableWidgetItem* DeviceName = ui->SelectDevices->item(DeviceID,0);
+
         if ((DeviceName->text() + QString().number(EffectManager::Get()->Controllers[TempDevID].Index)) == DName)
         {
             DevIndex = DeviceID;
             break;
         }
-        continue;
     }
 
     int DevTabIndex = DevIndex; // This is the index of the tab holding the device. It is mismatched because of the zone boxes
@@ -832,6 +843,7 @@ void OpenRGBEffectTab::DeviceReversalChanged(QString DName)
             for (int ZoneID = 0; ZoneID < ZoneReversalTable->rowCount(); ZoneID++)
             {
                 QCheckBox* ZoneReverseBox = qobject_cast<QCheckBox*>(ZoneReversalTable->cellWidget(ZoneID,2));
+
                 if (ZoneReverseBox->isEnabled() && ZoneReverseBox->isChecked())
                 {
                     EffectManager::Get()->Controllers[DevIndex].ReversedZones[ZoneID] = false;
@@ -847,17 +859,23 @@ void OpenRGBEffectTab::DeviceReversalChanged(QString DName)
 void OpenRGBEffectTab::ZoneReversalChanged(QString DName)
 {
     int DevIndex = 0;
+
     for (int DeviceID = 0; DeviceID < ui->SelectDevices->rowCount(); DeviceID++)
     {
-        if (DeviceID%2) continue;
+        if (DeviceID%2)
+        {
+            continue;
+        }
+
         int TempDevID = DeviceID/2;
+
         QTableWidgetItem* DeviceName = ui->SelectDevices->item(DeviceID,0);
+
         if ((DeviceName->text() + QString().number(EffectManager::Get()->Controllers[TempDevID].Index)) == DName)
         {
             DevIndex = DeviceID;
             break;
         }
-        continue;
     }
 
     int DevTabIndex = DevIndex; // This is the index of the tab holding the device. It is mismatched because of the zone boxes
@@ -930,9 +948,11 @@ void OpenRGBEffectTab::UnlockDevice(int Device, int Zone)
 
         QCheckBox* SelectDevice = GetCheckboxFromFrame(ui->SelectDevices->cellWidget((Device * 2),1));
         ResetButton* ResetDevice = GetResetButtonFromFrame(ui->SelectDevices->cellWidget((Device * 2),1));
+
         SelectDevice->setDisabled(false);
         SelectDevice->setChecked(false);
         SelectDevice->show();
+
         ResetDevice->hide();
     }
     else
@@ -943,6 +963,7 @@ void OpenRGBEffectTab::UnlockDevice(int Device, int Zone)
             {
                 int EffectIndex = EffectManager::Get()->Controllers[Device].OwnedZones[ZoneID].EffectIndex;
                 OwnedControllerAndZones ZONES = EffectManager::Get()->RespectiveToPass[EffectIndex][Device];
+
                 for (unsigned int SubZoneID = 0; SubZoneID < ZONES.OwnedZones.size(); SubZoneID++)
                 {
                     if (ZONES.OwnedZones[SubZoneID] == (unsigned int) Zone)
@@ -951,10 +972,12 @@ void OpenRGBEffectTab::UnlockDevice(int Device, int Zone)
                         break;
                     }
                 }
+
                 EffectManager::Get()->Controllers[Device].OwnedZones.erase(EffectManager::Get()->Controllers[Device].OwnedZones.begin() + ZoneID);
                 break;
             }
         }
+
         QTableWidget* ZoneTable = qobject_cast<QTableWidget*>(ui->SelectDevices->cellWidget(((Device * 2) + 1),0));
         QCheckBox* ZoneSelected = GetCheckboxFromFrame(ZoneTable->cellWidget(Zone,1));
         ResetButton* ResetZone = GetResetButtonFromFrame(ZoneTable->cellWidget(Zone,1));
@@ -962,22 +985,26 @@ void OpenRGBEffectTab::UnlockDevice(int Device, int Zone)
         ZoneSelected->setDisabled(false);
         ZoneSelected->setChecked(false);
         ZoneSelected->show();
+
         ResetZone->hide();
     }
 
-    on_TabChanged(CurrentTab);
+    on_LeftTabBar_currentChanged(CurrentTab);
 }
 
-void OpenRGBEffectTab::on_TabChanged(int Tab)
+void OpenRGBEffectTab::on_LeftTabBar_currentChanged(int Tab)
 {
     bool FullSelectAll = true;
+
     OpenRGBEffectTab::CurrentTab = Tab;
 
     for (int RowID = 0; RowID < ui->SelectDevices->rowCount()/2; RowID++)
     {
         bool AllSelected = true;
         bool AllLocked   = true;
+
         int ZoneBoxIndex = RowID * 2 + 1;
+
         if (EffectManager::Get()->Controllers[RowID].Controller->zones.size() > 1)
         {
             /*----------------------*\
@@ -1031,7 +1058,9 @@ void OpenRGBEffectTab::on_TabChanged(int Tab)
                     AllLocked = false;
                 }
             }
+
             int DevSelect = ZoneBoxIndex - 1;
+
             QCheckBox* DeviceSelected = GetCheckboxFromFrame(ui->SelectDevices->cellWidget(DevSelect,1));
             ResetButton* ResetDevice = GetResetButtonFromFrame(ui->SelectDevices->cellWidget(DevSelect,1));
 
@@ -1115,6 +1144,7 @@ void OpenRGBEffectTab::on_TabChanged(int Tab)
         | Set all of the zones reversal options as well  |
         \*----------------------------------------------*/
         QTableWidget* ZoneTable = qobject_cast<QTableWidget*>(ui->SelectDevices->cellWidget( (RowID*2 + 1) ,0));
+
         for (int ZoneID = 0; ZoneID < ZoneTable->rowCount(); ZoneID++)
         {
             QCheckBox* ZoneReversed = qobject_cast<QCheckBox*>(ZoneTable->cellWidget(ZoneID,2));
@@ -1123,6 +1153,7 @@ void OpenRGBEffectTab::on_TabChanged(int Tab)
     }
 
     SelectsAll = !FullSelectAll;
+
     if (SelectsAll)
     {
         ui->SelectAll->setText("Select All");
