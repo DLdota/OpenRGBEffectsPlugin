@@ -7,35 +7,15 @@
 class RainbowWave: public RGBEffect
 {
 public:
-    RainbowWave() {};
+    RainbowWave();
     ~RainbowWave() {};
 
-    EffectInfo  DefineEffectDetails()                                       override;
-    void        DefineExtraOptions(QLayout*)                                override {};
-    void        StepEffect(std::vector<OwnedControllerAndZones>, int)       override;
+    static std::string const ClassName() { return "RainbowWave"; }
 
-    void        SetSpeed(int Speed)                                         override;
-    void        SetUserColors(std::vector<RGBColor>)                        override {};
-    void        Slider2Changed(int)                                         override;
-    void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>)  override {};
-    void        ToggleRandomColors(bool)                                    override {};
+    void StepEffect(std::vector<ControllerZone>) override;
 
-    void        SetWidth(int NewWidth);
-
-    int                     GetSpeed()                                      override {return Speed;  };
-    int                     GetSlider2Val()                                 override {return Width;  };
-    std::vector<RGBColor>   GetUserColors()                                 override {return {};     };
-
-    void                    EffectState(bool)                               override {};
-
-    void                    LoadCustomSettings(json)                        override {};
-    json                    SaveCustomSettings(json)                        override {return json(); };
-
-    EffectInfo EffectDetails;
 private:
-    int     Speed;
-    int     Width;
-    float   Progress = 0;
+    float Progress = 0;
 };
 
 #endif // RAINBOWWAVE_H

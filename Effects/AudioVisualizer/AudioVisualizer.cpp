@@ -30,9 +30,28 @@ int     ledstrip_rotate_x       = 0;
 | Functions  |
 \*----------*/
 AudioVisualizer::AudioVisualizer(QWidget* parent):
-    QWidget(parent), ui(new Ui::AudioVisualizerUi)
+    QWidget(parent),
+    RGBEffect(),
+    ui(new Ui::AudioVisualizerUi)
 {
     ui->setupUi(this);
+
+
+    EffectDetails.EffectName = "Audio Visualizer";
+    EffectDetails.EffectClassName = ClassName();
+    EffectDetails.EffectDescription = "gitlab.com/CalcProgrammer1/KeyboardVisualizer";
+
+    EffectDetails.IsReversable = false;
+    EffectDetails.MaxSpeed = 0;
+    EffectDetails.MinSpeed = 0;
+
+    EffectDetails.UserColors = 0;
+    EffectDetails.MaxSlider2Val = 0;
+    EffectDetails.MinSlider2Val = 0;
+    EffectDetails.Slider2Name = "";
+
+    EffectDetails.HasCustomWidgets = true;
+    EffectDetails.HasCustomSettings = true;
 
     /*---------------------*\
     | Setup default values  |
@@ -121,10 +140,14 @@ AudioVisualizer::AudioVisualizer(QWidget* parent):
     ui->comboBox_Average_Mode->blockSignals(false);
 
     ui->comboBox_Audio_Device->blockSignals(true);
-    for(unsigned int i = 0; i < AudioManager::get()->GetAudioDevices().size(); i++)
+
+    std::vector<char *> devices = AudioManager::get()->GetAudioDevices();
+
+    for(const char * str : devices)
     {
-        ui->comboBox_Audio_Device->addItem(AudioManager::get()->GetAudioDevices()[i]);
+        ui->comboBox_Audio_Device->addItem(QString::fromLocal8Bit(str));
     }
+
     ui->comboBox_Audio_Device->setCurrentIndex(audio_device_idx);
     ui->comboBox_Audio_Device->blockSignals(false);
 
@@ -144,55 +167,34 @@ AudioVisualizer::AudioVisualizer(QWidget* parent):
 
 AudioVisualizer::~AudioVisualizer()
 {
+    if (RegisteredForDevice)
+    {
+        AudioManager::get()->UnRegisterClient(previous_audio_device_idx,this);
+        RegisteredForDevice = false;
+    }
+
     delete ui;
 }
 
-EffectInfo AudioVisualizer::DefineEffectDetails()
-{
-
-    EffectDetails.EffectName = "Audio Visualizer";
-    EffectDetails.EffectDescription = "gitlab.com/CalcProgrammer1/KeyboardVisualizer";
-
-    EffectDetails.IsReversable = false;
-    EffectDetails.MaxSpeed = 0;
-    EffectDetails.MinSpeed = 0;
-
-    EffectDetails.UserColors = 0;
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name = "";
-
-    EffectDetails.HasCustomWidgets = true;
-    EffectDetails.HasCustomSettings = true;
-
-    return EffectDetails;
-}
 
 void AudioVisualizer::DefineExtraOptions(QLayout *Scaler)
 {
     Scaler->addWidget(this);
 }
 
-void AudioVisualizer::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
+void AudioVisualizer::StepEffect(std::vector<ControllerZone> controller_zones)
 {
 
-    if (ZoneMaps.size() != Controllers.size())
+    if (ZoneMaps.size() != controller_zones.size())
     {
         ZoneMaps.clear();
-        ZoneMaps.resize(Controllers.size());
-        for (int ControllerID = 0; ControllerID < (int)Controllers.size(); ControllerID++)
+
+        for(unsigned int i = 0; i < controller_zones.size(); i++)
         {
-            for (int ZM_ID = 0; ZM_ID < (int)ZoneMaps.size(); ZM_ID++)
-            {
-                for (int ZoneIndex = 0; ZoneIndex < (int)Controllers[ControllerID].Controller->zones.size() + 1; ZoneIndex++)
-                {
-                    ZoneMaps[ZM_ID].push_back(nullptr);
-                }
-            }
+            ZoneMaps.push_back(nullptr);
         }
     }
 
-    this->FPS = FPS;
     Update();
 
     /*-------------------------*\
@@ -216,7 +218,7 @@ void AudioVisualizer::StepEffect(std::vector<OwnedControllerAndZones> Controller
     /*----------------------------------------------------------------------*\
     | If music isn't playing, fade in the single color LEDs after 2 seconds  |
     \*----------------------------------------------------------------------*/
-    background_timer = background_timer + (1 / this->FPS);
+    background_timer = background_timer + (1 / FPS);
 
     if (shutdown_flag == true)
     {
@@ -449,85 +451,85 @@ void AudioVisualizer::StepEffect(std::vector<OwnedControllerAndZones> Controller
     /*--------------------------*\
     | Increment background step  |
     \*--------------------------*/
-    bkgd_step = bkgd_step + ((anim_speed * 100) / (100.0f * this->FPS));
+    bkgd_step = bkgd_step + ((anim_speed * 100) / (100.0f * FPS));
 
-    for(int ControllerID = 0; ControllerID < (int)Controllers.size(); ControllerID++)
+    int i = 0;
+
+    for(ControllerZone controller_zone: controller_zones)
     {
-        RGBController* Controller = Controllers[ControllerID].Controller;
-        for (int ZoneID = 0; ZoneID < (int)Controllers[ControllerID].OwnedZones.size(); ZoneID++)
+        int                 x_count                 = controller_zone.leds_count();
+        int                 y_count                 = 0;
+        zone_type           type                    = controller_zone.type();
+        ZoneIndexType *     zone_index_map          = NULL;
+
+        /*--------------------------------------------------------------*\
+        | If matrix type and matrix mapping is valid, get X and Y count  |
+        \*--------------------------------------------------------------*/
+        if(type == ZONE_TYPE_MATRIX)
         {
-            int ZN = Controllers[ControllerID].OwnedZones[ZoneID];
+            x_count     = controller_zone.matrix_map_width();
+            y_count     = controller_zone.matrix_map_height();
+        }
 
-            int                 x_count                 = Controller->zones[ZN].leds_count;
-            int                 y_count                 = 0;
-            zone_type           type                    = Controller->zones[ZN].type;
-            ZoneIndexType *     zone_index_map          = NULL;
+        if (ZoneMaps[i] == nullptr)
+        {
+            ZoneIndexType *   new_index_map             = new ZoneIndexType();
+            new_index_map->x_count                      = x_count;
+            new_index_map->y_count                      = y_count;
 
-            /*--------------------------------------------------------------*\
-            | If matrix type and matrix mapping is valid, get X and Y count  |
-            \*--------------------------------------------------------------*/
             if(type == ZONE_TYPE_MATRIX)
             {
-                x_count     = Controller->zones[ZN].matrix_map->width;
-                y_count     = Controller->zones[ZN].matrix_map->height;
+                new_index_map->x_index                  = new int[x_count];
+                new_index_map->y_index                  = new int[y_count];
+
+                SetupMatrixGrid(x_count, y_count, new_index_map->x_index, new_index_map->y_index);
+            }
+            else if(type == ZONE_TYPE_LINEAR)
+            {
+                new_index_map->x_index                  = new int[x_count];
+
+                SetupLinearGrid(x_count, new_index_map->x_index);
             }
 
-            if (ZoneMaps[ControllerID][ZN] == nullptr)
+            ZoneMaps[i] = new_index_map;
+        }
+
+        zone_index_map = ZoneMaps[i];
+
+        switch (controller_zone.type())
+        {
+        case ZONE_TYPE_MATRIX:
+            for (int y = 0; y < y_count; y++)
             {
-                ZoneIndexType *   new_index_map             = new ZoneIndexType();
-                new_index_map->x_count                      = x_count;
-                new_index_map->y_count                      = y_count;
-
-                if(type == ZONE_TYPE_MATRIX)
-                {
-                    new_index_map->x_index                  = new int[x_count];
-                    new_index_map->y_index                  = new int[y_count];
-
-                    SetupMatrixGrid(x_count, y_count, new_index_map->x_index, new_index_map->y_index);
-                }
-                else if(type == ZONE_TYPE_LINEAR)
-                {
-                    new_index_map->x_index                  = new int[x_count];
-
-                    SetupLinearGrid(x_count, new_index_map->x_index);
-                }
-
-                ZoneMaps[ControllerID][ZN] = new_index_map;
-            }
-            zone_index_map = ZoneMaps[ControllerID][ZN];
-
-            switch (Controller->zones[ZN].type)
-            {
-            case ZONE_TYPE_MATRIX:
-                for (int y = 0; y < y_count; y++)
-                {
-                    for (int x = 0; x < x_count; x++)
-                    {
-                        unsigned int map_idx = (y * x_count) + x;
-                        unsigned int color_idx = Controller->zones[ZN].matrix_map->map[map_idx];
-                        if( color_idx != 0xFFFFFFFF )
-                        {
-                            Controller->zones[ZN].colors[color_idx] = pixels_out->pixels[zone_index_map->y_index[y]][zone_index_map->x_index[x]];
-                        }
-                    }
-                }
-                break;
-
-            case ZONE_TYPE_SINGLE:
-                for (int r = 0; r < x_count; r++)
-                {
-                    Controller->zones[ZN].colors[r] = pixels_out->pixels[ROW_IDX_SINGLE_COLOR][0];
-                }
-                break;
-
-            case ZONE_TYPE_LINEAR:
                 for (int x = 0; x < x_count; x++)
                 {
-                    Controller->zones[ZN].colors[x] = pixels_out->pixels[ROW_IDX_BAR_GRAPH][zone_index_map->x_index[x]];
+                    unsigned int map_idx = (y * x_count) + x;
+                    unsigned int color_idx = controller_zone.controller->zones[controller_zone.zone_idx].matrix_map->map[map_idx];
+
+                    if( color_idx != 0xFFFFFFFF )
+                    {
+                        controller_zone.controller->zones[controller_zone.zone_idx].colors[color_idx] = pixels_out->pixels[zone_index_map->y_index[y]][zone_index_map->x_index[x]];
+                    }
                 }
-                break;
             }
+            break;
+
+        case ZONE_TYPE_SINGLE:
+            for (int r = 0; r < x_count; r++)
+            {
+                controller_zone.controller->zones[controller_zone.zone_idx].colors[r] = pixels_out->pixels[ROW_IDX_SINGLE_COLOR][0];
+            }
+            break;
+
+        case ZONE_TYPE_LINEAR:
+            for (int x = 0; x < x_count; x++)
+            {
+                controller_zone.controller->zones[controller_zone.zone_idx].colors[x] = pixels_out->pixels[ROW_IDX_BAR_GRAPH][zone_index_map->x_index[x]];
+            }
+            break;
         }
+
+        i++;
     }
 }
 
@@ -590,6 +592,14 @@ void AudioVisualizer::LoadCustomSettings(json Settings)
 
     ui->checkBox_Reactive_Background->setChecked(reactive_bkgd);
     ui->checkBox_Silent_Background->setChecked(silent_bkgd);
+
+    if (RegisteredForDevice)
+    {
+        AudioManager::get()->UnRegisterClient(previous_audio_device_idx,this);
+        RegisteredForDevice = false;
+    }
+
+    ui->comboBox_Audio_Device->setCurrentIndex(audio_device_idx);
 }
 
 json AudioVisualizer::SaveCustomSettings(json)
@@ -653,7 +663,7 @@ void AudioVisualizer::on_ShowHideSettings_clicked()
         Hiding = true;
         ui->MainFrame->hide();
         ui->ToBottom->changeSize(0,0,QSizePolicy::Expanding,QSizePolicy::Expanding);
-        this->adjustSize();
+        adjustSize();
     }
 }
 
@@ -893,7 +903,7 @@ void AudioVisualizer::Update()
         /*-----------------------------------------------------------------------------------------*\
         | fft = fft * ( a decimal of decay divided by the opposite of FPS (1 for 60 and 60 for 1)   |
         \*-----------------------------------------------------------------------------------------*/
-        fft[i] = fft[i] * ((float(decay) / 100.0f) / (60 / this->FPS) );
+        fft[i] = fft[i] * ((float(decay) / 100.0f) / (60 / FPS) );
     }
 
     AudioManager::get()->Capture(audio_device_idx, fft_tmp);

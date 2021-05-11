@@ -1,14 +1,17 @@
 #include "OpenRGBEffectPage.h"
-#include "ORGBEffectPlugin.h"
 #include "OpenRGBEffectSettings.h"
 #include "EffectManager.h"
 
-OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* Effect): QWidget(parent), ui(new Ui::OpenRGBEffectPage), EFCT(Effect)
+OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
+    QWidget(parent),
+    ui(new Ui::OpenRGBEffectPage),
+    speeds({1,2,3,4,5,6,7,8,10,15,20,25,30,40,50,60})
 {
+    this->effect = effect;
+
     ui->setupUi(this);
 
     InitUi();
-    LoadStartupSettings();
 }
 
 OpenRGBEffectPage::~OpenRGBEffectPage()
@@ -27,33 +30,33 @@ void OpenRGBEffectPage::InitUi()
     /*---------------------------------*\
     | Fill in top description and name  |
     \*---------------------------------*/
-    ui->EffectName->setText(QString().fromStdString(EFCT->EffectDetails.EffectName));
-    ui->EffectDesciption->setText(QString().fromStdString(EFCT->EffectDetails.EffectDescription));
+    ui->EffectName->setText(QString().fromStdString(effect->EffectDetails.EffectName));
+    ui->EffectDesciption->setText(QString().fromStdString(effect->EffectDetails.EffectDescription));
+
+    ui->AutoStart->setCheckState(effect->IsAutoStart()? Qt::Checked : Qt::Unchecked);
+    ui->RandomCheckbox->setCheckState(effect->IsRandomColorsEnabled()? Qt::Checked : Qt::Unchecked);
+    ui->SpeedSlider->setValue(effect->GetSpeed());
+    ui->Slider2->setValue(effect->GetSlider2Val());
 
     /*-----------------------------------------------*\
     | Speed slider + extra slider                     |
     \*-----------------------------------------------*/
-    if (EFCT->EffectDetails.MinSpeed < EFCT->EffectDetails.MaxSpeed)
+    if (effect->EffectDetails.MinSpeed < effect->EffectDetails.MaxSpeed)
     {
-        ui->SpeedSlider->setMaximum(EFCT->EffectDetails.MaxSpeed);
-        ui->SpeedSlider->setMinimum(EFCT->EffectDetails.MinSpeed);
+        ui->SpeedSlider->setMaximum(effect->EffectDetails.MaxSpeed);
+        ui->SpeedSlider->setMinimum(effect->EffectDetails.MinSpeed);
         ui->SpeedFrame->show();
     }
 
-    if (EFCT->EffectDetails.MinSlider2Val < EFCT->EffectDetails.MaxSlider2Val)
+    if (effect->EffectDetails.MinSlider2Val < effect->EffectDetails.MaxSlider2Val)
     {
-        ui->Slider2->setMaximum(EFCT->EffectDetails.MaxSlider2Val);
-        ui->Slider2->setMinimum(EFCT->EffectDetails.MinSlider2Val);
-        ui->Slider2Label->setText(QString().fromStdString(EFCT->EffectDetails.Slider2Name));
+        ui->Slider2->setMaximum(effect->EffectDetails.MaxSlider2Val);
+        ui->Slider2->setMinimum(effect->EffectDetails.MinSlider2Val);
+        ui->Slider2Label->setText(QString().fromStdString(effect->EffectDetails.Slider2Name));
         ui->Slider2Frame->show();
     }
 
-    /*-----------------------------------------------*\
-    | Extra options and custom widgets                |
-    \*-----------------------------------------------*/
-    EFCT->DefineExtraOptions(ui->ExtraOptions);
-
-    if (EFCT->EffectDetails.HasCustomWidgets)
+    if (effect->EffectDetails.HasCustomWidgets)
     {
         ui->It_Goes_On_The_Bottom->changeSize(0,0,QSizePolicy::Fixed); // Gone
         resize(this->minimumSize());
@@ -62,203 +65,95 @@ void OpenRGBEffectPage::InitUi()
     /*-----------------------------------------------*\
     | Colors                                          |
     \*-----------------------------------------------*/
-    ui->UserColorFrame->setVisible(EFCT->EffectDetails.UserColors > 0);
-    ui->OnlyFirst->setVisible(EFCT->EffectDetails.AllowOnlyFirst);
+    ui->UserColorFrame->setVisible(effect->EffectDetails.UserColors > 0);
+    ui->OnlyFirst->setVisible(effect->EffectDetails.AllowOnlyFirst);
 
     ui->Colors->setLayout(new QHBoxLayout);
 
-    if (EFCT->EffectDetails.UserColors > 0)
+    if (effect->EffectDetails.UserColors > 0)
     {
-        for (int UserColorIndex = 0; UserColorIndex < EFCT->EffectDetails.UserColors; UserColorIndex++)
+        std::vector<RGBColor> colors = effect->GetUserColors();
+
+        if(colors.size() != effect->EffectDetails.UserColors)
         {
-            RGBColor UserColor = ToRGBColor(255,255,255);
-            UserColors.push_back(UserColor);
+            colors.resize(effect->EffectDetails.UserColors);
+        }
+
+        for (unsigned int i = 0; i < colors.size(); i++)
+        {
+            RGBColor UserColor = colors[i];
+            UserColors.push_back(UserColor);            
 
             ColorPicker* color_picker = new ColorPicker();
+            color_picker->SetColor(QColor(RGBGetRValue(colors[i]), RGBGetGValue(colors[i]), RGBGetBValue(colors[i])));
+
             ColorPickers.push_back(color_picker);
 
             connect(color_picker, &ColorPicker::ColorSelected, [=](QColor color){
                int Red   = color.red();
                int Green = color.green();
                int Blue  = color.blue();
-               UserColors[UserColorIndex] = ToRGBColor(Red,Green,Blue);
-               EFCT->SetUserColors(UserColors);
+               UserColors[i] = ToRGBColor(Red,Green,Blue);
+               effect->SetUserColors(UserColors);
             });
 
             ui->Colors->layout()->addWidget(color_picker);
         }
 
-        EFCT->SetUserColors(UserColors);
+        effect->SetUserColors(UserColors);
+    }
+
+
+
+    ui->FPS_slider->setMinimum(0);
+    ui->FPS_slider->setMaximum(speeds.size() - 1);
+
+    std::vector<unsigned int>::iterator it = std::find(speeds.begin(), speeds.end(), effect->GetFPS());
+
+    if( it != speeds.end() )
+    {
+        int index = std::distance(speeds.begin(), it);
+        ui->FPS_slider->setValue(index);
+    }
+
+    /*-----------------------------------------------*\
+    | Extra options and custom widgets                |
+    \*-----------------------------------------------*/
+    effect->DefineExtraOptions(ui->ExtraOptions);
+
+    if(effect->IsAutoStart())
+    {
+        StartEffect();
     }
 }
 
-void OpenRGBEffectPage::LoadStartupSettings()
+RGBEffect* OpenRGBEffectPage::GetEffect()
 {
-    json UserSettings = OpenRGBEffectSettings::LoadUserSettings();
-
-    if(UserSettings.contains("Effects") && UserSettings["Effects"][EFCT->EffectDetails.EffectIndex].contains("EffectName"))
-    {
-        /*-----------------------------------------------*\
-        | Speed slider + extra slider                     |
-        \*-----------------------------------------------*/
-        int SpeedMax = EFCT->EffectDetails.MaxSpeed;
-        int SpeedMin = EFCT->EffectDetails.MinSpeed;
-
-        if (UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("Speed"))
-        {
-            int Speed = UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Speed"];
-
-            if (SpeedMin <= Speed && Speed <= SpeedMax)
-            {
-                ui->SpeedSlider->setValue(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Speed"]);
-            }
-        }
-
-        int Slider2Max = EFCT->EffectDetails.MaxSlider2Val;
-        int Slider2Min = EFCT->EffectDetails.MinSlider2Val;
-
-        if (UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("Slider2Val"))
-        {
-            int Slider2Val = UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Slider2Val"];
-
-            if (Slider2Min <= Slider2Val && Slider2Val <= Slider2Max)
-            {
-                ui->Slider2->setValue(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Slider2Val"]);
-            }
-        }
-
-        /*-----------------------------------------------*\
-        | Colors                                          |
-        \*-----------------------------------------------*/
-        if (UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("UserColors"))
-        {
-            std::vector<RGBColor> NewUserColors;
-
-            for (int UserColorIndex = 0; UserColorIndex < EFCT->EffectDetails.UserColors; UserColorIndex++)
-            {
-                NewUserColors.push_back(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["UserColors"][UserColorIndex]);
-            }
-
-            if (EFCT->EffectDetails.UserColors > 0)
-            {
-                EFCT->SetUserColors(NewUserColors);
-                UserColors = NewUserColors;
-
-                for(unsigned int i = 0; i < ColorPickers.size(); i++)
-                {
-                    QColor color(RGBGetRValue(UserColors[i]), RGBGetGValue(UserColors[i]), RGBGetBValue(UserColors[i]));
-                    ColorPickers[i]->SetColor(color);
-                }
-            }
-        }
-
-        if (UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("RandomColors"))
-        {
-            bool RandomColors = UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["RandomColors"];
-
-            if (RandomColors)
-            {
-                ui->RandomCheckbox->click();
-            }
-        }
-
-        /*-----------------------------------------------*\
-        | Effect custom settings                          |
-        \*-----------------------------------------------*/
-        if(EFCT->EffectDetails.HasCustomSettings &&
-                UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("CustomSettings"))
-        {
-            EFCT->LoadCustomSettings(UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["CustomSettings"]);
-        }
-
-        /*-----------------------------------------------*\
-        | Auto start                                      |
-        \*-----------------------------------------------*/
-        if (UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"].contains("AutoStart") &&
-                UserSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["AutoStart"])
-        {
-            ui->AutoStart->click();
-            ui->StartButton->click();
-        }
-    }
-}
-
-void OpenRGBEffectPage::on_SaveSettings_clicked()
-{
-    json PrevSettings = OpenRGBEffectSettings::LoadUserSettings();
-
-    PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectName"] = EFCT->EffectDetails.EffectName;
-
-    std::vector<RGBColor> UserColors = EFCT->GetUserColors();
-
-    for (int UserColorIndex = 0; UserColorIndex < EFCT->EffectDetails.UserColors; UserColorIndex++)
-    {
-        PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["UserColors"][UserColorIndex] = UserColors[UserColorIndex];
-    }
-
-    std::vector<OwnedControllerAndZones> ToPass = EffectManager::Get()->GetToPass(EFCT->EffectDetails.EffectIndex);
-
-    PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"] = {};
-
-    int AddedDevices = 0;
-
-    for (int ControllerID = 0; ControllerID < (int)ToPass.size(); ControllerID++)
-    {
-        if (ToPass[ControllerID].OwnedZones.size() > 0)
-        {
-            PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"][AddedDevices]["ControllerName"]    = ToPass[ControllerID].Controller->name;
-            PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"][AddedDevices]["ControllerDescription"] = ToPass[ControllerID].Controller->description;
-            PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"][AddedDevices]["ControllerLocation"]    = ToPass[ControllerID].Controller->location;
-            PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"][AddedDevices]["ControllerSerial"]      = ToPass[ControllerID].Controller->serial;
-            PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"][AddedDevices]["ControllerLEDCount"]    = ToPass[ControllerID].Controller->colors.size();
-
-            for(int ZoneID = 0; ZoneID < (int)ToPass[ControllerID].OwnedZones.size(); ZoneID++)
-            {
-                PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Controllers"][AddedDevices]["SelectedZones"][ZoneID] = ToPass[ControllerID].OwnedZones[ZoneID];
-            }
-
-            AddedDevices += 1;
-        }
-    }
-
-    PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Speed"] = EFCT->GetSpeed();
-    PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["Slider2Val"] = EFCT->GetSlider2Val();
-    PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["AutoStart"] = AutoStart;
-    PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["RandomColors"] = ui->RandomCheckbox->isChecked();
-
-    if (EFCT->EffectDetails.HasCustomSettings)
-    {
-        PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["CustomSettings"] =
-                EFCT->SaveCustomSettings
-                (
-                    PrevSettings["Effects"][EFCT->EffectDetails.EffectIndex]["EffectSettings"]["CustomSettings"]
-                );
-    }
-
-    OpenRGBEffectSettings::SaveUserSettings(PrevSettings);
+    return effect;
 }
 
 void OpenRGBEffectPage::StartEffect()
 {
-    EffectManager::Get()->SetEffectActive(EFCT);
+    EffectManager::Get()->SetEffectActive(effect);
 
     ui->StartButton->setDisabled(true);
     ui->StopButton->setDisabled(false);
     ui->RunningStatus->setText("Running");
+
+    emit EffectState(true);
 }
 
 void OpenRGBEffectPage::StopEffect()
 {
-    EffectManager::Get()->SetEffectUnActive(EFCT);
+    EffectManager::Get()->SetEffectUnActive(effect);
 
     ui->StartButton->setDisabled(false);
     ui->StopButton->setDisabled(true);
     ui->RunningStatus->setText("Stopped");
+
+    emit EffectState(false);
 }
 
-/*--------*\
-| Slots    |
-\*--------*/
 void OpenRGBEffectPage::on_StartButton_clicked()
 {
     StartEffect();
@@ -271,25 +166,34 @@ void OpenRGBEffectPage::on_StopButton_clicked()
 
 void OpenRGBEffectPage::on_SpeedSlider_valueChanged(int value)
 {
-    EFCT->SetSpeed(value);
+    effect->SetSpeed(value);
 }
 
 void OpenRGBEffectPage::on_Slider2_valueChanged(int value)
 {
-    EFCT->Slider2Changed(value);
+    effect->SetSlider2Val(value);
+}
+
+void OpenRGBEffectPage::on_FPS_slider_valueChanged(int value)
+{
+    int FPS = speeds[value];
+
+    effect->SetFPS(FPS);
+    ui->FPS_value->setText(QString::number(FPS));
 }
 
 void OpenRGBEffectPage::on_AutoStart_clicked()
 {
     AutoStart = ui->AutoStart->isChecked();
+    effect->SetAutoStart(AutoStart);
 }
 
 void OpenRGBEffectPage::on_RandomCheckbox_clicked()
 {
-    EFCT->ToggleRandomColors(ui->RandomCheckbox->isChecked());
+    effect->SetRandomColorsEnabled(ui->RandomCheckbox->isChecked());
 }
 
 void OpenRGBEffectPage::on_OnlyFirst_clicked()
 {
-    EFCT->OnlyFirstChange(ui->OnlyFirst->isChecked());
+    effect->SetOnlyFirstColorEnabled(ui->OnlyFirst->isChecked());
 }

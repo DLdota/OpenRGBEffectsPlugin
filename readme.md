@@ -1,6 +1,6 @@
 # Effects
 
-[![pipeline status](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectPlugin/badges/master/pipeline.svg)](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectPlugin/-/commits/master)
+[![pipeline status](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/badges/master/pipeline.svg)](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/commits/master)
 
 ## What is this?
 
@@ -10,9 +10,9 @@ This is a plugin for [OpenRGB](https://gitlab.com/CalcProgrammer1/OpenRGB) that 
 
 ### **windows**
 
-1. download the latest [Windows pipeline](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectPlugin/-/jobs/artifacts/master/download?job=Windows%2064)
+1. download the latest [Windows pipeline](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/artifacts/master/download?job=Windows%2064)
 
-2. copy ``OpenRGBEffectPlugin.dll`` from the 7z file to  ``C:\Users\Username\appdata\roaming\OpenRGB\plugins``
+2. copy ``OpenRGBEffectsPlugin.dll`` from the 7z file to  ``C:\Users\Username\appdata\roaming\OpenRGB\plugins``
 
 3. Run the latest [Pipeline build of OpenRGB(At least until 0.6 is out)](https://gitlab.com/Calcprogrammer1/OpenRGB/-/jobs/artifacts/master/download?job=Windows%2064)
 
@@ -20,9 +20,9 @@ This is a plugin for [OpenRGB](https://gitlab.com/CalcProgrammer1/OpenRGB) that 
 
 Make sure `libopenal` is installed first. You can use your package manager to install it (`apt`, `yum`, `pacman`, etc..).
 
-1. download the latest [linux pipeline](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectPlugin/-/jobs/artifacts/master/download?job=Linux%2064)
+1. download the latest [linux pipeline](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/artifacts/master/download?job=Linux%2064)
 
-2. Copy ``libOpenRGBEffectPlugin.so`` from the 7z to ``~/.config/OpenRGB/plugins``
+2. Copy ``libOpenRGBEffectsPlugin.so`` from the 7z to ``~/.config/OpenRGB/plugins``
 
 3. Run the latest [Pipeline build of OpenRGB(At least until 0.6 is out)](https://gitlab.com/Calcprogrammer1/OpenRGB/-/jobs/artifacts/master/download?job=Linux%2064%20AppImage)
 

@@ -2,98 +2,96 @@
 #include "EffectManager.h"
 #include "hsv.h"
 
-EffectInfo RainbowWave::DefineEffectDetails()
+RainbowWave::RainbowWave() : RGBEffect()
 {
-    RainbowWave::EffectDetails.EffectName = "Rainbow Wave";
-    RainbowWave::EffectDetails.EffectDescription = "A sliding Rainbow";
+    EffectDetails.EffectName = "Rainbow Wave";
+    EffectDetails.EffectClassName = ClassName();
+    EffectDetails.EffectDescription = "A sliding Rainbow";
 
-    RainbowWave::EffectDetails.IsReversable = true;
-    RainbowWave::EffectDetails.MaxSpeed     = 30;
-    RainbowWave::EffectDetails.MinSpeed     = 1;
-    RainbowWave::EffectDetails.UserColors   = 0;
+    EffectDetails.IsReversable = true;
+    EffectDetails.MaxSpeed     = 30;
+    EffectDetails.MinSpeed     = 1;
+    EffectDetails.UserColors   = 0;
 
-    RainbowWave::EffectDetails.MinSlider2Val = 5;
-    RainbowWave::EffectDetails.MaxSlider2Val = 50;
-    RainbowWave::EffectDetails.Slider2Name   = "Width";
+    EffectDetails.MinSlider2Val = 5;
+    EffectDetails.MaxSlider2Val = 50;
+    EffectDetails.Slider2Name   = "Width";
 
-    RainbowWave::EffectDetails.HasCustomWidgets = false;
-    RainbowWave::EffectDetails.HasCustomSettings = false;
-
-    return RainbowWave::EffectDetails;
+    EffectDetails.HasCustomWidgets = false;
+    EffectDetails.HasCustomSettings = false;
 }
 
-void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
-{
+void RainbowWave::StepEffect(std::vector<ControllerZone> controller_zones)
+{    
+    int Width = Slider2Val;
+
     hsv_t HSVVal;
     HSVVal.saturation = 255;
     HSVVal.value      = 255;
 
-    for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
+    for(ControllerZone controller_zone: controller_zones)
     {
-        for (int ZoneID = 0; ZoneID < int(Controllers[ControllerID].OwnedZones.size()); ZoneID++)
+        /*-------------------*\
+        | Setup for the loop  |
+        \*-------------------*/
+        int start_idx = controller_zone.start_idx();
+        int leds_count = controller_zone.leds_count();
+        zone_type ZT = controller_zone.type();
+        bool RVRS = controller_zone.reverse;
+
+        /*----------------------------------------------------*\
+        | Adjust how it applies for the specific type of zone  |
+        \*----------------------------------------------------*/
+        if (ZT == ZONE_TYPE_SINGLE)
         {
-            /*-------------------*\
-            | Setup for the loop  |
-            \*-------------------*/
-            int SetLEDIndex = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
-            zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
-            bool RVRS = EffectManager::Get()->CheckReversed(ControllerID, Controllers[ControllerID].OwnedZones[ZoneID]);
-
-            /*----------------------------------------------------*\
-            | Adjust how it applies for the specific type of zone  |
-            \*----------------------------------------------------*/
-            if (ZT == ZONE_TYPE_SINGLE)
+            int HUE = (Progress * Width);
+            HSVVal.hue = HUE;
+            for (int LedID = 0; LedID < leds_count; LedID++)
             {
-                int HUE = (Progress * Width);
+                controller_zone.controller->SetLED((start_idx + LedID),RGBColor(hsv2rgb(&HSVVal)));
+            }
+        }
+
+        else if (ZT == ZONE_TYPE_LINEAR)
+        {
+            for (int LedID = 0; LedID < leds_count; LedID++)
+            {
+                int HUE;
+                if (RVRS) HUE = ((Progress + ( (leds_count - 1) - LedID) ) * Width);
+                else HUE = ((Progress + LedID) * Width);
+
                 HSVVal.hue = HUE;
-                for (int LedID = 0; LedID < int(Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count); LedID++)
-                {
-                    Controllers[ControllerID].Controller->SetLED((SetLEDIndex + LedID),RGBColor(hsv2rgb(&HSVVal)));
-                }
-            }
 
-            else if (ZT == ZONE_TYPE_LINEAR)
+                controller_zone.controller->SetLED((start_idx + LedID),RGBColor(hsv2rgb(&HSVVal)));
+            }
+        }
+
+        else if (ZT == ZONE_TYPE_MATRIX)
+        {
+            int ColumnCount = controller_zone.matrix_map_width();
+            int RowCount = controller_zone.matrix_map_height();
+
+            for (int ColumnID = 0; ColumnID < ColumnCount; ColumnID++)
             {
-                int LEDCOUNT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count;
-                for (int LedID = 0; LedID < LEDCOUNT; LedID++)
+                int HUE;
+
+                if (RVRS)
                 {
-                    int HUE;
-                    if (RVRS) HUE = ((Progress + ( (LEDCOUNT - 1) - LedID) ) * Width);
-                    else HUE = ((Progress + LedID) * Width);
+                    HUE = ((Progress + (int)( (ColumnCount - 1) - ColumnID)) * Width);
+                }
+                else
+                {
+                    HUE = ((Progress + (int)ColumnID) * Width);
+                }
 
-                    HSVVal.hue = HUE;
+                HSVVal.hue = HUE;
 
-                    Controllers[ControllerID].Controller->SetLED((SetLEDIndex+LedID),RGBColor(hsv2rgb(&HSVVal)));
+                for (int RowID = 0; RowID < RowCount; RowID++)
+                {
+                    int LedID = controller_zone.controller->zones[controller_zone.zone_idx].matrix_map->map[((RowID * ColumnCount) + ColumnID)];
+                    controller_zone.controller->SetLED(start_idx + LedID, RGBColor(hsv2rgb(&HSVVal)));
                 }
             }
-
-            else if (ZT == ZONE_TYPE_MATRIX)
-            {
-                int ColumnCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
-                int RowCount     = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
-
-                for (int ColumnID = 0; ColumnID < ColumnCount; ColumnID++)
-                {
-                    int HUE;
-                    if (RVRS)
-                    {
-                        HUE = ((Progress + (int)( (ColumnCount - 1) - ColumnID)) * Width);
-                    }
-                    else
-                    {
-                        HUE = ((Progress + (int)ColumnID) * Width);
-                    }
-
-                    HSVVal.hue = HUE;
-
-                    for (int RowID = 0; RowID < RowCount; RowID++)
-                    {
-                        int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((RowID * ColumnCount) + ColumnID)];
-                        Controllers[ControllerID].Controller->SetLED(SetLEDIndex + LedID,RGBColor(hsv2rgb(&HSVVal)));
-                    }
-                }
-            }
-
         }
     }
 
@@ -107,12 +105,3 @@ void RainbowWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
     }
 }
 
-void RainbowWave::SetSpeed(int value)
-{
-    Speed = value;
-}
-
-void RainbowWave::Slider2Changed(int value)
-{
-    Width = value;
-}

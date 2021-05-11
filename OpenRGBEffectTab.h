@@ -1,12 +1,8 @@
 #ifndef OPENRGBEFFECTTAB_H
 #define OPENRGBEFFECTTAB_H
 
-#include <QCheckBox>
-
 #include "ui_OpenRGBEffectTab.h"
-
-#include "ResetButton.h"
-#include "RGBController.h"
+#include "RGBEffect.h"
 
 namespace Ui {
 class OpenRGBEffectTab;
@@ -20,36 +16,25 @@ public:
     explicit OpenRGBEffectTab(QWidget *parent = nullptr);
     ~OpenRGBEffectTab();
 
-private slots:
+public slots:
     void DeviceListChanged();
 
-    void DeviceSelectionChanged(QString DName);
-    void ZoneSelectionChanged(QString DName);
-
-    void DeviceReversalChanged(QString DName);
-    void ZoneReversalChanged(QString DName);
-
-    void on_LeftTabBar_currentChanged(int);
-    void on_FPSSlider_valueChanged(int);
-    void on_SelectAll_clicked();
-
-    void UnlockDevice(int Device, int Zone);
+private slots:
+    void on_device_list_SelectionChanged();
+    void on_EffectTabs_currentChanged(int);
+    void on_save_settings_clicked();
 
 private:
     Ui::OpenRGBEffectTab                *ui;
-    int                                 CurrentTab = 0;
 
-    static void DeviceListChangedCallback(void* ptr);
-    void CreateDeviceSelection(RGBController* Controller, int Index, bool HasDirectMode);
-    void SetStyleSheetMargins(QCheckBox* CB);
+    void InitEffectTabs();
+    void CreateEffectTab(RGBEffect*);
+    void InitDeviceList();    
 
-    QCheckBox* GetCheckboxFromFrame(QWidget*);
-    ResetButton* GetResetButtonFromFrame(QWidget*);
+    void LoadEffectsFromSettings();
+    void LoadEffectSettings(json);
 
-    bool                                SelectsAll    = true;
-    const std::vector<int>              Speeds;
-
-    void SaveReversedSettings();
+    void SetFirstTabStyle();
 };
 
 #endif // OPENRGBEFFECTTAB_H

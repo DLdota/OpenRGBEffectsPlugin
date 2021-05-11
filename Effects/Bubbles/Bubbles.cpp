@@ -3,20 +3,13 @@
 
 Bubbles::Bubbles(QWidget *parent) :
     QWidget(parent),
+    RGBEffect(),
     ui(new Ui::Bubbles)
 {
     ui->setupUi(this); 
-}
 
-
-Bubbles::~Bubbles()
-{
-    delete ui;
-}
-
-EffectInfo Bubbles::DefineEffectDetails()
-{
     EffectDetails.EffectName = "Bubbles";
+    EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Bloop bloop";
 
     EffectDetails.IsReversable = false;
@@ -30,8 +23,12 @@ EffectInfo Bubbles::DefineEffectDetails()
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
+}
 
-    return EffectDetails;
+
+Bubbles::~Bubbles()
+{
+    delete ui;
 }
 
 void Bubbles::DefineExtraOptions(QLayout* layout)
@@ -39,45 +36,37 @@ void Bubbles::DefineExtraOptions(QLayout* layout)
     layout->addWidget(this);
 }
 
-void Bubbles::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
+void Bubbles::StepEffect(std::vector<ControllerZone> controller_zones)
 {
-
-    for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
+    for(ControllerZone controller_zone : controller_zones)
     {
-        for (int ZoneID = 0; ZoneID < int(Controllers[ControllerID].OwnedZones.size()); ZoneID++)
+        if (controller_zone.type() == ZONE_TYPE_LINEAR || controller_zone.type() == ZONE_TYPE_SINGLE)
         {
-            zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
+            int start_idx = controller_zone.start_idx();
+            int leds_count = controller_zone.leds_count();
 
-            if (ZT == ZONE_TYPE_LINEAR || ZT == ZONE_TYPE_SINGLE)
+            for (int LedID = 0; LedID < leds_count; LedID++)
             {
-                int SetLEDIndex = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
-                int led_count = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count;
+                controller_zone.controller->SetLED((start_idx+LedID), GetColor(LedID, 0, leds_count, 1));
+            }
+        }
 
-                for (int LedID = 0; LedID < led_count; LedID++)
+        else if (controller_zone.type() == ZONE_TYPE_MATRIX)
+        {
+            int cols = controller_zone.matrix_map_width();
+            int rows = controller_zone.matrix_map_height();
+
+            for (int col_id = 0; col_id < cols; col_id++)
+            {
+                for (int row_id = 0; row_id < rows; row_id++)
                 {
-                    Controllers[ControllerID].Controller->SetLED((SetLEDIndex+LedID), GetColor(LedID, 0, led_count, 1));
+                    RGBColor color = GetColor(col_id, row_id, cols, rows);
+                    int LedID = controller_zone.controller->zones[controller_zone.zone_idx].matrix_map->map[((row_id * cols) + col_id)];
+                    controller_zone.controller->SetLED(LedID, color);
                 }
             }
-
-            else if (ZT == ZONE_TYPE_MATRIX)
-            {
-                int cols = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
-                int rows = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
-
-                for (int col_id = 0; col_id < cols; col_id++)
-                {
-                    for (int row_id = 0; row_id < rows; row_id++)
-                    {
-                        RGBColor color = GetColor(col_id, row_id, cols, rows);
-                        int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((row_id * cols) + col_id)];
-                        Controllers[ControllerID].Controller->SetLED(LedID, color);
-                    }
-                }
-            }
-
         }
     }
-
 
     for(unsigned int i = 0; i < bubbles.size(); i++)
     {
@@ -102,7 +91,7 @@ void Bubbles::InitBubble()
 
     int hue;
 
-    if(random_enabled)
+    if(RandomColorsEnabled)
     {
         hue = 360 * (((double)rand() / RAND_MAX) - 1) *(-1);
     }
@@ -197,16 +186,6 @@ json Bubbles::SaveCustomSettings(json Settings)
     Settings["max_expansion"]     = max_expansion;
     Settings["bubbles_thickness"] = bubbles_thickness;
     return Settings;
-}
-
-void Bubbles::SetUserColors(std::vector<RGBColor> NewUserColors)
-{
-    UserColors = NewUserColors;
-}
-
-void Bubbles::ToggleRandomColors(bool value)
-{
-    random_enabled = value;
 }
 
 void Bubbles::on_max_bubbles_valueChanged(int value)

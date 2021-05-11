@@ -1,5 +1,5 @@
 #include "ColorPicker.h"
-#include "ORGBEffectPlugin.h"
+#include "OpenRGBEffectsPlugin.h"
 #include "ui_ColorPicker.h"
 #include "ColorWheel.h"
 
@@ -32,7 +32,7 @@ void ColorPicker::on_button_clicked()
 
     QDialog* dialog = new QDialog();
 
-    if (ORGBPlugin::DarkTheme)
+    if (OpenRGBEffectsPlugin::DarkTheme)
     {
         QPalette pal;
         pal.setColor(QPalette::WindowText, Qt::white);

@@ -1,32 +1,31 @@
 #include "GradientWave.h"
 #include "EffectManager.h"
 
-EffectInfo GradientWave::DefineEffectDetails()
+GradientWave::GradientWave() : RGBEffect()
 {
-    GradientWave::EffectDetails.EffectName = "Gradient Wave";
-    GradientWave::EffectDetails.EffectDescription = "Similar to rainbow wave but with 2 colors";
+    EffectDetails.EffectName = "Gradient Wave";
+    EffectDetails.EffectClassName = ClassName();
+    EffectDetails.EffectDescription = "Similar to rainbow wave but with 2 colors";
 
-    GradientWave::EffectDetails.IsReversable  = true;
-    GradientWave::EffectDetails.MaxSpeed      = 30;
-    GradientWave::EffectDetails.MinSpeed      = 1;
-    GradientWave::EffectDetails.UserColors    = 2;
+    EffectDetails.IsReversable  = true;
+    EffectDetails.MaxSpeed      = 30;
+    EffectDetails.MinSpeed      = 1;
+    EffectDetails.UserColors    = 2;
 
-    GradientWave::EffectDetails.MinSlider2Val = 0;
-    GradientWave::EffectDetails.MaxSlider2Val = 0;
-    GradientWave::EffectDetails.Slider2Name   = "";
+    EffectDetails.MinSlider2Val = 0;
+    EffectDetails.MaxSlider2Val = 0;
+    EffectDetails.Slider2Name   = "";
 
-    GradientWave::EffectDetails.HasCustomWidgets = false;
-    GradientWave::EffectDetails.HasCustomSettings = false;
-
-    return GradientWave::EffectDetails;
+    EffectDetails.HasCustomWidgets = false;
+    EffectDetails.HasCustomSettings = false;
 }
 
-void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
+void GradientWave::StepEffect(std::vector<ControllerZone> controller_zones)
 {
     int F[3];
     int S[3];
 
-    if (RandomColors)
+    if (RandomColorsEnabled)
     {
         S[0] = RGBGetRValue(RandomColorList[0]);
         S[1] = RGBGetGValue(RandomColorList[0]);
@@ -47,173 +46,163 @@ void GradientWave::StepEffect(std::vector<OwnedControllerAndZones> Controllers, 
         F[2] = RGBGetBValue(UserColors[1]);
     }
 
-    for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
+    if(Progress.size() != controller_zones.size())
     {
-        if (int(Progress.size()) < (ControllerID + 1))
+        Progress.clear();
+        Progress.resize(controller_zones.size());
+    }
+
+    int i = 0;
+
+    for (ControllerZone controller_zone: controller_zones)
+    {
+        zone_type ZT = controller_zone.type();
+        int StartIndex = controller_zone.start_idx();
+        int LEDCount = controller_zone.leds_count();
+        bool RVRS = controller_zone.reverse;
+
+        if (ZT == ZONE_TYPE_SINGLE)
         {
-            std::vector<float> EmptyVector;
-            Progress.push_back(EmptyVector);
+            for (int LedID = 0; LedID < LEDCount; LedID++)
+            {
+                float GetGradientPos;
+
+                if (Progress[i] > FPS)
+                {
+                    GetGradientPos = (FPS - (Progress[i] - FPS));
+                }
+                else
+                {
+                    GetGradientPos = Progress[i];
+                }
+
+                if (GetGradientPos <= 0)
+                {
+                    GetGradientPos *= -1;
+                }
+
+                int RGBCol[3];
+
+                for (int CVal = 0; CVal < 3; CVal++)
+                {
+                    RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(FPS))*(F[CVal]-S[CVal]));
+                }
+
+                controller_zone.controller->SetLED((RVRS ? (LEDCount - 1) - LedID : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
+            }
+
+            if (Progress[i] < FPS*2)
+            {
+                Progress[i] = Progress[i] + ((float)Speed/(float)FPS);
+            }
+            else if (Progress[i] >= FPS*2)
+            {
+                Progress[i] = 0;
+            }
         }
 
-        for (int ZoneID = 0; ZoneID < int(Controllers[ControllerID].OwnedZones.size()); ZoneID++)
+        else if (ZT == ZONE_TYPE_LINEAR)
         {
-            if (int(Progress[ControllerID].size()) < (ZoneID + 1))
+            for (int LedID = 0; LedID < LEDCount; LedID++)
             {
-                Progress[ControllerID].push_back(0);
+                float GetGradientPos;
+
+                if ((Progress[i] + LedID) > LEDCount)
+                {
+                    GetGradientPos = (LEDCount - ( (Progress[i] + LedID) - LEDCount));
+                }
+                else
+                {
+                    GetGradientPos = (Progress[i] + LedID);
+                }
+
+                if (GetGradientPos <= 0)
+                {
+                    GetGradientPos *= -1;
+                }
+
+                int RGBCol[3];
+
+                for (int CVal = 0; CVal < 3; CVal++)
+                {
+                    RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(LEDCount))*(F[CVal]-S[CVal]));
+                }
+
+                controller_zone.controller->SetLED((RVRS ? StartIndex + ((LEDCount - 1) - LedID) : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
             }
 
-            zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
-            int StartIndex = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
-            int LEDCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count;
-            bool RVRS = EffectManager::Get()->CheckReversed(ControllerID, Controllers[ControllerID].OwnedZones[ZoneID]);
-
-            if (ZT == ZONE_TYPE_SINGLE)
+            if (Progress[i] < (LEDCount*2))
             {
-                for (int LedID = 0; LedID < LEDCount; LedID++)
-                {
-                    float GetGradientPos;
-
-                    if (Progress[ControllerID][ZoneID] > FPS)
-                    {
-                        GetGradientPos = (FPS - (Progress[ControllerID][ZoneID] - FPS));
-                    }
-                    else
-                    {
-                        GetGradientPos = Progress[ControllerID][ZoneID];
-                    }
-
-                    if (GetGradientPos <= 0)
-                    {
-                        GetGradientPos *= -1;
-                    }
-
-                    int RGBCol[3];
-
-                    for (int CVal = 0; CVal < 3; CVal++)
-                    {
-                        RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(FPS))*(F[CVal]-S[CVal]));
-                    }
-
-                    Controllers[ControllerID].Controller->SetLED((RVRS ? (LEDCount - 1) - LedID : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
-                }
-
-                if (Progress[ControllerID][ZoneID] < FPS*2)
-                {
-                    Progress[ControllerID][ZoneID] = Progress[ControllerID][ZoneID] + ((float)Speed/(float)FPS);
-                }
-                else if (Progress[ControllerID][ZoneID] >= FPS*2)
-                {
-                    Progress[ControllerID][ZoneID] = 0;
-                }
+                Progress[i] += ((float)Speed / (float)FPS);
             }
-
-            else if (ZT == ZONE_TYPE_LINEAR)
+            else if (Progress[i] >= (LEDCount*2))
             {
-                for (int LedID = 0; LedID < LEDCount; LedID++)
-                {
-                    float GetGradientPos;
-
-                    if ((Progress[ControllerID][ZoneID] + LedID) > LEDCount)
-                    {
-                        GetGradientPos = (LEDCount - ( (Progress[ControllerID][ZoneID] + LedID) - LEDCount));
-                    }
-                    else
-                    {
-                        GetGradientPos = (Progress[ControllerID][ZoneID] + LedID);
-                    }
-
-                    if (GetGradientPos <= 0)
-                    {
-                        GetGradientPos *= -1;
-                    }
-
-                    int RGBCol[3];
-
-                    for (int CVal = 0; CVal < 3; CVal++)
-                    {
-                        RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(LEDCount))*(F[CVal]-S[CVal]));
-                    }
-
-                    Controllers[ControllerID].Controller->SetLED((RVRS ? StartIndex + ((LEDCount - 1) - LedID) : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
-                }
-
-                if (Progress[ControllerID][ZoneID] < (LEDCount*2)) Progress[ControllerID][ZoneID] += ((float)Speed / (float)FPS);
-                else if (Progress[ControllerID][ZoneID] >= (LEDCount*2)) Progress[ControllerID][ZoneID] = 0;
-            }
-
-            else if (ZT == ZONE_TYPE_MATRIX)
-            {
-                int ColumnCount = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
-                int RowCount     = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
-
-                for (int ColumnID = 0; ColumnID < ColumnCount; ColumnID++)
-                {
-                    float GetGradientPos;
-
-                    if ((Progress[ControllerID][ZoneID] + ColumnID) > ColumnCount)
-                    {
-                        GetGradientPos = (ColumnCount - ( (Progress[ControllerID][ZoneID] + ColumnID) - ColumnCount));
-                    }
-                    else
-                    {
-                        GetGradientPos = (Progress[ControllerID][ZoneID] + ColumnID);
-                    }
-
-                    if (GetGradientPos <= 0)
-                    {
-                        GetGradientPos *= -1;
-                    }
-
-                    int RGBCol[3];
-
-                    for (int CVal = 0; CVal < 3; CVal++)
-                    {
-                        RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(ColumnCount))*(F[CVal]-S[CVal]));
-                    }
-
-                    for (int RowID = 0; RowID < RowCount; RowID++)
-                    {
-                        int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((RowID * ColumnCount) + (RVRS ? (ColumnCount - 1) - ColumnID: ColumnID ) )];
-                        Controllers[ControllerID].Controller->SetLED(StartIndex + LedID,ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
-                    }
-                }
-
-                if (Progress[ControllerID][ZoneID] < (ColumnCount*2))
-                {
-                    Progress[ControllerID][ZoneID] += ((float)Speed / (float)FPS);
-                }
-                else if (Progress[ControllerID][ZoneID] >= (ColumnCount*2))
-                {
-                    Progress[ControllerID][ZoneID] = 0;
-                }
+                Progress[i] = 0;
             }
         }
+
+        else if (ZT == ZONE_TYPE_MATRIX)
+        {
+            int ColumnCount = controller_zone.matrix_map_width();
+            int RowCount = controller_zone.matrix_map_height();
+
+            for (int ColumnID = 0; ColumnID < ColumnCount; ColumnID++)
+            {
+                float GetGradientPos;
+
+                if ((Progress[i] + ColumnID) > ColumnCount)
+                {
+                    GetGradientPos = (ColumnCount - ( (Progress[i] + ColumnID) - ColumnCount));
+                }
+                else
+                {
+                    GetGradientPos = (Progress[i] + ColumnID);
+                }
+
+                if (GetGradientPos <= 0)
+                {
+                    GetGradientPos *= -1;
+                }
+
+                int RGBCol[3];
+
+                for (int CVal = 0; CVal < 3; CVal++)
+                {
+                    RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(ColumnCount))*(F[CVal]-S[CVal]));
+                }
+
+                for (int RowID = 0; RowID < RowCount; RowID++)
+                {
+                    int LedID = controller_zone.controller->zones[controller_zone.zone_idx].matrix_map->map[((RowID * ColumnCount) + (RVRS ? (ColumnCount - 1) - ColumnID: ColumnID ) )];
+                    controller_zone.controller->SetLED(StartIndex + LedID,ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
+                }
+            }
+
+            if (Progress[i] < (ColumnCount*2))
+            {
+                Progress[i] += ((float)Speed / (float)FPS);
+            }
+            else if (Progress[i] >= (ColumnCount*2))
+            {
+                Progress[i] = 0;
+            }
+        }
+
+        i++;
     }
 }
 
-void GradientWave::SetSpeed(int Speed)
-{
-    GradientWave::Speed = Speed;
-}
 
-void GradientWave::SetUserColors(std::vector<RGBColor> NewColors)
-{
-    GradientWave::UserColors = NewColors;
-}
-
-void GradientWave::Slider2Changed(int NewWidth)
-{
-    GradientWave::Width = NewWidth;
-}
-
-void GradientWave::ASelectionWasChanged(std::vector<OwnedControllerAndZones>)
+void GradientWave::ASelectionWasChanged(std::vector<ControllerZone>)
 {
     Progress.clear();
 }
 
-void GradientWave::ToggleRandomColors(bool RandomEnabled)
+void GradientWave::SetRandomColorsEnabled(bool value)
 {
-    if (RandomEnabled)
+    RandomColorsEnabled = value;
+
+    if (RandomColorsEnabled)
     {
         RandomColorList[0] = ToRGBColor(rand() % 255,
                                         rand() % 255,
@@ -223,6 +212,4 @@ void GradientWave::ToggleRandomColors(bool RandomEnabled)
                                         rand() % 255,
                                         rand() % 255);
     }
-
-    RandomColors = RandomEnabled;
 }

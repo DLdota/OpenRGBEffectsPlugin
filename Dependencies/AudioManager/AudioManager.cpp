@@ -115,7 +115,6 @@ void AudioManager::RegisterClient(int device_idx, void * client)
     {
         OpenDevice(device_idx);
 
-        printf("create Thread %d\n", device_idx);
         devices_capture_threads[device_idx] = new std::thread(&AudioManager::CaptureThreadFunction, this, device_idx);
     }
 }
@@ -135,8 +134,6 @@ void AudioManager::UnRegisterClient(int device_idx, void * client)
         if(active_clients[device_idx].empty())
         {
             active_clients.erase(device_idx);
-
-            printf("joining Thread %d\n", device_idx);
 
             ContinueCapture[device_idx] = false;
             std::thread* thread = devices_capture_threads[device_idx];
@@ -320,7 +317,7 @@ void AudioManager::InitAudioDeviceList()
 
 void AudioManager::CaptureThreadFunction(int device_idx)
 {
-    printf("START Thread %d\n", device_idx);
+    printf("AUDIO: Thread %d started\n", device_idx);
 
     while(ContinueCapture[device_idx])
     {
@@ -413,13 +410,13 @@ void AudioManager::CaptureThreadFunction(int device_idx)
         std::this_thread::sleep_for(std::chrono::milliseconds(delta > 0 ? delta:1));
     }
 
-    printf("STOPPED Thread %d\n", device_idx);
+    printf("AUDIO: Thread %d stopped\n", device_idx);
 
 }
 
 void AudioManager::OpenDevice(int device_idx)
 {
-    printf("Opening device %d\n" , device_idx);
+    printf("AUDIO: Opening device %d\n" , device_idx);
     ContinueCapture[device_idx] = true;
 
     #ifdef _WIN32
@@ -470,7 +467,7 @@ void AudioManager::OpenDevice(int device_idx)
 
 void AudioManager::CloseDevice(int device_idx)
 {
-    printf("Closing device %d\n" , device_idx);
+    printf("AUDIO: Closing device %d\n" , device_idx);
     ContinueCapture[device_idx] = false;
 
     #ifdef _WIN32
@@ -490,9 +487,4 @@ void AudioManager::CloseDevice(int device_idx)
         active_acl_devices.erase(device_idx);
     }
     #endif
-}
-
-void AudioManager::SetDelay(int value)
-{
-    delay = value;
 }

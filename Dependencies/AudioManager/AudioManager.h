@@ -50,7 +50,6 @@ public:
     void                     Capture(int device_idx, float *buf);
     void                     RegisterClient(int device_idx, void * client);
     void                     UnRegisterClient(int device_idx, void * client);
-    void                     SetDelay(int);
 
 private:
     AudioManager();
@@ -72,7 +71,7 @@ private:
     std::map<int, std::set<void *>>          active_clients;
     std::map<int, std::thread *>             devices_capture_threads;
     std::map<int, std::array<float, 512> >   devices_buffers;
-    int                                      delay;
+    int                                      delay = 1000 / 60;
 
     std::vector<bool>                        ContinueCapture;
 #ifdef WIN32

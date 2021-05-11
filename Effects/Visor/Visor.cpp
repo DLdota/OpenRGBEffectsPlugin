@@ -3,72 +3,67 @@
 
 RGBColor OFF = ToRGBColor(0,0,0);
 
-EffectInfo Visor::DefineEffectDetails()
+Visor::Visor() : RGBEffect()
 {
-    Visor::EffectDetails.EffectName = "Visor";
-    Visor::EffectDetails.EffectDescription = "A back and forth effect motion, flipping colors";
+    EffectDetails.EffectName = "Visor";
+    EffectDetails.EffectClassName = ClassName();
+    EffectDetails.EffectDescription = "A back and forth effect motion, flipping colors";
 
-    Visor::EffectDetails.IsReversable = false;
-    Visor::EffectDetails.MaxSpeed     = 100;
-    Visor::EffectDetails.MinSpeed     = 10;
+    EffectDetails.IsReversable = false;
+    EffectDetails.MaxSpeed     = 100;
+    EffectDetails.MinSpeed     = 10;
 
-    Visor::EffectDetails.UserColors   = 2;
+    EffectDetails.UserColors   = 2;
 
-    Visor::EffectDetails.MinSlider2Val = 3;
-    Visor::EffectDetails.MaxSlider2Val = 50;
-    Visor::EffectDetails.Slider2Name   = "Width";
+    EffectDetails.MinSlider2Val = 3;
+    EffectDetails.MaxSlider2Val = 50;
+    EffectDetails.Slider2Name   = "Width";
 
-    Visor::EffectDetails.HasCustomWidgets = false;
-    Visor::EffectDetails.HasCustomSettings = false;
-
-    return Visor::EffectDetails;
+    EffectDetails.HasCustomWidgets = false;
+    EffectDetails.HasCustomSettings = false;
 }
 
-void Visor::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
+void Visor::StepEffect(std::vector<ControllerZone> controller_zones)
 {    
     current_head_hue = Dir ? Head.hue: Tail.hue;
     current_tail_hue = Dir ? Tail.hue: Head.hue;
 
-    for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
+    for(ControllerZone controller_zone: controller_zones)
     {
-        for (int ZoneID = 0; ZoneID < int(Controllers[ControllerID].OwnedZones.size()); ZoneID++)
+        /*-------------------*\
+        | Setup for the loop  |
+        \*-------------------*/
+        int start_idx = controller_zone.start_idx();
+        zone_type ZT = controller_zone.type();
+
+        /*----------------------------------------------------*\
+        | Adjust how it applies for the specific type of zone  |
+        \*----------------------------------------------------*/
+        if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
         {
-            /*-------------------*\
-            | Setup for the loop  |
-            \*-------------------*/
-            int SetLEDIndex = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
-            zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
+            int leds_count = controller_zone.leds_count();
 
-            /*----------------------------------------------------*\
-            | Adjust how it applies for the specific type of zone  |
-            \*----------------------------------------------------*/
-            if (ZT == ZONE_TYPE_LINEAR)
+            for (int LedID = 0; LedID < leds_count; LedID++)
             {
-                int led_count = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count;
+                controller_zone.controller->SetLED((start_idx + LedID), GetColor(LedID, leds_count));
+            }
+        }
 
-                for (int LedID = 0; LedID < led_count; LedID++)
+        else if (ZT == ZONE_TYPE_MATRIX)
+        {
+            int cols = controller_zone.matrix_map_width();
+            int rows = controller_zone.matrix_map_height();
+
+            for (int col_id = 0; col_id < cols; col_id++)
+            {
+                RGBColor color = GetColor(col_id, cols);
+
+                for (int row_id = 0; row_id < rows; row_id++)
                 {
-                    Controllers[ControllerID].Controller->SetLED((SetLEDIndex+LedID), GetColor(LedID, led_count));
+                    int LedID = controller_zone.controller->zones[controller_zone.zone_idx].matrix_map->map[((row_id * cols) + col_id)];
+                    controller_zone.controller->SetLED(start_idx + LedID, color);
                 }
             }
-
-            else if (ZT == ZONE_TYPE_MATRIX)
-            {
-                int cols = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
-                int rows = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
-
-                for (int col_id = 0; col_id < cols; col_id++)
-                {
-                    RGBColor color = GetColor(col_id, cols);
-
-                    for (int row_id = 0; row_id < rows; row_id++)
-                    {
-                        int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((row_id * cols) + col_id)];
-                        Controllers[ControllerID].Controller->SetLED(SetLEDIndex + LedID, color);
-                    }
-                }
-            }
-
         }
     }
 
@@ -102,7 +97,7 @@ void Visor::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS
         }
     }
 
-    if(flipping && Random)
+    if(flipping && RandomColorsEnabled)
     {
         GenerateRandomColors();
     }
@@ -121,11 +116,11 @@ void Visor::GenerateRandomColors()
     rgb2hsv(C2, &Tail);
 }
 
-void Visor::ToggleRandomColors(bool NewRandom)
+void Visor::SetRandomColorsEnabled(bool value)
 {
-    Random = NewRandom;
+    RandomColorsEnabled = value;
 
-    if(Random)
+    if(RandomColorsEnabled)
     {
         GenerateRandomColors();
     }
@@ -135,25 +130,25 @@ void Visor::ToggleRandomColors(bool NewRandom)
     }
 }
 
-void Visor::SetSpeed(int NewSpeed)
-{
-    Speed = NewSpeed;
-}
-
 void Visor::SetUserColors(std::vector<RGBColor> NewUserColors)
 {
     UserColors = NewUserColors;
 
-    if(!Random)
+    if(!RandomColorsEnabled)
     {
         rgb2hsv(UserColors[0], &Head);
         rgb2hsv(UserColors[1], &Tail);
     }
 }
 
-void Visor::Slider2Changed(int NewWidth)
+void Visor::SetSlider2Val(unsigned int value)
 {
-    width = NewWidth * 2 ;
+    width = value * 2 ;
+}
+
+unsigned int Visor::GetSlider2Val()
+{
+    return width / 2;
 }
 
 RGBColor Visor::GetColor(int i, int count)

@@ -6,39 +6,17 @@
 class GradientWave: public RGBEffect
 {
 public:
-    GradientWave() {};
-    ~GradientWave() {};
+    GradientWave();
+    ~GradientWave(){}
 
-    EffectInfo  DefineEffectDetails()                                                       override;
-    void        DefineExtraOptions(QLayout*)                                                override {};
-    void        StepEffect(std::vector<OwnedControllerAndZones>, int)                       override;
+    static std::string const ClassName() { return "GradientWave"; }
 
-    void        SetSpeed(int Speed)                                                         override;
-    void        SetUserColors(std::vector<RGBColor>)                                        override;
-    void        Slider2Changed(int)                                                         override;
-    void        ToggleRandomColors(bool RandomEnabled)                                      override;
+    void StepEffect(std::vector<ControllerZone>) override;
+    void SetRandomColorsEnabled(bool) override;
+    void ASelectionWasChanged(std::vector<ControllerZone>) override;
 
-    void        SetWidth(int NewWidth);
-    void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>)                  override;
-
-    int                     GetSpeed()                                                      override {return Speed;     };
-    int                     GetSlider2Val()                                                 override {return 0;         };
-    std::vector<RGBColor>   GetUserColors()                                                 override {return UserColors;};
-
-    void                    EffectState(bool)                                               override {};
-
-    void                    LoadCustomSettings(json)                                        override {};
-    json                    SaveCustomSettings(json)                                        override {return json();    };
-
-    EffectInfo EffectDetails;
 private:
-    int                                         Speed;
-    float                                       Width;
-
-    std::vector<std::vector<float>>             Progress;
-    std::vector<RGBColor>                       UserColors;
-
-    bool     RandomColors = false;
+    std::vector<float> Progress;
     RGBColor RandomColorList[2];
 };
 

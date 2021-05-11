@@ -49,7 +49,7 @@ before_script:
   artifacts:
     name: "${CI_PROJECT_NAME}_Linux_32_${CI_COMMIT_SHORT_SHA}"
     paths:
-    - ./libORGBEffectPlugin.so.1.0.0
+    - ./libOpenRGBEffectsPlugin.so.1.0.0
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
@@ -66,7 +66,7 @@ before_script:
   artifacts:
     name: "${CI_PROJECT_NAME}_Linux_64_${CI_COMMIT_SHORT_SHA}"
     paths:
-    - ./libORGBEffectPlugin.so.1.0.0
+    - ./libOpenRGBEffectsPlugin.so.1.0.0
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
@@ -137,13 +137,13 @@ before_script:
   - _fold_final_
 
   - _fold_start_ 'Preparing artifact'  
-  - mv release/ORGBEffectPlugin.dll ../
+  - mv release/OpenRGBEffectsPlugin.dll ../
   - _fold_final_
 
   artifacts:
     name: "${CI_PROJECT_NAME}_Windows_32_${CI_COMMIT_SHORT_SHA}"
     paths:
-    - ORGBEffectPlugin.dll
+    - OpenRGBEffectsPlugin.dll
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
@@ -216,13 +216,13 @@ before_script:
   - _fold_final_
 
   - _fold_start_ 'Preparing artifact'  
-  - mv release/ORGBEffectPlugin.dll ../
+  - mv release/OpenRGBEffectsPlugin.dll ../
   - _fold_final_
 
   artifacts:
     name: "${CI_PROJECT_NAME}_Windows_64_${CI_COMMIT_SHORT_SHA}"
     paths:
-    - ORGBEffectPlugin.dll
+    - OpenRGBEffectsPlugin.dll
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
@@ -234,17 +234,17 @@ before_script:
   stage: build
   script:
   - eval $(/opt/homebrew/bin/brew shellenv)
-  - qmake ORGBEffectPlugin.pro
+  - qmake OpenRGBEffectsPlugin.pro
   - make -j16
-  - install_name_tool libORGBEffectPlugin.1.0.0.dylib -change /opt/homebrew/opt/qt@5/lib/QtWidgets.framework/Versions/5/QtWidgets @executable_path/../Frameworks/QtWidgets.framework/Versions/5/QtWidgets
-  - install_name_tool libORGBEffectPlugin.1.0.0.dylib -change /opt/homebrew/opt/qt@5/lib/QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui
-  - install_name_tool libORGBEffectPlugin.1.0.0.dylib -change /opt/homebrew/opt/qt@5/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore
-  - codesign --force --verify -s OpenRGB libORGBEffectPlugin.1.0.0.dylib
+  - install_name_tool libOpenRGBEffectsPlugin.1.0.0.dylib -change /opt/homebrew/opt/qt@5/lib/QtWidgets.framework/Versions/5/QtWidgets @executable_path/../Frameworks/QtWidgets.framework/Versions/5/QtWidgets
+  - install_name_tool libOpenRGBEffectsPlugin.1.0.0.dylib -change /opt/homebrew/opt/qt@5/lib/QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui
+  - install_name_tool libOpenRGBEffectsPlugin.1.0.0.dylib -change /opt/homebrew/opt/qt@5/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore
+  - codesign --force --verify -s OpenRGB libOpenRGBEffectsPlugin.1.0.0.dylib
 
   artifacts:
     name: "${CI_PROJECT_NAME}_MacOS_ARM64_${CI_COMMIT_SHORT_SHA}"
     paths:
-    - libORGBEffectPlugin.1.0.0.dylib
+    - libOpenRGBEffectsPlugin.1.0.0.dylib
     expire_in: 30 days
 
   rules:
@@ -259,16 +259,16 @@ before_script:
   stage: build
   script:
   - eval $(/usr/local/bin/brew shellenv)
-  - arch -x86_64 /usr/local/bin/qmake ORGBEffectPlugin.pro
+  - arch -x86_64 /usr/local/bin/qmake OpenRGBEffectsPlugin.pro
   - arch -x86_64 make -j16
-  - arch -x86_64 install_name_tool libORGBEffectPlugin.1.0.0.dylib -change /usr/local/bin/opt/qt@5/lib/QtWidgets.framework/Versions/5/QtWidgets @executable_path/../Frameworks/QtWidgets.framework/Versions/5/QtWidgets
-  - arch -x86_64 install_name_tool libORGBEffectPlugin.1.0.0.dylib -change /usr/local/bin/opt/qt@5/lib/QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui
-  - arch -x86_64 install_name_tool libORGBEffectPlugin.1.0.0.dylib -change /usr/local/bin/opt/qt@5/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore
-  - arch -x86_64 codesign --force --verify -s OpenRGB libORGBEffectPlugin.1.0.0.dylib
+  - arch -x86_64 install_name_tool libOpenRGBEffectsPlugin.1.0.0.dylib -change /usr/local/bin/opt/qt@5/lib/QtWidgets.framework/Versions/5/QtWidgets @executable_path/../Frameworks/QtWidgets.framework/Versions/5/QtWidgets
+  - arch -x86_64 install_name_tool libOpenRGBEffectsPlugin.1.0.0.dylib -change /usr/local/bin/opt/qt@5/lib/QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui
+  - arch -x86_64 install_name_tool libOpenRGBEffectsPlugin.1.0.0.dylib -change /usr/local/bin/opt/qt@5/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore
+  - arch -x86_64 codesign --force --verify -s OpenRGB libOpenRGBEffectsPlugin.1.0.0.dylib
   artifacts:
     name: "${CI_PROJECT_NAME}_MacOS_Intel_${CI_COMMIT_SHORT_SHA}"
     paths:
-    - libORGBEffectPlugin.1.0.0.dylib
+    - libOpenRGBEffectsPlugin.1.0.0.dylib
     expire_in: 30 days
 
   rules:

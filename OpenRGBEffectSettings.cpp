@@ -1,5 +1,10 @@
-#include "ORGBEffectPlugin.h"
 #include "OpenRGBEffectSettings.h"
+#include <fstream>
+#include <iostream>
+#include "filesystem.h"
+#include "OpenRGBEffectsPlugin.h"
+
+unsigned int OpenRGBEffectSettings::version = 2;
 
 void OpenRGBEffectSettings::SaveUserSettings(json Settings)
 {
@@ -9,7 +14,7 @@ void OpenRGBEffectSettings::SaveUserSettings(json Settings)
         return;
     }
 
-    std::ofstream EffectFile((ORGBPlugin::RMPointer->GetConfigurationDirectory() + SettingsFolder + SettingsFileName), std::ios::out | std::ios::binary);
+    std::ofstream EffectFile((OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() + SettingsFolder + SettingsFileName), std::ios::out | std::ios::binary);
 
     if(EffectFile)
     {
@@ -28,7 +33,7 @@ json OpenRGBEffectSettings::LoadUserSettings()
 {
     json Settings;
 
-    std::ifstream SFile(ORGBPlugin::RMPointer->GetConfigurationDirectory() + SettingsFolder + SettingsFileName, std::ios::in | std::ios::binary);
+    std::ifstream SFile(OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() + SettingsFolder + SettingsFileName, std::ios::in | std::ios::binary);
 
     if(SFile)
     {
@@ -48,7 +53,7 @@ json OpenRGBEffectSettings::LoadUserSettings()
 
 bool OpenRGBEffectSettings::CreateSettingsDirectory()
 {
-    std::string directory = ORGBPlugin::RMPointer->GetConfigurationDirectory() + SettingsFolder;
+    std::string directory = OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() + SettingsFolder;
 
     if(std::filesystem::exists(directory))
     {

@@ -56,24 +56,13 @@ public:
     AudioSync();
     ~AudioSync();
 
-    EffectInfo              DefineEffectDetails()                                  override;
-    void                    DefineExtraOptions(QLayout*)                           override;
-    void                    StepEffect(std::vector<OwnedControllerAndZones>, int)  override;
+    static std::string const ClassName() {return "AudioSync";}
 
-    void                    SetSpeed(int)                                          override {};
-    void                    SetUserColors(std::vector<RGBColor>)                   override {};
-    void                    Slider2Changed(int)                                    override {};
-    void                    ASelectionWasChanged(std::vector<OwnedControllerAndZones>) override {};
-    void                    ToggleRandomColors(bool)                               override {};
-
-    int                     GetSpeed()                                             override {return 0;};
-    int                     GetSlider2Val()                                        override {return 0;};
-    std::vector<RGBColor>   GetUserColors()                                        override {return {};};
-
-    void                    LoadCustomSettings(json)                               override;
-    json                    SaveCustomSettings(json)                               override;
-
-    void                    EffectState(bool)                                      override;
+    void DefineExtraOptions(QLayout*)                           override;
+    void StepEffect(std::vector<ControllerZone>)                override;
+    void LoadCustomSettings(json)                               override;
+    json SaveCustomSettings(json)                               override;
+    void EffectState(bool)                                      override;
 
 private slots:
     void SelectDeviceChanged(int);
@@ -101,8 +90,6 @@ signals:
     void UpdateGraphSignal() const;
 
 private:
-    EffectInfo EffectDetails;
-
     /*-----*\
     | Ui    |
     \*-----*/
@@ -158,7 +145,7 @@ private:
     float                 current_freq_val = 0;
     std::vector<int>      rainbow_hues;
     std::vector<RGBColor> colors_rotation;    
-    int                   audio_device_idx;
+    int                   audio_device_idx = 0;
     static const RGBColor OFF = ToRGBColor(0,0,0);
 
     RGBColor GetColor(int, int, int, int);

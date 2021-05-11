@@ -2,7 +2,7 @@
 #define RGBEFFECT_H
 
 #include <QLayout>
-#include "RGBController.h"
+#include "ControllerZone.h"
 #include "json.hpp"
 
 using json = nlohmann::json;
@@ -10,6 +10,7 @@ using json = nlohmann::json;
 struct EffectInfo
 {
     std::string EffectName;
+    std::string EffectClassName;
     std::string EffectDescription;
     int         EffectIndex;
 
@@ -17,8 +18,8 @@ struct EffectInfo
     int  MaxSpeed;
     int  MinSpeed;
 
-    bool AllowOnlyFirst = false;
-    int  UserColors;
+    bool AllowOnlyFirst;
+    unsigned int  UserColors;
 
     int         MaxSlider2Val;
     int         MinSlider2Val;
@@ -28,61 +29,52 @@ struct EffectInfo
     bool HasCustomSettings;
 };
 
-struct OwnedControllerAndZones
-{
-    RGBController*     Controller;
-    std::vector<unsigned int>   OwnedZones;
-};
-
-struct ZoneOwnedBy
-{
-    unsigned int Zone;
-    unsigned int EffectIndex;
-    std::string EffectName;
-};
-
-struct BetterController
-{
-    RGBController*              Controller;
-    bool                        HasDirect;
-    int                         DirectIndex;
-    int                         Index;
-    std::vector<ZoneOwnedBy>    OwnedZones;
-    std::vector<bool>           ReversedZones;
-};
-
 class RGBEffect
 {
 public:
-    virtual EffectInfo  DefineEffectDetails()                                        = 0;
-    virtual void        DefineExtraOptions(QLayout*) {};
-    virtual void        StepEffect(std::vector<OwnedControllerAndZones>, int FPS)    = 0;
+    virtual ~RGBEffect(){};
 
-    virtual void        SetSpeed(int SPD)                                          {Speed = SPD;};
-    virtual void        SetUserColors(std::vector<RGBColor> UC)                    {UserColors = UC;                     };
-    virtual void        Slider2Changed(int SVal)                                   {Slider2Val = SVal;                   };
-    virtual void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>) {                                     };
-    virtual void        ToggleRandomColors(bool RandomEnabled)                     {RandomColorsEnabled = RandomEnabled; };
-    virtual void        OnlyFirstChange(bool OnlyFirst)                            {OnlyFirstColorEnabled = OnlyFirst;   };
-    virtual int                     GetSpeed()                                     {return Speed;                        };
-    virtual int                     GetSlider2Val()                                {return Slider2Val;                   };
-    virtual std::vector<RGBColor>   GetUserColors()                                {return UserColors;                   };
+    virtual void DefineExtraOptions(QLayout*) {}
+    virtual void StepEffect(std::vector<ControllerZone>) {};
+    virtual void ASelectionWasChanged(std::vector<ControllerZone>) {}
 
-    virtual void                    EffectState(bool Enabled)                      {EffectEnabled = Enabled;             };
+    virtual void EffectState(bool Enabled) { EffectEnabled = Enabled; }
 
-    virtual void                    LoadCustomSettings(json)                       {                                     };
-    virtual json                    SaveCustomSettings(json)                       {return json();                       };
+    virtual void LoadCustomSettings(json) {}
+    virtual json SaveCustomSettings(json) { return json(); }
 
-    EffectInfo          EffectDetails;
+    virtual void SetAutoStart(bool value) { AutoStart = value;}
+    virtual bool IsAutoStart() { return AutoStart;}
+
+    virtual void SetFPS(unsigned int value) { FPS = value; }
+    virtual unsigned int GetFPS()  { return FPS; }
+
+    virtual void SetSpeed(unsigned int value) { Speed = value; }
+    virtual unsigned int GetSpeed() { return Speed; };
+
+    virtual void SetUserColors(std::vector<RGBColor> colors) { UserColors = colors; }
+    virtual std::vector<RGBColor> GetUserColors() {return UserColors; }
+
+    virtual void SetRandomColorsEnabled(bool value) { RandomColorsEnabled = value; }
+    virtual bool IsRandomColorsEnabled() { return RandomColorsEnabled; }
+
+    virtual void SetOnlyFirstColorEnabled(bool value) {OnlyFirstColorEnabled = value; }
+    virtual bool IsOnlyFirstColorEnabled() { return OnlyFirstColorEnabled; }
+
+    virtual unsigned int GetSlider2Val() { return Slider2Val; }
+    virtual void SetSlider2Val(unsigned int value) { Slider2Val = value; }
+
+    EffectInfo EffectDetails;
+
 protected:
-    float Speed = 1;
-    float Slider2Val = 1;
-
+    unsigned int FPS = 60;
+    unsigned int Speed = 1;
+    unsigned int Slider2Val = 1;
     std::vector<RGBColor> UserColors;
     bool RandomColorsEnabled = false;
+    bool AutoStart = false;
     bool OnlyFirstColorEnabled = false;
-
-    bool EffectEnabled;
+    bool EffectEnabled = false;
 };
 
 #endif // RGBEFFECT_H

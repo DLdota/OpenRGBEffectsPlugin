@@ -7,7 +7,7 @@
 
 struct NewStar
 {
-    int         ControllerIndex;
+    int         Index;
     int         LED;
     float       state;
     RGBColor    Color;
@@ -16,21 +16,16 @@ struct NewStar
 class StarryNight: public RGBEffect
 {
 public:
-    StarryNight() {};
+    StarryNight();
     ~StarryNight() {};
-    EffectInfo  DefineEffectDetails()                                       override;
-    void        StepEffect(std::vector<OwnedControllerAndZones>, int)       override;
-    void        Slider2Changed(int)                                         override;
-    void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>)  override;
 
-    int         GetSlider2Val()                      override {return LEDPerCycle; };
+    static std::string const ClassName() {return "StarryNight";}
 
-    EffectInfo  EffectDetails;
+    void StepEffect(std::vector<ControllerZone>) override;
+    void ASelectionWasChanged(std::vector<ControllerZone>) override;
+
 private:
-    int                         FPS;
-    int                         TempLEDPerCycle = 1;
-    int                         LEDPerCycle = 1;
-    std::vector<NewStar>        CurrentStars;
+    std::vector<NewStar> CurrentStars;
 };
 
 #endif // STARRYNIGHT_H

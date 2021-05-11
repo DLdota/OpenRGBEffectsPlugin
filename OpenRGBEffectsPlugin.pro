@@ -6,7 +6,7 @@ QT +=                  \
 win32:CONFIG += QTPLUGIN
 
 TEMPLATE = lib
-DEFINES += ORGBEFFECTPLUGIN_LIBRARY
+DEFINES += OPEN_RGB_EFFECTS_PLUGIN_LIBRARY
 
 win32:CONFIG += c++17
 
@@ -26,7 +26,12 @@ INCLUDEPATH +=                                                                  
     OpenRGB/dependencies/json                                                                   \
 
 HEADERS +=                                                                                      \
-    Effects/Effects.h                                                                           \
+    ControllerZone.h \
+    ControllerZoneList.h                                                                        \
+    DeviceList.h                                                                                \
+    DeviceListItem.h \
+    EffectList.h                                                                                \
+    EffectTabHeader.h                                                                           \
     Effects/Bubbles/Bubbles.h                                                                   \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
@@ -39,6 +44,7 @@ HEADERS +=                                                                      
     OpenRGB/i2c_smbus/i2c_smbus.h                                                               \
     OpenRGB/net_port/net_port.h                                                                 \
     OpenRGB/RGBController/RGBController.h                                                       \
+    ZoneListItem.h
 
 
 #-----------------------------------------------------------------------------------------------#
@@ -52,7 +58,7 @@ INCLUDEPATH +=                                                                  
     Dependencies/ResetButton/                                                                   \
 
 HEADERS +=                                                                                      \
-    ORGBEffectPlugin.h                                                                          \
+    OpenRGBEffectsPlugin.h                                                                      \
     OpenRGBEffectTab.h                                                                          \
     OpenRGBEffectPage.h                                                                         \
     OpenRGBEffectSettings.h                                                                     \
@@ -61,11 +67,15 @@ HEADERS +=                                                                      
     Dependencies/HSV/hsv.h                                                                      \
     Dependencies/ColorWheel/ColorWheel.h                                                        \
     Dependencies/ScreenSelection/ScreenSelection.h                                              \
-    Dependencies/ResetButton/ResetButton.h                                                      \
 
 SOURCES +=                                                                                      \
+    ControllerZoneList.cpp                                                                      \
+    DeviceList.cpp                                                                              \
+    DeviceListItem.cpp \
+    EffectList.cpp                                                                              \
+    EffectTabHeader.cpp                                                                         \
     Effects/Bubbles/Bubbles.cpp                                                                 \
-    ORGBEffectPlugin.cpp                                                                        \
+    OpenRGBEffectsPlugin.cpp                                                                    \
     OpenRGBEffectTab.cpp                                                                        \
     OpenRGBEffectPage.cpp                                                                       \
     OpenRGBEffectSettings.cpp                                                                   \
@@ -74,13 +84,19 @@ SOURCES +=                                                                      
     Dependencies/HSV/hsv.cpp                                                                    \
     Dependencies/ColorWheel/ColorWheel.cpp                                                      \
     Dependencies/ScreenSelection/ScreenSelection.cpp                                            \
-    Dependencies/ResetButton/ResetButton.cpp                                                    \
+    ZoneListItem.cpp
 
 FORMS +=                                                                                        \
+    ControllerZoneList.ui                                                                       \
+    DeviceList.ui                                                                               \
+    DeviceListItem.ui \
+    EffectList.ui                                                                               \
+    EffectTabHeader.ui                                                                          \
     Effects/Bubbles/Bubbles.ui                                                                  \
     OpenRGBEffectPage.ui                                                                        \
     OpenRGBEffectTab.ui                                                                         \
     ColorPicker.ui                                                                              \
+    ZoneListItem.ui
 
 #-----------------------------------------------------------------------------------------------#
 # Effects                                                                                       #
@@ -154,7 +170,7 @@ INCLUDEPATH +=                                                                  
     Dependencies/ctkrangeslider/                                                                \
 
 HEADERS +=                                                                                      \
-        Dependencies/ctkrangeslider/ctkrangeslider.h                                                \
+        Dependencies/ctkrangeslider/ctkrangeslider.h                                            \
 
 SOURCES +=                                                                                      \
     Dependencies/ctkrangeslider/ctkrangeslider.cpp                                              \

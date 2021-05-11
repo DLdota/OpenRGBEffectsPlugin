@@ -7,30 +7,18 @@
 class Ambient : public RGBEffect
 {
 public:
-    Ambient() {};
-    ~Ambient() {};
+    Ambient();
+    ~Ambient();
 
-    EffectInfo              DefineEffectDetails()                                       override;
-    void                    DefineExtraOptions(QLayout* Parent)                         override;
-    void                    StepEffect(std::vector<OwnedControllerAndZones>, int FPS)   override;
+    static std::string const ClassName() {return "Ambient";}
 
-    void                    SetSpeed(int)                                               override {};
-    void                    Slider2Changed(int)                                         override {};
-    void                    SetUserColors(std::vector<RGBColor>)                        override {};
-    void                    ASelectionWasChanged(std::vector<OwnedControllerAndZones>)  override {};
-    void                    ToggleRandomColors(bool)                                    override {};
-
-    int                     GetSpeed()                                                  override {return 0;}  ;
-    int                     GetSlider2Val()                                             override {return 0;}  ;
-    std::vector<RGBColor>   GetUserColors()                                             override {return {};} ;
-
+    void                    DefineExtraOptions(QLayout*)                                override;
+    void                    StepEffect(std::vector<ControllerZone>)                     override;
     void                    LoadCustomSettings(json)                                    override;
     json                    SaveCustomSettings(json)                                    override;
-
     void                    EffectState(bool)                                           override;
 
 private:
-    EffectInfo EffectDetails;
     ScreenSelection* SCRNSLCT;
 };
 

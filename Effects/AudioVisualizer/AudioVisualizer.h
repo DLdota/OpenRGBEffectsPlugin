@@ -197,53 +197,48 @@ public:
     explicit AudioVisualizer(QWidget* parent = nullptr);
     ~AudioVisualizer();
 
-    EffectInfo  DefineEffectDetails()               override;
-    void        DefineExtraOptions(QLayout* Scaler) override;
-    void        StepEffect(std::vector<OwnedControllerAndZones>, int FPS) override;
+    static std::string const ClassName() {return "AudioVisualizer";}
 
-    void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>) override {};
-
-    void                    EffectState(bool)        override;
-
-    void                    LoadCustomSettings(json) override;
-    json                    SaveCustomSettings(json) override;
-
-    EffectInfo  EffectDetails;
+    void DefineExtraOptions(QLayout*) override;
+    void StepEffect(std::vector<ControllerZone>) override;
+    void EffectState(bool) override;
+    void LoadCustomSettings(json) override;
+    json SaveCustomSettings(json) override;
 
 private slots:
     /*-------------*\
     | GUI Handling  |
     \*-------------*/
     void update();
-    void on_lineEdit_Background_Brightness_textChanged(const QString &arg1);
-    void on_lineEdit_Animation_Speed_textChanged(const QString &arg1);
+    void on_lineEdit_Background_Brightness_textChanged(const QString &);
+    void on_lineEdit_Animation_Speed_textChanged(const QString &);
 
     /*---------------------*\
     | Amp, Size, and Decay  |
     \*---------------------*/
-    void on_lineEdit_Amplitude_textChanged(const QString &arg1);
-    void on_lineEdit_Average_Size_textChanged(const QString &arg1);
-    void on_lineEdit_Decay_textChanged(const QString &arg1);
+    void on_lineEdit_Amplitude_textChanged(const QString &);
+    void on_lineEdit_Average_Size_textChanged(const QString &);
+    void on_lineEdit_Decay_textChanged(const QString &);
 
     /*-------------*\
     | Normalization |
     \*-------------*/
-    void on_lineEdit_Normalization_Offset_textChanged(const QString &arg1);
-    void on_lineEdit_Normalization_Scale_textChanged(const QString &arg1);
+    void on_lineEdit_Normalization_Offset_textChanged(const QString &);
+    void on_lineEdit_Normalization_Scale_textChanged(const QString &);
 
     /*------------------------------*\
     | Color and Brightness Settings  |
     \*------------------------------*/
-    void on_comboBox_FFT_Window_Mode_currentIndexChanged(int index);
-    void on_comboBox_Background_Mode_currentIndexChanged(int index);
-    void on_comboBox_Foreground_Mode_currentIndexChanged(int index);
-    void on_comboBox_Single_Color_Mode_currentIndexChanged(int index);
-    void on_comboBox_Average_Mode_currentIndexChanged(int index);
-    void on_checkBox_Reactive_Background_clicked(bool checked);
-    void on_comboBox_Audio_Device_currentIndexChanged(int index);
-    void on_lineEdit_Filter_Constant_textChanged(const QString &arg1);
-    void on_checkBox_Silent_Background_clicked(bool checked);
-    void on_lineEdit_Background_Timeout_textChanged(const QString &arg1);
+    void on_comboBox_FFT_Window_Mode_currentIndexChanged(int);
+    void on_comboBox_Background_Mode_currentIndexChanged(int);
+    void on_comboBox_Foreground_Mode_currentIndexChanged(int);
+    void on_comboBox_Single_Color_Mode_currentIndexChanged(int);
+    void on_comboBox_Average_Mode_currentIndexChanged(int);
+    void on_checkBox_Reactive_Background_clicked(bool);
+    void on_comboBox_Audio_Device_currentIndexChanged(int);
+    void on_lineEdit_Filter_Constant_textChanged(const QString &);
+    void on_checkBox_Silent_Background_clicked(bool);
+    void on_lineEdit_Background_Timeout_textChanged(const QString &);
 
     void on_ShowHideSettings_clicked();
 
@@ -404,7 +399,7 @@ private:
 
     unsigned char buffer[256];
 
-    std::vector<std::vector<ZoneIndexType*>> ZoneMaps;
+    std::vector<ZoneIndexType*> ZoneMaps;
 
     /*------------------*\
     | Drawing Functions  |

@@ -4,8 +4,24 @@
 /*------------------------*\
 | Standard Effect Members  |
 \*------------------------*/
-AudioSync::AudioSync(): QObject(nullptr)
+AudioSync::AudioSync(): QObject(nullptr) , RGBEffect()
 {
+    EffectDetails.EffectName = "Audio Sync";
+    EffectDetails.EffectClassName = ClassName();
+    EffectDetails.EffectDescription = "Synchronize to master audio";
+
+    EffectDetails.IsReversable = false;
+    EffectDetails.MaxSpeed     = 0;
+    EffectDetails.MinSpeed     = 0;
+    EffectDetails.UserColors   = 0;
+
+    EffectDetails.MaxSlider2Val = 0;
+    EffectDetails.MinSlider2Val = 0;
+    EffectDetails.Slider2Name   = "";
+
+    EffectDetails.HasCustomWidgets = true;
+    EffectDetails.HasCustomSettings = true;
+
     Init();
 }
 
@@ -14,24 +30,71 @@ AudioSync::~AudioSync()
     Stop();
 }
 
-EffectInfo AudioSync::DefineEffectDetails()
+void AudioSync::Init()
 {
-    AudioSync::EffectDetails.EffectName = "Audio Sync";
-    AudioSync::EffectDetails.EffectDescription = "Synchronize to master audio";
+    is_running = false;
 
-    AudioSync::EffectDetails.IsReversable = false;
-    AudioSync::EffectDetails.MaxSpeed     = 0;
-    AudioSync::EffectDetails.MinSpeed     = 0;
-    AudioSync::EffectDetails.UserColors   = 0;
+    /*-------------------------------------------------*\
+    | Create empty versions of all of the GUI elements  |
+    \*-------------------------------------------------*/
+    device_list_selector = new QComboBox();
+    bypass_slider = new ctkRangeSlider(Qt::Horizontal);
+    rainbow_shift_slider = new QSlider();
+    high_slider = new QSlider();
+    middle_slider = new QSlider();
+    low_slider = new QSlider();
+    amplitude_slider = new QSlider();
+    fade_step_slider = new QSlider();
+    decay_slider = new QSlider();
+    avg_size_slider = new QSlider();
+    saturation_mode_selector = new QComboBox();
+    roll_mode_selector = new QComboBox();
+    avg_mode_selector = new QComboBox();
+    filter_constant_slider = new QSlider();
+    preset_selector = new QComboBox();
+    amplitude_slider_min = new QSpinBox();
+    amplitude_slider_max = new QSpinBox();
 
-    AudioSync::EffectDetails.MaxSlider2Val = 0;
-    AudioSync::EffectDetails.MinSlider2Val = 0;
-    AudioSync::EffectDetails.Slider2Name   = "";
+    std::vector<char *> devices = AudioManager::get()->GetAudioDevices();
 
-    AudioSync::EffectDetails.HasCustomWidgets = true;
-    AudioSync::EffectDetails.HasCustomSettings = true;
+    for(const char * str : devices)
+    {
+        device_list_selector->addItem(QString::fromLocal8Bit(str));
+    }
 
-    return AudioSync::EffectDetails;
+    RestoreDefaultSettings();
+
+    hanning(win_hanning, 256);
+
+    float offset            = 0.04f;
+    float scale             = 0.5f;
+
+    /*------------------------------------*\
+    | Fill in Normalization and FFT array  |
+    \*------------------------------------*/
+    for (int i = 0; i < 256; i++)
+    {
+        fft[i] = 0.0f;
+        fft_nrml[i] = offset + (scale * (i / 256.0f));
+    }
+
+    int start_hue = 360;
+    int stop_hue =  0;
+
+    float hue_step = (stop_hue-start_hue)/256.0f;
+
+    /*---------------------------------------------------------------------------------*\
+    | Create a list of colors to read off of when drawing                        |
+    \*---------------------------------------------------------------------------------*/
+    for(int i = 0; i<256;i++)
+    {
+        rainbow_hues.push_back(ceil(start_hue + i * hue_step));
+    }
+
+    /*--------------------------*\
+    | Map signal to UpdateGraph  |
+    \*--------------------------*/
+    connect(this, SIGNAL(UpdateGraphSignal()), this, SLOT(UpdateGraph()));
 }
 
 void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
@@ -70,17 +133,6 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
 
     device_label->setToolTip(device_tooltip);
     device_list_selector->setToolTip(device_tooltip);
-
-    std::vector<char *> devices = AudioManager::get()->GetAudioDevices();
-    foreach (const char * str, AudioManager::get()->GetAudioDevices())
-    {
-        device_list_selector->addItem(str);
-    }
-
-    if(devices.size() > 0)
-    {
-        audio_device_idx = 0;
-    }
 
     connect(device_list_selector, SIGNAL(currentIndexChanged(int)), this, SLOT(SelectDeviceChanged(int)));
 
@@ -422,7 +474,7 @@ void AudioSync::ShowHide()
     }
 }
 
-void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
+void AudioSync::StepEffect(std::vector<ControllerZone> controller_zones)
 {
     float fft_tmp[512];
 
@@ -712,48 +764,42 @@ void AudioSync::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int
 
     int colors_count = (int)colors_rotation.size();
 
-    for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
+    for(ControllerZone controller_zone: controller_zones)
     {
-        for (int ZoneID = 0; ZoneID < int(Controllers[ControllerID].OwnedZones.size()); ZoneID++)
+        /*-------------------*\
+        | Setup for the loop  |
+        \*-------------------*/
+        int start_idx = controller_zone.start_idx();
+        zone_type ZT = controller_zone.type();
+
+        /*----------------------------------------------------*\
+        | Adjust how it applies for the specific type of zone  |
+        \*----------------------------------------------------*/
+        if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
         {
-            /*-------------------*\
-            | Setup for the loop  |
-            \*-------------------*/
-            int start_idx = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
-            zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
+            int leds_count = controller_zone.leds_count();
 
-            /*----------------------------------------------------*\
-            | Adjust how it applies for the specific type of zone  |
-            \*----------------------------------------------------*/
-            if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
-            {                
-                int led_count = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count;
-
-                for (int LedID = 0; LedID < led_count && LedID < colors_count; LedID++)
-                {
-                    Controllers[ControllerID].Controller->SetLED(start_idx + LedID, GetColor(1, LedID, led_count, 1));
-                }
-            }
-
-            else if (ZT == ZONE_TYPE_MATRIX)
+            for (int LedID = 0; LedID < leds_count && LedID < colors_count; LedID++)
             {
-                int cols = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
-                int rows = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
+                controller_zone.controller->SetLED(start_idx + LedID, GetColor(1, LedID, leds_count, 1));
+            }
+        }
 
-                for (int col_id = 0; col_id < cols && col_id < colors_count; col_id++)
+        else if (ZT == ZONE_TYPE_MATRIX)
+        {
+            int cols = controller_zone.matrix_map_width();
+            int rows = controller_zone.matrix_map_height();
+
+            for (int col_id = 0; col_id < cols && col_id < colors_count; col_id++)
+            {
+                for (int row_id = 0; row_id < rows; row_id++)
                 {
-                    for (int row_id = 0; row_id < rows; row_id++)
-                    {
-                        int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((row_id * cols) + col_id)];
-
-                        Controllers[ControllerID].Controller->SetLED(start_idx + LedID, GetColor(row_id, col_id, rows, cols));
-                    }
+                    int LedID = controller_zone.controller->zones[controller_zone.zone_idx].matrix_map->map[((row_id * cols) + col_id)];
+                    controller_zone.controller->SetLED(start_idx + LedID, GetColor(row_id, col_id, rows, cols));
                 }
             }
-
         }
     }
-
 }
 
 RGBColor AudioSync::GetColor(int row, int col, int zone_width, int zone_height)
@@ -800,6 +846,7 @@ void AudioSync::LoadCustomSettings(json Settings)
     if (Settings.contains("amplitude_max_value")) amplitude_max_value              = Settings["amplitude_max_value"];
 
     UpdateUiSettings();
+
     return;
 }
 
@@ -959,6 +1006,11 @@ void AudioSync::ToggleAmplitudeChangeInputs()
 
 void AudioSync::UpdateGraph()
 {
+    if(!is_running)
+    {
+        return;
+    }
+
     /*----------------------------------*\
     | Set bounds for drawing visualizer  |
     \*----------------------------------*/
@@ -998,7 +1050,7 @@ void AudioSync::UpdateUiSettings()
 {
     /*-----------------------------------------------*\
     | Set the min and max values of all GUI elements  |
-    \*-----------------------------------------------*/
+    \*-----------------------------------------------*/    
     device_list_selector->setCurrentIndex(audio_device_idx >= 0 ? audio_device_idx: 0);
     bypass_slider->setMinimum(0);
     bypass_slider->setMaximum(256);
@@ -1020,70 +1072,6 @@ void AudioSync::UpdateUiSettings()
     amplitude_slider->setValue(current_settings.amplitude * 100);
 }
 
-void AudioSync::Init()
-{
-    is_running = false;
-
-    /*-----------------------------------------------------------*\
-    | no device selected yet, waiting for settings to be loaded.  |
-    \*-----------------------------------------------------------*/
-    audio_device_idx = -1;
-
-    /*-------------------------------------------------*\
-    | Create empty versions of all of the GUI elements  |
-    \*-------------------------------------------------*/
-    device_list_selector = new QComboBox();
-    bypass_slider = new ctkRangeSlider(Qt::Horizontal);
-    rainbow_shift_slider = new QSlider();
-    high_slider = new QSlider();
-    middle_slider = new QSlider();
-    low_slider = new QSlider();
-    amplitude_slider = new QSlider();
-    fade_step_slider = new QSlider();
-    decay_slider = new QSlider();
-    avg_size_slider = new QSlider();
-    saturation_mode_selector = new QComboBox();
-    roll_mode_selector = new QComboBox();
-    avg_mode_selector = new QComboBox();
-    filter_constant_slider = new QSlider();
-    preset_selector = new QComboBox();
-    amplitude_slider_min = new QSpinBox();
-    amplitude_slider_max = new QSpinBox();
-
-    RestoreDefaultSettings();
-
-    hanning(win_hanning, 256);
-
-    float offset            = 0.04f;
-    float scale             = 0.5f;
-
-    /*------------------------------------*\
-    | Fill in Normalization and FFT array  |
-    \*------------------------------------*/
-    for (int i = 0; i < 256; i++)
-    {
-        fft[i] = 0.0f;
-        fft_nrml[i] = offset + (scale * (i / 256.0f));
-    }
-
-    int start_hue = 360;
-    int stop_hue =  0;
-
-    float hue_step = (stop_hue-start_hue)/256.0f;
-
-    /*---------------------------------------------------------------------------------*\
-    | Create a list of colors to read off of when drawing                        |
-    \*---------------------------------------------------------------------------------*/
-    for(int i = 0; i<256;i++)
-    {
-        rainbow_hues.push_back(ceil(start_hue + i * hue_step));
-    }
-
-    /*--------------------------*\
-    | Map signal to UpdateGraph  |
-    \*--------------------------*/
-    connect(this, SIGNAL(UpdateGraphSignal()), this, SLOT(UpdateGraph()));
-}
 
 void AudioSync::Start()
 {

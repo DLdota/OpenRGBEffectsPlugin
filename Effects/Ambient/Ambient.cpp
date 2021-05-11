@@ -1,46 +1,47 @@
 ﻿#include "Ambient.h"
 
-EffectInfo Ambient::DefineEffectDetails()
+Ambient::Ambient() : RGBEffect()
 {
-    Ambient::EffectDetails.EffectName = "Ambient";
-    Ambient::EffectDetails.EffectDescription = "Takes a portion of the screen and\nsets all of the LEDs to it";
-    Ambient::EffectDetails.IsReversable = false;
+    EffectDetails.EffectName = "Ambient";
+    EffectDetails.EffectClassName = ClassName();
+    EffectDetails.EffectDescription = "Takes a portion of the screen and\nsets all of the LEDs to it";
+    EffectDetails.IsReversable = false;
 
-    Ambient::EffectDetails.MaxSpeed = 0;
-    Ambient::EffectDetails.MinSpeed = 0;
+    EffectDetails.MaxSpeed = 0;
+    EffectDetails.MinSpeed = 0;
 
-    Ambient::EffectDetails.MaxSlider2Val = 0;
-    Ambient::EffectDetails.MinSlider2Val = 0;
-    Ambient::EffectDetails.Slider2Name   = "";
+    EffectDetails.MaxSlider2Val = 0;
+    EffectDetails.MinSlider2Val = 0;
+    EffectDetails.Slider2Name   = "";
 
-    Ambient::EffectDetails.UserColors = 0;
+    EffectDetails.UserColors = 0;
 
-    Ambient::EffectDetails.HasCustomWidgets = true;
-    Ambient::EffectDetails.HasCustomSettings = true;
+    EffectDetails.HasCustomWidgets = true;
+    EffectDetails.HasCustomSettings = true;
 
-    return Ambient::EffectDetails;
+    SCRNSLCT = new ScreenSelection();
+}
+
+Ambient::~Ambient()
+{
+    delete SCRNSLCT;
 }
 
 void Ambient::DefineExtraOptions(QLayout* ParentLayout)
-{
-    ScreenSelection* ImgPrev = new ScreenSelection();
-    SCRNSLCT = ImgPrev;
-    ParentLayout->addWidget(ImgPrev);
+{    
+    ParentLayout->addWidget(SCRNSLCT);
 }
 
-void Ambient::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int)
+void Ambient::StepEffect(std::vector<ControllerZone> controller_zones)
 {
     SCRNSLCT->GetScreen();
     QColor C = SCRNSLCT->CalcColor();
 
-    RGBColor SetCol = ToRGBColor(C.red(),C.green(),C.blue());
+    RGBColor color = ToRGBColor(C.red(),C.green(),C.blue());
 
-    for (int ControllerID = 0; ControllerID < (int)Controllers.size(); ControllerID++)
+    for (ControllerZone controller_zone : controller_zones)
     {
-        for (int ZoneID = 0; ZoneID < (int)Controllers[ControllerID].OwnedZones.size(); ZoneID++)
-        {
-            Controllers[ControllerID].Controller->SetAllZoneLEDs(Controllers[ControllerID].OwnedZones[ZoneID],SetCol);
-        }
+        controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, color);
     }
 }
 

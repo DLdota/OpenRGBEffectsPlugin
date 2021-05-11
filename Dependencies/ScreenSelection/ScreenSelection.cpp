@@ -109,25 +109,23 @@ ScreenSelection::ScreenSelection(QWidget* Parent) :
     mainLayout->addLayout(PosSliderLayout);
     mainLayout->addWidget(RadioFrame);
 
-    std::thread([=]()
-    {
-        while (true)
-        {
-            /*-------------------------------------------*\
-            | Don't do anything if the preview is hidden  |
-            | Even if it is set to auto refresh           |
-            \*-------------------------------------------*/
-            if (AutoRefresh && !Display->isHidden())
-            {
-                GetScreen();
-                std::this_thread::sleep_for(std::chrono::seconds(2));
-            }
-            else
-            {
-                std::this_thread::sleep_for(std::chrono::seconds(10));
-            }
-        }
-    }).detach();
+    // temporaly remove the preview
+    // todo : change this to support multiple instances, and avoid crash + mem leaks
+//    std::thread([=]()
+//    {
+//        while (true)
+//        {
+//            if (AutoRefresh && !Display->isHidden())
+//            {
+//                GetScreen();
+//                std::this_thread::sleep_for(std::chrono::seconds(2));
+//            }
+//            else
+//            {
+//                std::this_thread::sleep_for(std::chrono::seconds(10));
+//            }
+//        }
+//    }).detach();
 
     GetScreen();
     ToCalc = ScreenShot.toImage();
@@ -369,6 +367,7 @@ void ScreenSelection::on_ShowHide()
         this->layout()->setSizeConstraint(QLayout::SetDefaultConstraint);
         this->resize(PrevSize);
         this->adjustSize();
+        GetScreen();
     }
     else
     {
@@ -386,6 +385,12 @@ void ScreenSelection::on_ShowHide()
 
 QColor ScreenSelection::CalcColor()
 {
+    // prevents dividing by 0
+    if (ToCalc.width() == 0 || ToCalc.height() == 0)
+    {
+        return Qt::black;
+    }
+
     switch (CalcType)
     {
         case CALCULATE_AVERAGE:

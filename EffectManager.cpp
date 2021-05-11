@@ -1,8 +1,9 @@
 #include "EffectManager.h"
-#include "ORGBEffectPlugin.h"
-#include "Effects.h"
+#include "AudioManager.h"
 
 EffectManager* EffectManager::instance;
+
+EffectManager::EffectManager(): clock(new std::chrono::steady_clock()) {}
 
 EffectManager* EffectManager::Get()
 {
@@ -12,26 +13,6 @@ EffectManager* EffectManager::Get()
     }
 
     return instance;
-}
-
-EffectManager::EffectManager():
-    EffectList({
-        new SpectrumCycling,
-        new RainbowWave,
-        new StarryNight,
-        new GradientWave,
-        new Breathing,
-        new Rain,
-        new Ambient,
-        new Visor,
-        new AudioVisualizer,
-        new AudioSync,
-        new Wavy,
-        new Lightning,
-        new Bubbles
-    }),
-    CLK(new std::chrono::steady_clock())
-{
 }
 
 void EffectManager::SetEffectActive(RGBEffect* Effect)
@@ -63,94 +44,92 @@ void EffectManager::SetEffectUnActive(RGBEffect* Effect)
     }
 }
 
-void EffectManager::ResetControllers()
+void EffectManager::RemoveMapping(RGBEffect* effect)
 {
-    /*-----------------------------*\
-    | Wipe the list of controllers  |
-    \*-----------------------------*/
-    Controllers.erase(Controllers.begin(), Controllers.end());
+    effect_zones.erase(effect);
+}
 
-    for (int EffectIndex = 0; EffectIndex < int(EffectList.size()); EffectIndex++)
+void EffectManager::ClearAssignments()
+{
+    effect_zones.clear();
+}
+
+void EffectManager::Assign(std::vector<ControllerZone> controller_zones, RGBEffect* effect)
+{
+    printf("Assigning %lu zones to %s\n", controller_zones.size(), effect->EffectDetails.EffectName.c_str());
+    effect_zones[effect] = controller_zones;
+
+    // remove from other effects
+
+    std::map<RGBEffect*, std::vector<ControllerZone>>::iterator it;
+
+    for (it = effect_zones.begin(); it != effect_zones.end(); it++)
     {
-        RespectiveToPass[EffectIndex].clear();
-    }
+        RGBEffect* other_effect = it->first;
 
-    /*--------------------------------------------------------*\
-    | Grab new controllers and start making entries for them   |
-    \*--------------------------------------------------------*/
-    std::vector<RGBController*> NewControllers = ORGBPlugin::RMPointer->GetRGBControllers();
-
-    for (int i = 0; i < int(NewControllers.size()); i++)
-    {
-        bool HasDirectMode = false;
-        int  DirectID = 0;
-        for (int ModeIndex = 0; ModeIndex < int(NewControllers[i]->modes.size()); ModeIndex++ )
+        if(other_effect == effect)
         {
-            if (NewControllers[i]->modes[ModeIndex].name == "Direct")
+            continue;
+        }
+
+        std::vector<ControllerZone> remaining_zones;
+        std::vector<ControllerZone> current_zones = it->second;
+
+        for(ControllerZone zone : current_zones)
+        {
+            if(std::find(controller_zones.begin(), controller_zones.end(), zone) == controller_zones.end())
             {
-                HasDirectMode = true;
-                DirectID   = ModeIndex;
-                break;
+                remaining_zones.push_back(zone);
             }
         }
 
-        BetterController NewItem;
-        NewItem.Controller  = NewControllers[i];
-        NewItem.Index       = i;
-        NewItem.HasDirect   = HasDirectMode;
-        NewItem.DirectIndex = DirectID;
+        effect_zones[other_effect] = remaining_zones;
 
-        Controllers.push_back(NewItem);
-
-        for (int EffectIndex = 0; EffectIndex < int(EffectList.size()); EffectIndex++)
-        {
-            OwnedControllerAndZones NewZoneMap;
-            NewZoneMap.Controller = NewControllers[i];
-            RespectiveToPass[EffectIndex].push_back(NewZoneMap);
-        }
     }
 
+    effect->ASelectionWasChanged(effect_zones[effect]);
+
 }
 
-bool EffectManager::CheckReversed(int DeviceIndex, int ZoneIndex)
+std::vector<ControllerZone> EffectManager::GetAssignedZones(RGBEffect* effect)
 {
-    return Controllers[DeviceIndex].ReversedZones[ZoneIndex];
+    return effect_zones[effect];
 }
 
-std::vector<OwnedControllerAndZones> EffectManager::GetToPass(int EffectIndex)
+std::map<RGBEffect*, std::vector<ControllerZone>>EffectManager::GetEffectsMapping()
 {
-    return RespectiveToPass[EffectIndex];
+    return effect_zones;
 }
 
-void EffectManager::SetFPS(int value)
+void  EffectManager::EffectThreadFunction(RGBEffect* effect)
 {
-    FPS = value;
-    FPSDelay = 1000 / value;
+    printf("EFFECT: %s thread started\n", effect->EffectDetails.EffectName.c_str());
 
-    AudioManager::get()->SetDelay(FPSDelay);
-}
+    while (EffectThreads.find(effect) != EffectThreads.end()) {
 
-void  EffectManager::EffectThreadFunction(RGBEffect* Effect)
-{
-    printf("%s thread started\n", Effect->EffectDetails.EffectName.c_str());
+            TCount start = clock->now();
 
-    while (EffectThreads.find(Effect) != EffectThreads.end()) {
+            std::vector<ControllerZone> controller_zones =  effect_zones[effect];
 
-            TCount start = CLK->now();
+            effect->StepEffect(controller_zones);
 
-            Effect->StepEffect(RespectiveToPass[Effect->EffectDetails.EffectIndex], FPS);
+            // Use a set to update only once the controllers
+            std::set<RGBController*> controllers;
 
-            std::vector<OwnedControllerAndZones> CtrlAndZones = RespectiveToPass[Effect->EffectDetails.EffectIndex];
-
-            for(OwnedControllerAndZones ocz: CtrlAndZones)
+            for(ControllerZone controller_zone: controller_zones)
             {
-                if (ocz.OwnedZones.size() > 0)
-                {
-                    ocz.Controller->UpdateLEDs();
-                }
+                controllers.insert(controller_zone.controller);
             }
 
-            TCount end = CLK->now();
+            for(RGBController* controller : controllers)
+            {
+                controller->UpdateLEDs();
+            }
+
+            TCount end = clock->now();
+
+            int FPS = effect->GetFPS();
+            int FPSDelay = 1000 / FPS;
 
             int delta = FPSDelay - std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 
@@ -164,5 +143,5 @@ void  EffectManager::EffectThreadFunction(RGBEffect* Effect)
             }
         }
 
-    printf("%s thread ended\n", Effect->EffectDetails.EffectName.c_str());
+    printf("EFFECT: %s thread ended\n", effect->EffectDetails.EffectName.c_str());
 }

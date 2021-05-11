@@ -19,14 +19,18 @@ public:
     ~OpenRGBEffectPage();
 
     void CreateDeviceSelection(std::string DeviceName);
-    void DeviceListChanged(std::vector<BetterController> Devices);
+
+    RGBEffect* GetEffect();
+
+signals:
+    void EffectState(bool);
 
 private slots:
     void on_StartButton_clicked();
     void on_StopButton_clicked();
     void on_SpeedSlider_valueChanged(int value);
     void on_Slider2_valueChanged(int value);
-    void on_SaveSettings_clicked();
+    void on_FPS_slider_valueChanged(int value);
     void on_AutoStart_clicked();
     void on_RandomCheckbox_clicked();
     void on_OnlyFirst_clicked();
@@ -34,7 +38,7 @@ private slots:
 private:
     Ui::OpenRGBEffectPage *ui;
 
-    RGBEffect* EFCT;
+    RGBEffect* effect;
 
     std::vector<RGBController*> OwnedController;
     std::vector<RGBColor> UserColors;
@@ -44,9 +48,11 @@ private:
     bool RandomColors = false;
 
     void InitUi();
-    void LoadStartupSettings();
+    //void LoadStartupSettings();
     void StartEffect();
     void StopEffect();
+
+    std::vector<unsigned int> speeds;
 };
 
 #endif // OPENRGBEFFECTPAGE_H

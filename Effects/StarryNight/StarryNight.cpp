@@ -1,80 +1,71 @@
 #include "StarryNight.h"
 
-EffectInfo StarryNight::DefineEffectDetails()
+StarryNight::StarryNight() : RGBEffect()
 {
-    StarryNight::EffectDetails.EffectName = "Starry Night";
-    StarryNight::EffectDetails.EffectDescription = "Selects a random LED and fades it in an out";
+    EffectDetails.EffectName = "Starry Night";
+    EffectDetails.EffectClassName = ClassName();
+    EffectDetails.EffectDescription = "Selects a random LED and fades it in an out";
 
-    StarryNight::EffectDetails.IsReversable = false;
-    StarryNight::EffectDetails.MaxSpeed = 100;
-    StarryNight::EffectDetails.MinSpeed = 20;
-    StarryNight::EffectDetails.UserColors = 5;
+    EffectDetails.IsReversable = false;
+    EffectDetails.MaxSpeed = 100;
+    EffectDetails.MinSpeed = 20;
+    EffectDetails.UserColors = 5;
 
-    StarryNight::EffectDetails.MaxSlider2Val = 20;
-    StarryNight::EffectDetails.MinSlider2Val = 5;
-    StarryNight::EffectDetails.Slider2Name   = "Star Count";
+    EffectDetails.MaxSlider2Val = 20;
+    EffectDetails.MinSlider2Val = 5;
+    EffectDetails.Slider2Name   = "Star Count";
 
-    StarryNight::EffectDetails.HasCustomWidgets = false;
-    StarryNight::EffectDetails.HasCustomSettings = false;
-
-    return StarryNight::EffectDetails;
+    EffectDetails.HasCustomWidgets = false;
+    EffectDetails.HasCustomSettings = false;
 }
 
-void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
+void StarryNight::StepEffect(std::vector<ControllerZone> controller_zones)
 {
-    if (LEDPerCycle != TempLEDPerCycle)
-    {
-        LEDPerCycle = TempLEDPerCycle;
-    }
+    int LEDPerCycle = Slider2Val;
 
     int AmountMadeThisCycle = 0;
 
-    for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
+    for (unsigned int ControllerID = 0; ControllerID < controller_zones.size(); ControllerID++)
     {
         if (rand() % 2)
         {
-            for (int ZoneID = 0; ZoneID < (int)Controllers[ControllerID].OwnedZones.size(); ZoneID++)
+            int MakeForZone = 0;
+
+            if ((LEDPerCycle - (int(CurrentStars.size()))) > 0)
             {
-                if (rand() % 2)
+                MakeForZone = rand() % (LEDPerCycle - (int(CurrentStars.size())));
+            }
+
+            if ((int(CurrentStars.size()) < LEDPerCycle))
+            {
+                for (int ZonesMade = 0; ZonesMade < MakeForZone; ZonesMade++)
                 {
-                    int MakeForZone = 0;
+                    int StartingLED = controller_zones[ControllerID].start_idx();
+                    int RandomLedID = rand() % controller_zones[ControllerID].leds_count();
 
-                    if ((LEDPerCycle - (int(CurrentStars.size()))) > 0)
+                    NewStar LEDStar;
+                    LEDStar.Index = ControllerID;
+                    LEDStar.LED = (StartingLED + RandomLedID);
+                    LEDStar.state = 255;
+
+                    if (RandomColorsEnabled)
                     {
-                        MakeForZone = rand() % (LEDPerCycle - (int(CurrentStars.size())));
+                        LEDStar.Color = ToRGBColor(
+                                    rand() % 255, /* R */
+                                    rand() % 255, /* G */
+                                    rand() % 255  /* B */
+                                    );
+                    }
+                    else
+                    {
+                        LEDStar.Color = UserColors[rand() % 4];
                     }
 
-                    if ((int(CurrentStars.size()) < LEDPerCycle))
-                    {
-                        for (int ZonesMade = 0; ZonesMade < MakeForZone; ZonesMade++)
-                        {
-                            int ZiD = Controllers[ControllerID].OwnedZones[ZoneID];
-                            int StartingLED = Controllers[ControllerID].Controller->zones[ZiD].start_idx;
-                            int RandomLedID = rand() % Controllers[ControllerID].Controller->zones[ZiD].leds_count;
-
-                            NewStar LEDStar;
-                            LEDStar.ControllerIndex = ControllerID;
-                            LEDStar.LED = (StartingLED + RandomLedID);
-                            LEDStar.state = 255;
-                            if (RandomColorsEnabled)
-                            {
-                                LEDStar.Color = ToRGBColor(
-                                            rand() % 255, /* R */
-                                            rand() % 255, /* G */
-                                            rand() % 255  /* B */
-                                            );
-                            }
-                            else
-                            {
-                                LEDStar.Color = UserColors[rand() % 4];
-                            }
-
-                            CurrentStars.push_back(LEDStar);
-                            AmountMadeThisCycle += 1;
-                        }
-                    }
+                    CurrentStars.push_back(LEDStar);
+                    AmountMadeThisCycle += 1;
                 }
             }
+
         }
     }
 
@@ -82,27 +73,31 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
 
     for (int StarIndex = 0; StarIndex < (int)CurrentStars.size(); StarIndex++)
     {
-        /*-------*\
-        | Setup   |
-        \*-------*/
-        int CTRLR = CurrentStars[StarIndex].ControllerIndex;
-        hsv_t SetColor;
-        rgb2hsv(CurrentStars[StarIndex].Color,&SetColor);
+        int CTRLR = CurrentStars[StarIndex].Index;
 
-
-        float NewValue = (CurrentStars[StarIndex].state - ((float)Speed / (float)(1000/(float)FPS)));
-
-        if ((NewValue < 1) || (NewValue > 255))
+        if(CTRLR < controller_zones.size())
         {
-            ToBeDeleted.push_back(StarIndex);
-            SetColor.value = 0;
-            Controllers[CTRLR].Controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
+            hsv_t SetColor;
+            rgb2hsv(CurrentStars[StarIndex].Color,&SetColor);
+
+            float NewValue = (CurrentStars[StarIndex].state - ((float)Speed / (float)(1000/(float)FPS)));
+
+            if ((NewValue < 1) || (NewValue > 255))
+            {
+                ToBeDeleted.push_back(StarIndex);
+                SetColor.value = 0;
+                controller_zones[CTRLR].controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
+            }
+            else
+            {
+                SetColor.value = CurrentStars[StarIndex].state;
+                controller_zones[CTRLR].controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
+                CurrentStars[StarIndex].state -= (float(Speed) / float(FPS) );
+            }
         }
         else
         {
-            SetColor.value = CurrentStars[StarIndex].state;
-            Controllers[CTRLR].Controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
-            CurrentStars[StarIndex].state -= (float(Speed) / float(FPS) );
+             ToBeDeleted.push_back(StarIndex);
         }
     }
 
@@ -113,21 +108,15 @@ void StarryNight::StepEffect(std::vector<OwnedControllerAndZones> Controllers, i
     }
 }
 
-void StarryNight::Slider2Changed(int LEDCount)
-{
-    TempLEDPerCycle = LEDCount;
-}
 
-void StarryNight::ASelectionWasChanged(std::vector<OwnedControllerAndZones> Controllers)
+void StarryNight::ASelectionWasChanged(std::vector<ControllerZone> controller_zones)
 {
+    RGBColor OFF = ToRGBColor(0,0,0);
+
     CurrentStars.clear();
 
-    for (int ControllerID = 0; ControllerID < (int)Controllers.size(); ControllerID++)
+    for(ControllerZone controller_zone : controller_zones)
     {
-        for (int ZoneID = 0; ZoneID < (int)Controllers[ControllerID].OwnedZones.size(); ZoneID++)
-        {
-            Controllers[ControllerID].Controller->SetAllZoneLEDs(Controllers[ControllerID].OwnedZones[ZoneID],ToRGBColor(0,0,0));
-        }
-        Controllers[ControllerID].Controller->UpdateLEDs();
+        controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, OFF);
     }
 }

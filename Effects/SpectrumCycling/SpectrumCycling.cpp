@@ -2,55 +2,39 @@
 #include "SpectrumCycling.h"
 #include "hsv.h"
 
-EffectInfo SpectrumCycling::DefineEffectDetails()
+SpectrumCycling::SpectrumCycling() : RGBEffect()
 {
-    SpectrumCycling::EffectDetails.EffectName = "Spectrum Cycling";
-    SpectrumCycling::EffectDetails.EffectDescription = "Goes through every solid color";
+    EffectDetails.EffectName = "Spectrum Cycling";
+    EffectDetails.EffectClassName = ClassName();
+    EffectDetails.EffectDescription = "Goes through every solid color";
 
-    SpectrumCycling::EffectDetails.IsReversable = false;
-    SpectrumCycling::EffectDetails.MaxSpeed     = 100;
-    SpectrumCycling::EffectDetails.MinSpeed     = 1;
-    SpectrumCycling::EffectDetails.UserColors   = 0;
+    EffectDetails.IsReversable = false;
+    EffectDetails.MaxSpeed     = 100;
+    EffectDetails.MinSpeed     = 1;
+    EffectDetails.UserColors   = 0;
 
-    SpectrumCycling::EffectDetails.MaxSlider2Val = 0;
-    SpectrumCycling::EffectDetails.MinSlider2Val = 0;
-    SpectrumCycling::EffectDetails.Slider2Name   = "";
+    EffectDetails.MaxSlider2Val = 0;
+    EffectDetails.MinSlider2Val = 0;
+    EffectDetails.Slider2Name   = "";
 
-    SpectrumCycling::EffectDetails.HasCustomWidgets = false;
-    SpectrumCycling::EffectDetails.HasCustomSettings = false;
-
-    return SpectrumCycling::EffectDetails;
+    EffectDetails.HasCustomWidgets = false;
+    EffectDetails.HasCustomSettings = false;
 }
 
-void SpectrumCycling::StepEffect(std::vector<OwnedControllerAndZones> PassedTo, int FPS)
+void SpectrumCycling::StepEffect(std::vector<ControllerZone> controller_zones)
 {
     hsv_t HSVVal;
+
     HSVVal.value = 255;
     HSVVal.saturation = 255;
-
     HSVVal.hue = CurrentHue;
-    for (int i = 0; i < int(PassedTo.size()); i++)
+
+    for(ControllerZone controller_zone: controller_zones)
     {
-        for (int ZoneID = 0; ZoneID < int(PassedTo[i].OwnedZones.size()); ZoneID++)
-        {
-            PassedTo[i].Controller->SetAllZoneLEDs(PassedTo[i].OwnedZones[ZoneID],RGBColor(hsv2rgb(&HSVVal)));
-        }
+        controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, RGBColor(hsv2rgb(&HSVVal)));
     }
 
-
-    if (CurrentHue < 360)
-    {
-        CurrentHue = CurrentHue + ((float)Speed / (float)FPS);
-    }
-    else
-    {
-        CurrentHue = 0.0000;
-    }
-
-}
-
-void SpectrumCycling::SetSpeed(int Speed)
-{
-    SpectrumCycling::Speed = Speed;
+    CurrentHue += ((float)Speed / (float)FPS);
+    CurrentHue = CurrentHue % 360;
 }
 

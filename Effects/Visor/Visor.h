@@ -1,42 +1,24 @@
 #ifndef Visor_H
 #define Visor_H
 
-#include "hsv.h"
 #include "RGBEffect.h"
-#include "OpenRGBEffectPage.h"
+#include "hsv.h"
 
 class Visor: public RGBEffect
 {
 public:
-    Visor() {};
+    Visor();
     ~Visor() {};
 
-    EffectInfo  DefineEffectDetails()                                       override;
-    void        DefineExtraOptions(QLayout*)                                override {};
-    void        StepEffect(std::vector<OwnedControllerAndZones>, int)       override;
+    static std::string const ClassName() {return "Visor";}
 
-    void        SetSpeed(int Speed)                                         override;
-    void        SetUserColors(std::vector<RGBColor>)                        override;
-    void        Slider2Changed(int)                                         override;
-    void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>)  override {};
-    void        ToggleRandomColors(bool)                                    override;
-
-    void                    SetWidth(int NewWidth);
-    int                     GetSpeed()                                      override {return Speed;      };
-    int                     GetSlider2Val()                                 override {return 0;          };
-    std::vector<RGBColor>   GetUserColors()                                 override {return UserColors; };
-
-    void            EffectState(bool)                                       override {};
-
-    void            LoadCustomSettings(json)                                override {};
-    json            SaveCustomSettings(json)                                override {return json();     };
-
-    EffectInfo EffectDetails;
+    void StepEffect(std::vector<ControllerZone>) override;
+    void SetUserColors(std::vector<RGBColor>) override;
+    void SetSlider2Val(unsigned int) override;
+    unsigned int GetSlider2Val() override;
+    void SetRandomColorsEnabled(bool) override;
 
 private:
-    float                   Speed = 10;
-    std::vector<RGBColor>   UserColors;    
-    bool                    Random = false;
     bool                    Dir = true;
     int                     width = 10;
     float                   Progress = 0;
@@ -46,8 +28,9 @@ private:
     float                   current_tail_hue;
 
     RGBColor GetColor(int i, int count);
-    void     GenerateRandomColors();
 
+    void GenerateRandomColors();
+    void SetWidth(int);
 };
 
 #endif // Visor_H

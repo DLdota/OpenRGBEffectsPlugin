@@ -17,30 +17,15 @@ public:
     explicit Bubbles(QWidget *parent = nullptr);
     ~Bubbles();
 
-    EffectInfo  DefineEffectDetails()                                       override;
-    void        DefineExtraOptions(QLayout*)                                override;
-    void        StepEffect(std::vector<OwnedControllerAndZones>, int)       override;
-    void        SetSpeed(int)                                               override {};
-    void        SetUserColors(std::vector<RGBColor>)                        override;
-    void        Slider2Changed(int)                                         override {};
-    void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>)  override {};
-    void        ToggleRandomColors(bool)                                    override;
+    static std::string const ClassName() {return "Bubbles";}
 
-    int                     GetSpeed()                                      override {return 0;          };
-    int                     GetSlider2Val()                                 override {return 0;          };
-    std::vector<RGBColor>   GetUserColors()                                 override {return UserColors; };
-
-    void                    EffectState(bool)                               override {};
-
-    void                    LoadCustomSettings(json)                        override;
-    json                    SaveCustomSettings(json)                        override;
-
-    EffectInfo EffectDetails;
+    void DefineExtraOptions(QLayout*) override;
+    void StepEffect(std::vector<ControllerZone>) override;
+    void LoadCustomSettings(json) override;
+    json SaveCustomSettings(json) override;
 
 private:
     Ui::Bubbles   *ui;
-
-    bool random_enabled = false;
 
     std::vector<double>    speeds;
     std::vector<double>    bubbles;

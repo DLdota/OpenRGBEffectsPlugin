@@ -5,9 +5,26 @@
 \*-----------------------------*/
 Wavy::Wavy(QWidget *parent) :
     QWidget(parent),
+    RGBEffect(),
     ui(new Ui::Wavy)
 {
     ui->setupUi(this);
+
+    EffectDetails.EffectName = "Wavy";
+    EffectDetails.EffectClassName = ClassName();
+    EffectDetails.EffectDescription = "Alternate colors like waves";
+
+    EffectDetails.IsReversable = false;
+    EffectDetails.MaxSpeed     = 0;
+    EffectDetails.MinSpeed     = 0;
+    EffectDetails.UserColors   = 2;
+
+    EffectDetails.MaxSlider2Val = 0;
+    EffectDetails.MinSlider2Val = 0;
+    EffectDetails.Slider2Name   = "";
+
+    EffectDetails.HasCustomWidgets = true;
+    EffectDetails.HasCustomSettings = true;
 
     ui->oscillation_speed_slider->setMinimum(1);
     ui->oscillation_speed_slider->setMaximum(200);
@@ -26,70 +43,47 @@ Wavy::~Wavy()
     delete ui;
 }
 
-EffectInfo Wavy::DefineEffectDetails()
-{
-    Wavy::EffectDetails.EffectName = "Wavy";
-    Wavy::EffectDetails.EffectDescription = "Alternate colors like waves";
-
-    Wavy::EffectDetails.IsReversable = false;
-    Wavy::EffectDetails.MaxSpeed     = 0;
-    Wavy::EffectDetails.MinSpeed     = 0;
-    Wavy::EffectDetails.UserColors   = 2;
-
-    Wavy::EffectDetails.MaxSlider2Val = 0;
-    Wavy::EffectDetails.MinSlider2Val = 0;
-    Wavy::EffectDetails.Slider2Name   = "";
-
-    Wavy::EffectDetails.HasCustomWidgets = true;
-    Wavy::EffectDetails.HasCustomSettings = true;
-
-    return Wavy::EffectDetails;
-}
-
 void Wavy::DefineExtraOptions(QLayout* layout)
 {
     layout->addWidget(this);
 }
 
-void Wavy::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
+void Wavy::StepEffect(std::vector<ControllerZone> controller_zones)
 {
-
-    for (int ControllerID = 0; ControllerID < int(Controllers.size()); ControllerID++)
+    for(ControllerZone controller_zone : controller_zones)
     {
-        for (int ZoneID = 0; ZoneID < int(Controllers[ControllerID].OwnedZones.size()); ZoneID++)
+        zone_type ZT = controller_zone.type();
+
+        if (ZT == ZONE_TYPE_LINEAR)
         {
-            zone_type ZT = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].type;
+            int start_idx = controller_zone.start_idx();
+            int leds_count = controller_zone.leds_count();
 
-            if (ZT == ZONE_TYPE_LINEAR)
+            for (int LedID = 0; LedID < leds_count; LedID++)
             {
-                int SetLEDIndex = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].start_idx;
-                int led_count = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].leds_count;
-
-                for (int LedID = 0; LedID < led_count; LedID++)
-                {
-                    Controllers[ControllerID].Controller->SetLED((SetLEDIndex+LedID), GetColor(LedID, led_count));
-                }
+                controller_zone.controller->SetLED((start_idx + LedID), GetColor(LedID, leds_count));
             }
-
-            else if (ZT == ZONE_TYPE_MATRIX)
-            {
-                int cols = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->width;
-                int rows = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->height;
-
-                for (int col_id = 0; col_id < cols; col_id++)
-                {
-                    RGBColor color = GetColor(col_id, cols);
-
-                    for (int row_id = 0; row_id < rows; row_id++)
-                    {
-                        int LedID = Controllers[ControllerID].Controller->zones[Controllers[ControllerID].OwnedZones[ZoneID]].matrix_map->map[((row_id * cols) + col_id)];
-                        Controllers[ControllerID].Controller->SetLED(LedID, color);
-                    }
-                }
-            }
-
         }
+
+        else if (ZT == ZONE_TYPE_MATRIX)
+        {
+            int cols = controller_zone.matrix_map_width();
+            int rows = controller_zone.matrix_map_height();
+
+            for (int col_id = 0; col_id < cols; col_id++)
+            {
+                RGBColor color = GetColor(col_id, cols);
+
+                for (int row_id = 0; row_id < rows; row_id++)
+                {
+                    int LedID = controller_zone.controller->zones[controller_zone.zone_idx].matrix_map->map[((row_id * cols) + col_id)];
+                    controller_zone.controller->SetLED(LedID, color);
+                }
+            }
+        }
+
     }
+
 
     if(Dir)
     {
@@ -118,7 +112,7 @@ void Wavy::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
         }
     }
 
-    if(IsRandomColors && SineProgress >= -0.01f && SineProgress <= 0.01f)
+    if(RandomColorsEnabled && SineProgress >= -0.01f && SineProgress <= 0.01f)
     {
         GenerateRandomColors();
     }
@@ -134,37 +128,6 @@ void Wavy::StepEffect(std::vector<OwnedControllerAndZones> Controllers, int FPS)
     }
 }
 
-void Wavy::SetUserColors(std::vector<RGBColor> NewUserColors)
-{
-    UserColors = NewUserColors;
-}
-
-void Wavy::ToggleRandomColors(bool RandomEnabled)
-{
-    IsRandomColors = RandomEnabled;
-}
-
-void Wavy::LoadCustomSettings(json Settings)
-{
-    /*-------------------------------*\
-    | Load settings and apply in GUI  |
-    \*-------------------------------*/
-    if (Settings.contains("WaveFrequency"))    WaveFrequency    = Settings["WaveFrequency"];
-    if (Settings.contains("WaveSpeed"))        WaveSpeed        = Settings["WaveSpeed"];
-    if (Settings.contains("OscillationSpeed")) OscillationSpeed = Settings["OscillationSpeed"];
-
-    ui->wave_freq_slider->setValue(WaveFrequency);
-    ui->wave_speed_slider->setValue(WaveSpeed);
-    ui->oscillation_speed_slider->setValue(OscillationSpeed);
-}
-
-json Wavy::SaveCustomSettings(json Settings)
-{
-    Settings["WaveFrequency"]    = WaveFrequency;
-    Settings["WaveSpeed"]        = WaveSpeed;
-    Settings["OscillationSpeed"] = OscillationSpeed;
-    return Settings;
-}
 
 /*-----------------*\
 | Custom Functions  |
@@ -172,6 +135,7 @@ json Wavy::SaveCustomSettings(json Settings)
 void Wavy::GenerateRandomColors()
 {
     RandomColors.clear();
+
     int r = rand() % 255;
     int g = rand() % 255;
     int b = rand() % 255;
@@ -191,13 +155,11 @@ RGBColor Wavy::Interpolate(RGBColor color1, RGBColor color2, float fraction)
     unsigned char   b1 = RGBGetBValue(color1);
     unsigned char   b2 = RGBGetBValue(color2);
 
-    RGBColor color = RGBColor(ToRGBColor(
+    return RGBColor(ToRGBColor(
                         (int) ((r2 - r1) * fraction + r1),
                         (int) ((g2 - g1) * fraction + g1),
                         (int) ((b2 - b1) * fraction + b1)
                         ));
-
-    return color;
 }
 
 RGBColor Wavy::GetColor(int i, int count)
@@ -207,7 +169,7 @@ RGBColor Wavy::GetColor(int i, int count)
     float wave_height = SineProgress * sin(WaveFrequency * rad);
     float h = 0.5 + wave_height/2;
 
-    if(IsRandomColors)
+    if(RandomColorsEnabled)
     {
         return Interpolate(RandomColors[0], RandomColors[1], h);
     }
@@ -218,10 +180,25 @@ RGBColor Wavy::GetColor(int i, int count)
 
 }
 
+void Wavy::LoadCustomSettings(json Settings)
+{
+    if (Settings.contains("WaveFrequency"))    WaveFrequency    = Settings["WaveFrequency"];
+    if (Settings.contains("WaveSpeed"))        WaveSpeed        = Settings["WaveSpeed"];
+    if (Settings.contains("OscillationSpeed")) OscillationSpeed = Settings["OscillationSpeed"];
 
-/*---------*\
-| UI slots  |
-\*---------*/
+    ui->wave_freq_slider->setValue(WaveFrequency);
+    ui->wave_speed_slider->setValue(WaveSpeed);
+    ui->oscillation_speed_slider->setValue(OscillationSpeed);
+}
+
+json Wavy::SaveCustomSettings(json Settings)
+{
+    Settings["WaveFrequency"]    = WaveFrequency;
+    Settings["WaveSpeed"]        = WaveSpeed;
+    Settings["OscillationSpeed"] = OscillationSpeed;
+    return Settings;
+}
+
 void Wavy::on_wave_freq_slider_valueChanged(int NewVal)
 {
     WaveFrequency = NewVal;

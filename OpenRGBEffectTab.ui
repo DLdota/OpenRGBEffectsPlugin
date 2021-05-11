@@ -39,7 +39,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QTabWidget" name="LeftTabBar">
+    <widget class="QTabWidget" name="EffectTabs">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>1</horstretch>
@@ -52,7 +52,7 @@
     </widget>
    </item>
    <item alignment="Qt::AlignHCenter">
-    <widget class="QFrame" name="Device_Select_And_FPS_Slider">
+    <widget class="QFrame" name="right_frame">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -74,181 +74,45 @@
      <property name="lineWidth">
       <number>1</number>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0">
       <property name="spacing">
-       <number>0</number>
+       <number>9</number>
       </property>
       <property name="leftMargin">
-       <number>0</number>
+       <number>9</number>
       </property>
       <property name="topMargin">
        <number>0</number>
       </property>
       <property name="rightMargin">
-       <number>0</number>
+       <number>9</number>
       </property>
       <property name="bottomMargin">
-       <number>5</number>
+       <number>0</number>
       </property>
       <item>
-       <layout class="QHBoxLayout" name="SelectAllSpacing">
-        <property name="leftMargin">
-         <number>5</number>
-        </property>
-        <property name="topMargin">
-         <number>5</number>
-        </property>
-        <property name="rightMargin">
-         <number>5</number>
-        </property>
-        <property name="bottomMargin">
-         <number>5</number>
-        </property>
-        <item>
-         <widget class="QPushButton" name="SelectAll">
-          <property name="text">
-           <string>Select all</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="DeviceList" name="device_list" native="true"/>
       </item>
       <item>
-       <widget class="QTableWidget" name="SelectDevices">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QPushButton" name="save_settings">
+        <property name="text">
+         <string>Save settings</string>
         </property>
-        <property name="minimumSize">
-         <size>
-          <width>332</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="lineWidth">
-         <number>0</number>
-        </property>
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
-        </property>
-        <property name="selectionMode">
-         <enum>QAbstractItemView::NoSelection</enum>
-        </property>
-        <attribute name="verticalHeaderVisible">
-         <bool>false</bool>
-        </attribute>
        </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="FPSLayout">
-        <property name="spacing">
-         <number>5</number>
-        </property>
-        <property name="leftMargin">
-         <number>2</number>
-        </property>
-        <property name="topMargin">
-         <number>2</number>
-        </property>
-        <property name="rightMargin">
-         <number>2</number>
-        </property>
-        <item>
-         <layout class="QHBoxLayout" name="FPSLabelSizing">
-          <property name="sizeConstraint">
-           <enum>QLayout::SetFixedSize</enum>
-          </property>
-          <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QLabel" name="FPSLabel">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>FPS:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="FPSCount">
-            <property name="text">
-             <string>0</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QSlider" name="FPSSlider">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>260</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>260</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="FPSSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DeviceList</class>
+   <extends>QWidget</extends>
+   <header location="global">DeviceList.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

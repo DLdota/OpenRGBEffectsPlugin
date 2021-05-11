@@ -1,6 +1,7 @@
 #ifndef EFFECTMANAGER_H
 #define EFFECTMANAGER_H
 
+#include "ControllerZone.h"
 #include "RGBEffect.h"
 
 /*-----------------------------------------------------------------------------------------------*\
@@ -14,31 +15,25 @@ public:
     static EffectManager* Get();
 
     void SetEffectActive(RGBEffect*);
-    void SetEffectUnActive(RGBEffect*);
-    bool CheckReversed(int, int);
-    std::vector<OwnedControllerAndZones> GetToPass(int);
-    void SetFPS(int);
-    void ResetControllers();
+    void SetEffectUnActive(RGBEffect*);    
+    void RemoveMapping(RGBEffect*);
 
-    const std::vector<RGBEffect*> EffectList;
-
-    std::vector<std::vector<OwnedControllerAndZones>>    RespectiveToPass;
-    std::vector<BetterController>                        Controllers;
+    void ClearAssignments();
+    void Assign(std::vector<ControllerZone>, RGBEffect*);
+    std::vector<ControllerZone> GetAssignedZones(RGBEffect*);
+    std::map<RGBEffect*, std::vector<ControllerZone>> GetEffectsMapping();
 
 private:
     EffectManager();
     ~EffectManager() {};
-
-    static EffectManager*   instance;
-
-    std::vector<RGBEffect*> ActiveEffects;
-    int                     FPSDelay;
-    int                     FPS;
-
-    std::map<RGBEffect*,std::thread*> EffectThreads;
     void EffectThreadFunction(RGBEffect*);
 
-    std::chrono::steady_clock* CLK;
+    static EffectManager*   instance;
+    std::vector<RGBEffect*> ActiveEffects;   
+    std::map<RGBEffect*,std::thread*> EffectThreads;
+    std::chrono::steady_clock* clock;
+
+    std::map<RGBEffect*, std::vector<ControllerZone>> effect_zones;
 };
 
 #endif // EFFECTMANAGER_H

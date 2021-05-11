@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DeviceListItem</class>
+ <widget class="QWidget" name="DeviceListItem">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>407</width>
+    <height>249</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="toolTip">
+   <string>This device doesn't have direct mode
+Using an effect on a device WILL damage the flash or controller</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" columnstretch="10,0,0,0">
+   <property name="rightMargin">
+    <number>9</number>
+   </property>
+   <item row="0" column="2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="rightMargin">
+      <number>4</number>
+     </property>
+     <item>
+      <widget class="QCheckBox" name="enable">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="reverse">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0" colspan="4">
+    <widget class="QTableWidget" name="zones">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" alignment="Qt::AlignLeft">
+    <widget class="QLabel" name="device_name">
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLabel" name="danger_not_direct">
+     <property name="text">
+      <string>⚠</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

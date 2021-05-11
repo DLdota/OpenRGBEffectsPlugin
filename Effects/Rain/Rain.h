@@ -5,8 +5,7 @@
 
 struct Drops
 {
-    int ControllerIndex;
-    int  ZoneIndex;
+    int Index;
 
     zone_type   ZT;
     int   LEDCount;
@@ -24,24 +23,19 @@ struct Drops
 class Rain: public RGBEffect
 {
 public:
-    Rain() {};
-    ~Rain() {};
+    Rain();
+    ~Rain(){}
 
-    EffectInfo  DefineEffectDetails()                                      override;
-    void        StepEffect(std::vector<OwnedControllerAndZones>, int)      override;
+    static std::string const ClassName() { return "Rain"; }
 
-    void        ASelectionWasChanged(std::vector<OwnedControllerAndZones>) override;
-    void                    EffectState(bool)                              override {};
+    void StepEffect(std::vector<ControllerZone>) override;
+    void ASelectionWasChanged(std::vector<ControllerZone>) override;
 
-    void                    LoadCustomSettings(json)                       override {};
-    json                    SaveCustomSettings(json)                       override {return json(); };
-
-    EffectInfo              EffectDetails;
 private:
-    //int DropCount;
-    std::vector<Drops> CurrentDrops;
-    int      PrevNum;
-    std::vector<std::vector<bool>> HasEffect;
+    std::vector<Drops> CurrentDrops;   
+    std::vector<bool> HasEffect;
+
+    int PrevNum;
 };
 
 #endif // RAIN_H
