@@ -385,7 +385,6 @@ private:
     int frgd_mode;
 
     std::vector<char *> audio_devices;
-    float FPS;
 
     float bkgd_step;
 
