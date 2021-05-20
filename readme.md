@@ -33,38 +33,26 @@ After running the OpenRGB build you downloaded from the link the effects tab sho
 ## What Effects do you have?
 
 * Spectrum Cycling
-
 * Rainbow Wave
-
 * Starry night
-
 * Gradient Cycling
-
 * Breathing
-
 * Rain
-
 * Ambient
-
-* Visor (By Morg)
+* Visor
+* Bubbles
+* Wavy
 
 ### Audio Effects (Backend created by Morg)
 
 * Audio Visualizer (A port of [Keyboard visualizer](https://gitlab.com/CalcProgrammer1/KeyboardVisualizer))
-
-* Audio Sync (Morgs implementation of Audio Visualizer)
+* Audio Sync (an other audio visualizer with different options)
 
 ## Common Issues
 
-### Only 1 effect is working?
+### OpenRGB does not start with the plugin
 
-The way device/zone selection works prevents a device being in use by 2 Effects
-
-If you check a device in Effect 1 and then go to Effect 2 and press start it won't do anything because Effect 1 has the device
-
-You will need to go back to Effect 1 and uncheck the device. Then go to Effect 2 and reselect the device
-
-If you don't know which Effect has the device/zone then you can hover over the checkbox and it will give you a tooltip telling you where it is
+OpenRGB and EffectsPLugin are under heavy development, make sure to run latest pipeline from both.
 
 ### My CPU usage is really high
 
