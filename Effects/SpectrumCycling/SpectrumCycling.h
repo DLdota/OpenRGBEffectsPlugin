@@ -2,6 +2,7 @@
 #define SPECTRUMCYCLING_H
 
 #include "RGBEffect.h"
+#include "EffectRegisterer.h"
 
 class SpectrumCycling:
 public RGBEffect
@@ -9,6 +10,8 @@ public RGBEffect
 public:
     SpectrumCycling();
     ~SpectrumCycling() {};
+
+    EFFECT_REGISTERER(ClassName(), [](){return new SpectrumCycling;});
 
     static std::string const ClassName() {return "SpectrumCycling";}
 

@@ -3,12 +3,15 @@
 
 #include "RGBEffect.h"
 #include "ScreenSelection.h"
+#include "EffectRegisterer.h"
 
 class Ambient : public RGBEffect
 {
 public:
     Ambient();
     ~Ambient();
+
+    EFFECT_REGISTERER(ClassName(), [](){return new Ambient;});
 
     static std::string const ClassName() {return "Ambient";}
 

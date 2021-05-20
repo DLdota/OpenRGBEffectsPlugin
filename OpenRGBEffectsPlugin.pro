@@ -26,13 +26,14 @@ INCLUDEPATH +=                                                                  
     OpenRGB/dependencies/json                                                                   \
 
 HEADERS +=                                                                                      \
-    ControllerZone.h \
+    ControllerZone.h                                                                            \
     ControllerZoneList.h                                                                        \
     DeviceList.h                                                                                \
-    DeviceListItem.h \
+    DeviceListItem.h                                                                            \
     EffectList.h                                                                                \
     EffectTabHeader.h                                                                           \
     Effects/Bubbles/Bubbles.h                                                                   \
+    Effects/EffectRegisterer.h                                                                  \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -71,7 +72,7 @@ HEADERS +=                                                                      
 SOURCES +=                                                                                      \
     ControllerZoneList.cpp                                                                      \
     DeviceList.cpp                                                                              \
-    DeviceListItem.cpp \
+    DeviceListItem.cpp                                                                          \
     EffectList.cpp                                                                              \
     EffectTabHeader.cpp                                                                         \
     Effects/Bubbles/Bubbles.cpp                                                                 \
@@ -89,7 +90,7 @@ SOURCES +=                                                                      
 FORMS +=                                                                                        \
     ControllerZoneList.ui                                                                       \
     DeviceList.ui                                                                               \
-    DeviceListItem.ui \
+    DeviceListItem.ui                                                                           \
     EffectList.ui                                                                               \
     EffectTabHeader.ui                                                                          \
     Effects/Bubbles/Bubbles.ui                                                                  \

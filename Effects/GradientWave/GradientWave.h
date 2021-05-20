@@ -2,12 +2,15 @@
 #define GRADIENTWAVE_H
 
 #include "RGBEffect.h"
+#include "EffectRegisterer.h"
 
 class GradientWave: public RGBEffect
 {
 public:
     GradientWave();
     ~GradientWave(){}
+
+    EFFECT_REGISTERER(ClassName(), [](){return new GradientWave;});
 
     static std::string const ClassName() { return "GradientWave"; }
 

@@ -1,5 +1,6 @@
 #include "Breathing.h"
-#include "hsv.h"
+
+REGISTER_EFFECT(Breathing);
 
 Breathing::Breathing(): RGBEffect()
 {

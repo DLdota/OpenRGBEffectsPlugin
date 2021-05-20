@@ -2,6 +2,7 @@
 #define Visor_H
 
 #include "RGBEffect.h"
+#include "EffectRegisterer.h"
 #include "hsv.h"
 
 class Visor: public RGBEffect
@@ -9,6 +10,8 @@ class Visor: public RGBEffect
 public:
     Visor();
     ~Visor() {};
+
+    EFFECT_REGISTERER(ClassName(), [](){return new Visor;});
 
     static std::string const ClassName() {return "Visor";}
 

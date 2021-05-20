@@ -1,5 +1,6 @@
 #include "GradientWave.h"
-#include "EffectManager.h"
+
+REGISTER_EFFECT(GradientWave);
 
 GradientWave::GradientWave() : RGBEffect()
 {

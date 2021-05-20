@@ -1,8 +1,7 @@
 #include "Lightning.h"
 
-/*------------------------------*\
-| RGBEffect Standard Functions  |
-\*-----------------------------*/
+REGISTER_EFFECT(Lightning);
+
 Lightning::Lightning(QWidget *parent) :
     QWidget(parent),
     RGBEffect()

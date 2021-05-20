@@ -6,6 +6,7 @@
 #include "hsv.h"
 #include "ctkrangeslider.h"
 #include "AudioManager.h"
+#include "EffectRegisterer.h"
 
 #include <QLayout>
 #include <QComboBox>
@@ -55,6 +56,8 @@ class AudioSync: public QObject, public RGBEffect
 public:
     AudioSync();
     ~AudioSync();
+
+    EFFECT_REGISTERER(ClassName(), [](){return new AudioSync;});
 
     static std::string const ClassName() {return "AudioSync";}
 

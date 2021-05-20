@@ -2,6 +2,7 @@
 #define BREATHING_H
 
 #include "RGBEffect.h"
+#include "EffectRegisterer.h"
 #include "hsv.h"
 
 class Breathing: public RGBEffect
@@ -9,6 +10,8 @@ class Breathing: public RGBEffect
 public:
     Breathing();
     ~Breathing(){}
+
+    EFFECT_REGISTERER(ClassName(), [](){return new Breathing;});
 
     static std::string const ClassName() { return "Breathing"; }
 

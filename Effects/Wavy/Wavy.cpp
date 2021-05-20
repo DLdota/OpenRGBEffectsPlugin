@@ -1,8 +1,7 @@
 #include "Wavy.h"
 
-/*------------------------------*\
-| RGBEffect Standard Functions  |
-\*-----------------------------*/
+REGISTER_EFFECT(Wavy);
+
 Wavy::Wavy(QWidget *parent) :
     QWidget(parent),
     RGBEffect(),

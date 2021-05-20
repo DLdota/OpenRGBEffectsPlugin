@@ -1,6 +1,7 @@
 #include "RainbowWave.h"
-#include "EffectManager.h"
 #include "hsv.h"
+
+RainbowWave::_register RainbowWave::_registerer;
 
 RainbowWave::RainbowWave() : RGBEffect()
 {

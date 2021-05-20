@@ -5,6 +5,7 @@
 #include "ui_Wavy.h"
 #include <QWidget>
 #include "RGBEffect.h"
+#include "EffectRegisterer.h"
 
 #include <math.h>
 #include <algorithm>
@@ -20,6 +21,8 @@ class Wavy: public QWidget, public RGBEffect
 public:
     explicit Wavy(QWidget *parent = nullptr);
     ~Wavy();
+
+    EFFECT_REGISTERER(ClassName(), [](){return new Wavy;});
 
     static std::string const ClassName() {return "Wavy";}
 

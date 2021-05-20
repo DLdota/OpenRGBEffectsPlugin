@@ -6,6 +6,7 @@
 
 #include "hsv.h"
 #include "RGBEffect.h"
+#include "EffectRegisterer.h"
 
 class Lightning: public QWidget, public RGBEffect
 {
@@ -14,6 +15,8 @@ class Lightning: public QWidget, public RGBEffect
 public:
     explicit Lightning(QWidget *parent = nullptr);
     ~Lightning(){}
+
+    EFFECT_REGISTERER(ClassName(), [](){return new Lightning;});
 
     static std::string const ClassName() {return "Lightning";}
 

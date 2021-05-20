@@ -1,6 +1,8 @@
 #include "Bubbles.h"
 #include "hsv.h"
 
+REGISTER_EFFECT(Bubbles);
+
 Bubbles::Bubbles(QWidget *parent) :
     QWidget(parent),
     RGBEffect(),

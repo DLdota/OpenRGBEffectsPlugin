@@ -25,6 +25,7 @@ bool    ledstrip_mirror_y       = false;
 bool    ledstrip_single_color   = false;
 int     ledstrip_rotate_x       = 0;
 
+REGISTER_EFFECT(AudioVisualizer);
 
 /*----------*\
 | Functions  |

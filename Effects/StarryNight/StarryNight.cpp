@@ -1,4 +1,7 @@
 #include "StarryNight.h"
+#include "hsv.h"
+
+REGISTER_EFFECT(StarryNight);
 
 StarryNight::StarryNight() : RGBEffect()
 {
@@ -73,7 +76,7 @@ void StarryNight::StepEffect(std::vector<ControllerZone> controller_zones)
 
     for (int StarIndex = 0; StarIndex < (int)CurrentStars.size(); StarIndex++)
     {
-        int CTRLR = CurrentStars[StarIndex].Index;
+        unsigned int CTRLR = CurrentStars[StarIndex].Index;
 
         if(CTRLR < controller_zones.size())
         {

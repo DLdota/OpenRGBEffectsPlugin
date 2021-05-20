@@ -1,9 +1,8 @@
 #include "AudioSync.h"
 #include "math.h"
 
-/*------------------------*\
-| Standard Effect Members  |
-\*------------------------*/
+REGISTER_EFFECT(AudioSync);
+
 AudioSync::AudioSync(): QObject(nullptr) , RGBEffect()
 {
     EffectDetails.EffectName = "Audio Sync";

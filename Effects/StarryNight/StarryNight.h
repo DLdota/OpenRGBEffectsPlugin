@@ -2,15 +2,14 @@
 #define STARRYNIGHT_H
 
 #include "RGBEffect.h"
-#include <stdlib.h>
-#include <hsv.h>
+#include "EffectRegisterer.h"
 
 struct NewStar
 {
-    int         Index;
-    int         LED;
-    float       state;
-    RGBColor    Color;
+    unsigned int        Index;
+    unsigned int        LED;
+    float               state;
+    RGBColor            Color;
 };
 
 class StarryNight: public RGBEffect
@@ -18,6 +17,8 @@ class StarryNight: public RGBEffect
 public:
     StarryNight();
     ~StarryNight() {};
+
+    EFFECT_REGISTERER(ClassName(), [](){return new StarryNight;});
 
     static std::string const ClassName() {return "StarryNight";}
 

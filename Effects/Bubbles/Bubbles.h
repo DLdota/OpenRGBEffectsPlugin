@@ -4,6 +4,7 @@
 #include "ui_Bubbles.h"
 #include <QWidget>
 #include "RGBEffect.h"
+#include "EffectRegisterer.h"
 
 namespace Ui {
 class Bubbles;
@@ -16,6 +17,8 @@ class Bubbles: public QWidget, public RGBEffect
 public:
     explicit Bubbles(QWidget *parent = nullptr);
     ~Bubbles();
+
+    EFFECT_REGISTERER(ClassName(), [](){return new Bubbles;});
 
     static std::string const ClassName() {return "Bubbles";}
 

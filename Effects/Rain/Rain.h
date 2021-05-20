@@ -2,6 +2,7 @@
 #define RAIN_H
 
 #include "RGBEffect.h"
+#include "EffectRegisterer.h"
 
 struct Drops
 {
@@ -25,6 +26,8 @@ class Rain: public RGBEffect
 public:
     Rain();
     ~Rain(){}
+
+    EFFECT_REGISTERER(ClassName(), [](){return new Rain;});
 
     static std::string const ClassName() { return "Rain"; }
 

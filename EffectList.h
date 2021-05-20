@@ -2,7 +2,6 @@
 #define EFFECTLIST_H
 
 #include <QWidget>
-
 #include "RGBEffect.h"
 
 namespace Ui {
@@ -19,6 +18,9 @@ public:
 
     static std::map<std::string, std::function<RGBEffect*()>> effects_construtors;
 
+    static void RegisterEffect(std::string, std::function<RGBEffect*()>);
+
+    static void blah(){};
 signals:
     void EffectAdded(RGBEffect*);
 

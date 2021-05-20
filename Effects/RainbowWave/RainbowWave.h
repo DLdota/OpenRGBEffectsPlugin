@@ -2,13 +2,15 @@
 #define RAINBOWWAVE_H
 
 #include "RGBEffect.h"
-#include "OpenRGBEffectPage.h"
+#include "EffectRegisterer.h"
 
 class RainbowWave: public RGBEffect
 {
 public:
     RainbowWave();
     ~RainbowWave() {};
+
+    EFFECT_REGISTERER(ClassName(), [](){return new RainbowWave;});
 
     static std::string const ClassName() { return "RainbowWave"; }
 

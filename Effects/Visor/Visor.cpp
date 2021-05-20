@@ -1,7 +1,6 @@
 ﻿#include "Visor.h"
-#include "OpenRGBEffectTab.h"
 
-RGBColor OFF = ToRGBColor(0,0,0);
+REGISTER_EFFECT(Visor);
 
 Visor::Visor() : RGBEffect()
 {
@@ -172,6 +171,7 @@ RGBColor Visor::GetColor(int i, int count)
     // black leds
     if(i < current_first_led  - width || i > current_first_led  -1)
     {
+        RGBColor OFF = ToRGBColor(0,0,0);
         return OFF;
     }
 

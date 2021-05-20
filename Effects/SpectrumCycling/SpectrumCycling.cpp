@@ -1,6 +1,7 @@
-#include <iostream>
 #include "SpectrumCycling.h"
 #include "hsv.h"
+
+REGISTER_EFFECT(SpectrumCycling);
 
 SpectrumCycling::SpectrumCycling() : RGBEffect()
 {

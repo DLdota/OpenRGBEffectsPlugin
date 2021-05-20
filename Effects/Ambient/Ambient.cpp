@@ -1,5 +1,7 @@
 ﻿#include "Ambient.h"
 
+REGISTER_EFFECT(Ambient);
+
 Ambient::Ambient() : RGBEffect()
 {
     EffectDetails.EffectName = "Ambient";

@@ -1,35 +1,7 @@
 #include "EffectList.h"
 #include "ui_EffectList.h"
 
-#include "SpectrumCycling.h"
-#include "RainbowWave.h"
-#include "StarryNight.h"
-#include "GradientWave.h"
-#include "Breathing.h"
-#include "Rain.h"
-#include "Ambient.h"
-#include "Visor.h"
-#include "AudioVisualizer.h"
-#include "AudioSync.h"
-#include "Wavy.h"
-#include "Lightning.h"
-#include "Bubbles.h"
-
-std::map<std::string, std::function<RGBEffect*()>> EffectList::effects_construtors = {
-    {SpectrumCycling::ClassName(), [](){return new SpectrumCycling;}},
-    {RainbowWave::ClassName(),     [](){return new RainbowWave;}},
-    {StarryNight::ClassName(),     [](){return new StarryNight;}},
-    {GradientWave::ClassName(),    [](){return new GradientWave;}},
-    {Breathing::ClassName(),       [](){return new Breathing;}},
-    {Rain::ClassName(),            [](){return new Rain;}},
-    {Ambient::ClassName(),         [](){return new Ambient;}},
-    {Visor::ClassName(),           [](){return new Visor;}},
-    {AudioVisualizer::ClassName(), [](){return new AudioVisualizer;}},
-    {AudioSync::ClassName(),       [](){return new AudioSync;}},
-    {Wavy::ClassName(),            [](){return new Wavy;}},
-    {Lightning::ClassName(),       [](){return new Lightning;}},
-    {Bubbles::ClassName(),         [](){return new Bubbles;}}
-};
+std::map<std::string, std::function<RGBEffect*()>> EffectList::effects_construtors = {};
 
 EffectList::EffectList(QWidget *parent) :
     QWidget(parent),
@@ -46,6 +18,12 @@ EffectList::EffectList(QWidget *parent) :
 EffectList::~EffectList()
 {
     delete ui;
+}
+
+void EffectList::RegisterEffect(std::string class_name, std::function<RGBEffect*()> constructor)
+{
+    printf("Registering %s effect\n", class_name.c_str());
+    effects_construtors[class_name] = constructor;
 }
 
 void EffectList::on_add_effect_clicked()

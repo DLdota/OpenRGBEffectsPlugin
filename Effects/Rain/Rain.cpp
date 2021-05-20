@@ -1,6 +1,8 @@
 #include "Rain.h"
 #include "hsv.h"
 
+REGISTER_EFFECT(Rain);
+
 Rain::Rain() : RGBEffect()
 {
     EffectDetails.EffectName = "Rain";
@@ -31,7 +33,7 @@ void Rain::StepEffect(std::vector<ControllerZone> controller_zones)
 
     for (int ControllerID = 0; ControllerID < int(controller_zones.size()); ControllerID++)
     {
-        if ((int)CurrentDrops.size() >= Slider2Val)
+        if (CurrentDrops.size() >= Slider2Val)
         {
             break;
         }
@@ -49,7 +51,7 @@ void Rain::StepEffect(std::vector<ControllerZone> controller_zones)
 
             else if (ZT == ZONE_TYPE_LINEAR)
             {
-                if ((int)CurrentDrops.size() < Slider2Val)
+                if (CurrentDrops.size() < Slider2Val)
                 {
                     if (rand()%2 && !HasEffect[ControllerID])
                     {

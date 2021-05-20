@@ -2,6 +2,7 @@
 #define AUDIOVISUALIZER_H
 
 #include "RGBEffect.h"
+#include "EffectRegisterer.h"
 #include "ui_AudioVisualizer.h"
 #include <QWidget>
 #include <QTimer>
@@ -196,6 +197,8 @@ class AudioVisualizer:  public QWidget, public RGBEffect
 public:
     explicit AudioVisualizer(QWidget* parent = nullptr);
     ~AudioVisualizer();
+
+    EFFECT_REGISTERER(ClassName(), [](){return new AudioVisualizer;});
 
     static std::string const ClassName() {return "AudioVisualizer";}
 
