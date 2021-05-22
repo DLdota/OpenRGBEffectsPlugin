@@ -34,6 +34,7 @@ HEADERS +=                                                                      
     EffectTabHeader.h                                                                           \
     Effects/Bubbles/Bubbles.h                                                                   \
     Effects/EffectRegisterer.h                                                                  \
+    Effects/GifPlayer/GifPlayer.h                                                               \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -76,6 +77,7 @@ SOURCES +=                                                                      
     EffectList.cpp                                                                              \
     EffectTabHeader.cpp                                                                         \
     Effects/Bubbles/Bubbles.cpp                                                                 \
+    Effects/GifPlayer/GifPlayer.cpp                                                             \
     OpenRGBEffectsPlugin.cpp                                                                    \
     OpenRGBEffectTab.cpp                                                                        \
     OpenRGBEffectPage.cpp                                                                       \
@@ -94,6 +96,7 @@ FORMS +=                                                                        
     EffectList.ui                                                                               \
     EffectTabHeader.ui                                                                          \
     Effects/Bubbles/Bubbles.ui                                                                  \
+    Effects/GifPlayer/GifPlayer.ui                                                              \
     OpenRGBEffectPage.ui                                                                        \
     OpenRGBEffectTab.ui                                                                         \
     ColorPicker.ui                                                                              \

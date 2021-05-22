@@ -37,6 +37,11 @@ struct ControllerZone
         return controller->zones[zone_idx].matrix_map->height;
     }
 
+    unsigned int* map()
+    {
+        return controller->zones[zone_idx].matrix_map->map;
+    }
+
     bool operator==(ControllerZone const & rhs) const {
         return this->controller == rhs.controller && this->zone_idx == rhs.zone_idx;
     }
