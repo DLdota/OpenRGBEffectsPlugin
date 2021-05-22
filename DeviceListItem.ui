@@ -14,8 +14,7 @@
    <string>Form</string>
   </property>
   <property name="toolTip">
-   <string>This device doesn't have direct mode
-Using an effect on a device WILL damage the flash or controller</string>
+   <string/>
   </property>
   <layout class="QGridLayout" name="gridLayout" columnstretch="10,0,0,0">
    <property name="rightMargin">
@@ -61,6 +60,10 @@ Using an effect on a device WILL damage the flash or controller</string>
    </item>
    <item row="0" column="1">
     <widget class="QLabel" name="danger_not_direct">
+     <property name="toolTip">
+      <string>This device doesn't have direct mode
+Using an effect on a device WILL damage the flash or controller</string>
+     </property>
      <property name="text">
       <string>⚠</string>
      </property>
