@@ -1,7 +1,7 @@
 #include "RainbowWave.h"
 #include "hsv.h"
 
-RainbowWave::_register RainbowWave::_registerer;
+REGISTER_EFFECT(RainbowWave);
 
 RainbowWave::RainbowWave() : RGBEffect()
 {
