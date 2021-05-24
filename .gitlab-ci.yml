@@ -248,7 +248,7 @@ before_script:
     expire_in: 30 days
 
   rules:
-  - if: '$CI_PROJECT_PATH == "OpenRGBDevelopers/OpenRGBEffectPlugin"'
+  - if: '$CI_PROJECT_PATH == "OpenRGBDevelopers/OpenRGBEffectsPlugin"'
     when: on_success
   - if: '$BUILD_MACOS =~ /.+/'
     when: on_success
@@ -272,7 +272,7 @@ before_script:
     expire_in: 30 days
 
   rules:
-  - if: '$CI_PROJECT_PATH == "OpenRGBDevelopers/OpenRGBEffectPlugin"'
+  - if: '$CI_PROJECT_PATH == "OpenRGBDevelopers/OpenRGBEffectsPlugin"'
     when: on_success
   - if: '$BUILD_MACOS =~ /.+/'
     when: on_success
