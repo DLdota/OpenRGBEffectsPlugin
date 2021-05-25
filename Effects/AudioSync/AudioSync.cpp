@@ -117,6 +117,7 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     scene = new QGraphicsScene();
     graphics_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     graphics_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    graphics_view->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
     graphics_view->setScene(scene);
     MainAudioSyncLayout->addWidget(graphics_view);
@@ -1013,8 +1014,6 @@ void AudioSync::UpdateGraph()
     /*----------------------------------*\
     | Set bounds for drawing visualizer  |
     \*----------------------------------*/
-    scene->setSceneRect(0,0,graphics_view->width(),graphics_view->height());
-
     QRectF bounds = scene->itemsBoundingRect();
     bounds.setWidth(bounds.width());
     bounds.setHeight(bounds.height());
