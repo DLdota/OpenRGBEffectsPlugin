@@ -27,7 +27,19 @@ DeviceListItem::DeviceListItem(RGBController* controller) :
     f.setPointSize(f.pointSize() * 1.5);
     ui->danger_not_direct->setFont(f);
 
-    ui->device_name->setText(QString::fromStdString(controller->name));
+    QString display_name = "";
+
+    if(controller->name.length() > 25)
+    {
+        display_name = QString::fromStdString(controller->name.substr(0,25) + "...");
+        ui->device_name->setToolTip(QString::fromStdString(controller->name));
+    }
+    else
+    {
+        display_name = QString::fromStdString(controller->name);
+    }
+
+    ui->device_name->setText(display_name);
 
     single_zone = controller->zones.size() == 1;
 
