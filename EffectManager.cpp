@@ -28,8 +28,7 @@ void EffectManager::SetEffectActive(RGBEffect* Effect)
 }
 
 void EffectManager::SetEffectUnActive(RGBEffect* Effect)
-{    
-
+{
     Effect->EffectState(false);
 
     if (EffectThreads.find(Effect) != EffectThreads.end())
@@ -57,10 +56,10 @@ void EffectManager::ClearAssignments()
 void EffectManager::Assign(std::vector<ControllerZone> controller_zones, RGBEffect* effect)
 {
     printf("Assigning %lu zones to %s\n", controller_zones.size(), effect->EffectDetails.EffectName.c_str());
+
     effect_zones[effect] = controller_zones;
 
     // remove from other effects
-
     std::map<RGBEffect*, std::vector<ControllerZone>>::iterator it;
 
     for (it = effect_zones.begin(); it != effect_zones.end(); it++)
@@ -84,9 +83,29 @@ void EffectManager::Assign(std::vector<ControllerZone> controller_zones, RGBEffe
         }
 
         effect_zones[other_effect] = remaining_zones;
-
     }
 
+    // force direct mode
+    std::set<RGBController*> controllers;
+
+    for(ControllerZone controller_zone: controller_zones)
+    {
+        controllers.insert(controller_zone.controller);
+    }
+
+    for(RGBController* controller : controllers)
+    {
+        for(unsigned int i = 0 ; i < controller->modes.size(); i++)
+        {
+            if(controller->modes[i].name == "Direct")
+            {
+                controller->SetMode(i);
+                break;
+            }
+        }
+    }
+
+    // notify effect zones has changed
     effect->ASelectionWasChanged(effect_zones[effect]);
 
 }
