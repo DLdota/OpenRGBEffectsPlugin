@@ -202,7 +202,11 @@ void OpenRGBEffectTab::LoadEffectsFromSettings()
         }
         catch (const std::exception& e)
         {
-            printf("Something went wrong with plugin loading. %s", e.what());
+            printf("Something went wrong while loading effect: %s.\n", e.what());
+        }
+        catch(...)
+        {
+            printf("Unknown error while loading effect.\n");
         }
     }
 }
@@ -243,7 +247,11 @@ void OpenRGBEffectTab::LoadEffectSettings(json effect_settings)
         }
     }
 
+    printf("Creating effect. %s\n", name.c_str());
+
     RGBEffect* effect = EffectList::effects_construtors[name]();
+
+    printf("[%s] Applying basic settings\n", name.c_str());
 
     effect->SetFPS(effect_settings["FPS"]);
     effect->SetAutoStart(effect_settings["AutoStart"]);
@@ -253,12 +261,16 @@ void OpenRGBEffectTab::LoadEffectSettings(json effect_settings)
     effect->SetRandomColorsEnabled(effect_settings["RandomColors"]);
     effect->SetOnlyFirstColorEnabled(effect_settings["AllowOnlyFirst"]);
 
-    CreateEffectTab(effect);
+    printf("[%s] Loading custom settings\n", name.c_str());
 
     if(effect_settings.contains("CustomSettings"))
     {
         effect->LoadCustomSettings(effect_settings["CustomSettings"]);
     }
+
+    printf("[%s] Creating effect tab\n", name.c_str());
+
+    CreateEffectTab(effect);
 
     EffectManager::Get()->Assign(controller_zones, effect);
     ui->device_list->ApplySelection(controller_zones);

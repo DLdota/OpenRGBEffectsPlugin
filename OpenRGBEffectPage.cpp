@@ -35,6 +35,7 @@ void OpenRGBEffectPage::InitUi()
 
     ui->AutoStart->setCheckState(effect->IsAutoStart()? Qt::Checked : Qt::Unchecked);
     ui->RandomCheckbox->setCheckState(effect->IsRandomColorsEnabled()? Qt::Checked : Qt::Unchecked);
+    ui->OnlyFirst->setCheckState(effect->IsOnlyFirstColorEnabled()? Qt::Checked : Qt::Unchecked);
     ui->SpeedSlider->setValue(effect->GetSpeed());
     ui->Slider2->setValue(effect->GetSlider2Val());
 
