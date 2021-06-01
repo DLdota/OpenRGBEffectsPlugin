@@ -29,7 +29,10 @@ void OpenRGBEffectTab::InitEffectTabs()
 {
     EffectList* effect_list = new EffectList;
 
-    ui->EffectTabs->insertTab(0, new QWidget , "");
+    QLabel* label = new QLabel("No effects added. Please select one from the list to get started.");
+    label->setAlignment(Qt::AlignCenter);
+
+    ui->EffectTabs->insertTab(0, label , "");
     ui->EffectTabs->setTabEnabled(0, false);
     ui->EffectTabs->setCurrentIndex(0);
     ui->EffectTabs->tabBar()->setTabButton(0, QTabBar::RightSide, effect_list);
