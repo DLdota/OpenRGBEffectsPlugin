@@ -36,6 +36,10 @@ void SpectrumCycling::StepEffect(std::vector<ControllerZone> controller_zones)
     }
 
     CurrentHue += ((float)Speed / (float)FPS);
-    CurrentHue = CurrentHue % 360;
+
+    if(CurrentHue >= 360)
+    {
+        CurrentHue = 0;
+    }
 }
 
