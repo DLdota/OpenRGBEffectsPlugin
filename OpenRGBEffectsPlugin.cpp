@@ -2,6 +2,9 @@
 #include "OpenRGBEffectTab.h"
 #include "EffectManager.h"
 
+bool OpenRGBEffectsPlugin::DarkTheme = false;
+ResourceManager* OpenRGBEffectsPlugin::RMPointer = nullptr;
+
 OpenRGBPluginInfo OpenRGBEffectsPlugin::Initialize(bool Dt, ResourceManager *RM)
 {
     DarkTheme = Dt;
