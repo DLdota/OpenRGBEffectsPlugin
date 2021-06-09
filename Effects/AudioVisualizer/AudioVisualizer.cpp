@@ -1332,6 +1332,27 @@ void AudioVisualizer::DrawPattern(VISUALIZER_PATTERN pattern, int bright, vis_pi
         DrawSolidColor(bright, 0x00FF0040, pixels);
         break;
 
+    case VISUALIZER_PATTERN_STATIC_RED_BLUE:
+        {
+        RGBColor colors[] = { 0x000000FF, 0x00FF0000 };
+        DrawHorizontalBars(bright, colors, 2, pixels);
+        }
+        break;
+
+    case VISUALIZER_PATTERN_STATIC_CYAN_ORANGE:
+        {
+        RGBColor colors[] = { 0x00FFFF00, 0x00001EFF };
+        DrawHorizontalBars(bright, colors, 2, pixels);
+        }
+        break;
+
+    case VISUALIZER_PATTERN_STATIC_CYAN_PURPLE:
+        {
+        RGBColor colors[] = { 0x00FFFF00, 0x00FF00FF };
+        DrawHorizontalBars(bright, colors, 2, pixels);
+        }
+        break;
+
     case VISUALIZER_PATTERN_STATIC_GREEN_YELLOW_RED:
         {
         RGBColor colors[] = { 0x0000FF00, 0x0000FFFF, 0x000000FF };

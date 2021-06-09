@@ -91,7 +91,10 @@ enum
     VISUALIZER_PATTERN_SOLID_CYAN,
     VISUALIZER_PATTERN_SOLID_BLUE,
     VISUALIZER_PATTERN_SOLID_PURPLE,
-    //Static Color Patterns
+    //Static Color Patterns    
+    VISUALIZER_PATTERN_STATIC_RED_BLUE,
+    VISUALIZER_PATTERN_STATIC_CYAN_ORANGE,
+    VISUALIZER_PATTERN_STATIC_CYAN_PURPLE,
     VISUALIZER_PATTERN_STATIC_GREEN_YELLOW_RED,
     VISUALIZER_PATTERN_STATIC_GREEN_WHITE_RED,
     VISUALIZER_PATTERN_STATIC_BLUE_CYAN_WHITE,
@@ -120,7 +123,10 @@ const char* const visualizer_pattern_labels[VISUALIZER_NUM_PATTERNS] =
     "Green",
     "Cyan",
     "Blue",
-    "Purple",
+    "Purple",    
+    "Red/Blue",
+    "Cyan/Orange",
+    "Cyan/Purple",
     "Green/Yellow/Red",
     "Green/White/Red",
     "Blue/Cyan/White",
