@@ -402,7 +402,6 @@ private:
     float win_blackman[256];
     float fft_tmp[512];
 
-    bool settings_changed;
     bool shutdown_flag;
 
     unsigned char buffer[256];

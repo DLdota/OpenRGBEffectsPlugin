@@ -75,7 +75,6 @@ AudioVisualizer::AudioVisualizer(QWidget* parent):
     audio_device_idx     = 0;
     filter_constant      = 1.0f;
 
-    settings_changed     = false;
     update_ui            = false;
     shutdown_flag        = false;
 
@@ -219,7 +218,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone> controller_zones)
     /*----------------------------------------------------------------------*\
     | If music isn't playing, fade in the single color LEDs after 2 seconds  |
     \*----------------------------------------------------------------------*/
-    background_timer = background_timer + (1 / FPS);
+    background_timer += 60.f / FPS;
 
     if (shutdown_flag == true)
     {
@@ -539,7 +538,6 @@ void AudioVisualizer::LoadCustomSettings(json Settings)
     /*----------------------------------------------*\
     | Set all values to the settings stored in json  |
     \*----------------------------------------------*/
-    if (Settings.contains("SilentBackGround"))     silent_bkgd        = Settings["SilentBackGround"];
     if (Settings.contains("Amplitude"))            amplitude          = Settings["Amplitude"];
     if (Settings.contains("BackgroundBrightness")) bkgd_bright        = Settings["BackgroundBrightness"];
     if (Settings.contains("AverageSize"))          avg_size           = Settings["AverageSize"];
@@ -609,12 +607,11 @@ json AudioVisualizer::SaveCustomSettings(json)
     /*---------------------------------------------*\
     | Only allow for Silent OR Reactive. Not both   |
     \*---------------------------------------------*/
-    if ((silent_bkgd == TRUE) && (reactive_bkgd == TRUE))
+    if ((silent_bkgd == true) && (reactive_bkgd == true))
     {
-        silent_bkgd = FALSE;
+        silent_bkgd = false;
     }
 
-    Settings["SilentBackGround"] = silent_bkgd;
     Settings["Amplitude"] = amplitude;
     Settings["BackgroundBrightness"] = bkgd_bright;
     Settings["AverageSize"] = avg_size;
@@ -745,14 +742,12 @@ void AudioVisualizer::update()
 
 void AudioVisualizer::on_lineEdit_Background_Brightness_textChanged(const QString &arg1)
 {
-bkgd_bright = arg1.toInt();
-settings_changed = true;
+    bkgd_bright = arg1.toInt();
 }
 
 void AudioVisualizer::on_lineEdit_Animation_Speed_textChanged(const QString &arg1)
 {
     anim_speed = arg1.toFloat();
-    settings_changed = true;
 }
 
 
@@ -762,19 +757,16 @@ void AudioVisualizer::on_lineEdit_Animation_Speed_textChanged(const QString &arg
 void AudioVisualizer::on_lineEdit_Amplitude_textChanged(const QString &arg1)
 {
     amplitude = arg1.toInt();
-    settings_changed = true;
 }
 
 void AudioVisualizer::on_lineEdit_Average_Size_textChanged(const QString &arg1)
 {
     avg_size = arg1.toInt();
-    settings_changed = true;
 }
 
 void AudioVisualizer::on_lineEdit_Decay_textChanged(const QString &arg1)
 {
     decay = arg1.toInt();
-    settings_changed = true;
 }
 
 
@@ -785,14 +777,12 @@ void AudioVisualizer::on_lineEdit_Normalization_Offset_textChanged(const QString
 {
     nrml_ofst = arg1.toFloat();
     SetNormalization(nrml_ofst, nrml_scl);
-    settings_changed = true;
 }
 
 void AudioVisualizer::on_lineEdit_Normalization_Scale_textChanged(const QString &arg1)
 {
     nrml_scl = arg1.toFloat();
     SetNormalization(nrml_ofst, nrml_scl);
-    settings_changed = true;
 }
 
 
@@ -802,31 +792,26 @@ void AudioVisualizer::on_lineEdit_Normalization_Scale_textChanged(const QString 
 void AudioVisualizer::on_comboBox_FFT_Window_Mode_currentIndexChanged(int index)
 {
     window_mode = index;
-    settings_changed = true;
 }
 
 void AudioVisualizer::on_comboBox_Background_Mode_currentIndexChanged(int index)
 {
     bkgd_mode = index;
-    settings_changed = true;
 }
 
 void AudioVisualizer::on_comboBox_Foreground_Mode_currentIndexChanged(int index)
 {
     frgd_mode = index;
-    settings_changed = true;
 }
 
 void AudioVisualizer::on_comboBox_Single_Color_Mode_currentIndexChanged(int index)
 {
     single_color_mode = index;
-    settings_changed = true;
 }
 
 void AudioVisualizer::on_comboBox_Average_Mode_currentIndexChanged(int index)
 {
     avg_mode = index;
-    settings_changed = true;
 }
 
 void AudioVisualizer::on_checkBox_Reactive_Background_clicked(bool checked)
@@ -838,7 +823,6 @@ void AudioVisualizer::on_checkBox_Reactive_Background_clicked(bool checked)
         silent_bkgd = false;
         ui->checkBox_Silent_Background->setChecked(false);
     }
-    settings_changed = true;
 }
 
 void AudioVisualizer::on_comboBox_Audio_Device_currentIndexChanged(int index)
@@ -859,7 +843,6 @@ void AudioVisualizer::on_lineEdit_Filter_Constant_textChanged(const QString &arg
     {
         filter_constant = 0.0f;
     }
-    settings_changed = true;
 }
 
 void AudioVisualizer::on_checkBox_Silent_Background_clicked(bool checked)
@@ -871,8 +854,6 @@ void AudioVisualizer::on_checkBox_Silent_Background_clicked(bool checked)
         reactive_bkgd = false;
         ui->checkBox_Reactive_Background->setChecked(false);
     }
-
-    settings_changed = true;
 }
 
 void AudioVisualizer::on_lineEdit_Background_Timeout_textChanged(const QString &arg1)
@@ -883,8 +864,6 @@ void AudioVisualizer::on_lineEdit_Background_Timeout_textChanged(const QString &
     {
         background_timer = 0;
     }
-
-    settings_changed = true;
 }
 
 
