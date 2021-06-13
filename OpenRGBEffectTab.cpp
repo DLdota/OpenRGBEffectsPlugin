@@ -7,6 +7,7 @@
 #include "OpenRGBEffectsPlugin.h"
 
 #include <QTabBar>
+#include <QTimer>
 
 OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     QWidget(parent),
@@ -17,7 +18,10 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     ui->device_list->DisableControls();
 
     InitEffectTabs();
-    LoadEffectsFromSettings();
+
+    QTimer::singleShot(1000, [=](){
+        LoadEffectsFromSettings();
+    });
 }
 
 OpenRGBEffectTab::~OpenRGBEffectTab()
@@ -185,6 +189,7 @@ void OpenRGBEffectTab::on_save_settings_clicked()
 
 void OpenRGBEffectTab::LoadEffectsFromSettings()
 {
+    printf("Loading effects settings if any.\n");
     json settings = OpenRGBEffectSettings::LoadUserSettings();
 
     if(!settings.contains("version") || settings["version"] != OpenRGBEffectSettings::version)
