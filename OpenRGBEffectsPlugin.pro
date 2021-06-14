@@ -34,6 +34,7 @@ HEADERS +=                                                                      
     EffectTabHeader.h                                                                           \
     Effects/Bubbles/Bubbles.h                                                                   \
     Effects/EffectRegisterer.h                                                                  \
+    Effects/Stack/Stack.h                                                                       \
     Effects/GifPlayer/GifPlayer.h                                                               \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
@@ -78,6 +79,7 @@ SOURCES +=                                                                      
     EffectList.cpp                                                                              \
     EffectTabHeader.cpp                                                                         \
     Effects/Bubbles/Bubbles.cpp                                                                 \
+    Effects/Stack/Stack.cpp                                                                     \
     Effects/GifPlayer/GifPlayer.cpp                                                             \
     OpenRGBEffectsPlugin.cpp                                                                    \
     OpenRGBEffectTab.cpp                                                                        \
@@ -97,6 +99,7 @@ FORMS +=                                                                        
     EffectList.ui                                                                               \
     EffectTabHeader.ui                                                                          \
     Effects/Bubbles/Bubbles.ui                                                                  \
+    Effects/Stack/Stack.ui                                                                      \
     Effects/GifPlayer/GifPlayer.ui                                                              \
     OpenRGBEffectPage.ui                                                                        \
     OpenRGBEffectTab.ui                                                                         \
@@ -122,6 +125,7 @@ INCLUDEPATH +=                                                                  
     Effects/AudioVisualizer/                                                                    \
     Effects/Lightning/                                                                          \
     Effects/Bubbles/                                                                            \
+    Effects/Stack/                                                                              \
 
 SOURCES +=                                                                                      \
     Effects/Rain/Rain.cpp                                                                       \
