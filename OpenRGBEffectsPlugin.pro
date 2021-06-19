@@ -33,6 +33,7 @@ HEADERS +=                                                                      
     EffectList.h                                                                                \
     EffectTabHeader.h                                                                           \
     Effects/Bubbles/Bubbles.h                                                                   \
+    Effects/ColorWheelEffect/ColorWheelEffect.h                                                 \
     Effects/EffectRegisterer.h                                                                  \
     Effects/RadialRainbow/RadialRainbow.h                                                       \
     Effects/Stack/Stack.h                                                                       \
@@ -80,6 +81,7 @@ SOURCES +=                                                                      
     EffectList.cpp                                                                              \
     EffectTabHeader.cpp                                                                         \
     Effects/Bubbles/Bubbles.cpp                                                                 \
+    Effects/ColorWheelEffect/ColorWheelEffect.cpp                                               \
     Effects/RadialRainbow/RadialRainbow.cpp                                                     \
     Effects/Stack/Stack.cpp                                                                     \
     Effects/GifPlayer/GifPlayer.cpp                                                             \
@@ -101,6 +103,7 @@ FORMS +=                                                                        
     EffectList.ui                                                                               \
     EffectTabHeader.ui                                                                          \
     Effects/Bubbles/Bubbles.ui                                                                  \
+    Effects/ColorWheelEffect/ColorWheelEffect.ui                                                \
     Effects/RadialRainbow/RadialRainbow.ui                                                      \
     Effects/Stack/Stack.ui                                                                      \
     Effects/GifPlayer/GifPlayer.ui                                                              \
