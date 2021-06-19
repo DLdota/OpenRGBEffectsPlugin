@@ -34,6 +34,7 @@ HEADERS +=                                                                      
     EffectTabHeader.h                                                                           \
     Effects/Bubbles/Bubbles.h                                                                   \
     Effects/EffectRegisterer.h                                                                  \
+    Effects/RadialRainbow/RadialRainbow.h                                                       \
     Effects/Stack/Stack.h                                                                       \
     Effects/GifPlayer/GifPlayer.h                                                               \
     OpenRGB/NetworkClient.h                                                                     \
@@ -79,6 +80,7 @@ SOURCES +=                                                                      
     EffectList.cpp                                                                              \
     EffectTabHeader.cpp                                                                         \
     Effects/Bubbles/Bubbles.cpp                                                                 \
+    Effects/RadialRainbow/RadialRainbow.cpp                                                     \
     Effects/Stack/Stack.cpp                                                                     \
     Effects/GifPlayer/GifPlayer.cpp                                                             \
     OpenRGBEffectsPlugin.cpp                                                                    \
@@ -99,6 +101,7 @@ FORMS +=                                                                        
     EffectList.ui                                                                               \
     EffectTabHeader.ui                                                                          \
     Effects/Bubbles/Bubbles.ui                                                                  \
+    Effects/RadialRainbow/RadialRainbow.ui                                                      \
     Effects/Stack/Stack.ui                                                                      \
     Effects/GifPlayer/GifPlayer.ui                                                              \
     OpenRGBEffectPage.ui                                                                        \
