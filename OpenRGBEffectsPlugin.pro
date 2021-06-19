@@ -61,6 +61,7 @@ HEADERS +=                                                                      
     Effects/ColorWheelEffect/ColorWheelEffect.h                                                 \
     Effects/EffectRegisterer.h                                                                  \
     Effects/RadialRainbow/RadialRainbow.h                                                       \
+    Effects/Sequence/Sequence.h \
     Effects/Stack/Stack.h                                                                       \
     Effects/GifPlayer/GifPlayer.h                                                               \
     OpenRGB/NetworkClient.h                                                                     \
@@ -109,6 +110,7 @@ SOURCES +=                                                                      
     Effects/Bubbles/Bubbles.cpp                                                                 \
     Effects/ColorWheelEffect/ColorWheelEffect.cpp                                               \
     Effects/RadialRainbow/RadialRainbow.cpp                                                     \
+    Effects/Sequence/Sequence.cpp \
     Effects/Stack/Stack.cpp                                                                     \
     Effects/GifPlayer/GifPlayer.cpp                                                             \
     OpenRGBEffectsPlugin.cpp                                                                    \
@@ -132,6 +134,7 @@ FORMS +=                                                                        
     Effects/Bubbles/Bubbles.ui                                                                  \
     Effects/ColorWheelEffect/ColorWheelEffect.ui                                                \
     Effects/RadialRainbow/RadialRainbow.ui                                                      \
+    Effects/Sequence/Sequence.ui \
     Effects/Stack/Stack.ui                                                                      \
     Effects/GifPlayer/GifPlayer.ui                                                              \
     OpenRGBEffectPage.ui                                                                        \

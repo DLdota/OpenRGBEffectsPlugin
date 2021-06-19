@@ -1,0 +1,155 @@
+#include "Sequence.h"
+
+REGISTER_EFFECT(Sequence);
+
+Sequence::Sequence(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::Sequence)
+{
+    ui->setupUi(this);
+
+    EffectDetails.EffectName = "Sequence";
+    EffectDetails.EffectClassName = ClassName();
+    EffectDetails.EffectDescription = "Alternates colors with a fade effect";
+
+    EffectDetails.IsReversable = false;
+    EffectDetails.MaxSpeed     = 20;
+    EffectDetails.MinSpeed     = 1;
+    EffectDetails.UserColors   = 0;
+    EffectDetails.AllowOnlyFirst = false;
+
+    EffectDetails.MaxSlider2Val = 100;
+    EffectDetails.MinSlider2Val = 1;
+    EffectDetails.Slider2Name   = "Fade time";
+
+    EffectDetails.HasCustomWidgets = true;
+    EffectDetails.HasCustomSettings = true;
+
+    ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->colors->setLayout(new QHBoxLayout());
+    ui->colors->layout()->setSizeConstraint(QLayout::SetFixedSize);
+    ui->scrollArea->setWidgetResizable(true);
+
+    ResetColors();
+}
+
+Sequence::~Sequence()
+{
+    delete ui;
+}
+
+void Sequence::DefineExtraOptions(QLayout* layout)
+{
+    layout->addWidget(this);
+}
+
+void Sequence::StepEffect(std::vector<ControllerZone> controller_zones)
+{
+    unsigned int colors_count = ui->colors_count_spinBox->value();
+    unsigned int current_color_index = ((int)ceil(progress)) % colors_count;
+
+    float whole;
+    float frac = std::modf(progress, &whole);
+
+    float fade_mult;
+
+    RGBColor color;
+
+    if(frac >= 0.8)
+    {
+       unsigned int next_color_index = current_color_index < colors_count - 1 ? current_color_index + 1 : 0;
+       color = Interpolate(colors[current_color_index], colors[next_color_index], (frac - 0.8) * 5);
+       fade_mult = 1.f / (float) Slider2Val;
+    }
+    else
+    {
+        color = colors[current_color_index];
+        fade_mult = 1.f;
+    }
+
+    for(unsigned int i = 0; i < controller_zones.size(); i++)
+    {
+        controller_zones[i].controller->SetAllLEDs(color);
+    }
+
+    progress += fade_mult * 0.1 * (float) Speed / (float) FPS;
+}
+
+ColorPicker* Sequence::CreatePicker(int i)
+{
+    ColorPicker* picker = new ColorPicker();
+    picker->SetColor(QColor(RGBGetRValue(colors[i]), RGBGetGValue(colors[i]), RGBGetBValue(colors[i])));
+
+    color_pickers[i] = picker;
+
+    connect(picker, &ColorPicker::ColorSelected, [=](QColor c){
+        colors[i] = ToRGBColor(c.red(), c.green(), c.blue());
+    });
+
+    return picker;
+}
+
+void Sequence::ResetColors()
+{
+    QLayoutItem *child;
+
+    while ((child = ui->colors->layout()->takeAt(0)) != 0) {
+        delete child->widget();
+    }
+
+    unsigned int colors_count = ui->colors_count_spinBox->value();
+
+    color_pickers.resize(colors_count);
+    colors.resize(colors_count);
+
+    for(unsigned int i = 0; i < colors_count; i++)
+    {
+        ColorPicker* picker = CreatePicker(i);
+        ui->colors->layout()->addWidget(picker);
+    }
+
+}
+
+void Sequence::LoadCustomSettings(json Settings)
+{
+    if (Settings.contains("colors"))
+    {
+        colors.clear();
+
+        for(unsigned int color : Settings["colors"])
+        {
+            colors.push_back(color);
+        }
+
+        ui->colors_count_spinBox->setValue(colors.size());
+    }
+}
+
+json Sequence::SaveCustomSettings(json Settings)
+{
+    Settings["colors"] = colors;
+    return Settings;
+}
+
+void Sequence::on_colors_count_spinBox_valueChanged(int value)
+{
+    ResetColors();
+}
+
+RGBColor Sequence::Interpolate(RGBColor color1, RGBColor color2, float fraction)
+{
+    unsigned char   r1 = RGBGetRValue(color1);
+    unsigned char   r2 = RGBGetRValue(color2);
+
+    unsigned char   g1 = RGBGetGValue(color1);
+    unsigned char   g2 = RGBGetGValue(color2);
+
+    unsigned char   b1 = RGBGetBValue(color1);
+    unsigned char   b2 = RGBGetBValue(color2);
+
+    return RGBColor(ToRGBColor(
+                        (int) ((r2 - r1) * fraction + r1),
+                        (int) ((g2 - g1) * fraction + g1),
+                        (int) ((b2 - b1) * fraction + b1)
+                        ));
+}

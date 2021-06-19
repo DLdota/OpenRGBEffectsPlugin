@@ -176,7 +176,6 @@ RGBColor Wavy::GetColor(int i, int count)
     {
         return Interpolate(UserColors[0], UserColors[1], h);
     }
-
 }
 
 void Wavy::LoadCustomSettings(json Settings)
