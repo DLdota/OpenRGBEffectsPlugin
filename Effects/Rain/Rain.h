@@ -4,21 +4,12 @@
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
 
-struct Drops
+struct Drop
 {
-    int Index;
-
-    zone_type   ZT;
-    int   LEDCount;
-    int   StartingLED;
-
-    bool  Reversed;
-
-    int    Column;
-    int    ColumnCount;
-    float  Progress;
-
-    RGBColor C;
+    double progress;
+    RGBColor color;
+    unsigned int col;
+    float speed_mult;
 };
 
 class Rain: public RGBEffect
@@ -35,10 +26,15 @@ public:
     void ASelectionWasChanged(std::vector<ControllerZone>) override;
 
 private:
-    std::vector<Drops> CurrentDrops;   
-    std::vector<bool> HasEffect;
+    RGBColor GetColor(unsigned int, unsigned int, unsigned int);
+    void  TriggerDrop(unsigned int, unsigned int);
+    void  CleanDrops(unsigned int, unsigned int);
+    void  RunDrops(unsigned int);
+    RGBColor Enlight(float, RGBColor);
 
-    int PrevNum;
+    std::vector<std::vector<Drop>> drops;
+    RGBColor OFF = ToRGBColor(0,0,0);
+
 };
 
 #endif // RAIN_H

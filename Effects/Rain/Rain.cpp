@@ -7,9 +7,9 @@ Rain::Rain() : RGBEffect()
 {
     EffectDetails.EffectName = "Rain";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Picks a random zone/column and makes a droplet effect";
+    EffectDetails.EffectDescription = "Droplet effect";
 
-    EffectDetails.IsReversable = true;
+    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed = 25;
     EffectDetails.MinSpeed = 1;
 
@@ -26,323 +26,164 @@ Rain::Rain() : RGBEffect()
 
 void Rain::StepEffect(std::vector<ControllerZone> controller_zones)
 {
-    if (controller_zones.size() != HasEffect.size())
+    for(unsigned int i = 0; i < controller_zones.size(); i++)
     {
-        ASelectionWasChanged(controller_zones);
-    }
+        int start_idx = controller_zones[i].start_idx();
+        zone_type ZT = controller_zones[i].type();
+        int leds_count = controller_zones[i].leds_count();
+        bool reverse = controller_zones[i].reverse;
 
-    for (int ControllerID = 0; ControllerID < int(controller_zones.size()); ControllerID++)
-    {
-        if (CurrentDrops.size() >= Slider2Val)
+        unsigned int w;
+        unsigned int h;
+
+        if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
         {
-            break;
+            w = 1;
+            h = leds_count;
+
+            for (int LedID = 0; LedID < leds_count; LedID++)
+            {
+                RGBColor color = GetColor(i, 0, LedID);
+                controller_zones[i].controller->SetLED(start_idx + LedID, color);
+            }
         }
 
-        if (rand() % 2)
+        else if (ZT == ZONE_TYPE_MATRIX)
         {
+            int cols = controller_zones[i].matrix_map_width();
+            int rows = controller_zones[i].matrix_map_height();
 
-            zone_type ZT =  controller_zones[ControllerID].type();
+            w = cols;
+            h = rows;
 
-            if (ZT == ZONE_TYPE_SINGLE)
+            for (int col_id = 0; col_id < cols; col_id++)
             {
-                // Rain doesn't support single LED zones
-                continue;
-            }
-
-            else if (ZT == ZONE_TYPE_LINEAR)
-            {
-                if (CurrentDrops.size() < Slider2Val)
+                for (int row_id = 0; row_id < rows; row_id++)
                 {
-                    if (rand()%2 && !HasEffect[ControllerID])
-                    {
-                        Drops NewDrop;
-                        NewDrop.Index = ControllerID;
-
-                        NewDrop.LEDCount = controller_zones[ControllerID].leds_count();
-                        NewDrop.StartingLED = controller_zones[ControllerID].start_idx();
-
-
-                        NewDrop.ZT = ZONE_TYPE_LINEAR;
-                        NewDrop.Reversed = controller_zones[ControllerID].reverse;
-
-                        NewDrop.Progress = 0;
-
-                        if (RandomColorsEnabled)
-                        {
-                            NewDrop.C = ToRGBColor(rand() % 255,
-                                                   rand() % 255,
-                                                   rand() % 255);
-                        }
-                        else if (OnlyFirstColorEnabled)
-                        {
-                            NewDrop.C = UserColors[0];
-                        }
-                        else
-                        {
-                            NewDrop.C = UserColors[rand()%this->EffectDetails.UserColors];
-                        }
-
-                        HasEffect[ControllerID] = true;
-                        CurrentDrops.push_back(NewDrop);
-                    }
+                    int LedID = controller_zones[i].controller->zones[controller_zones[i].zone_idx].matrix_map->map[((row_id * cols) + col_id)];
+                    RGBColor color = GetColor(i, col_id, row_id);
+                    controller_zones[i].controller->SetLED(start_idx + LedID, color);
                 }
             }
-
-            else if (ZT == ZONE_TYPE_MATRIX)
-            {
-                int MaxAllowed = (rand() % (int)Slider2Val - (int)CurrentDrops.size());
-                int AmountCreated = 0;
-
-                for (int Created = 0; Created < MaxAllowed; Created++)
-                {
-                    int CreateDrop = rand()%(int)controller_zones[ControllerID].matrix_map_width();
-
-                    if (AmountCreated < MaxAllowed)
-                    {
-                        AmountCreated += 1;
-                        Drops NewDrop;
-
-                        NewDrop.Index = ControllerID;
-
-                        NewDrop.Column = CreateDrop;
-                        NewDrop.ColumnCount = controller_zones[ControllerID].matrix_map_width();
-                        NewDrop.LEDCount = controller_zones[ControllerID].matrix_map_height();
-
-                        NewDrop.Progress = 0;
-                        NewDrop.ZT = ZONE_TYPE_MATRIX;
-                        NewDrop.Reversed = controller_zones[ControllerID].reverse;
-
-                        if (RandomColorsEnabled)
-                        {
-                            NewDrop.C = ToRGBColor(rand() % 255,
-                                                   rand() % 255,
-                                                   rand() % 255);
-                        }
-                        else if (OnlyFirstColorEnabled)
-                        {
-                            NewDrop.C = UserColors[0];
-                        }
-                        else
-                        {
-                            NewDrop.C = UserColors[rand()%this->EffectDetails.UserColors];
-                        }
-
-                        CurrentDrops.push_back(NewDrop);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-
-        }
-    }
-
-    std::vector<int> ToDelete = {};
-
-    for (int DropID = 0; DropID < (int)CurrentDrops.size(); DropID++)
-    {
-        int CIndex = CurrentDrops[DropID].Index;
-        int SIndex = controller_zones[CIndex].start_idx();
-        int CCount = CurrentDrops[DropID].LEDCount;
-
-        // Ok so this is kinda hacky.
-        RGBColor UserColor = CurrentDrops[DropID].C;
-
-        int LedID = CurrentDrops[DropID].Progress; // Convert to int so that I can have a solid LED index
-        int integral = LedID; // Copy it to another variable so as to not mess stuff up
-
-        float fractional;
-
-        if ((int)CurrentDrops[DropID].Progress == 0)
-        {
-            fractional = CurrentDrops[DropID].Progress;
         }
         else
         {
-            fractional = (CurrentDrops[DropID].Progress - integral);
+            continue;
         }
 
-        hsv_t FromUserColor;
-        rgb2hsv(UserColor, &FromUserColor);
-
-        hsv_t StartingHSV = FromUserColor;
-        hsv_t EndingHSV = FromUserColor;
-
-        if ((signed)fractional > 1)
-        {
-            fractional = 1;
-        }
-        else if ((signed)fractional < 0)
-        {
-            fractional = 0;
-        }
-
-        StartingHSV.value = StartingHSV.value * fractional;
-        EndingHSV.value   = EndingHSV.value * (1 - fractional);
-
-        if (CurrentDrops[DropID].ZT == ZONE_TYPE_LINEAR)
-        {
-            // If the drop is reversed
-            if (CurrentDrops[DropID].Reversed)
-            {
-                if (0 <= ( (CCount - LedID) + 3) ) controller_zones[CIndex].controller->SetLED((SIndex + ((CCount - LedID) + 3)), ToRGBColor(0,0,0)     );
-                if (0 <= ( (CCount - LedID) + 0) ) controller_zones[CIndex].controller->SetLED((SIndex + ((CCount - LedID) + 0)), hsv2rgb(&StartingHSV));
-                if (0 <= ( (CCount - LedID) + 1) ) controller_zones[CIndex].controller->SetLED((SIndex + ((CCount - LedID) + 1)), UserColor            );
-                if (0 <= ( (CCount - LedID) + 2) ) controller_zones[CIndex].controller->SetLED((SIndex + ((CCount - LedID) + 2)), hsv2rgb(&EndingHSV)  );
-            }
-            else
-            {
-                if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 3)
-                {
-                    if (LedID > 2)
-                    {
-                        controller_zones[CIndex].controller->SetLED((SIndex + (LedID - 3)),ToRGBColor(0,0,0));
-                    }
-
-                    if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 2)
-                    {
-                        if (LedID > 1)
-                        {
-                            controller_zones[CIndex].controller->SetLED((SIndex + (LedID - 2)),hsv2rgb(&EndingHSV));
-                        }
-
-                        if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 1)
-                        {
-                            if (LedID > 0)
-                            {
-                                controller_zones[CIndex].controller->SetLED((SIndex + (LedID - 1)),UserColor);
-                            }
-
-                            if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount)
-                            {
-                                controller_zones[CIndex].controller->SetLED((SIndex + LedID),hsv2rgb(&StartingHSV));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        else if (CurrentDrops[DropID].ZT == ZONE_TYPE_MATRIX)
-        {
-            {
-                int RowID = LedID;
-                int ColumnID = CurrentDrops[DropID].Column;
-                int ColumnCount = CurrentDrops[DropID].ColumnCount;
-                int Led;
-
-                int ZIndex = controller_zones[CIndex].zone_idx;
-
-                // If the drop is reversed
-                if (CurrentDrops[DropID].Reversed)
-                {
-                    if (0 < ( (CurrentDrops[DropID].LEDCount - RowID) + 3) )
-                    {
-                        Led = controller_zones[CIndex].controller->zones[ZIndex].matrix_map->map[( (ColumnCount * ((CurrentDrops[DropID].LEDCount - RowID) + 3)) + ColumnID)];
-                        controller_zones[CIndex].controller->SetLED((SIndex + Led),ToRGBColor(0,0,0));
-                    }
-
-                    if (0 < ( (CurrentDrops[DropID].LEDCount - RowID) + 2) )
-                    {
-                        Led = controller_zones[CIndex].controller->zones[ZIndex].matrix_map->map[( (ColumnCount * ((CurrentDrops[DropID].LEDCount - RowID) + 2 )) + ColumnID)];
-                        controller_zones[CIndex].controller->SetLED((SIndex + Led),hsv2rgb(&EndingHSV));
-                    }
-
-                    if (0 < ( (CurrentDrops[DropID].LEDCount - RowID) + 1) )
-                    {
-                        Led = controller_zones[CIndex].controller->zones[ZIndex].matrix_map->map[( (ColumnCount * ((CurrentDrops[DropID].LEDCount - RowID)  + 1)) + ColumnID)];
-                        controller_zones[CIndex].controller->SetLED((SIndex + Led),UserColor);
-                    }
-
-                    if (0 < ( (CurrentDrops[DropID].LEDCount - RowID) + 0) )
-                    {
-                        Led = controller_zones[CIndex].controller->zones[ZIndex].matrix_map->map[( (ColumnCount * ((CurrentDrops[DropID].LEDCount - RowID)  + 0)) + ColumnID)];
-                        controller_zones[CIndex].controller->SetLED((SIndex + Led),hsv2rgb(&StartingHSV));
-                    }
-
-                }
-                else
-                {
-                    if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 3)
-                    {
-                        Led = controller_zones[CIndex].controller->zones[ZIndex].matrix_map->map[( ( (RowID - 3) * ColumnCount ) + ColumnID)];
-
-                        if (LedID > 2 )
-                        {
-                            controller_zones[CIndex].controller->SetLED((SIndex + Led),ToRGBColor(0,0,0));
-                        }
-
-                        if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 2)
-                        {
-                            Led = controller_zones[CIndex].controller->zones[ZIndex].matrix_map->map[( ( (RowID - 2) * ColumnCount ) + ColumnID)];
-
-                            if (LedID > 1 )
-                            {
-                                controller_zones[CIndex].controller->SetLED((SIndex + Led),hsv2rgb(&EndingHSV));
-                            }
-
-                            if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 1)
-                            {
-                                Led = controller_zones[CIndex].controller->zones[ZIndex].matrix_map->map[( ( (RowID - 1) * ColumnCount ) + ColumnID)];
-
-                                if (LedID > 0 )
-                                {
-                                    controller_zones[CIndex].controller->SetLED((SIndex + Led),UserColor);
-                                }
-
-                                if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount)
-                                {
-                                    Led = controller_zones[CIndex].controller->zones[ZIndex].matrix_map->map[( (RowID * ColumnCount) + ColumnID)];
-                                    controller_zones[CIndex].controller->SetLED((SIndex + Led),hsv2rgb(&StartingHSV));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (CurrentDrops[DropID].Progress < CurrentDrops[DropID].LEDCount + 3)
-        {
-            CurrentDrops[DropID].Progress = CurrentDrops[DropID].Progress + Speed / (float)FPS;
-        }
-
-        else
-        {
-            ToDelete.push_back(DropID);
-        }
-    }
-
-    if (ToDelete.size() == 0)
-    {
-        return;
-    }
-
-    for (int DelIndex = ((int)ToDelete.size() - 1) ; DelIndex >= 0; DelIndex--)
-    {
-        int CIndex = CurrentDrops[ToDelete[DelIndex]].Index;
-        HasEffect[CIndex] = false;
-
-        CurrentDrops.erase(CurrentDrops.begin() + ToDelete[DelIndex]);
+        TriggerDrop(i, w);
+        RunDrops(i);
+        CleanDrops(i, h);
     }
 
 }
 
-/*-----------------------*\
-| Setters for Effect GUI  |
-\*-----------------------*/
+void Rain::TriggerDrop(unsigned int controller_zone_index, unsigned int w)
+{
+    unsigned int max_drops = std::min(w, Slider2Val);
+
+    if(drops[controller_zone_index].size() < max_drops && rand() % (2 + FPS / w) == 0)
+    {
+        RGBColor color;
+
+        if(OnlyFirstColorEnabled)
+        {
+            color = UserColors[0];
+        }
+        else if(RandomColorsEnabled)
+        {
+            hsv_t hsv;
+            hsv.hue = rand() % 360;
+            hsv.value = 255;
+            hsv.saturation = 255;
+            color = RGBColor(hsv2rgb(&hsv));
+        }
+        else
+        {
+            color = UserColors[(rand() % UserColors.size())];
+        }
+
+        unsigned int col = rand() % w;
+        float speed_mult = 1 + static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        Drop drop = {0.f, color, col, speed_mult};
+        drops[controller_zone_index].push_back(drop);
+
+    }
+}
+
+void Rain::RunDrops(unsigned int controller_zone_index)
+{
+    for(Drop& drop: drops[controller_zone_index])
+    {
+        drop.progress += drop.speed_mult * Speed / (float) FPS;
+    }
+}
+
+void Rain::CleanDrops(unsigned int controller_zone_index, unsigned int h)
+{
+    for( std::vector<Drop>::iterator iter = drops[controller_zone_index].begin();
+         iter != drops[controller_zone_index].end();)
+    {
+        if(iter->progress > h + 3)
+        {
+            drops[controller_zone_index].erase(iter);
+        }
+        else
+        {
+            iter++;
+        }
+    }
+}
+
+RGBColor Rain::GetColor(unsigned int controller_zone_index, unsigned int x, unsigned int y)
+{
+    for(Drop drop: drops[controller_zone_index])
+    {
+        if(drop.col == x)
+        {
+            float distance = drop.progress - y;
+
+            if(distance >= 0 && distance < 3)
+            {
+                float whole;
+                float frac = std::modf(distance, &whole);
+
+                if (whole == 2) // tail
+                {
+                    return Enlight(1 - frac, drop.color);
+                }
+                else if(whole == 1) // middle
+                {
+                    return drop.color;
+                }
+                else // head
+                {
+                    return Enlight(frac, drop.color);
+                }
+            }
+        }
+    }
+
+    return OFF;
+}
+
 void Rain::ASelectionWasChanged(std::vector<ControllerZone> controller_zones)
 {
-    RGBColor OFF = ToRGBColor(0,0,0);
+    unsigned int zones_count = controller_zones.size();
 
-    HasEffect.clear();
-    CurrentDrops.clear();
+    drops.resize(zones_count);
 
-    for(ControllerZone controller_zone: controller_zones)
+    for(unsigned int i = 0; i < zones_count; i++)
     {
-        HasEffect.push_back(false);
-        controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, OFF);
+        std::vector<Drop> zone_drops;
+        drops[i] = zone_drops;
     }
+}
+
+RGBColor Rain::Enlight(float brightness, RGBColor color)
+{
+    hsv_t hsv;
+    rgb2hsv(color, &hsv);
+    hsv.value *= brightness;
+    return RGBColor(hsv2rgb(&hsv));
 }
