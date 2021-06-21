@@ -17,15 +17,16 @@ public:
     ~EffectList();
 
     static std::map<std::string, std::function<RGBEffect*()>> effects_construtors;
-
     static void RegisterEffect(std::string, std::function<RGBEffect*()>);
+    void ShowStartStopButton(bool);
 
-    static void blah(){};
 signals:
     void EffectAdded(RGBEffect*);
+    void ToggleAllEffectsState();
 
 private slots:
     void on_add_effect_clicked();
+    void on_start_stop_all_button_clicked();
 
 private:
     Ui::EffectList *ui;

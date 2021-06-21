@@ -22,6 +22,9 @@ public:
 
     RGBEffect* GetEffect();
 
+    void StartEffect();
+    void StopEffect();
+
 signals:
     void EffectState(bool);
 
@@ -48,9 +51,6 @@ private:
     bool RandomColors = false;
 
     void InitUi();
-    //void LoadStartupSettings();
-    void StartEffect();
-    void StopEffect();
 
     std::vector<unsigned int> speeds;
 };

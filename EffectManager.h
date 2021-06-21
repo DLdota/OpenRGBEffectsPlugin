@@ -23,6 +23,8 @@ public:
     std::vector<ControllerZone> GetAssignedZones(RGBEffect*);
     std::map<RGBEffect*, std::vector<ControllerZone>> GetEffectsMapping();
 
+    bool HasActiveEffects();
+
 private:
     EffectManager();
     ~EffectManager() {};

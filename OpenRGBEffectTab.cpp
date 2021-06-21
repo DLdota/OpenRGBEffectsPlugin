@@ -3,7 +3,6 @@
 #include "OpenRGBEffectSettings.h"
 #include "EffectManager.h"
 #include "EffectTabHeader.h"
-#include "EffectList.h"
 #include "OpenRGBEffectsPlugin.h"
 #include "PluginInfo.h"
 
@@ -20,6 +19,8 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
 
     ui->device_list->DisableControls();
 
+    effect_list = new EffectList;
+
     InitEffectTabs();
 
     QTimer::singleShot(1000, [=](){
@@ -34,8 +35,6 @@ OpenRGBEffectTab::~OpenRGBEffectTab()
 
 void OpenRGBEffectTab::InitEffectTabs()
 {
-    EffectList* effect_list = new EffectList;
-
     QLabel* label = new QLabel("No effects added. Please select one from the list to get started.");
     label->setAlignment(Qt::AlignCenter);
 
@@ -48,6 +47,17 @@ void OpenRGBEffectTab::InitEffectTabs()
 
     connect(effect_list, &EffectList::EffectAdded, [=](RGBEffect* effect){
         CreateEffectTab(effect);
+    });
+
+    connect(effect_list, &EffectList::ToggleAllEffectsState, [=](){
+        if(EffectManager::Get()->HasActiveEffects())
+        {
+            StopAll();
+        }
+        else
+        {
+            StartAll();
+        }
     });
 }
 
@@ -77,6 +87,8 @@ void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
         EffectManager::Get()->SetEffectUnActive(effect);
         EffectManager::Get()->RemoveMapping(effect);
 
+        effect_list->ShowStartStopButton(ui->EffectTabs->count() > 1);
+
         delete effect_page;
         delete effect_header;
         //delete effect;
@@ -85,6 +97,8 @@ void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
     effect_header->ToogleRunningIndicator(effect->IsAutoStart());
 
     ui->EffectTabs->setCurrentIndex(tab_position);
+
+    effect_list->ShowStartStopButton(ui->EffectTabs->count() > 1);
 }
 
 void OpenRGBEffectTab::DeviceListChanged()
@@ -318,4 +332,25 @@ void OpenRGBEffectTab::LoadEffectSettings(json effect_settings)
 
     EffectManager::Get()->Assign(controller_zones, effect);
     ui->device_list->ApplySelection(controller_zones);
+}
+
+
+void OpenRGBEffectTab::StartAll()
+{
+    QList<OpenRGBEffectPage*> pages = ui->EffectTabs->findChildren<OpenRGBEffectPage*>();
+
+    for(OpenRGBEffectPage* page: pages)
+    {
+        page->StartEffect();
+    }
+}
+
+void OpenRGBEffectTab::StopAll()
+{
+    QList<OpenRGBEffectPage*> pages = ui->EffectTabs->findChildren<OpenRGBEffectPage*>();
+
+    for(OpenRGBEffectPage* page: pages)
+    {
+        page->StopEffect();
+    }
 }

@@ -3,6 +3,7 @@
 
 #include "ui_OpenRGBEffectTab.h"
 #include "RGBEffect.h"
+#include "EffectList.h"
 
 namespace Ui {
 class OpenRGBEffectTab;
@@ -26,7 +27,8 @@ private slots:
     void on_plugin_infos_clicked();
 
 private:
-    Ui::OpenRGBEffectTab                *ui;
+    Ui::OpenRGBEffectTab *ui;
+    EffectList* effect_list = nullptr;
 
     void InitEffectTabs();
     void CreateEffectTab(RGBEffect*);
@@ -36,6 +38,9 @@ private:
     void LoadEffectSettings(json);
 
     void SetFirstTabStyle();
+
+    void StartAll();
+    void StopAll();
 };
 
 #endif // OPENRGBEFFECTTAB_H

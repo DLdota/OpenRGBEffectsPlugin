@@ -164,3 +164,8 @@ void  EffectManager::EffectThreadFunction(RGBEffect* effect)
 
     printf("EFFECT: %s thread ended\n", effect->EffectDetails.EffectName.c_str());
 }
+
+bool EffectManager::HasActiveEffects()
+{
+    return !ActiveEffects.empty();
+}
