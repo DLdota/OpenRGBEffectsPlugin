@@ -5,9 +5,12 @@
 #include "EffectTabHeader.h"
 #include "EffectList.h"
 #include "OpenRGBEffectsPlugin.h"
+#include "PluginInfo.h"
 
 #include <QTabBar>
 #include <QTimer>
+#include <QDialog>
+#include <QFile>
 
 OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     QWidget(parent),
@@ -129,6 +132,42 @@ void OpenRGBEffectTab::on_device_list_SelectionChanged()
     RGBEffect* effect = ((OpenRGBEffectPage*)widget)->GetEffect();
 
     EffectManager::Get()->Assign(ui->device_list->GetSelection(), effect);
+}
+
+void OpenRGBEffectTab::on_plugin_infos_clicked()
+{
+    QDialog* dialog = new QDialog();
+    dialog->setWindowTitle("Effects");
+
+    if (OpenRGBEffectsPlugin::DarkTheme)
+    {
+        QPalette pal;
+        pal.setColor(QPalette::WindowText, Qt::white);
+        dialog->setPalette(pal);
+        QFile dark_theme(":/windows_dark.qss");
+        dark_theme.open(QFile::ReadOnly);
+        dialog->setStyleSheet(dark_theme.readAll());
+        dark_theme.close();
+    }
+
+    dialog->setMinimumSize(300,320);
+    dialog->setModal(true);
+
+    QVBoxLayout* dialog_layout = new QVBoxLayout(dialog);
+
+    PluginInfo* plugin_info = new PluginInfo(dialog);
+
+    dialog_layout->addWidget(plugin_info);
+
+    QHBoxLayout* buttons_layout = new QHBoxLayout();
+
+    QPushButton* close_button = new QPushButton();
+    close_button->setText("Close");
+    dialog->connect(close_button,SIGNAL(clicked()),dialog,SLOT(reject()));
+    buttons_layout->addWidget(close_button);
+    dialog_layout->addLayout(buttons_layout);
+
+    dialog->exec();
 }
 
 void OpenRGBEffectTab::on_save_settings_clicked()

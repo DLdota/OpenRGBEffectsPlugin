@@ -14,6 +14,31 @@ unix:!macx {
   QMAKE_CXXFLAGS += -std=c++17
 }
 
+#-----------------------------------------------------------------------------------------------#
+# Application Configuration                                                                     #
+#-----------------------------------------------------------------------------------------------#
+PLUGIN_VERSION     = 0.1
+
+#-----------------------------------------------------------------------------------------------#
+# Automatically generated build information                                                     #
+#-----------------------------------------------------------------------------------------------#
+win32:BUILDDATE = $$system(date /t)
+unix:BUILDDATE  = $$system(date -R -d "@${SOURCE_DATE_EPOCH:-$(date +%s)}")
+GIT_COMMIT_ID   = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$_PRO_FILE_PWD_ rev-parse HEAD)
+GIT_COMMIT_DATE = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$_PRO_FILE_PWD_ show -s --format=%ci HEAD)
+GIT_BRANCH      = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$_PRO_FILE_PWD_ rev-parse --abbrev-ref HEAD)
+
+
+win32:LATEST_BUILD_URL="https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/artifacts/master/download?job=Windows 64"
+unix:!macx:LATEST_BUILD_URL="https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/artifacts/master/download?job=Linux 64"
+
+DEFINES +=                                                                                      \
+    VERSION_STRING=\\"\"\"$$PLUGIN_VERSION\\"\"\"                                               \
+    BUILDDATE_STRING=\\"\"\"$$BUILDDATE\\"\"\"                                                  \
+    GIT_COMMIT_ID=\\"\"\"$$GIT_COMMIT_ID\\"\"\"                                                 \
+    GIT_COMMIT_DATE=\\"\"\"$$GIT_COMMIT_DATE\\"\"\"                                             \
+    GIT_BRANCH=\\"\"\"$$GIT_BRANCH\\"\"\"                                                       \
+    LATEST_BUILD_URL=\\"\"\"$$LATEST_BUILD_URL\\"\"\"                                           \
 
 #-----------------------------------------------------------------------------------------------#
 # OpenRGB Plugin SDK                                                                            #
@@ -49,6 +74,7 @@ HEADERS +=                                                                      
     OpenRGB/i2c_smbus/i2c_smbus.h                                                               \
     OpenRGB/net_port/net_port.h                                                                 \
     OpenRGB/RGBController/RGBController.h                                                       \
+    PluginInfo.h \
     ZoneListItem.h
 
 
@@ -94,6 +120,7 @@ SOURCES +=                                                                      
     Dependencies/HSV/hsv.cpp                                                                    \
     Dependencies/ColorWheel/ColorWheel.cpp                                                      \
     Dependencies/ScreenSelection/ScreenSelection.cpp                                            \
+    PluginInfo.cpp \
     ZoneListItem.cpp
 
 FORMS +=                                                                                        \
@@ -110,6 +137,7 @@ FORMS +=                                                                        
     OpenRGBEffectPage.ui                                                                        \
     OpenRGBEffectTab.ui                                                                         \
     ColorPicker.ui                                                                              \
+    PluginInfo.ui \
     ZoneListItem.ui
 
 #-----------------------------------------------------------------------------------------------#
