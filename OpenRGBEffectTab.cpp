@@ -225,7 +225,7 @@ void OpenRGBEffectTab::on_save_settings_clicked()
 
         std::vector<json> zones;
 
-        for(ControllerZone controller_zone: controller_zones)
+        for(ControllerZone& controller_zone: controller_zones)
         {
             zones.push_back(controller_zone.to_json());
         }

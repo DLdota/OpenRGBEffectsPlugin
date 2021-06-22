@@ -74,7 +74,7 @@ void EffectManager::Assign(std::vector<ControllerZone> controller_zones, RGBEffe
         std::vector<ControllerZone> remaining_zones;
         std::vector<ControllerZone> current_zones = it->second;
 
-        for(ControllerZone zone : current_zones)
+        for(ControllerZone& zone : current_zones)
         {
             if(std::find(controller_zones.begin(), controller_zones.end(), zone) == controller_zones.end())
             {
@@ -88,7 +88,7 @@ void EffectManager::Assign(std::vector<ControllerZone> controller_zones, RGBEffe
     // force direct mode
     std::set<RGBController*> controllers;
 
-    for(ControllerZone controller_zone: controller_zones)
+    for(ControllerZone& controller_zone: controller_zones)
     {
         controllers.insert(controller_zone.controller);
     }
@@ -135,7 +135,7 @@ void  EffectManager::EffectThreadFunction(RGBEffect* effect)
             // Use a set to update only once the controllers
             std::set<RGBController*> controllers;
 
-            for(ControllerZone controller_zone: controller_zones)
+            for(ControllerZone& controller_zone: controller_zones)
             {
                 controllers.insert(controller_zone.controller);
             }

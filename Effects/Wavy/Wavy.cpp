@@ -50,7 +50,7 @@ void Wavy::DefineExtraOptions(QLayout* layout)
 
 void Wavy::StepEffect(std::vector<ControllerZone> controller_zones)
 {
-    for(ControllerZone controller_zone : controller_zones)
+    for(ControllerZone& controller_zone : controller_zones)
     {
         zone_type ZT = controller_zone.type();
         int start_idx = controller_zone.start_idx();

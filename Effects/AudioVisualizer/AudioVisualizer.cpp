@@ -455,7 +455,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone> controller_zones)
 
     int i = 0;
 
-    for(ControllerZone controller_zone: controller_zones)
+    for(ControllerZone& controller_zone: controller_zones)
     {
         int                 x_count                 = controller_zone.leds_count();
         int                 y_count                 = 0;

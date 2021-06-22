@@ -764,7 +764,7 @@ void AudioSync::StepEffect(std::vector<ControllerZone> controller_zones)
 
     int colors_count = (int)colors_rotation.size();
 
-    for(ControllerZone controller_zone: controller_zones)
+    for(ControllerZone& controller_zone: controller_zones)
     {
         /*-------------------*\
         | Setup for the loop  |

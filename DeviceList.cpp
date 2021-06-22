@@ -104,7 +104,7 @@ std::vector<ControllerZone> DeviceList::GetSelection()
 
     for(DeviceListItem* item: device_items)
     {
-        for(ControllerZone controller_zone: item->GetSelection())
+        for(ControllerZone& controller_zone: item->GetSelection())
         {
             selection.push_back(controller_zone);
         }

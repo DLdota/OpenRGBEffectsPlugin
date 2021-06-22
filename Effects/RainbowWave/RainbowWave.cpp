@@ -30,7 +30,7 @@ void RainbowWave::StepEffect(std::vector<ControllerZone> controller_zones)
     HSVVal.saturation = 255;
     HSVVal.value      = 255;
 
-    for(ControllerZone controller_zone: controller_zones)
+    for(ControllerZone& controller_zone: controller_zones)
     {
         /*-------------------*\
         | Setup for the loop  |

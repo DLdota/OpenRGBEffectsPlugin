@@ -115,7 +115,7 @@ void StarryNight::ASelectionWasChanged(std::vector<ControllerZone> controller_zo
 
     CurrentStars.clear();
 
-    for(ControllerZone controller_zone : controller_zones)
+    for(ControllerZone& controller_zone : controller_zones)
     {
         controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, OFF);
     }

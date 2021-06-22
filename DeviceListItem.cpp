@@ -209,7 +209,7 @@ void DeviceListItem::ApplySelection(std::vector<ControllerZone> selection)
     }
 
     // Set checked if needed
-    for(ControllerZone controller_zone : selection)
+    for(ControllerZone& controller_zone : selection)
     {
         if(controller == controller_zone.controller)
         {

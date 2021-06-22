@@ -28,7 +28,7 @@ void Visor::StepEffect(std::vector<ControllerZone> controller_zones)
     current_head_hue = Dir ? Head.hue: Tail.hue;
     current_tail_hue = Dir ? Tail.hue: Head.hue;
 
-    for(ControllerZone controller_zone: controller_zones)
+    for(ControllerZone& controller_zone: controller_zones)
     {
         /*-------------------*\
         | Setup for the loop  |
