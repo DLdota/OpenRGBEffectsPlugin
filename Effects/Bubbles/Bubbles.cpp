@@ -40,11 +40,13 @@ void Bubbles::DefineExtraOptions(QLayout* layout)
 
 void Bubbles::StepEffect(std::vector<ControllerZone> controller_zones)
 {
-    for(ControllerZone controller_zone : controller_zones)
+    for(ControllerZone& controller_zone : controller_zones)
     {
-        if (controller_zone.type() == ZONE_TYPE_LINEAR || controller_zone.type() == ZONE_TYPE_SINGLE)
-        {
-            int start_idx = controller_zone.start_idx();
+        int start_idx = controller_zone.start_idx();
+        zone_type ZT = controller_zone.type();
+
+        if (ZT == ZONE_TYPE_LINEAR || ZT == ZONE_TYPE_SINGLE)
+        {            
             int leds_count = controller_zone.leds_count();
 
             for (int LedID = 0; LedID < leds_count; LedID++)
@@ -53,7 +55,7 @@ void Bubbles::StepEffect(std::vector<ControllerZone> controller_zones)
             }
         }
 
-        else if (controller_zone.type() == ZONE_TYPE_MATRIX)
+        else if (ZT == ZONE_TYPE_MATRIX)
         {
             int cols = controller_zone.matrix_map_width();
             int rows = controller_zone.matrix_map_height();
@@ -64,7 +66,7 @@ void Bubbles::StepEffect(std::vector<ControllerZone> controller_zones)
                 {
                     RGBColor color = GetColor(col_id, row_id, cols, rows);
                     int LedID = controller_zone.controller->zones[controller_zone.zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                    controller_zone.controller->SetLED(LedID, color);
+                    controller_zone.controller->SetLED(start_idx + LedID, color);
                 }
             }
         }
