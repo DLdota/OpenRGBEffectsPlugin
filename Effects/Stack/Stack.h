@@ -42,8 +42,6 @@ private:
 
     RGBColor GetColor(unsigned int, unsigned int);
     void ResetZone(unsigned int, ControllerZone);
-    RGBColor Enlight(float, RGBColor);
-    RGBColor RandomColor();
 
     RGBColor OFF = ToRGBColor(0,0,0);
 

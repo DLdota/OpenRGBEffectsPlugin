@@ -1,5 +1,6 @@
 #include "Stack.h"
 #include "hsv.h"
+#include "ColorUtils.h"
 
 REGISTER_EFFECT(Stack);
 
@@ -147,15 +148,7 @@ RGBColor Stack::GetColor(unsigned int controller_zone_idx, unsigned int led_idx)
         return OFF;
     }
 
-    return Enlight(1 - distance, zone_colors[controller_zone_idx]);
-}
-
-RGBColor Stack::Enlight(float brightness, RGBColor color)
-{
-    hsv_t hsv;
-    rgb2hsv(color, &hsv);
-    hsv.value *= brightness;
-    return RGBColor(hsv2rgb(&hsv));
+    return ColorUtils::Enlight(zone_colors[controller_zone_idx], 1 - distance);
 }
 
 void Stack::ASelectionWasChanged(std::vector<ControllerZone> controller_zones)
@@ -207,17 +200,9 @@ void Stack::ResetZone(unsigned int controller_zone_idx, ControllerZone controlle
         current_colors[controller_zone_idx][c] = OFF;
     }
 
-    zone_colors[controller_zone_idx] = RandomColorsEnabled ? RandomColor() : UserColors[0];
+    zone_colors[controller_zone_idx] = RandomColorsEnabled ? ColorUtils::RandomRGBColor() : UserColors[0];
 }
 
-RGBColor Stack::RandomColor()
-{
-    hsv_t hsv;
-    hsv.hue = rand() % 360;
-    hsv.saturation = 255;
-    hsv.value = 255;
-    return RGBColor(hsv2rgb(&hsv));
-}
 
 void Stack::LoadCustomSettings(json settings)
 {

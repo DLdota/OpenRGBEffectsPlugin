@@ -1,4 +1,5 @@
 #include "Sequence.h"
+#include "ColorUtils.h"
 
 REGISTER_EFFECT(Sequence);
 
@@ -58,7 +59,7 @@ void Sequence::StepEffect(std::vector<ControllerZone> controller_zones)
     if(frac >= 0.8)
     {
        unsigned int next_color_index = current_color_index < colors_count - 1 ? current_color_index + 1 : 0;
-       color = Interpolate(colors[current_color_index], colors[next_color_index], (frac - 0.8) * 5);
+       color = ColorUtils::Interpolate(colors[current_color_index], colors[next_color_index], (frac - 0.8) * 5);
        fade_mult = 1.f / (float) Slider2Val;
     }
     else
@@ -131,25 +132,7 @@ json Sequence::SaveCustomSettings(json Settings)
     return Settings;
 }
 
-void Sequence::on_colors_count_spinBox_valueChanged(int value)
+void Sequence::on_colors_count_spinBox_valueChanged(int)
 {
     ResetColors();
-}
-
-RGBColor Sequence::Interpolate(RGBColor color1, RGBColor color2, float fraction)
-{
-    unsigned char   r1 = RGBGetRValue(color1);
-    unsigned char   r2 = RGBGetRValue(color2);
-
-    unsigned char   g1 = RGBGetGValue(color1);
-    unsigned char   g2 = RGBGetGValue(color2);
-
-    unsigned char   b1 = RGBGetBValue(color1);
-    unsigned char   b2 = RGBGetBValue(color2);
-
-    return RGBColor(ToRGBColor(
-                        (int) ((r2 - r1) * fraction + r1),
-                        (int) ((g2 - g1) * fraction + g1),
-                        (int) ((b2 - b1) * fraction + b1)
-                        ));
 }

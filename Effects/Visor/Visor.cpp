@@ -1,4 +1,5 @@
 ﻿#include "Visor.h"
+#include "ColorUtils.h"
 
 REGISTER_EFFECT(Visor);
 
@@ -105,11 +106,8 @@ void Visor::StepEffect(std::vector<ControllerZone> controller_zones)
 
 void Visor::GenerateRandomColors()
 {
-    int r = rand() % 255;
-    int g = rand() % 255;
-    int b = rand() % 255;
-    RGBColor C1 = ToRGBColor(r, g, b);
-    RGBColor C2 = ToRGBColor((255-r),(255-g),(255-b));
+    RGBColor C1 = ColorUtils::RandomRGBColor();
+    RGBColor C2 = ColorUtils::Invert(C1);
 
     rgb2hsv(C1, &Head);
     rgb2hsv(C2, &Tail);

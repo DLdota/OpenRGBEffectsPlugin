@@ -51,6 +51,7 @@ INCLUDEPATH +=                                                                  
     OpenRGB/dependencies/json                                                                   \
 
 HEADERS +=                                                                                      \
+    ColorUtils.h \
     ControllerZone.h                                                                            \
     ControllerZoneList.h                                                                        \
     DeviceList.h                                                                                \

@@ -46,7 +46,6 @@ private:
     const double PI = std::atan(1)*4;
 
     RGBColor GetColor(int, int);
-    RGBColor Interpolate(RGBColor, RGBColor, float);
     void GenerateRandomColors();
 
 private slots:

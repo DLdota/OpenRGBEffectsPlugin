@@ -1,4 +1,5 @@
 #include "Breathing.h"
+#include "ColorUtils.h"
 
 REGISTER_EFFECT(Breathing);
 
@@ -31,7 +32,7 @@ void Breathing::StepEffect(std::vector<ControllerZone> controller_zones)
 
         if(RandomColorsEnabled)
         {
-           rgb2hsv(ToRGBColor(rand() % 255, rand() % 255, rand() % 255), &CurrentColor);
+           CurrentColor = ColorUtils::RandomHSVColor();
         }
         else
         {

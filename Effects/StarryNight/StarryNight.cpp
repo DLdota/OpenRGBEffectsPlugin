@@ -1,5 +1,6 @@
 #include "StarryNight.h"
 #include "hsv.h"
+#include "ColorUtils.h"
 
 REGISTER_EFFECT(StarryNight);
 
@@ -53,15 +54,11 @@ void StarryNight::StepEffect(std::vector<ControllerZone> controller_zones)
 
                     if (RandomColorsEnabled)
                     {
-                        LEDStar.Color = ToRGBColor(
-                                    rand() % 255, /* R */
-                                    rand() % 255, /* G */
-                                    rand() % 255  /* B */
-                                    );
+                        LEDStar.Color = ColorUtils::RandomRGBColor();
                     }
                     else
                     {
-                        LEDStar.Color = UserColors[rand() % 4];
+                        LEDStar.Color = UserColors[rand() % UserColors.size()];
                     }
 
                     CurrentStars.push_back(LEDStar);

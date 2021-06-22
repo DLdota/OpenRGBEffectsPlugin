@@ -35,7 +35,6 @@ private:
 
     void ResetColors();
     ColorPicker* CreatePicker(int);
-    RGBColor Interpolate(RGBColor, RGBColor, float);
 
     std::vector<RGBColor> colors;
     std::vector<ColorPicker*> color_pickers;

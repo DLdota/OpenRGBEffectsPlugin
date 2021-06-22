@@ -1,4 +1,5 @@
 #include "GradientWave.h"
+#include "ColorUtils.h"
 
 REGISTER_EFFECT(GradientWave);
 
@@ -205,12 +206,7 @@ void GradientWave::SetRandomColorsEnabled(bool value)
 
     if (RandomColorsEnabled)
     {
-        RandomColorList[0] = ToRGBColor(rand() % 255,
-                                        rand() % 255,
-                                        rand() % 255);
-
-        RandomColorList[1] = ToRGBColor(rand() % 255,
-                                        rand() % 255,
-                                        rand() % 255);
+        RandomColorList[0] = ColorUtils::RandomRGBColor();
+        RandomColorList[1] = ColorUtils::RandomRGBColor();
     }
 }

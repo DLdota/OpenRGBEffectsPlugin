@@ -1,5 +1,6 @@
 #include "Rain.h"
 #include "hsv.h"
+#include "ColorUtils.h"
 
 REGISTER_EFFECT(Rain);
 
@@ -92,11 +93,7 @@ void Rain::TriggerDrop(unsigned int controller_zone_index, unsigned int w)
         }
         else if(RandomColorsEnabled)
         {
-            hsv_t hsv;
-            hsv.hue = rand() % 360;
-            hsv.value = 255;
-            hsv.saturation = 255;
-            color = RGBColor(hsv2rgb(&hsv));
+            color = ColorUtils::RandomRGBColor();
         }
         else
         {
@@ -150,7 +147,7 @@ RGBColor Rain::GetColor(unsigned int controller_zone_index, unsigned int x, unsi
 
                 if (whole == 2) // tail
                 {
-                    return Enlight(1 - frac, drop.color);
+                    return ColorUtils::Enlight(drop.color, 1 - frac);
                 }
                 else if(whole == 1) // middle
                 {
@@ -158,7 +155,7 @@ RGBColor Rain::GetColor(unsigned int controller_zone_index, unsigned int x, unsi
                 }
                 else // head
                 {
-                    return Enlight(frac, drop.color);
+                    return ColorUtils::Enlight(drop.color, frac);
                 }
             }
         }
@@ -178,12 +175,4 @@ void Rain::ASelectionWasChanged(std::vector<ControllerZone> controller_zones)
         std::vector<Drop> zone_drops;
         drops[i] = zone_drops;
     }
-}
-
-RGBColor Rain::Enlight(float brightness, RGBColor color)
-{
-    hsv_t hsv;
-    rgb2hsv(color, &hsv);
-    hsv.value *= brightness;
-    return RGBColor(hsv2rgb(&hsv));
 }

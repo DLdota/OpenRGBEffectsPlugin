@@ -1,4 +1,5 @@
 #include "Wavy.h"
+#include "ColorUtils.h"
 
 REGISTER_EFFECT(Wavy);
 
@@ -135,31 +136,12 @@ void Wavy::GenerateRandomColors()
 {
     RandomColors.clear();
 
-    int r = rand() % 255;
-    int g = rand() % 255;
-    int b = rand() % 255;
+    RGBColor color = ColorUtils::RandomRGBColor();
 
-    RandomColors.push_back(RGBColor(ToRGBColor(r,g,b)));
-    RandomColors.push_back(RGBColor(ToRGBColor((255-r),(255-g),(255-b))));
+    RandomColors.push_back(color);
+    RandomColors.push_back(ColorUtils::Invert(color));
 }
 
-RGBColor Wavy::Interpolate(RGBColor color1, RGBColor color2, float fraction)
-{
-    unsigned char   r1 = RGBGetRValue(color1);
-    unsigned char   r2 = RGBGetRValue(color2);
-
-    unsigned char   g1 = RGBGetGValue(color1);
-    unsigned char   g2 = RGBGetGValue(color2);
-
-    unsigned char   b1 = RGBGetBValue(color1);
-    unsigned char   b2 = RGBGetBValue(color2);
-
-    return RGBColor(ToRGBColor(
-                        (int) ((r2 - r1) * fraction + r1),
-                        (int) ((g2 - g1) * fraction + g1),
-                        (int) ((b2 - b1) * fraction + b1)
-                        ));
-}
 
 RGBColor Wavy::GetColor(int i, int count)
 {
@@ -170,11 +152,11 @@ RGBColor Wavy::GetColor(int i, int count)
 
     if(RandomColorsEnabled)
     {
-        return Interpolate(RandomColors[0], RandomColors[1], h);
+        return ColorUtils::Interpolate(RandomColors[0], RandomColors[1], h);
     }
     else
     {
-        return Interpolate(UserColors[0], UserColors[1], h);
+        return ColorUtils::Interpolate(UserColors[0], UserColors[1], h);
     }
 }
 

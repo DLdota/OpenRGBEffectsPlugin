@@ -30,7 +30,6 @@ private:
     void  TriggerDrop(unsigned int, unsigned int);
     void  CleanDrops(unsigned int, unsigned int);
     void  RunDrops(unsigned int);
-    RGBColor Enlight(float, RGBColor);
 
     std::vector<std::vector<Drop>> drops;
     RGBColor OFF = ToRGBColor(0,0,0);
