@@ -42,7 +42,7 @@ void Breathing::StepEffect(std::vector<ControllerZone> controller_zones)
 
     CurrentColor.value = pow(sin(Progress),3) * 255;
 
-    for (ControllerZone controller_zone: controller_zones)
+    for (ControllerZone& controller_zone: controller_zones)
     {
         controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, hsv2rgb(&CurrentColor));
     }

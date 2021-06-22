@@ -53,14 +53,15 @@ void GifPlayer::StepEffect(std::vector<ControllerZone> controller_zones)
 
     QImage image = movie->currentImage();
 
-    for(ControllerZone controller_zone : controller_zones)
+    for(ControllerZone& controller_zone : controller_zones)
     {
+        unsigned int start_idx = controller_zone.start_idx();
 
         if(controller_zone.type() == ZONE_TYPE_SINGLE || controller_zone.type() == ZONE_TYPE_LINEAR)
         {
             unsigned int width = controller_zone.leds_count();
             unsigned int height = 1;
-            unsigned int start_idx = controller_zone.start_idx();
+
 
             QImage scaled = image.scaled(width, height);
 
@@ -86,7 +87,7 @@ void GifPlayer::StepEffect(std::vector<ControllerZone> controller_zones)
                     QColor color = scaled.pixelColor(w, h);
 
                     unsigned int led_num = map[h * width + w];
-                    controller_zone.controller->SetLED(led_num, ToRGBColor(color.red(), color.green(), color.blue()));
+                    controller_zone.controller->SetLED(start_idx + led_num, ToRGBColor(color.red(), color.green(), color.blue()));
                 }
             }
 

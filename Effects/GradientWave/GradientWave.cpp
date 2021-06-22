@@ -56,7 +56,7 @@ void GradientWave::StepEffect(std::vector<ControllerZone> controller_zones)
 
     int i = 0;
 
-    for (ControllerZone controller_zone: controller_zones)
+    for (ControllerZone& controller_zone: controller_zones)
     {
         zone_type ZT = controller_zone.type();
         int StartIndex = controller_zone.start_idx();
@@ -90,7 +90,7 @@ void GradientWave::StepEffect(std::vector<ControllerZone> controller_zones)
                     RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(FPS))*(F[CVal]-S[CVal]));
                 }
 
-                controller_zone.controller->SetLED((RVRS ? (LEDCount - 1) - LedID : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
+                controller_zone.controller->SetLED((RVRS ? StartIndex + (LEDCount - 1) - LedID : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
             }
 
             if (Progress[i] < FPS*2)

@@ -41,7 +41,7 @@ void Ambient::StepEffect(std::vector<ControllerZone> controller_zones)
 
     RGBColor color = ToRGBColor(C.red(),C.green(),C.blue());
 
-    for (ControllerZone controller_zone : controller_zones)
+    for (ControllerZone& controller_zone : controller_zones)
     {
         controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, color);
     }
