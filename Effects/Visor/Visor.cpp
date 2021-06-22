@@ -155,16 +155,14 @@ RGBColor Visor::GetColor(int i, int count)
     float whole;
     float linear_fractional = std::modf(percent, &whole);
     float linear_neg_fractional = 1.0f - linear_fractional;
-
     float fractional = pow(linear_fractional,  3.0);
-    float neg_fractional = 1.0f - pow(linear_fractional, 1.0/3.0);
 
     int current_first_led = (int) whole;
     int half_width = width/2;
 
-    float value;
-    float hue;
-    float sat;
+    float value = 0;
+    float hue = 0;
+    float sat = 0;
 
     // black leds
     if(i < current_first_led  - width || i > current_first_led  -1)
@@ -176,7 +174,7 @@ RGBColor Visor::GetColor(int i, int count)
     // tail led
     if(current_first_led  - width== i)
     {
-        value = neg_fractional * Tail.value;
+        value = linear_neg_fractional * Tail.value;
         sat = Tail.saturation;
         hue = current_tail_hue;
     }
