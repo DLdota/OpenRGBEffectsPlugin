@@ -1402,17 +1402,26 @@ void AudioVisualizer::DrawPattern(VISUALIZER_PATTERN pattern, int bright, vis_pi
 
 void AudioVisualizer::SetupMatrixGrid(int x_count, int y_count, int * x_idx_list, int * y_idx_list)
 {
-    double x_step = (SPECTROGRAPH_COLS - 1) / (1.0 * x_count);
-    double y_step = (SPECTROGRAPH_ROWS - ROW_IDX_SPECTROGRAPH_TOP) / (1.0 * y_count);;
-
     for(int x = 0; x < x_count; x++)
     {
-        x_idx_list[x] = round(x * x_step);
+        if(x_count < 10)
+        {
+            x_idx_list[x] = (int)((x * (SPECTROGRAPH_COLS / (float)(x_count))) + (0.5f * (SPECTROGRAPH_COLS / (float)(x_count))));
+        }
+        else if(x < ((x_count) / 2))
+        {
+            x_idx_list[x] = (int)((x * (SPECTROGRAPH_COLS / (float)(x_count - 1))) + (0.5f * (SPECTROGRAPH_COLS / (float)(x_count - 1))));
+        }
+        else
+        {
+            x_idx_list[x] = (int)((x * (SPECTROGRAPH_COLS / (float)(x_count - 1))) - (0.5f * (SPECTROGRAPH_COLS / (float)(x_count - 1))));
+        }
+
     }
 
     for(int y = 0; y < y_count; y++)
     {
-        y_idx_list[y] = ROW_IDX_SPECTROGRAPH_TOP + round(y * y_step);
+        y_idx_list[y] = (int)(ROW_IDX_SPECTROGRAPH_TOP + (y * (SPECTROGRAPH_ROWS / (float)y_count)) + (0.5f * (SPECTROGRAPH_ROWS / (float)y_count)));
     }
 }
 
