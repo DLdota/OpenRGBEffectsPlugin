@@ -161,8 +161,6 @@ AudioVisualizer::AudioVisualizer(QWidget* parent):
     image = new QImage(256, 64, QImage::Format_RGB32);
     scene = new QGraphicsScene(this);
     ui->graphicsView_Visualization_Preview->setScene(scene);
-
-    ui->ShowHideSettings->click();
 }
 
 AudioVisualizer::~AudioVisualizer()
@@ -645,23 +643,6 @@ void AudioVisualizer::EffectState(bool IsRunning)
             AudioManager::get()->UnRegisterClient(previous_audio_device_idx,this);
             RegisteredForDevice = false;
         }
-    }
-}
-
-void AudioVisualizer::on_ShowHideSettings_clicked()
-{
-    if (Hiding)
-    {
-        Hiding = false;
-        ui->MainFrame->show();
-        ui->ToBottom->changeSize(0,0,QSizePolicy::Fixed,QSizePolicy::Fixed);
-    }
-    else
-    {
-        Hiding = true;
-        ui->MainFrame->hide();
-        ui->ToBottom->changeSize(0,0,QSizePolicy::Expanding,QSizePolicy::Expanding);
-        adjustSize();
     }
 }
 

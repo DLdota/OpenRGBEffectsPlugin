@@ -440,38 +440,14 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     \*-------------------------*/
     QPushButton *reset_defaults_button = new QPushButton("Reset defaults");
     MainAudioSyncLayout->addWidget(reset_defaults_button);
-    connect(reset_defaults_button,SIGNAL(clicked(bool)), this, SLOT(RestoreDefaultSettings()));
-
-    /*-----------------*\
-    | Hide/Show Button  |
-    \*-----------------*/
-    QPushButton* HideShowButton = new QPushButton("Show/Hide Settings");
-    connect(HideShowButton,SIGNAL(clicked()),this, SLOT(ShowHide()));
+    connect(reset_defaults_button,SIGNAL(clicked(bool)), this, SLOT(RestoreDefaultSettings())); 
 
     AudioSyncFrame->setLayout(MainAudioSyncLayout);
     PrimaryLayout->addSpacerItem(ToBottom);
     PrimaryLayout->addWidget(AudioSyncFrame);
-    PrimaryLayout->addWidget(HideShowButton);
     PrimaryFrame->setLayout(PrimaryLayout);
 
     ParentLayout->addWidget(PrimaryFrame);
-
-    HideShowButton->click();
-}
-
-void AudioSync::ShowHide()
-{
-    if (AudioSyncFrame->isHidden())
-    {
-        AudioSyncFrame->show();
-        ToBottom->changeSize(0,0,QSizePolicy::Fixed,QSizePolicy::Fixed);
-    }
-    else
-    {
-        AudioSyncFrame->hide();
-        ToBottom->changeSize(0,0,QSizePolicy::Fixed,QSizePolicy::Expanding);
-        PrimaryFrame->adjustSize();
-    }
 }
 
 void AudioSync::StepEffect(std::vector<ControllerZone> controller_zones)

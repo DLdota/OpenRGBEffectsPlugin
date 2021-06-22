@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
-    <height>446</height>
+    <width>820</width>
+    <height>555</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,7 +22,7 @@
     <height>0</height>
    </size>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1,0">
+  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
    <item>
     <spacer name="ToBottom">
      <property name="orientation">
@@ -608,13 +608,6 @@
        </layout>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="ShowHideSettings">
-     <property name="text">
-      <string>Show/Hide Settings</string>
-     </property>
     </widget>
    </item>
   </layout>

@@ -87,7 +87,6 @@ private slots:
     void UpdateUiSettings();
     void UpdateGraph();
     void PresetChanged(int);
-    void ShowHide();
 
 signals:
     void UpdateGraphSignal() const;
