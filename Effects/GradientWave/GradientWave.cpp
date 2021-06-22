@@ -63,47 +63,7 @@ void GradientWave::StepEffect(std::vector<ControllerZone> controller_zones)
         int LEDCount = controller_zone.leds_count();
         bool RVRS = controller_zone.reverse;
 
-        if (ZT == ZONE_TYPE_SINGLE)
-        {
-            for (int LedID = 0; LedID < LEDCount; LedID++)
-            {
-                float GetGradientPos;
-
-                if (Progress[i] > FPS)
-                {
-                    GetGradientPos = (FPS - (Progress[i] - FPS));
-                }
-                else
-                {
-                    GetGradientPos = Progress[i];
-                }
-
-                if (GetGradientPos <= 0)
-                {
-                    GetGradientPos *= -1;
-                }
-
-                int RGBCol[3];
-
-                for (int CVal = 0; CVal < 3; CVal++)
-                {
-                    RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(FPS))*(F[CVal]-S[CVal]));
-                }
-
-                controller_zone.controller->SetLED((RVRS ? StartIndex + (LEDCount - 1) - LedID : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
-            }
-
-            if (Progress[i] < FPS*2)
-            {
-                Progress[i] = Progress[i] + ((float)Speed/(float)FPS);
-            }
-            else if (Progress[i] >= FPS*2)
-            {
-                Progress[i] = 0;
-            }
-        }
-
-        else if (ZT == ZONE_TYPE_LINEAR)
+        if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
         {
             for (int LedID = 0; LedID < LEDCount; LedID++)
             {
@@ -133,9 +93,11 @@ void GradientWave::StepEffect(std::vector<ControllerZone> controller_zones)
                 controller_zone.controller->SetLED((RVRS ? StartIndex + ((LEDCount - 1) - LedID) : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
             }
 
+            float speed_mult = LEDCount > 0 ? 0.1 * (float) LEDCount : 1.f;
+
             if (Progress[i] < (LEDCount*2))
             {
-                Progress[i] += ((float)Speed / (float)FPS);
+                Progress[i] += speed_mult * ((float)Speed / (float)FPS);
             }
             else if (Progress[i] >= (LEDCount*2))
             {
