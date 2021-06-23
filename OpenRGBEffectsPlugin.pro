@@ -61,6 +61,7 @@ HEADERS +=                                                                      
     Effects/Bubbles/Bubbles.h                                                                   \
     Effects/ColorWheelEffect/ColorWheelEffect.h                                                 \
     Effects/EffectRegisterer.h                                                                  \
+    Effects/FractalMotion/FractalMotion.h \
     Effects/MotionPoint/MotionPoint.h \
     Effects/NoiseMap/NoiseMap.h \
     Effects/RadialRainbow/RadialRainbow.h                                                       \
@@ -112,6 +113,7 @@ SOURCES +=                                                                      
     EffectTabHeader.cpp                                                                         \
     Effects/Bubbles/Bubbles.cpp                                                                 \
     Effects/ColorWheelEffect/ColorWheelEffect.cpp                                               \
+    Effects/FractalMotion/FractalMotion.cpp \
     Effects/MotionPoint/MotionPoint.cpp \
     Effects/NoiseMap/NoiseMap.cpp \
     Effects/RadialRainbow/RadialRainbow.cpp                                                     \
@@ -138,6 +140,7 @@ FORMS +=                                                                        
     EffectTabHeader.ui                                                                          \
     Effects/Bubbles/Bubbles.ui                                                                  \
     Effects/ColorWheelEffect/ColorWheelEffect.ui                                                \
+    Effects/FractalMotion/FractalMotion.ui \
     Effects/MotionPoint/MotionPoint.ui \
     Effects/NoiseMap/NoiseMap.ui \
     Effects/RadialRainbow/RadialRainbow.ui                                                      \
