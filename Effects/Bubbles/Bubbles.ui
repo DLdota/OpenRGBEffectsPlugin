@@ -6,54 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>464</width>
-    <height>222</height>
+    <width>1203</width>
+    <height>609</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <widget class="QLabel" name="max_bubbles_label">
-     <property name="text">
-      <string>Max bubbles</string>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="1">
-    <widget class="QSlider" name="max_expansion">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>500</number>
-     </property>
-     <property name="value">
-      <number>100</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QSlider" name="max_bubbles">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>20</number>
-     </property>
-     <property name="value">
-      <number>10</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
     <widget class="QSlider" name="rarity">
      <property name="minimum">
       <number>1</number>
@@ -69,7 +30,14 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="3" column="0">
+    <widget class="QLabel" name="rarity_label">
+     <property name="text">
+      <string>Rarity</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
     <widget class="QSlider" name="bubbles_thickness">
      <property name="minimum">
       <number>1</number>
@@ -85,24 +53,19 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="bubbles_thickness_label">
-     <property name="text">
-      <string>Bubbles thickness</string>
+   <item row="2" column="1">
+    <widget class="QSlider" name="max_bubbles">
+     <property name="minimum">
+      <number>1</number>
      </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="rarity_label">
-     <property name="text">
-      <string>Rarity</string>
+     <property name="maximum">
+      <number>20</number>
      </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="max_expansion_label">
-     <property name="text">
-      <string>Max expansion</string>
+     <property name="value">
+      <number>10</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
@@ -120,27 +83,82 @@
     </spacer>
    </item>
    <item row="5" column="0">
-    <widget class="QLabel" name="speed_mult_label">
+    <widget class="QLabel" name="bubbles_thickness_label">
      <property name="text">
-      <string>Speed</string>
+      <string>Bubbles thickness</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QSlider" name="speed_mult">
+   <item row="4" column="1">
+    <widget class="QSlider" name="max_expansion">
      <property name="minimum">
       <number>1</number>
      </property>
      <property name="maximum">
-      <number>20</number>
+      <number>500</number>
+     </property>
+     <property name="value">
+      <number>100</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Background</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="max_bubbles_label">
+     <property name="text">
+      <string>Max bubbles</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="speed_mult_label">
+     <property name="text">
+      <string>Speed</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QSlider" name="speed_mult">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="max_expansion_label">
+     <property name="text">
+      <string>Max expansion</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="ColorPicker" name="background" native="true"/>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ColorPicker</class>
+   <extends>QWidget</extends>
+   <header location="global">ColorPicker.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

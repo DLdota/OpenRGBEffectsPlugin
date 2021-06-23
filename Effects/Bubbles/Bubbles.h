@@ -35,6 +35,8 @@ private:
     std::vector<int>       colors;
     std::vector<QPointF>   centers;
 
+    RGBColor background = ToRGBColor(0,0,0);
+
     void InitBubble();
     void Cleanup();
 
@@ -52,6 +54,7 @@ private slots:
     void on_max_expansion_valueChanged(int);
     void on_bubbles_thickness_valueChanged(int);
     void on_speed_mult_valueChanged(int);
+    void on_background_ColorSelected(QColor);
 };
 
 #endif // BUBBLES_H

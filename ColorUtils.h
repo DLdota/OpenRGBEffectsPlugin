@@ -12,10 +12,8 @@ public:
     {
         unsigned char   r1 = RGBGetRValue(color1);
         unsigned char   r2 = RGBGetRValue(color2);
-
         unsigned char   g1 = RGBGetGValue(color1);
         unsigned char   g2 = RGBGetGValue(color2);
-
         unsigned char   b1 = RGBGetBValue(color1);
         unsigned char   b2 = RGBGetBValue(color2);
 
@@ -57,6 +55,22 @@ public:
         hsv.value *= brightness;
         return RGBColor(hsv2rgb(&hsv));
     }
+
+    static RGBColor Screen(RGBColor color1, RGBColor color2)
+    {
+        unsigned char   r1 = RGBGetRValue(color1);
+        unsigned char   r2 = RGBGetRValue(color2);
+        unsigned char   g1 = RGBGetGValue(color1);
+        unsigned char   g2 = RGBGetGValue(color2);
+        unsigned char   b1 = RGBGetBValue(color1);
+        unsigned char   b2 = RGBGetBValue(color2);
+
+        unsigned char   r = 255 - ((255 - r2) * (255 - r1) >> 8);
+        unsigned char   g = 255 - ((255 - g2) * (255 - g1) >> 8);
+        unsigned char   b = 255 - ((255 - b2) * (255 - b1) >> 8);
+
+        return RGBColor(ToRGBColor(r, g, b));
+    };
 
 };
 

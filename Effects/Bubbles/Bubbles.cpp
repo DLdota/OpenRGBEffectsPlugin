@@ -1,4 +1,5 @@
 #include "Bubbles.h"
+#include "ColorUtils.h"
 #include "hsv.h"
 
 REGISTER_EFFECT(Bubbles);
@@ -74,7 +75,7 @@ void Bubbles::StepEffect(std::vector<ControllerZone> controller_zones)
 
     for(unsigned int i = 0; i < bubbles.size(); i++)
     {
-        bubbles[i] += speed_mult * speeds[i] / (float) FPS;
+        bubbles[i] += 0.2 * speed_mult * speeds[i] / (float) FPS;
     }
 
 
@@ -164,7 +165,7 @@ RGBColor Bubbles::GetColor(int x, int y, int w, int h)
     final.value = value;
     final.saturation = 255;
 
-    return RGBColor(hsv2rgb(&final));
+    return ColorUtils::Screen(RGBColor(hsv2rgb(&final)), background);
 }
 
 void Bubbles::LoadCustomSettings(json Settings)
@@ -174,12 +175,14 @@ void Bubbles::LoadCustomSettings(json Settings)
     if(Settings.contains("speed_mult"))         speed_mult        = Settings["speed_mult"];
     if(Settings.contains("max_expansion"))      max_expansion     = Settings["max_expansion"];
     if(Settings.contains("bubbles_thickness"))  bubbles_thickness = Settings["bubbles_thickness"];
+    if(Settings.contains("background"))         background        = Settings["background"];
 
     ui->max_bubbles->setValue(max_bubbles);
     ui->rarity->setValue(rarity);
     ui->speed_mult->setValue(speed_mult);
     ui->max_expansion->setValue(max_expansion);
     ui->bubbles_thickness->setValue(bubbles_thickness);
+    ui->background->SetColor(QColor(RGBGetRValue(background), RGBGetGValue(background), RGBGetBValue(background)));
 }
 
 json Bubbles::SaveCustomSettings(json Settings)
@@ -189,6 +192,7 @@ json Bubbles::SaveCustomSettings(json Settings)
     Settings["speed_mult"]        = speed_mult;
     Settings["max_expansion"]     = max_expansion;
     Settings["bubbles_thickness"] = bubbles_thickness;
+    Settings["background"]        = background;
     return Settings;
 }
 
@@ -217,3 +221,7 @@ void Bubbles::on_speed_mult_valueChanged(int value)
     speed_mult = value;
 }
 
+void Bubbles::on_background_ColorSelected(QColor c)
+{
+    background = ToRGBColor(c.red(), c.green(), c.blue());
+}
