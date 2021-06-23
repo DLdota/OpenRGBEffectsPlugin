@@ -10,7 +10,7 @@ Rain::Rain() : RGBEffect()
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Droplet effect";
 
-    EffectDetails.IsReversable = false;
+    EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed = 25;
     EffectDetails.MinSpeed = 1;
 
@@ -44,7 +44,7 @@ void Rain::StepEffect(std::vector<ControllerZone> controller_zones)
 
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
-                RGBColor color = GetColor(i, 0, LedID);
+                RGBColor color = GetColor(i, 0, reverse ? leds_count - LedID - 1 : LedID);
                 controller_zones[i].controller->SetLED(start_idx + LedID, color);
             }
         }
@@ -62,7 +62,7 @@ void Rain::StepEffect(std::vector<ControllerZone> controller_zones)
                 for (int row_id = 0; row_id < rows; row_id++)
                 {
                     int LedID = controller_zones[i].controller->zones[controller_zones[i].zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                    RGBColor color = GetColor(i, col_id, row_id);
+                    RGBColor color = GetColor(i, col_id, reverse ? rows - row_id - 1: row_id);
                     controller_zones[i].controller->SetLED(start_idx + LedID, color);
                 }
             }
