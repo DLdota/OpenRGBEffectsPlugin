@@ -62,6 +62,7 @@ HEADERS +=                                                                      
     Effects/ColorWheelEffect/ColorWheelEffect.h                                                 \
     Effects/EffectRegisterer.h                                                                  \
     Effects/MotionPoint/MotionPoint.h \
+    Effects/NoiseMap/NoiseMap.h \
     Effects/RadialRainbow/RadialRainbow.h                                                       \
     Effects/Sequence/Sequence.h \
     Effects/Stack/Stack.h                                                                       \
@@ -112,6 +113,7 @@ SOURCES +=                                                                      
     Effects/Bubbles/Bubbles.cpp                                                                 \
     Effects/ColorWheelEffect/ColorWheelEffect.cpp                                               \
     Effects/MotionPoint/MotionPoint.cpp \
+    Effects/NoiseMap/NoiseMap.cpp \
     Effects/RadialRainbow/RadialRainbow.cpp                                                     \
     Effects/Sequence/Sequence.cpp \
     Effects/Stack/Stack.cpp                                                                     \
@@ -137,6 +139,7 @@ FORMS +=                                                                        
     Effects/Bubbles/Bubbles.ui                                                                  \
     Effects/ColorWheelEffect/ColorWheelEffect.ui                                                \
     Effects/MotionPoint/MotionPoint.ui \
+    Effects/NoiseMap/NoiseMap.ui \
     Effects/RadialRainbow/RadialRainbow.ui                                                      \
     Effects/Sequence/Sequence.ui \
     Effects/Stack/Stack.ui                                                                      \
@@ -237,6 +240,18 @@ SOURCES +=                                                                      
 
 HEADERS +=                                                                                      \
     Dependencies/chuck_fft/chuck_fft.h                                                          \
+
+#-----------------------------------------------------------------------------------------------#
+# SimplexNoise                                                                                  #
+#-----------------------------------------------------------------------------------------------#
+INCLUDEPATH +=                                                                                  \
+    Dependencies/SimplexNoise/                                                                  \
+
+SOURCES +=                                                                                      \
+    Dependencies/SimplexNoise/SimplexNoise.cpp
+
+HEADERS +=                                                                                      \
+    Dependencies/SimplexNoise/SimplexNoise.h                                                    \
 
 
 #-----------------------------------------------------------------------------------------------#
