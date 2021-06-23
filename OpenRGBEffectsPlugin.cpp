@@ -21,6 +21,8 @@ OpenRGBPluginInfo OpenRGBEffectsPlugin::Initialize(bool Dt, ResourceManager *RM)
 
 QWidget* OpenRGBEffectsPlugin::CreateGUI(QWidget*)
 {
+    printf("OpenRGBEffectsPlugin version %s (%s), build date %s\n", VERSION_STRING, GIT_COMMIT_ID, GIT_COMMIT_DATE);
+
     RMPointer->WaitForDeviceDetection();
 
     OpenRGBEffectTab* ui = new OpenRGBEffectTab(nullptr);
