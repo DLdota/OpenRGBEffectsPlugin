@@ -61,6 +61,7 @@ HEADERS +=                                                                      
     Effects/Bubbles/Bubbles.h                                                                   \
     Effects/ColorWheelEffect/ColorWheelEffect.h                                                 \
     Effects/EffectRegisterer.h                                                                  \
+    Effects/MotionPoint/MotionPoint.h \
     Effects/RadialRainbow/RadialRainbow.h                                                       \
     Effects/Sequence/Sequence.h \
     Effects/Stack/Stack.h                                                                       \
@@ -110,6 +111,7 @@ SOURCES +=                                                                      
     EffectTabHeader.cpp                                                                         \
     Effects/Bubbles/Bubbles.cpp                                                                 \
     Effects/ColorWheelEffect/ColorWheelEffect.cpp                                               \
+    Effects/MotionPoint/MotionPoint.cpp \
     Effects/RadialRainbow/RadialRainbow.cpp                                                     \
     Effects/Sequence/Sequence.cpp \
     Effects/Stack/Stack.cpp                                                                     \
@@ -134,6 +136,7 @@ FORMS +=                                                                        
     EffectTabHeader.ui                                                                          \
     Effects/Bubbles/Bubbles.ui                                                                  \
     Effects/ColorWheelEffect/ColorWheelEffect.ui                                                \
+    Effects/MotionPoint/MotionPoint.ui \
     Effects/RadialRainbow/RadialRainbow.ui                                                      \
     Effects/Sequence/Sequence.ui \
     Effects/Stack/Stack.ui                                                                      \

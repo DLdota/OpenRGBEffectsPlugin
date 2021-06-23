@@ -71,6 +71,11 @@ public:
 
         return RGBColor(ToRGBColor(r, g, b));
     };
+    
+    static RGBColor OFF()
+    {
+        return ToRGBColor(0,0,0);
+    }
 
 };
 
