@@ -148,7 +148,6 @@ private:
     std::vector<int>      rainbow_hues;
     std::vector<RGBColor> colors_rotation;    
     int                   audio_device_idx = 0;
-    static const RGBColor OFF = ToRGBColor(0,0,0);
 
     RGBColor GetColor(int, int, int, int);
 

@@ -1,4 +1,5 @@
 ﻿#include "Ambient.h"
+#include "ColorUtils.h"
 
 REGISTER_EFFECT(Ambient);
 
@@ -39,7 +40,7 @@ void Ambient::StepEffect(std::vector<ControllerZone> controller_zones)
     SCRNSLCT->GetScreen();
     QColor C = SCRNSLCT->CalcColor();
 
-    RGBColor color = ToRGBColor(C.red(),C.green(),C.blue());
+    RGBColor color = ColorUtils::fromQColor(C);
 
     for (ControllerZone& controller_zone : controller_zones)
     {

@@ -2,6 +2,7 @@
 #define COLORPICKER_H
 
 #include <QWidget>
+#include "RGBController.h"
 
 namespace Ui {
 class ColorPicker;
@@ -15,7 +16,8 @@ public:
     explicit ColorPicker(QWidget *parent = nullptr);
     ~ColorPicker();
 
-    void SetColor(QColor);
+    void SetQColor(QColor);
+    void SetRGBColor(RGBColor);
 
 private slots:
     void on_button_clicked();

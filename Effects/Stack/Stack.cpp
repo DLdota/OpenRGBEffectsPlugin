@@ -145,7 +145,7 @@ RGBColor Stack::GetColor(unsigned int controller_zone_idx, unsigned int led_idx)
 
     if(distance > 1)
     {
-        return OFF;
+        return ColorUtils::OFF();
     }
 
     return ColorUtils::Enlight(zone_colors[controller_zone_idx], 1 - distance);
@@ -197,7 +197,7 @@ void Stack::ResetZone(unsigned int controller_zone_idx, ControllerZone controlle
 
     for(unsigned int c = 0; c < leds_count; c++)
     {
-        current_colors[controller_zone_idx][c] = OFF;
+        current_colors[controller_zone_idx][c] = ColorUtils::OFF();
     }
 
     zone_colors[controller_zone_idx] = RandomColorsEnabled ? ColorUtils::RandomRGBColor() : UserColors[0];

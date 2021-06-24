@@ -1,6 +1,7 @@
 #include "OpenRGBEffectPage.h"
 #include "OpenRGBEffectSettings.h"
 #include "EffectManager.h"
+#include "ColorUtils.h"
 
 OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
     QWidget(parent),
@@ -86,15 +87,12 @@ void OpenRGBEffectPage::InitUi()
             UserColors.push_back(UserColor);            
 
             ColorPicker* color_picker = new ColorPicker();
-            color_picker->SetColor(QColor(RGBGetRValue(colors[i]), RGBGetGValue(colors[i]), RGBGetBValue(colors[i])));
+            color_picker->SetRGBColor(colors[i]);
 
             ColorPickers.push_back(color_picker);
 
-            connect(color_picker, &ColorPicker::ColorSelected, [=](QColor color){
-               int Red   = color.red();
-               int Green = color.green();
-               int Blue  = color.blue();
-               UserColors[i] = ToRGBColor(Red,Green,Blue);
+            connect(color_picker, &ColorPicker::ColorSelected, [=](QColor color){               
+               UserColors[i] = ColorUtils::fromQColor(color);
                effect->SetUserColors(UserColors);
             });
 

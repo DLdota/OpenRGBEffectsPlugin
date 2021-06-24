@@ -26,6 +26,8 @@ Bubbles::Bubbles(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
+
+    background = ColorUtils::OFF();
 }
 
 
@@ -182,7 +184,7 @@ void Bubbles::LoadCustomSettings(json Settings)
     ui->speed_mult->setValue(speed_mult);
     ui->max_expansion->setValue(max_expansion);
     ui->bubbles_thickness->setValue(bubbles_thickness);
-    ui->background->SetColor(QColor(RGBGetRValue(background), RGBGetGValue(background), RGBGetBValue(background)));
+    ui->background->SetRGBColor(background);
 }
 
 json Bubbles::SaveCustomSettings(json Settings)
@@ -223,5 +225,5 @@ void Bubbles::on_speed_mult_valueChanged(int value)
 
 void Bubbles::on_background_ColorSelected(QColor c)
 {
-    background = ToRGBColor(c.red(), c.green(), c.blue());
+    background = ColorUtils::fromQColor(c);
 }

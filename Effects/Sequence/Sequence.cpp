@@ -79,12 +79,12 @@ void Sequence::StepEffect(std::vector<ControllerZone> controller_zones)
 ColorPicker* Sequence::CreatePicker(int i)
 {
     ColorPicker* picker = new ColorPicker();
-    picker->SetColor(QColor(RGBGetRValue(colors[i]), RGBGetGValue(colors[i]), RGBGetBValue(colors[i])));
+    picker->SetRGBColor(colors[i]);
 
     color_pickers[i] = picker;
 
     connect(picker, &ColorPicker::ColorSelected, [=](QColor c){
-        colors[i] = ToRGBColor(c.red(), c.green(), c.blue());
+        colors[i] = ColorUtils::fromQColor(c);
     });
 
     return picker;

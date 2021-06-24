@@ -42,9 +42,6 @@ private:
 
     RGBColor GetColor(unsigned int, unsigned int);
     void ResetZone(unsigned int, ControllerZone);
-
-    RGBColor OFF = ToRGBColor(0,0,0);
-
 };
 
 #endif // STACK_H

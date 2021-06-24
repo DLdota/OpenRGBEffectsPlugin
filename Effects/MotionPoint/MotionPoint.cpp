@@ -25,7 +25,7 @@ MotionPoint::MotionPoint(QWidget *parent) :
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
-    ui->background->SetColor(QColor(RGBGetRValue(background), RGBGetGValue(background), RGBGetBValue(background)));
+    ui->background->SetRGBColor(background);
 }
 
 MotionPoint::~MotionPoint()
@@ -113,7 +113,7 @@ void MotionPoint::LoadCustomSettings(json settings)
     if(settings.contains("background"))
     {
         background = settings["background"];
-        ui->background->SetColor(QColor(RGBGetRValue(background), RGBGetGValue(background), RGBGetBValue(background)));
+        ui->background->SetRGBColor(background);
     }
 }
 
@@ -125,5 +125,5 @@ json MotionPoint::SaveCustomSettings(json settings)
 
 void MotionPoint::on_background_ColorSelected(QColor color)
 {
-    background = ToRGBColor(color.red(), color.green(), color.blue());
+    background = ColorUtils::fromQColor(color);
 }

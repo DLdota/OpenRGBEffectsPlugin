@@ -103,12 +103,12 @@ void NoiseMap::GenerateGradient()
 ColorPicker* NoiseMap::CreatePicker(int i)
 {
     ColorPicker* picker = new ColorPicker();
-    picker->SetColor(QColor(RGBGetRValue(colors[i]), RGBGetGValue(colors[i]), RGBGetBValue(colors[i])));
+    picker->SetRGBColor(colors[i]);
 
     color_pickers[i] = picker;
 
     connect(picker, &ColorPicker::ColorSelected, [=](QColor c){
-        colors[i] = ToRGBColor(c.red(), c.green(), c.blue());
+        colors[i] = ColorUtils::fromQColor(c);
         GenerateGradient();
     });
 
@@ -196,7 +196,7 @@ RGBColor NoiseMap::GetColor(unsigned int x, unsigned int y)
         case 2:
             int color_x = (1 - frac) * 100;
             QColor c = image.pixelColor(color_x, 0);
-            return RGBColor(ToRGBColor(c.red(), c.green(), c.blue()));
+            return ColorUtils::fromQColor(c);
     }
 
     return ColorUtils::OFF();

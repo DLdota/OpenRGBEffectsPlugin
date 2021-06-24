@@ -35,7 +35,7 @@ private:
     std::vector<int>       colors;
     std::vector<QPointF>   centers;
 
-    RGBColor background = ToRGBColor(0,0,0);
+    RGBColor background;
 
     void InitBubble();
     void Cleanup();

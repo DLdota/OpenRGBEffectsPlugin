@@ -32,8 +32,6 @@ private:
     void  RunDrops(unsigned int);
 
     std::vector<std::vector<Drop>> drops;
-    RGBColor OFF = ToRGBColor(0,0,0);
-
 };
 
 #endif // RAIN_H

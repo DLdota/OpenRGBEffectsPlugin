@@ -1,5 +1,6 @@
 #include "AudioSync.h"
 #include "math.h"
+#include "ColorUtils.h"
 
 REGISTER_EFFECT(AudioSync);
 
@@ -659,7 +660,7 @@ void AudioSync::StepEffect(std::vector<ControllerZone> controller_zones)
             if(value > y || y == 0){
                 image->setPixel(i, 63 - y, color);
             } else {
-                image->setPixel(i, 63 - y, OFF);
+                image->setPixel(i, 63 - y, ColorUtils::OFF());
             }
         }
     }
@@ -798,7 +799,7 @@ RGBColor AudioSync::GetColor(int row, int col, int zone_width, int zone_height)
         return colors_rotation[distance];
     }
 
-    return OFF;
+    return ColorUtils::OFF();
 }
 
 void AudioSync::LoadCustomSettings(json Settings)

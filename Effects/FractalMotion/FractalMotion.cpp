@@ -25,7 +25,7 @@ FractalMotion::FractalMotion(QWidget *parent) :
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
-    ui->background->SetColor(Qt::black);
+    ui->background->SetRGBColor(ColorUtils::OFF());
 
     random_color = ColorUtils::RandomRGBColor();
     next_random_color = ColorUtils::RandomRGBColor();
@@ -131,7 +131,7 @@ void FractalMotion::LoadCustomSettings(json settings)
     if(settings.contains("background"))
     {
         background = settings["background"];
-        ui->background->SetColor(QColor(RGBGetRValue(background), RGBGetGValue(background), RGBGetBValue(background)));
+        ui->background->SetRGBColor(background);
     }
 
     if(settings.contains("thickness"))  thickness  = settings["thickness"];
@@ -190,9 +190,9 @@ json FractalMotion::SaveCustomSettings(json settings)
     return settings;
 }
 
-void FractalMotion::on_background_ColorSelected(QColor color)
+void FractalMotion::on_background_ColorSelected(QColor c)
 {
-    background = ToRGBColor(color.red(), color.green(), color.blue());
+    background = ColorUtils::fromQColor(c);
 }
 
 void FractalMotion:: on_thickness_valueChanged(int value)

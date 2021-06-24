@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QDialog>
 #include <QVBoxLayout>
+#include "ColorUtils.h"
 
 ColorPicker::ColorPicker(QWidget *parent) :
     QWidget(parent),
@@ -21,9 +22,14 @@ ColorPicker::~ColorPicker()
     delete ui;
 }
 
-void ColorPicker::SetColor(QColor color)
+void ColorPicker::SetQColor(QColor color)
 {
     ui->button->setStyleSheet("QPushButton {background-color: "+ color.name() + "; border: 1px solid black;}");
+}
+
+void ColorPicker::SetRGBColor(RGBColor color)
+{
+    SetQColor(ColorUtils::toQColor(color));
 }
 
 void ColorPicker::on_button_clicked()
@@ -71,7 +77,7 @@ void ColorPicker::on_button_clicked()
     if (dialog->exec())
     {
         QColor color = color_wheel->color();
-        SetColor(color);
+        SetQColor(color);
 
         emit ColorSelected(color);
         delete dialog;

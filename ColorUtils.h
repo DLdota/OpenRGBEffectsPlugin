@@ -3,6 +3,7 @@
 
 #include "RGBController.h"
 #include "hsv.h"
+#include <QColor>
 
 class ColorUtils {
 
@@ -17,19 +18,21 @@ public:
         unsigned char   b1 = RGBGetBValue(color1);
         unsigned char   b2 = RGBGetBValue(color2);
 
-        return RGBColor(ToRGBColor(
-                            (int) ((r2 - r1) * fraction + r1),
-                            (int) ((g2 - g1) * fraction + g1),
-                            (int) ((b2 - b1) * fraction + b1)
-                            ));
+        int r = (int) ((r2 - r1) * fraction + r1);
+        int g = (int) ((g2 - g1) * fraction + g1);
+        int b = (int) ((b2 - b1) * fraction + b1);
+
+        return ToRGBColor(r, g, b);
     }
 
     static hsv_t RandomHSVColor()
     {
         hsv_t hsv;
+
         hsv.hue = rand() % 360;
         hsv.saturation = 255;
         hsv.value = 255;
+
         return hsv;
     }
 
@@ -41,18 +44,20 @@ public:
 
     static RGBColor Invert(RGBColor color)
     {
-        return ToRGBColor(
-            (255-RGBGetRValue(color)),
-            (255-RGBGetGValue(color)),
-            (255-RGBGetBValue(color))
-        );
+        int r = (255-RGBGetRValue(color));
+        int g = (255-RGBGetGValue(color));
+        int b = (255-RGBGetBValue(color));
+
+        return ToRGBColor(r, g, b);
     }
 
     static RGBColor Enlight(RGBColor color, float brightness)
     {
         hsv_t hsv;
         rgb2hsv(color, &hsv);
+
         hsv.value *= brightness;
+
         return RGBColor(hsv2rgb(&hsv));
     }
 
@@ -69,12 +74,22 @@ public:
         unsigned char   g = 255 - ((255 - g2) * (255 - g1) >> 8);
         unsigned char   b = 255 - ((255 - b2) * (255 - b1) >> 8);
 
-        return RGBColor(ToRGBColor(r, g, b));
+        return ToRGBColor(r, g, b);
     };
     
     static RGBColor OFF()
     {
         return ToRGBColor(0,0,0);
+    }
+
+    static RGBColor fromQColor(QColor c)
+    {
+        return ToRGBColor(c.red(), c.green(), c.blue());
+    }
+
+    static QColor toQColor(RGBColor c)
+    {
+        return QColor(RGBGetRValue(c), RGBGetGValue(c), RGBGetBValue(c));
     }
 
 };

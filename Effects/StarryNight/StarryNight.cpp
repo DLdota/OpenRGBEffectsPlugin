@@ -111,12 +111,10 @@ void StarryNight::StepEffect(std::vector<ControllerZone> controller_zones)
 
 void StarryNight::ASelectionWasChanged(std::vector<ControllerZone> controller_zones)
 {
-    RGBColor OFF = ToRGBColor(0,0,0);
-
     CurrentStars.clear();
 
     for(ControllerZone& controller_zone : controller_zones)
     {
-        controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, OFF);
+        controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, ColorUtils::OFF());
     }
 }

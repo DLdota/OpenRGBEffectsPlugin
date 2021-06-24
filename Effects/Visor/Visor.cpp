@@ -166,9 +166,8 @@ RGBColor Visor::GetColor(int i, int count)
 
     // black leds
     if(i < current_first_led  - width || i > current_first_led  -1)
-    {
-        RGBColor OFF = ToRGBColor(0,0,0);
-        return OFF;
+    {        
+        return ColorUtils::OFF();
     }
 
     // tail led

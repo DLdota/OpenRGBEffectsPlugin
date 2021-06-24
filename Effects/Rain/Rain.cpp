@@ -161,7 +161,7 @@ RGBColor Rain::GetColor(unsigned int controller_zone_index, unsigned int x, unsi
         }
     }
 
-    return OFF;
+    return ColorUtils::OFF();
 }
 
 void Rain::ASelectionWasChanged(std::vector<ControllerZone> controller_zones)

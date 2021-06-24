@@ -5,6 +5,7 @@
 #include "xio.hpp"
 #include "xadapt.hpp"
 #include "RGBController.h"
+#include "ColorUtils.h"
 
 ScreenSelection::ScreenSelection(QWidget* Parent) :
     QWidget(Parent)
@@ -421,7 +422,7 @@ QColor ScreenSelection::CalcColor()
                 for (int RowPX = 0; RowPX < img.height(); RowPX++)
                 {
                     QColor QCol = img.pixelColor(ColPX,RowPX);
-                    ToConvert.push_back(ToRGBColor(QCol.red(),QCol.green(),QCol.blue()));
+                    ToConvert.push_back(ColorUtils::fromQColor(QCol));
                 }
             }
 
