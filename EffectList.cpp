@@ -22,8 +22,7 @@ EffectList::~EffectList()
 }
 
 void EffectList::RegisterEffect(std::string class_name, std::function<RGBEffect*()> constructor)
-{
-    printf("Registering %s effect\n", class_name.c_str());
+{    
     effects_construtors[class_name] = constructor;
 }
 

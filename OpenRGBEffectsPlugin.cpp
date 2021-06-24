@@ -1,6 +1,7 @@
 #include "OpenRGBEffectsPlugin.h"
 #include "OpenRGBEffectTab.h"
 #include "EffectManager.h"
+#include "EffectList.h"
 
 bool OpenRGBEffectsPlugin::DarkTheme = false;
 ResourceManager* OpenRGBEffectsPlugin::RMPointer = nullptr;
@@ -21,7 +22,14 @@ OpenRGBPluginInfo OpenRGBEffectsPlugin::Initialize(bool Dt, ResourceManager *RM)
 
 QWidget* OpenRGBEffectsPlugin::CreateGUI(QWidget*)
 {
-    printf("OpenRGBEffectsPlugin version %s (%s), build date %s\n", VERSION_STRING, GIT_COMMIT_ID, GIT_COMMIT_DATE);
+    printf("[OpenRGBEffectsPlugin] version %s (%s), build date %s\n", VERSION_STRING, GIT_COMMIT_ID, GIT_COMMIT_DATE);
+
+    std::map<std::string, std::function<RGBEffect*()>>::iterator it;
+
+    for (it = EffectList::effects_construtors.begin(); it != EffectList::effects_construtors.end(); it++)
+    {
+        printf("[OpenRGBEffectsPlugin] %s effect registered\n", it->first.c_str());
+    }
 
     RMPointer->WaitForDeviceDetection();
 

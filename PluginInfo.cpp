@@ -27,7 +27,7 @@ void PluginInfo::on_open_plugin_folder_clicked()
     std::string config_dir = OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() + "plugins";
     QUrl url = QUrl::fromLocalFile(QString::fromStdString(config_dir));
 
-    printf("Opening %s\n", url.path().toStdString().c_str());
+    printf("[OpenRGBEffectsPlugin] Opening %s\n", url.path().toStdString().c_str());
 
     QDesktopServices::openUrl(url);
 }

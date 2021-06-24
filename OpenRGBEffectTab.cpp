@@ -103,7 +103,7 @@ void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
 
 void OpenRGBEffectTab::DeviceListChanged()
 {
-    printf("ui->device_list->Clear()\n");
+    printf("[OpenRGBEffectsPlugin] Clear device list\n");
     ui->device_list->Clear();
 
     if (OpenRGBEffectsPlugin::RMPointer->GetDetectionPercent() < 100)
@@ -111,7 +111,7 @@ void OpenRGBEffectTab::DeviceListChanged()
         return;
     }
 
-    printf("ui->device_list->InitControllersList()\n");
+    printf("[OpenRGBEffectsPlugin] Init device list\n");
     ui->device_list->InitControllersList();
 }
 
@@ -242,12 +242,12 @@ void OpenRGBEffectTab::on_save_settings_clicked()
 
 void OpenRGBEffectTab::LoadEffectsFromSettings()
 {
-    printf("Loading effects settings if any.\n");
+    printf("[OpenRGBEffectsPlugin] Loading effects settings if any.\n");
     json settings = OpenRGBEffectSettings::LoadUserSettings();
 
     if(!settings.contains("version") || settings["version"] != OpenRGBEffectSettings::version)
     {
-        printf("Trying to load an old settings file version. Aborting.\n");
+        printf("[OpenRGBEffectsPlugin] Trying to load an old settings file version. Aborting.\n");
         return;
     }
 
@@ -260,11 +260,11 @@ void OpenRGBEffectTab::LoadEffectsFromSettings()
         }
         catch (const std::exception& e)
         {
-            printf("Something went wrong while loading effect: %s.\n", e.what());
+            printf("[OpenRGBEffectsPlugin] Something went wrong while loading effect: %s.\n", e.what());
         }
         catch(...)
         {
-            printf("Unknown error while loading effect.\n");
+            printf("[OpenRGBEffectsPlugin] Unknown error while loading effect.\n");
         }
     }
 }
@@ -305,11 +305,11 @@ void OpenRGBEffectTab::LoadEffectSettings(json effect_settings)
         }
     }
 
-    printf("Creating effect. %s\n", name.c_str());
+    printf("[OpenRGBEffectsPlugin] Creating effect: %s\n", name.c_str());
 
     RGBEffect* effect = EffectList::effects_construtors[name]();
 
-    printf("[%s] Applying basic settings\n", name.c_str());
+    printf("[OpenRGBEffectsPlugin] Effect %s: Applying basic settings\n", name.c_str());
 
     effect->SetFPS(effect_settings["FPS"]);
     effect->SetAutoStart(effect_settings["AutoStart"]);
@@ -319,14 +319,14 @@ void OpenRGBEffectTab::LoadEffectSettings(json effect_settings)
     effect->SetRandomColorsEnabled(effect_settings["RandomColors"]);
     effect->SetOnlyFirstColorEnabled(effect_settings["AllowOnlyFirst"]);
 
-    printf("[%s] Loading custom settings\n", name.c_str());
+    printf("[OpenRGBEffectsPlugin] Effect %s: Loading custom settings\n", name.c_str());
 
     if(effect_settings.contains("CustomSettings"))
     {
         effect->LoadCustomSettings(effect_settings["CustomSettings"]);
     }
 
-    printf("[%s] Creating effect tab\n", name.c_str());
+    printf("[OpenRGBEffectsPlugin] Creating effect %s tab\n", name.c_str());
 
     CreateEffectTab(effect);
 

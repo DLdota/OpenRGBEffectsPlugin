@@ -55,7 +55,7 @@ void EffectManager::ClearAssignments()
 
 void EffectManager::Assign(std::vector<ControllerZone> controller_zones, RGBEffect* effect)
 {
-    printf("Assigning %lu zones to %s\n", controller_zones.size(), effect->EffectDetails.EffectName.c_str());
+    printf("[OpenRGBEffectsPlugin] Assigning %lu zones to %s\n", controller_zones.size(), effect->EffectDetails.EffectName.c_str());
 
     effect_zones[effect] = controller_zones;
 
@@ -122,7 +122,7 @@ std::map<RGBEffect*, std::vector<ControllerZone>>EffectManager::GetEffectsMappin
 
 void  EffectManager::EffectThreadFunction(RGBEffect* effect)
 {
-    printf("EFFECT: %s thread started\n", effect->EffectDetails.EffectName.c_str());
+    printf("[OpenRGBEffectsPlugin] Effect %s thread started\n", effect->EffectDetails.EffectName.c_str());
 
     while (EffectThreads.find(effect) != EffectThreads.end()) {
 
@@ -162,7 +162,7 @@ void  EffectManager::EffectThreadFunction(RGBEffect* effect)
             }
         }
 
-    printf("EFFECT: %s thread ended\n", effect->EffectDetails.EffectName.c_str());
+    printf("[OpenRGBEffectsPlugin] Effect %s thread ended\n", effect->EffectDetails.EffectName.c_str());
 }
 
 bool EffectManager::HasActiveEffects()
