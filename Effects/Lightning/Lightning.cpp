@@ -3,8 +3,7 @@
 REGISTER_EFFECT(Lightning);
 
 Lightning::Lightning(QWidget *parent) :
-    QWidget(parent),
-    RGBEffect()
+    RGBEffect(parent)
 {
     EffectDetails.EffectName = "Lightning";
     EffectDetails.EffectClassName = ClassName();

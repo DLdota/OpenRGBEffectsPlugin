@@ -6,7 +6,7 @@
 REGISTER_EFFECT(GifPlayer);
 
 GifPlayer::GifPlayer(QWidget *parent) :
-    QWidget(parent),
+    RGBEffect(parent),
     ui(new Ui::GifPlayer),
     movie(nullptr)
 {

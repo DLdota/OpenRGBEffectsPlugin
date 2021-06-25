@@ -4,7 +4,7 @@
 
 REGISTER_EFFECT(AudioSync);
 
-AudioSync::AudioSync(): QObject(nullptr) , RGBEffect()
+AudioSync::AudioSync(): RGBEffect()
 {
     EffectDetails.EffectName = "Audio Sync";
     EffectDetails.EffectClassName = ClassName();

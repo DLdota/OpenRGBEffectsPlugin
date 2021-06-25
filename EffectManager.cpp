@@ -124,6 +124,9 @@ void  EffectManager::EffectThreadFunction(RGBEffect* effect)
 {
     printf("[OpenRGBEffectsPlugin] Effect %s thread started\n", effect->EffectDetails.EffectName.c_str());
 
+    TCount effect_start = clock->now();
+    int last_total_duration = -1;
+
     while (EffectThreads.find(effect) != EffectThreads.end()) {
 
             TCount start = clock->now();
@@ -148,13 +151,24 @@ void  EffectManager::EffectThreadFunction(RGBEffect* effect)
             TCount end = clock->now();
 
             int FPS = effect->GetFPS();
-            int FPSDelay = 1000 / FPS;
+            int FPSDelay = 1000000 / (float)FPS;
 
-            int delta = FPSDelay - std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+            int duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+            int delta = FPSDelay - duration;
+
+            int total_duration = std::chrono::duration_cast<std::chrono::seconds>(end - effect_start).count();
+
+            // emit every second
+            if(total_duration > last_total_duration)
+            {
+                // emit as ms
+                last_total_duration = total_duration;
+                effect->EmitMeasure(duration * 0.001, total_duration);
+            }
 
             if(delta > 0)
             {
-                std::this_thread::sleep_for(std::chrono::milliseconds(delta));
+                std::this_thread::sleep_for(std::chrono::microseconds(delta));
             }
             else
             {

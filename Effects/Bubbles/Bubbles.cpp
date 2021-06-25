@@ -5,8 +5,7 @@
 REGISTER_EFFECT(Bubbles);
 
 Bubbles::Bubbles(QWidget *parent) :
-    QWidget(parent),
-    RGBEffect(),
+    RGBEffect(parent),
     ui(new Ui::Bubbles)
 {
     ui->setupUi(this); 

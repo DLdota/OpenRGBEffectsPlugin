@@ -10,7 +10,7 @@ namespace Ui {
 class Hypnotoad;
 }
 
-class Hypnotoad : public QWidget, public RGBEffect
+class Hypnotoad : public RGBEffect
 {
     Q_OBJECT
 

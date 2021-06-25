@@ -4,7 +4,7 @@
 REGISTER_EFFECT(Sequence);
 
 Sequence::Sequence(QWidget *parent) :
-    QWidget(parent),
+    RGBEffect(parent),
     ui(new Ui::Sequence)
 {
     ui->setupUi(this);

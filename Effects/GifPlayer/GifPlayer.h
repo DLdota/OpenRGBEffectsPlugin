@@ -13,7 +13,7 @@ namespace Ui {
 class GifPlayer;
 }
 
-class GifPlayer: public QWidget, public RGBEffect
+class GifPlayer: public RGBEffect
 {
     Q_OBJECT
 

@@ -10,7 +10,7 @@ namespace Ui {
 class ColorWheelEffect;
 }
 
-class ColorWheelEffect : public QWidget, public RGBEffect
+class ColorWheelEffect : public RGBEffect
 {
     Q_OBJECT
 

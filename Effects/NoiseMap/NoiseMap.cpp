@@ -7,7 +7,7 @@
 REGISTER_EFFECT(NoiseMap);
 
 NoiseMap::NoiseMap(QWidget *parent) :
-    QWidget(parent),
+    RGBEffect(parent),
     ui(new Ui::NoiseMap)
 {
     ui->setupUi(this);

@@ -8,7 +8,7 @@
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
 
-class Lightning: public QWidget, public RGBEffect
+class Lightning: public RGBEffect
 {
     Q_OBJECT
 

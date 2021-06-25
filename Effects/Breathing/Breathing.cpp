@@ -3,7 +3,7 @@
 
 REGISTER_EFFECT(Breathing);
 
-Breathing::Breathing(): RGBEffect()
+Breathing::Breathing() : RGBEffect()
 {
     EffectDetails.EffectName = "Breathing";
     EffectDetails.EffectClassName = ClassName();

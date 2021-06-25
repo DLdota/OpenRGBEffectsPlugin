@@ -4,8 +4,8 @@
 
 REGISTER_EFFECT(Stack);
 
-Stack::Stack(QWidget *parent) :
-    QWidget(parent),
+Stack::Stack(QWidget *parent) :    
+    RGBEffect(parent),
     ui(new Ui::Stack)
 {
     ui->setupUi(this);

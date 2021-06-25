@@ -10,7 +10,7 @@ namespace Ui {
 class RadialRainbow;
 }
 
-class RadialRainbow : public QWidget, public RGBEffect
+class RadialRainbow : public RGBEffect
 {
     Q_OBJECT
 

@@ -3,7 +3,7 @@
 REGISTER_EFFECT(MotionPoint);
 
 MotionPoint::MotionPoint(QWidget *parent) :
-    QWidget(parent),
+    RGBEffect(parent),
     ui(new Ui::MotionPoint)
 {
     ui->setupUi(this);

@@ -13,7 +13,7 @@ namespace Ui {
 class NoiseMap;
 }
 
-class NoiseMap : public QWidget, public RGBEffect
+class NoiseMap : public RGBEffect
 {
     Q_OBJECT
 

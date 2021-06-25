@@ -10,7 +10,7 @@ namespace Ui {
 class Stack;
 }
 
-class Stack : public QWidget, public RGBEffect
+class Stack : public RGBEffect
 {
     Q_OBJECT
 

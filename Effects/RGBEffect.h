@@ -1,6 +1,7 @@
 #ifndef RGBEFFECT_H
 #define RGBEFFECT_H
 
+#include <QWidget>
 #include <QLayout>
 #include "ControllerZone.h"
 #include "json.hpp"
@@ -29,9 +30,12 @@ struct EffectInfo
     bool HasCustomSettings;
 };
 
-class RGBEffect
+class RGBEffect : public QWidget
 {
+    Q_OBJECT
+
 public:
+    explicit RGBEffect(QWidget* parent = nullptr) : QWidget(parent){};
     virtual ~RGBEffect(){};
 
     virtual void DefineExtraOptions(QLayout*) {}
@@ -65,6 +69,11 @@ public:
     virtual void SetSlider2Val(unsigned int value) { Slider2Val = value; }
 
     EffectInfo EffectDetails;
+
+    void EmitMeasure(float t, int d){ emit TimeMeasured(t, d); }
+
+signals:
+    void TimeMeasured(float, int);
 
 protected:
     unsigned int FPS = 60;

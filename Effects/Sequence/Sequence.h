@@ -11,7 +11,7 @@ namespace Ui {
 class Sequence;
 }
 
-class Sequence : public QWidget, public RGBEffect
+class Sequence : public RGBEffect
 {
     Q_OBJECT
 

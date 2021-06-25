@@ -196,7 +196,7 @@ namespace Ui {
 class AudioVisualizer;
 }
 
-class AudioVisualizer:  public QWidget, public RGBEffect
+class AudioVisualizer: public RGBEffect
 {
     Q_OBJECT
 

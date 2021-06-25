@@ -4,8 +4,7 @@
 REGISTER_EFFECT(Wavy);
 
 Wavy::Wavy(QWidget *parent) :
-    QWidget(parent),
-    RGBEffect(),
+    RGBEffect(parent),
     ui(new Ui::Wavy)
 {
     ui->setupUi(this);

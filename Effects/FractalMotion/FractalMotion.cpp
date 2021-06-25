@@ -3,7 +3,7 @@
 REGISTER_EFFECT(FractalMotion);
 
 FractalMotion::FractalMotion(QWidget *parent) :
-    QWidget(parent),
+    RGBEffect(parent),
     ui(new Ui::FractalMotion)
 {
     ui->setupUi(this);

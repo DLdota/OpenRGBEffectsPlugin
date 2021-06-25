@@ -50,7 +50,7 @@ enum RollMode {
     RADIAL = 2
 };
 
-class AudioSync: public QObject, public RGBEffect
+class AudioSync: public RGBEffect
 {
     Q_OBJECT
 public:

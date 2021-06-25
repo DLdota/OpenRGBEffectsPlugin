@@ -4,7 +4,7 @@
 REGISTER_EFFECT(ColorWheelEffect);
 
 ColorWheelEffect::ColorWheelEffect(QWidget *parent) :
-    QWidget(parent),
+    RGBEffect(parent),
     ui(new Ui::ColorWheelEffect)
 {
     ui->setupUi(this);

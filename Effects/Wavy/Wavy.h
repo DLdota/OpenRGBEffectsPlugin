@@ -14,7 +14,7 @@ namespace Ui {
 class Wavy;
 }
 
-class Wavy: public QWidget, public RGBEffect
+class Wavy: public RGBEffect
 {
     Q_OBJECT
 

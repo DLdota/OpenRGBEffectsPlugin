@@ -11,7 +11,7 @@ namespace Ui {
 class MotionPoint;
 }
 
-class MotionPoint : public QWidget, public RGBEffect
+class MotionPoint : public RGBEffect
 {
     Q_OBJECT
 

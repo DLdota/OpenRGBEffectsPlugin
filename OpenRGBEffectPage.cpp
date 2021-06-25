@@ -2,6 +2,8 @@
 #include "OpenRGBEffectSettings.h"
 #include "EffectManager.h"
 #include "ColorUtils.h"
+#include <iomanip>
+#include <sstream>
 
 OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
     QWidget(parent),
@@ -13,6 +15,20 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
     ui->setupUi(this);
 
     InitUi();
+
+    connect(effect, &RGBEffect::TimeMeasured, [=](float time, int duration){
+        int hour = duration / 3600;
+        int minute = (duration % 3600) / 60;
+        int second = duration % 60;
+
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(1) << time << "ms \n"
+                  << (hour   < 10 ? "0" : "") << hour    << ":"
+                  << (minute < 10 ? "0" : "") << minute  << ":"
+                  << (second < 10 ? "0" : "") << second;
+
+        ui->time_measure->setText(QString::fromStdString(stream.str()));
+    });
 }
 
 OpenRGBEffectPage::~OpenRGBEffectPage()

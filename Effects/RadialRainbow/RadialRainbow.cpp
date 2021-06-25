@@ -4,7 +4,7 @@
 REGISTER_EFFECT(RadialRainbow);
 
 RadialRainbow::RadialRainbow(QWidget *parent) :
-    QWidget(parent),
+    RGBEffect(parent),
     ui(new Ui::RadialRainbow)
 {
     ui->setupUi(this);

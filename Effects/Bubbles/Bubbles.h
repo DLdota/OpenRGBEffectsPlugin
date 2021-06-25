@@ -10,7 +10,7 @@ namespace Ui {
 class Bubbles;
 }
 
-class Bubbles: public QWidget, public RGBEffect
+class Bubbles: public RGBEffect
 {
     Q_OBJECT
 

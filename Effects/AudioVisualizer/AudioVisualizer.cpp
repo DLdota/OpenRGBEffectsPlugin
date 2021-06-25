@@ -31,8 +31,7 @@ REGISTER_EFFECT(AudioVisualizer);
 | Functions  |
 \*----------*/
 AudioVisualizer::AudioVisualizer(QWidget* parent):
-    QWidget(parent),
-    RGBEffect(),
+    RGBEffect(parent),
     ui(new Ui::AudioVisualizerUi)
 {
     ui->setupUi(this);

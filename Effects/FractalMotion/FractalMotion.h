@@ -11,7 +11,7 @@ namespace Ui {
 class FractalMotion;
 }
 
-class FractalMotion : public QWidget, public RGBEffect
+class FractalMotion : public RGBEffect
 {
     Q_OBJECT
 

@@ -8,7 +8,7 @@
 REGISTER_EFFECT(Hypnotoad);
 
 Hypnotoad::Hypnotoad(QWidget *parent) :
-    QWidget(parent),
+    RGBEffect(parent),
     ui(new Ui::Hypnotoad)
 {
     ui->setupUi(this);
