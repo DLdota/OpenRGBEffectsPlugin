@@ -19,9 +19,9 @@ RadialRainbow::RadialRainbow(QWidget *parent) :
     EffectDetails.UserColors   = 0;
     EffectDetails.AllowOnlyFirst = false;
 
-    EffectDetails.MaxSlider2Val = 20;
-    EffectDetails.MinSlider2Val = 2;
-    EffectDetails.Slider2Name   = "Width";
+    EffectDetails.MaxSlider2Val = 100;
+    EffectDetails.MinSlider2Val = 1;
+    EffectDetails.Slider2Name   = "Frequency";
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
@@ -40,6 +40,8 @@ void RadialRainbow::DefineExtraOptions(QLayout* layout)
 
 void RadialRainbow::StepEffect(std::vector<ControllerZone> controller_zones)
 {
+    float cx_shift_mult = cx_shift / 100.f;
+    float cy_shift_mult = cy_shift / 100.f;
 
     for(unsigned int i = 0; i < controller_zones.size(); i++)
     {
@@ -50,7 +52,7 @@ void RadialRainbow::StepEffect(std::vector<ControllerZone> controller_zones)
 
         if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
         {
-            double cx = leds_count / 2.f;
+            double cx = leds_count * cx_shift_mult;
             double cy = 0;
 
             for (int LedID = 0; LedID < leds_count; LedID++)
@@ -65,8 +67,8 @@ void RadialRainbow::StepEffect(std::vector<ControllerZone> controller_zones)
             int cols = controller_zones[i].matrix_map_width();
             int rows = controller_zones[i].matrix_map_height();
 
-            double cx = cols / 2.f;
-            double cy = rows / 2.f;
+            double cx = cols * cx_shift_mult;
+            double cy = rows * cy_shift_mult;
 
             for (int col_id = 0; col_id < cols; col_id++)
             {
@@ -88,7 +90,7 @@ RGBColor RadialRainbow::GetColor(unsigned int x, unsigned int y, double cx, doub
 {
     double distance = sqrt(pow(cx - x, 2) + pow(cy - y, 2));
 
-    float width = Slider2Val * 1.f;
+    float width = Slider2Val * 0.5f;
 
     hsv_t hsv;
     hsv.hue = distance * width + (reverse ? progress:-progress);
@@ -99,5 +101,28 @@ RGBColor RadialRainbow::GetColor(unsigned int x, unsigned int y, double cx, doub
     return RGBColor(hsv2rgb(&hsv));
 }
 
+void RadialRainbow::on_cx_valueChanged(int value)
+{
+    cx_shift = value;
+}
 
+void RadialRainbow::on_cy_valueChanged(int value)
+{
+    cy_shift = value;
+}
 
+void RadialRainbow::LoadCustomSettings(json settings)
+{
+    if(settings.contains("cx")) cx_shift = settings["cx"];
+    if(settings.contains("cy")) cy_shift = settings["cy"];
+
+    ui->cx->setValue(cx_shift);
+    ui->cy->setValue(cy_shift);
+}
+
+json RadialRainbow::SaveCustomSettings(json settings)
+{
+    settings["cx"] = cx_shift;
+    settings["cy"] = cy_shift;
+    return settings;
+}

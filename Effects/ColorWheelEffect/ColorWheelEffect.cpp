@@ -25,6 +25,8 @@ ColorWheelEffect::ColorWheelEffect(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
+
+    ui->direction->addItems({"Clockwise", "Counter-clockwise"});
 }
 
 ColorWheelEffect::~ColorWheelEffect()
@@ -41,6 +43,8 @@ void ColorWheelEffect::DefineExtraOptions(QLayout* layout)
 
 void ColorWheelEffect::StepEffect(std::vector<ControllerZone> controller_zones)
 {
+    float cx_shift_mult = cx_shift / 100.f;
+    float cy_shift_mult = cy_shift / 100.f;
 
     for(unsigned int i = 0; i < controller_zones.size(); i++)
     {
@@ -51,7 +55,7 @@ void ColorWheelEffect::StepEffect(std::vector<ControllerZone> controller_zones)
 
         if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
         {
-            double cx = leds_count / 2.f;
+            double cx = leds_count * cx_shift_mult;
             double cy = 0;
 
             for (int LedID = 0; LedID < leds_count; LedID++)
@@ -66,8 +70,8 @@ void ColorWheelEffect::StepEffect(std::vector<ControllerZone> controller_zones)
             int cols = controller_zones[i].matrix_map_width();
             int rows = controller_zones[i].matrix_map_height();
 
-            double cx = cols / 2.f;
-            double cy = rows / 2.f;
+            double cx = cols * cx_shift_mult;
+            double cy = rows * cy_shift_mult;
 
             for (int col_id = 0; col_id < cols; col_id++)
             {
@@ -86,7 +90,8 @@ void ColorWheelEffect::StepEffect(std::vector<ControllerZone> controller_zones)
 
 
 RGBColor ColorWheelEffect::GetColor(unsigned int x, unsigned int y, double cx, double cy, bool reverse){
-    float hue = (float)(progress + (int)(180 + (reverse?atan2(y - cy, x - cx):atan2(x - cx, y - cy)) * (180.0 / 3.14159)) % 360);
+    float direction_mult = direction == 0 ? 1.f : -1.f;
+    float hue = (float)(progress + (int)(180 + direction_mult * (reverse ? atan2(y - cy, x - cx) : atan2(x - cx, y - cy)) * (180.0 / 3.14159)) % 360);
     hsv_t hsv = { 0, 0, 0 };
     hsv.hue = (int)hue;
     hsv.saturation = 255;
@@ -94,4 +99,39 @@ RGBColor ColorWheelEffect::GetColor(unsigned int x, unsigned int y, double cx, d
 
     return RGBColor(hsv2rgb(&hsv));
 }
+
+void ColorWheelEffect::on_cx_valueChanged(int value)
+{
+    cx_shift = value;
+}
+
+void ColorWheelEffect::on_cy_valueChanged(int value)
+{
+    cy_shift = value;
+}
+
+void ColorWheelEffect::on_direction_currentIndexChanged(int value)
+{
+    direction = value;
+}
+
+void ColorWheelEffect::LoadCustomSettings(json settings)
+{
+    if(settings.contains("cx")) cx_shift = settings["cx"];
+    if(settings.contains("cy")) cy_shift = settings["cy"];
+    if(settings.contains("direction")) direction = settings["direction"];
+
+    ui->cx->setValue(cx_shift);
+    ui->cy->setValue(cy_shift);
+    ui->direction->setCurrentIndex(direction);
+}
+
+json ColorWheelEffect::SaveCustomSettings(json settings)
+{
+    settings["cx"] = cx_shift;
+    settings["cy"] = cy_shift;
+    settings["direction"] = direction;
+    return settings;
+}
+
 

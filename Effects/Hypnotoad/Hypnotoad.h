@@ -33,6 +33,8 @@ private slots:
     void on_color_rotation_direction_currentIndexChanged(int);    
     void on_spacing_valueChanged(int);
     void on_thickness_valueChanged(int);
+    void on_cx_valueChanged(int);
+    void on_cy_valueChanged(int);
 
 private:
     Ui::Hypnotoad *ui;
@@ -45,6 +47,9 @@ private:
     unsigned int color_rotation_direction = 0;
     unsigned int spacing = 1;
     unsigned int thickness = 1;
+    unsigned int cx_shift = 50;
+    unsigned int cy_shift = 50;
+
 };
 
 #endif // HYPNOTOAD_H

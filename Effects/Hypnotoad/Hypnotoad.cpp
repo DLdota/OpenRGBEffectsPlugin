@@ -47,6 +47,9 @@ void Hypnotoad::DefineExtraOptions(QLayout* layout)
 
 void Hypnotoad::StepEffect(std::vector<ControllerZone> controller_zones)
 {
+    float cx_shift_mult = cx_shift / 100.f;
+    float cy_shift_mult = cy_shift / 100.f;
+
     for(ControllerZone& controller_zone : controller_zones)
     {
         unsigned int start_idx = controller_zone.start_idx();
@@ -57,8 +60,8 @@ void Hypnotoad::StepEffect(std::vector<ControllerZone> controller_zones)
             unsigned int width = controller_zone.leds_count();
             unsigned int height = 1;
 
-            float cx = width / 2.f;
-            float cy = height / 2.f;
+            float cx = width * cx_shift_mult;
+            float cy = height * cy_shift_mult;
 
             for(unsigned int i = 0; i < width; i++)
             {
@@ -73,8 +76,8 @@ void Hypnotoad::StepEffect(std::vector<ControllerZone> controller_zones)
             unsigned int height = controller_zone.matrix_map_height();
             unsigned int * map = controller_zone.map();
 
-            float cx = width / 2.f;
-            float cy = height / 2.f;
+            float cx = width * cx_shift_mult;
+            float cy = height * cy_shift_mult;
 
             for(unsigned int h = 0; h < height; h++)
             {
@@ -119,6 +122,8 @@ void Hypnotoad::LoadCustomSettings(json settings)
     if(settings.contains("color_rotation_direction"))   color_rotation_direction = settings["color_rotation_direction"];
     if(settings.contains("spacing"))                    spacing                  = settings["spacing"];
     if(settings.contains("thickness"))                  thickness                = settings["thickness"];
+    if(settings.contains("cx"))                         cx_shift                 = settings["cx"];
+    if(settings.contains("cy"))                         cy_shift                 = settings["cy"];
 
     ui->animation_speed->setValue(animation_speed);
     ui->color_rotation_speed->setValue(color_rotation_speed);
@@ -126,6 +131,8 @@ void Hypnotoad::LoadCustomSettings(json settings)
     ui->color_rotation_direction->setCurrentIndex(color_rotation_direction);
     ui->spacing->setValue(spacing);
     ui->thickness->setValue(thickness);
+    ui->cx->setValue(cx_shift);
+    ui->cy->setValue(cy_shift);
 }
 
 json Hypnotoad::SaveCustomSettings(json settings)
@@ -136,6 +143,8 @@ json Hypnotoad::SaveCustomSettings(json settings)
     settings["color_rotation_direction"] = color_rotation_direction;
     settings["spacing"]                  = spacing;
     settings["thickness"]                = thickness;
+    settings["cx"]                       = cx_shift;
+    settings["cy"]                       = cy_shift;
 
     return settings;
 }
@@ -169,3 +178,14 @@ void Hypnotoad::on_thickness_valueChanged(int value)
 {
     thickness = value;
 }
+
+void Hypnotoad::on_cx_valueChanged(int value)
+{
+    cx_shift = value;
+}
+
+void Hypnotoad::on_cy_valueChanged(int value)
+{
+    cy_shift = value;
+}
+
