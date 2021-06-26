@@ -2,6 +2,7 @@
 #define SCREENSELECTION_H
 
 #include <QWidget>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QMainWindow>
 #include <QMainWindow>
@@ -20,7 +21,8 @@
 enum CALCULATION_TYPE
 {
     CALCULATE_MODE,
-    CALCULATE_AVERAGE
+    CALCULATE_AVERAGE,
+    SCREEN_COPY_MODE
 };
 
 
@@ -37,6 +39,7 @@ public:
     void SetAuto(bool Auto);
 
     QColor CalcColor();
+    QImage GetImage(unsigned int, unsigned int);
 
     CALCULATION_TYPE GetCalcType();
     void             SetCalcType(CALCULATION_TYPE);
@@ -69,6 +72,7 @@ private:
     QSlider* YPosSlider;
     QRadioButton* AverageButton;
     QRadioButton* ModeButton;
+    QRadioButton* CopyButton;
     QPushButton* ShowHide;
     QPoint lastPos;
 
@@ -95,6 +99,7 @@ private slots:
 
     void on_CALC_MODE();
     void on_CALC_AVERAGE();
+    void on_SCREEN_COPY();
     void on_ShowHide();
 };
 

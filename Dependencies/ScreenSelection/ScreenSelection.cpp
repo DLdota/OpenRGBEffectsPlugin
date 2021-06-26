@@ -24,9 +24,9 @@ ScreenSelection::ScreenSelection(QWidget* Parent) :
     Display = new QLabel();
     Display->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     Display->setAlignment(Qt::AlignCenter);
-    Display->setMinimumSize(this->minimumSize() / 2);
+    Display->setMinimumSize(minimumSize() / 2);
 
-    const QRect ScreenSize = this->screen->geometry();
+    const QRect ScreenSize = screen->geometry();
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addSpacerItem(ToBottom);
@@ -88,11 +88,9 @@ ScreenSelection::ScreenSelection(QWidget* Parent) :
     QFrame* RadioFrame = new QFrame();
     QHBoxLayout* RadioLayout = new QHBoxLayout(RadioFrame);
 
-
     RadioFrame->setLayout(RadioLayout);
     RadioFrame->setFixedHeight(40);
-    RadioFrame->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed);
-
+    RadioFrame->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
     AverageButton = new QRadioButton("Average",RadioFrame);
     connect(AverageButton,SIGNAL(clicked()),this,SLOT(on_CALC_AVERAGE()));
@@ -100,11 +98,14 @@ ScreenSelection::ScreenSelection(QWidget* Parent) :
     ModeButton    = new QRadioButton("Most Common",RadioFrame);
     connect(ModeButton,SIGNAL(clicked()),this,SLOT(on_CALC_MODE()));
 
+    CopyButton    = new QRadioButton("Screen copy",RadioFrame);
+    connect(CopyButton,SIGNAL(clicked()),this,SLOT(on_SCREEN_COPY()));
+
     AverageButton->toggle();
 
     RadioLayout->addWidget(AverageButton);
     RadioLayout->addWidget(ModeButton);
-
+    RadioLayout->addWidget(CopyButton);
 
     mainLayout->addLayout(BoxSizeSliderLayout);
     mainLayout->addLayout(PosSliderLayout);
@@ -132,7 +133,7 @@ ScreenSelection::ScreenSelection(QWidget* Parent) :
     ToCalc = ScreenShot.toImage();
 
     on_ShowHide();
-    this->resize(this->minimumSize());
+    resize(minimumSize());
 }
 
 void ScreenSelection::GetScreen()
@@ -190,7 +191,7 @@ void ScreenSelection::SetAuto(bool Auto)
 
 QSize ScreenSelection::sizeHint() const
 {
-    return QSize(this->height(),this->width());
+    return QSize(height(),width());
 }
 
 QSize ScreenSelection::minimumSizeHint() const
@@ -242,7 +243,7 @@ void ScreenSelection::mouseReleaseEvent(QMouseEvent *)
 
 void ScreenSelection::resizeEvent(QResizeEvent*)
 {
-    this->layout()->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    layout()->setSizeConstraint(QLayout::SetMinAndMaxSize);
     QSize SZ = Display->size();
 
     imgRegion = QRegion(Display->pos().x(), Display->pos().y(),SZ.width(),SZ.height(), QRegion::Rectangle);
@@ -286,6 +287,8 @@ void ScreenSelection::drawIndicator()
     QPoint BottomRightPoint = QPoint(BottomRight[0],BottomRight[1]);
 
     ToCalc = ForMod.copy(QRect(TopLeftPoint,BottomRightPoint)).toImage();
+
+    composePainter.setPen(QPen(QColor("#c7956d")));
 
     composePainter.drawRect(QRect(TopLeftPoint,BottomRightPoint));
     composePainter.end();
@@ -340,34 +343,33 @@ void ScreenSelection::HeightChanged(const int NewHeight)
 
 void ScreenSelection::on_CALC_MODE()
 {
-    if (CalcType == CALCULATE_AVERAGE)
-    {
-        CalcType = CALCULATE_MODE;
-    }
+    CalcType = CALCULATE_MODE;
 }
 
 void ScreenSelection::on_CALC_AVERAGE()
 {
-    if (CalcType == CALCULATE_MODE)
-    {
-        CalcType = CALCULATE_AVERAGE;
-    }
+   CalcType = CALCULATE_AVERAGE;
+}
+
+void ScreenSelection::on_SCREEN_COPY()
+{
+    CalcType = SCREEN_COPY_MODE;
 }
 
 void ScreenSelection::on_ShowHide()
 {
     if (Display->isHidden())
     {
-        QSize PrevSize = this->size();
-        this->layout()->setSizeConstraint(QLayout::SetFixedSize);
+        QSize PrevSize = size();
+        layout()->setSizeConstraint(QLayout::SetFixedSize);
         Display->show();
         ForMod = ScreenShot;
         ShowHide->setText("Hide Preview");
         ToBottom->changeSize(0,0,QSizePolicy::Fixed,QSizePolicy::Fixed);
         update();
-        this->layout()->setSizeConstraint(QLayout::SetDefaultConstraint);
-        this->resize(PrevSize);
-        this->adjustSize();
+        layout()->setSizeConstraint(QLayout::SetDefaultConstraint);
+        resize(PrevSize);
+        adjustSize();
         GetScreen();
     }
     else
@@ -376,12 +378,17 @@ void ScreenSelection::on_ShowHide()
         Display->clear();
         ForMod = QPixmap(0,0);
         ShowHide->setText("Show Preview");
-        if (!this->isHidden())
+        if (!isHidden())
         {
             ToBottom->changeSize(0,0,QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
         }
-        this->resize(this->minimumSize());
+        resize(minimumSize());
     }
+}
+
+QImage ScreenSelection::GetImage(unsigned int w, unsigned int h)
+{
+    return ToCalc.scaled(w, h);
 }
 
 QColor ScreenSelection::CalcColor()
@@ -475,6 +482,10 @@ void ScreenSelection::SetCalcType(CALCULATION_TYPE CT)
     else if (CT == CALCULATE_MODE)
     {
         ModeButton->click();
+    }
+    else if (CT == SCREEN_COPY_MODE)
+    {
+        CopyButton->click();
     }
 }
 
