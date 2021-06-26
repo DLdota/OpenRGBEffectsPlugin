@@ -32,21 +32,28 @@ After running the OpenRGB build you downloaded from the link the effects tab sho
 
 ## What Effects do you have?
 
-* Spectrum Cycling
-* Rainbow Wave
-* Starry night
-* Gradient Cycling
-* Breathing
-* Rain
 * Ambient
-* Visor
+* AudioSync
+* AudioVisualizer (A port of [Keyboard visualizer](https://gitlab.com/CalcProgrammer1/KeyboardVisualizer))
+* Breathing
 * Bubbles
+* ColorWheelEffect
+* FractalMotion
+* GifPlayer
+* GradientWave
+* Hypnotoad
+* Lightning
+* MotionPoint
+* NoiseMap
+* RadialRainbow
+* Rain
+* RainbowWave
+* Sequence
+* SpectrumCycling
+* Stack
+* StarryNight
+* Visor
 * Wavy
-
-### Audio Effects (Backend created by Morg)
-
-* Audio Visualizer (A port of [Keyboard visualizer](https://gitlab.com/CalcProgrammer1/KeyboardVisualizer))
-* Audio Sync (an other audio visualizer with different options)
 
 ## Common Issues
 
@@ -58,15 +65,17 @@ OpenRGB and EffectsPLugin are under heavy development, make sure to run latest p
 
 There are 3 Effects that cause this:
 
-1. Audio Visualizer
-
-2. Audio Sync
-
-3. Ambient
+* Audio Visualizer
+* Audio Sync
+* Ambient
 
 Both of the audio effects will spike in CPU usage when opening an [S/PDIF device](https://en.wikipedia.org/wiki/S/PDIF) for reasons we still don't know. This can be fixed by switching off of the spdif device or stopping the effect
 
 The very nature of ambient is to do massive calulation to get the average or most common color on screen. Scaling uses a lot of CPU so once you have selected your portion of the screen it is recommended that you hide the preview
+
+## Contributing
+
+Please read the [contributing guide](./CONTRIBUTING.md) if you want to add effects or bring new features.
 
 ## Donations
 
