@@ -1,7 +1,11 @@
 #include "OpenRGBEffectPage.h"
 #include "OpenRGBEffectSettings.h"
+#include "OpenRGBEffectsPlugin.h"
 #include "EffectManager.h"
 #include "ColorUtils.h"
+#include "LivePreviewController.h"
+#include <QDialog>
+#include <QFile>
 #include <iomanip>
 #include <sstream>
 
@@ -169,6 +173,44 @@ void OpenRGBEffectPage::StopEffect()
     emit EffectState(false);
 }
 
+void OpenRGBEffectPage::OpenPreview()
+{
+    preview_dialog = new QDialog(this);
+    preview_dialog->setAttribute(Qt::WA_DeleteOnClose);
+    preview_dialog->setModal(false);
+    preview_dialog->setWindowTitle(QString::fromStdString(effect->EffectDetails.EffectName + " preview"));
+
+    if (OpenRGBEffectsPlugin::DarkTheme)
+    {
+        QPalette pal;
+        pal.setColor(QPalette::WindowText, Qt::white);
+        preview_dialog->setPalette(pal);
+        QFile dark_theme(":/windows_dark.qss");
+        dark_theme.open(QFile::ReadOnly);
+        preview_dialog->setStyleSheet(dark_theme.readAll());
+        dark_theme.close();
+    }
+
+    preview_dialog->setMinimumSize(64,64);
+
+    QVBoxLayout* dialog_layout = new QVBoxLayout(preview_dialog);
+
+    LivePreviewController* preview = new LivePreviewController(preview_dialog);
+    ControllerZone controller_zone = {preview, 0, false};
+    EffectManager::Get()->AddPreview(effect, controller_zone);
+
+    dialog_layout->addWidget(preview);
+
+    preview_dialog->show();
+
+    ui->PreviewButton->setDisabled(true);
+
+    connect(preview_dialog, &QDialog::finished, [=](){
+        ui->PreviewButton->setDisabled(false);
+        EffectManager::Get()->RemovePreview(effect);
+    });
+}
+
 void OpenRGBEffectPage::on_StartButton_clicked()
 {
     StartEffect();
@@ -177,6 +219,11 @@ void OpenRGBEffectPage::on_StartButton_clicked()
 void OpenRGBEffectPage::on_StopButton_clicked()
 {
     StopEffect();
+}
+
+void OpenRGBEffectPage::on_PreviewButton_clicked()
+{
+    OpenPreview();
 }
 
 void OpenRGBEffectPage::on_SpeedSlider_valueChanged(int value)

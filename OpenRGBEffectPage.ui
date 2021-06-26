@@ -48,7 +48,7 @@
     </layout>
    </item>
    <item row="1" column="1">
-    <layout class="QVBoxLayout" name="StatusLayout" stretch="1,0,0,0,0,0,0,0">
+    <layout class="QVBoxLayout" name="StatusLayout" stretch="1,0,0,0,0,0,0,0,0">
      <item>
       <spacer name="Top_to_Status">
        <property name="orientation">
@@ -149,6 +149,13 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="PreviewButton">
+       <property name="text">
+        <string>Preview</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

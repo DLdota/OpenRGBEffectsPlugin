@@ -46,11 +46,13 @@ void EffectManager::SetEffectUnActive(RGBEffect* Effect)
 void EffectManager::RemoveMapping(RGBEffect* effect)
 {
     effect_zones.erase(effect);
+    previews.erase(effect);
 }
 
 void EffectManager::ClearAssignments()
 {
     effect_zones.clear();
+    previews.clear();
 }
 
 void EffectManager::Assign(std::vector<ControllerZone> controller_zones, RGBEffect* effect)
@@ -93,6 +95,7 @@ void EffectManager::Assign(std::vector<ControllerZone> controller_zones, RGBEffe
         controllers.insert(controller_zone.controller);
     }
 
+    // todo: use setCustomMode instead?
     for(RGBController* controller : controllers)
     {
         for(unsigned int i = 0 ; i < controller->modes.size(); i++)
@@ -105,9 +108,7 @@ void EffectManager::Assign(std::vector<ControllerZone> controller_zones, RGBEffe
         }
     }
 
-    // notify effect zones has changed
-    effect->ASelectionWasChanged(effect_zones[effect]);
-
+    NotifySelectionChanged(effect);
 }
 
 std::vector<ControllerZone> EffectManager::GetAssignedZones(RGBEffect* effect)
@@ -127,54 +128,60 @@ void  EffectManager::EffectThreadFunction(RGBEffect* effect)
     TCount effect_start = clock->now();
     int last_total_duration = -1;
 
-    while (EffectThreads.find(effect) != EffectThreads.end()) {
+    while (EffectThreads.find(effect) != EffectThreads.end())
+    {
+        TCount start = clock->now();
 
-            TCount start = clock->now();
+        std::vector<ControllerZone> controller_zones =  effect_zones[effect];
 
-            std::vector<ControllerZone> controller_zones =  effect_zones[effect];
-
-            effect->StepEffect(controller_zones);
-
-            // Use a set to update only once the controllers
-            std::set<RGBController*> controllers;
-
-            for(ControllerZone& controller_zone: controller_zones)
-            {
-                controllers.insert(controller_zone.controller);
-            }
-
-            for(RGBController* controller : controllers)
-            {
-                controller->UpdateLEDs();
-            }
-
-            TCount end = clock->now();
-
-            int FPS = effect->GetFPS();
-            int FPSDelay = 1000000 / (float)FPS;
-
-            int duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-            int delta = FPSDelay - duration;
-
-            int total_duration = std::chrono::duration_cast<std::chrono::seconds>(end - effect_start).count();
-
-            // emit every second
-            if(total_duration > last_total_duration)
-            {
-                // emit as ms
-                last_total_duration = total_duration;
-                effect->EmitMeasure(duration * 0.001, total_duration);
-            }
-
-            if(delta > 0)
-            {
-                std::this_thread::sleep_for(std::chrono::microseconds(delta));
-            }
-            else
-            {
-                std::this_thread::sleep_for(std::chrono::milliseconds(1));
-            }
+        // Add preview virtual controllers to the list of real devices if any
+        if (previews.find(effect) != previews.end())
+        {
+            controller_zones.push_back(previews[effect]);
         }
+
+        effect->StepEffect(controller_zones);
+
+        // Use a set to update only once the controllers
+        std::set<RGBController*> controllers;
+
+        for(ControllerZone& controller_zone: controller_zones)
+        {
+            controllers.insert(controller_zone.controller);
+        }
+
+        for(RGBController* controller : controllers)
+        {
+            controller->UpdateLEDs();
+        }
+
+        TCount end = clock->now();
+
+        int FPS = effect->GetFPS();
+        int FPSDelay = 1000000 / (float)FPS;
+
+        int duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        int delta = FPSDelay - duration;
+
+        int total_duration = std::chrono::duration_cast<std::chrono::seconds>(end - effect_start).count();
+
+        // emit every second
+        if(total_duration > last_total_duration)
+        {
+            // emit as ms
+            last_total_duration = total_duration;
+            effect->EmitMeasure(duration * 0.001, total_duration);
+        }
+
+        if(delta > 0)
+        {
+            std::this_thread::sleep_for(std::chrono::microseconds(delta));
+        }
+        else
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+    }
 
     printf("[OpenRGBEffectsPlugin] Effect %s thread ended\n", effect->EffectDetails.EffectName.c_str());
 }
@@ -182,4 +189,28 @@ void  EffectManager::EffectThreadFunction(RGBEffect* effect)
 bool EffectManager::HasActiveEffects()
 {
     return !ActiveEffects.empty();
+}
+
+void EffectManager::AddPreview(RGBEffect* effect, ControllerZone preview)
+{
+    previews[effect] = preview;
+    NotifySelectionChanged(effect);
+}
+
+void EffectManager::RemovePreview(RGBEffect* effect)
+{
+    previews.erase(effect);
+}
+
+void EffectManager::NotifySelectionChanged(RGBEffect* effect)
+{
+    // notify effect zones has changed
+    std::vector<ControllerZone> new_zones =  effect_zones[effect];
+
+    if (previews.find(effect) != previews.end())
+    {
+        new_zones.push_back(previews[effect]);
+    }
+
+    effect->ASelectionWasChanged(new_zones);
 }

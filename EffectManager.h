@@ -25,10 +25,15 @@ public:
 
     bool HasActiveEffects();
 
+    void AddPreview(RGBEffect*, ControllerZone);
+    void RemovePreview(RGBEffect*);
+
 private:
     EffectManager();
     ~EffectManager() {};
     void EffectThreadFunction(RGBEffect*);
+
+    void NotifySelectionChanged(RGBEffect*);
 
     static EffectManager*   instance;
     std::vector<RGBEffect*> ActiveEffects;   
@@ -36,6 +41,7 @@ private:
     std::chrono::steady_clock* clock;
 
     std::map<RGBEffect*, std::vector<ControllerZone>> effect_zones;
+    std::map<RGBEffect*, ControllerZone> previews;
 };
 
 #endif // EFFECTMANAGER_H

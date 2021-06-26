@@ -69,6 +69,7 @@ HEADERS +=                                                                      
     Effects/Sequence/Sequence.h \
     Effects/Stack/Stack.h                                                                       \
     Effects/GifPlayer/GifPlayer.h                                                               \
+    LivePreviewController.h \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -81,7 +82,11 @@ HEADERS +=                                                                      
     OpenRGB/net_port/net_port.h                                                                 \
     OpenRGB/RGBController/RGBController.h                                                       \
     PluginInfo.h \
+    PreviewWidget.h \
     ZoneListItem.h
+
+SOURCES += OpenRGB/RGBController/RGBController.cpp                                              \
+    PreviewWidget.cpp
 
 
 #-----------------------------------------------------------------------------------------------#
@@ -122,6 +127,7 @@ SOURCES +=                                                                      
     Effects/Sequence/Sequence.cpp \
     Effects/Stack/Stack.cpp                                                                     \
     Effects/GifPlayer/GifPlayer.cpp                                                             \
+    LivePreviewController.cpp \
     OpenRGBEffectsPlugin.cpp                                                                    \
     OpenRGBEffectTab.cpp                                                                        \
     OpenRGBEffectPage.cpp                                                                       \
@@ -150,6 +156,7 @@ FORMS +=                                                                        
     Effects/Sequence/Sequence.ui \
     Effects/Stack/Stack.ui                                                                      \
     Effects/GifPlayer/GifPlayer.ui                                                              \
+    LivePreviewController.ui \
     OpenRGBEffectPage.ui                                                                        \
     OpenRGBEffectTab.ui                                                                         \
     ColorPicker.ui                                                                              \
