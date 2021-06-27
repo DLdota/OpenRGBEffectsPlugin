@@ -104,7 +104,7 @@ RGBColor Hypnotoad::GetColor(unsigned int x, unsigned int y, float cx, float cy,
 
     double angle    = atan2(y - cy, x - cx) * 180 / 3.14159265359;
     double distance = sqrt(pow(cx - x, 2) + pow(cy - y, 2));
-    float  value    = cos(animation_mult * distance / (float) spacing  + progress);
+    float  value    = cos(animation_mult * distance / (0.1 * (float) spacing)  + progress);
 
     hsv_t hsv;
     hsv.value = pow((value + 1) * 0.5, (11 - thickness)) * 255;
