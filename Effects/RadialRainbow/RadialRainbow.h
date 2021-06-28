@@ -29,6 +29,7 @@ public:
 private slots:
     void on_cx_valueChanged(int);
     void on_cy_valueChanged(int);
+    void on_shape_currentIndexChanged(int);
 
 private:
     Ui::RadialRainbow *ui;
@@ -36,6 +37,7 @@ private:
     RGBColor GetColor(unsigned int, unsigned int, double, double, bool);
     unsigned int cx_shift = 50;
     unsigned int cy_shift = 50;
+    unsigned int shape = 0;
 };
 
 #endif // RADIALRAINBOW_H

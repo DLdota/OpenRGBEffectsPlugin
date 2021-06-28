@@ -1,5 +1,6 @@
 #include "RadialRainbow.h"
 #include "hsv.h"
+#include "ColorUtils.h"
 
 REGISTER_EFFECT(RadialRainbow);
 
@@ -25,6 +26,8 @@ RadialRainbow::RadialRainbow(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
+
+    ui->shape->addItems({"Circles", "Squares"});
 }
 
 RadialRainbow::~RadialRainbow()
@@ -87,14 +90,27 @@ void RadialRainbow::StepEffect(std::vector<ControllerZone> controller_zones)
 
 
 RGBColor RadialRainbow::GetColor(unsigned int x, unsigned int y, double cx, double cy, bool reverse)
-{
-    double distance = sqrt(pow(cx - x, 2) + pow(cy - y, 2));
-
-    float width = Slider2Val * 0.5f;
-
+{    
     hsv_t hsv;
+    float width = Slider2Val * 0.5f;
+    double distance;
+
+    if(shape == 0)
+    {
+        distance = sqrt(pow(cx - x, 2) + pow(cy - y, 2));
+    }
+    else if (shape == 1)
+    {
+        distance = std::max<float>(fabs(cy - y), fabs(cx - x));
+    }
+    else
+    {
+        return ColorUtils::OFF();
+    }
+
     hsv.hue = distance * width + (reverse ? progress:-progress);
     hsv.hue %= 360;
+
     hsv.saturation = 255;
     hsv.value = 255;
 
@@ -111,18 +127,26 @@ void RadialRainbow::on_cy_valueChanged(int value)
     cy_shift = value;
 }
 
+void RadialRainbow::on_shape_currentIndexChanged(int value)
+{
+    shape = value;
+}
+
 void RadialRainbow::LoadCustomSettings(json settings)
 {
     if(settings.contains("cx")) cx_shift = settings["cx"];
     if(settings.contains("cy")) cy_shift = settings["cy"];
+    if(settings.contains("shape")) cy_shift = settings["shape"];
 
     ui->cx->setValue(cx_shift);
     ui->cy->setValue(cy_shift);
+    ui->shape->setCurrentIndex(shape);
 }
 
 json RadialRainbow::SaveCustomSettings(json settings)
 {
     settings["cx"] = cx_shift;
     settings["cy"] = cy_shift;
+    settings["shape"] = shape;
     return settings;
 }
