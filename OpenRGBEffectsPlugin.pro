@@ -1,18 +1,6 @@
-QT +=                  \
-    gui                \
-    widgets            \
-    core               \
-
-win32:CONFIG += QTPLUGIN
-
-TEMPLATE = lib
+QT += gui widgets core
 DEFINES += OPEN_RGB_EFFECTS_PLUGIN_LIBRARY
-
-win32:CONFIG += c++17
-
-unix:!macx {
-  QMAKE_CXXFLAGS += -std=c++17
-}
+TEMPLATE = lib
 
 #-----------------------------------------------------------------------------------------------#
 # Application Configuration                                                                     #
@@ -28,10 +16,15 @@ GIT_COMMIT_ID   = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$_PR
 GIT_COMMIT_DATE = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$_PRO_FILE_PWD_ show -s --format=%ci HEAD)
 GIT_BRANCH      = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$_PRO_FILE_PWD_ rev-parse --abbrev-ref HEAD)
 
-
+#-----------------------------------------------------------------------------------------------#
+# Download links                                                                                #
+#-----------------------------------------------------------------------------------------------#
 win32:LATEST_BUILD_URL="https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/artifacts/master/download?job=Windows 64"
 unix:!macx:LATEST_BUILD_URL="https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/artifacts/master/download?job=Linux 64"
 
+#-----------------------------------------------------------------------------------------------#
+# Inject vars in defines                                                                        #
+#-----------------------------------------------------------------------------------------------#
 DEFINES +=                                                                                      \
     VERSION_STRING=\\"\"\"$$PLUGIN_VERSION\\"\"\"                                               \
     BUILDDATE_STRING=\\"\"\"$$BUILDDATE\\"\"\"                                                  \
@@ -51,25 +44,6 @@ INCLUDEPATH +=                                                                  
     OpenRGB/dependencies/json                                                                   \
 
 HEADERS +=                                                                                      \
-    ColorUtils.h \
-    ControllerZone.h                                                                            \
-    ControllerZoneList.h                                                                        \
-    DeviceList.h                                                                                \
-    DeviceListItem.h                                                                            \
-    EffectList.h                                                                                \
-    EffectTabHeader.h                                                                           \
-    Effects/Bubbles/Bubbles.h                                                                   \
-    Effects/ColorWheelEffect/ColorWheelEffect.h                                                 \
-    Effects/EffectRegisterer.h                                                                  \
-    Effects/FractalMotion/FractalMotion.h \
-    Effects/Hypnotoad/Hypnotoad.h \
-    Effects/MotionPoint/MotionPoint.h \
-    Effects/NoiseMap/NoiseMap.h \
-    Effects/RadialRainbow/RadialRainbow.h                                                       \
-    Effects/Sequence/Sequence.h \
-    Effects/Stack/Stack.h                                                                       \
-    Effects/GifPlayer/GifPlayer.h                                                               \
-    LivePreviewController.h \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -81,153 +55,33 @@ HEADERS +=                                                                      
     OpenRGB/i2c_smbus/i2c_smbus.h                                                               \
     OpenRGB/net_port/net_port.h                                                                 \
     OpenRGB/RGBController/RGBController.h                                                       \
-    PluginInfo.h \
-    PreviewWidget.h \
-    ZoneListItem.h
 
-SOURCES += OpenRGB/RGBController/RGBController.cpp                                              \
-    PreviewWidget.cpp
-
+SOURCES +=                                                                                      \
+    OpenRGB/RGBController/RGBController.cpp                                                     \
 
 #-----------------------------------------------------------------------------------------------#
-# GUI and misc                                                                                  #
+# HSV                                                                                           #
 #-----------------------------------------------------------------------------------------------#
 INCLUDEPATH +=                                                                                  \
-    Dependencies/                                                                               \
     Dependencies/HSV/                                                                           \
-    Dependencies/ColorWheel/                                                                    \
-    Dependencies/ScreenSelection/                                                               \
-    Dependencies/ResetButton/                                                                   \
 
 HEADERS +=                                                                                      \
-    OpenRGBEffectsPlugin.h                                                                      \
-    OpenRGBEffectTab.h                                                                          \
-    OpenRGBEffectPage.h                                                                         \
-    OpenRGBEffectSettings.h                                                                     \
-    EffectManager.h                                                                             \
-    ColorPicker.h                                                                               \
-    filesystem.h                                                                                \
     Dependencies/HSV/hsv.h                                                                      \
-    Dependencies/ColorWheel/ColorWheel.h                                                        \
-    Dependencies/ScreenSelection/ScreenSelection.h                                              \
 
 SOURCES +=                                                                                      \
-    ControllerZoneList.cpp                                                                      \
-    DeviceList.cpp                                                                              \
-    DeviceListItem.cpp                                                                          \
-    EffectList.cpp                                                                              \
-    EffectTabHeader.cpp                                                                         \
-    Effects/Bubbles/Bubbles.cpp                                                                 \
-    Effects/ColorWheelEffect/ColorWheelEffect.cpp                                               \
-    Effects/FractalMotion/FractalMotion.cpp \
-    Effects/Hypnotoad/Hypnotoad.cpp \
-    Effects/MotionPoint/MotionPoint.cpp \
-    Effects/NoiseMap/NoiseMap.cpp \
-    Effects/RadialRainbow/RadialRainbow.cpp                                                     \
-    Effects/Sequence/Sequence.cpp \
-    Effects/Stack/Stack.cpp                                                                     \
-    Effects/GifPlayer/GifPlayer.cpp                                                             \
-    LivePreviewController.cpp \
-    OpenRGBEffectsPlugin.cpp                                                                    \
-    OpenRGBEffectTab.cpp                                                                        \
-    OpenRGBEffectPage.cpp                                                                       \
-    OpenRGBEffectSettings.cpp                                                                   \
-    EffectManager.cpp                                                                           \
-    ColorPicker.cpp                                                                             \
     Dependencies/HSV/hsv.cpp                                                                    \
+
+#-----------------------------------------------------------------------------------------------#
+# ColorWheel                                                                                    #
+#-----------------------------------------------------------------------------------------------#
+INCLUDEPATH +=                                                                                  \
+    Dependencies/ColorWheel/                                                                    \
+
+HEADERS +=                                                                                      \
+    Dependencies/ColorWheel/ColorWheel.h                                                        \
+
+SOURCES +=                                                                                      \
     Dependencies/ColorWheel/ColorWheel.cpp                                                      \
-    Dependencies/ScreenSelection/ScreenSelection.cpp                                            \
-    PluginInfo.cpp \
-    ZoneListItem.cpp
-
-FORMS +=                                                                                        \
-    ControllerZoneList.ui                                                                       \
-    DeviceList.ui                                                                               \
-    DeviceListItem.ui                                                                           \
-    EffectList.ui                                                                               \
-    EffectTabHeader.ui                                                                          \
-    Effects/Bubbles/Bubbles.ui                                                                  \
-    Effects/ColorWheelEffect/ColorWheelEffect.ui                                                \
-    Effects/FractalMotion/FractalMotion.ui \
-    Effects/Hypnotoad/Hypnotoad.ui \
-    Effects/MotionPoint/MotionPoint.ui \
-    Effects/NoiseMap/NoiseMap.ui \
-    Effects/RadialRainbow/RadialRainbow.ui                                                      \
-    Effects/Sequence/Sequence.ui \
-    Effects/Stack/Stack.ui                                                                      \
-    Effects/GifPlayer/GifPlayer.ui                                                              \
-    LivePreviewController.ui \
-    OpenRGBEffectPage.ui                                                                        \
-    OpenRGBEffectTab.ui                                                                         \
-    ColorPicker.ui                                                                              \
-    PluginInfo.ui \
-    ZoneListItem.ui
-
-#-----------------------------------------------------------------------------------------------#
-# Effects                                                                                       #
-#-----------------------------------------------------------------------------------------------#
-INCLUDEPATH +=                                                                                  \
-    Effects/                                                                                    \
-    Effects/Rain/                                                                               \
-    Effects/Rave/                                                                               \
-    Effects/Wavy/                                                                               \
-    Effects/Visor/                                                                              \
-    Effects/Ambient/                                                                            \
-    Effects/AudioSync/                                                                          \
-    Effects/Breathing/                                                                          \
-    Effects/RainbowWave/                                                                        \
-    Effects/StarryNight/                                                                        \
-    Effects/GradientWave/                                                                       \
-    Effects/SpectrumCycling/                                                                    \
-    Effects/AudioVisualizer/                                                                    \
-    Effects/Lightning/                                                                          \
-    Effects/Bubbles/                                                                            \
-    Effects/Stack/                                                                              \
-
-SOURCES +=                                                                                      \
-    Effects/Rain/Rain.cpp                                                                       \
-    Effects/Wavy/Wavy.cpp                                                                       \
-    Effects/Visor/Visor.cpp                                                                     \
-    Effects/Ambient/Ambient.cpp                                                                 \
-    Effects/AudioSync/AudioSync.cpp                                                             \
-    Effects/Breathing/Breathing.cpp                                                             \
-    Effects/RainbowWave/RainbowWave.cpp                                                         \
-    Effects/StarryNight/StarryNight.cpp                                                         \
-    Effects/GradientWave/GradientWave.cpp                                                       \
-    Effects/AudioVisualizer/AudioVisualizer.cpp                                                 \
-    Effects/Lightning/Lightning.cpp                                                             \
-    Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
-
-HEADERS +=                                                                                      \
-    Effects/RGBEffect.h                                                                         \
-    Effects/Rain/Rain.h                                                                         \
-    Effects/Wavy/Wavy.h                                                                         \
-    Effects/Visor/Visor.h                                                                       \
-    Effects/Ambient/Ambient.h                                                                   \
-    Effects/AudioSync/AudioSync.h                                                               \
-    Effects/Breathing/Breathing.h                                                               \
-    Effects/RainbowWave/RainbowWave.h                                                           \
-    Effects/StarryNight/StarryNight.h                                                           \
-    Effects/GradientWave/GradientWave.h                                                         \
-    Effects/SpectrumCycling/SpectrumCycling.h                                                   \
-    Effects/AudioVisualizer/AudioVisualizer.h                                                   \
-    Effects/Lightning/Lightning.h                                                               \
-
-FORMS +=                                                                                        \
-    Effects/Wavy/Wavy.ui                                                                        \
-    Effects/AudioVisualizer/AudioVisualizer.ui                                                  \
-
-#-----------------------------------------------------------------------------------------------#
-# AudioManager                                                                                  #
-#-----------------------------------------------------------------------------------------------#
-INCLUDEPATH +=                                                                                  \
-    Dependencies/AudioManager/                                                                  \
-
-HEADERS +=                                                                                      \
-    Dependencies/AudioManager/AudioManager.h                                                    \
-
-SOURCES +=                                                                                      \
-    Dependencies/AudioManager/AudioManager.cpp                                                  \
 
 #-----------------------------------------------------------------------------------------------#
 # ctkrangeslider                                                                                #
@@ -236,7 +90,7 @@ INCLUDEPATH +=                                                                  
     Dependencies/ctkrangeslider/                                                                \
 
 HEADERS +=                                                                                      \
-        Dependencies/ctkrangeslider/ctkrangeslider.h                                            \
+    Dependencies/ctkrangeslider/ctkrangeslider.h                                                \
 
 SOURCES +=                                                                                      \
     Dependencies/ctkrangeslider/ctkrangeslider.cpp                                              \
@@ -261,11 +115,10 @@ INCLUDEPATH +=                                                                  
     Dependencies/SimplexNoise/                                                                  \
 
 SOURCES +=                                                                                      \
-    Dependencies/SimplexNoise/SimplexNoise.cpp
+    Dependencies/SimplexNoise/SimplexNoise.cpp                                                  \
 
 HEADERS +=                                                                                      \
     Dependencies/SimplexNoise/SimplexNoise.h                                                    \
-
 
 #-----------------------------------------------------------------------------------------------#
 # Xtensor (For ambient)                                                                         #
@@ -273,110 +126,139 @@ HEADERS +=                                                                      
 INCLUDEPATH +=                                                                                  \
     Dependencies/xtensor/                                                                       \
 
+#-----------------------------------------------------------------------------------------------#
+# GUI and misc                                                                                  #
+#-----------------------------------------------------------------------------------------------#
 HEADERS +=                                                                                      \
-    Dependencies/xtensor/xaccessible.hpp                                                        \
-    Dependencies/xtensor/xaccumulator.hpp                                                       \
-    Dependencies/xtensor/xadapt.hpp                                                             \
-    Dependencies/xtensor/xarray.hpp                                                             \
-    Dependencies/xtensor/xassign.hpp                                                            \
-    Dependencies/xtensor/xaxis_iterator.hpp                                                     \
-    Dependencies/xtensor/xaxis_slice_iterator.hpp                                               \
-    Dependencies/xtensor/xbroadcast.hpp                                                         \
-    Dependencies/xtensor/xbuffer_adaptor.hpp                                                    \
-    Dependencies/xtensor/xbuilder.hpp                                                           \
-    Dependencies/xtensor/xchunked_array.hpp                                                     \
-    Dependencies/xtensor/xcomplex.hpp                                                           \
-    Dependencies/xtensor/xcontainer.hpp                                                         \
-    Dependencies/xtensor/xcsv.hpp                                                               \
-    Dependencies/xtensor/xdynamic_view.hpp                                                      \
-    Dependencies/xtensor/xeval.hpp                                                              \
-    Dependencies/xtensor/xexception.hpp                                                         \
-    Dependencies/xtensor/xexpression.hpp                                                        \
-    Dependencies/xtensor/xexpression_holder.hpp                                                 \
-    Dependencies/xtensor/xexpression_traits.hpp                                                 \
-    Dependencies/xtensor/xfixed.hpp                                                             \
-    Dependencies/xtensor/xfunction.hpp                                                          \
-    Dependencies/xtensor/xfunctor_view.hpp                                                      \
-    Dependencies/xtensor/xgenerator.hpp                                                         \
-    Dependencies/xtensor/xhistogram.hpp                                                         \
-    Dependencies/xtensor/xindex_view.hpp                                                        \
-    Dependencies/xtensor/xinfo.hpp                                                              \
-    Dependencies/xtensor/xio.hpp                                                                \
-    Dependencies/xtensor/xiterable.hpp                                                          \
-    Dependencies/xtensor/xiterator.hpp                                                          \
-    Dependencies/xtensor/xjson.hpp                                                              \
-    Dependencies/xtensor/xlayout.hpp                                                            \
-    Dependencies/xtensor/xmanipulation.hpp                                                      \
-    Dependencies/xtensor/xmasked_view.hpp                                                       \
-    Dependencies/xtensor/xmath.hpp                                                              \
-    Dependencies/xtensor/xmime.hpp                                                              \
-    Dependencies/xtensor/xnoalias.hpp                                                           \
-    Dependencies/xtensor/xnorm.hpp                                                              \
-    Dependencies/xtensor/xnpy.hpp                                                               \
-    Dependencies/xtensor/xoffset_view.hpp                                                       \
-    Dependencies/xtensor/xoperation.hpp                                                         \
-    Dependencies/xtensor/xoptional.hpp                                                          \
-    Dependencies/xtensor/xoptional_assembly.hpp                                                 \
-    Dependencies/xtensor/xoptional_assembly_base.hpp                                            \
-    Dependencies/xtensor/xoptional_assembly_storage.hpp                                         \
-    Dependencies/xtensor/xpad.hpp                                                               \
-    Dependencies/xtensor/xrandom.hpp                                                            \
-    Dependencies/xtensor/xreducer.hpp                                                           \
-    Dependencies/xtensor/xrepeat.hpp                                                            \
-    Dependencies/xtensor/xscalar.hpp                                                            \
-    Dependencies/xtensor/xsemantic.hpp                                                          \
-    Dependencies/xtensor/xset_operation.hpp                                                     \
-    Dependencies/xtensor/xshape.hpp                                                             \
-    Dependencies/xtensor/xslice.hpp                                                             \
-    Dependencies/xtensor/xsort.hpp                                                              \
-    Dependencies/xtensor/xstorage.hpp                                                           \
-    Dependencies/xtensor/xstrided_view.hpp                                                      \
-    Dependencies/xtensor/xstrided_view_base.hpp                                                 \
-    Dependencies/xtensor/xstrides.hpp                                                           \
-    Dependencies/xtensor/xtensor.hpp                                                            \
-    Dependencies/xtensor/xtensor_config.hpp                                                     \
-    Dependencies/xtensor/xtensor_forward.hpp                                                    \
-    Dependencies/xtensor/xtensor_simd.hpp                                                       \
-    Dependencies/xtensor/xutils.hpp                                                             \
-    Dependencies/xtensor/xvectorize.hpp                                                         \
-    Dependencies/xtensor/xview.hpp                                                              \
-    Dependencies/xtensor/xview_utils.hpp                                                        \
-    Dependencies/xtensor/xtl/xany.hpp                                                           \
-    Dependencies/xtensor/xtl/xbase64.hpp                                                        \
-    Dependencies/xtensor/xtl/xbasic_fixed_string.hpp                                            \
-    Dependencies/xtensor/xtl/xclosure.hpp                                                       \
-    Dependencies/xtensor/xtl/xcomplex.hpp                                                       \
-    Dependencies/xtensor/xtl/xcomplex_sequence.hpp                                              \
-    Dependencies/xtensor/xtl/xdynamic_bitset.hpp                                                \
-    Dependencies/xtensor/xtl/xfunctional.hpp                                                    \
-    Dependencies/xtensor/xtl/xhalf_float.hpp                                                    \
-    Dependencies/xtensor/xtl/xhalf_float_impl.hpp                                               \
-    Dependencies/xtensor/xtl/xhash.hpp                                                          \
-    Dependencies/xtensor/xtl/xhierarchy_generator.hpp                                           \
-    Dependencies/xtensor/xtl/xiterator_base.hpp                                                 \
-    Dependencies/xtensor/xtl/xjson.hpp                                                          \
-    Dependencies/xtensor/xtl/xmasked_value.hpp                                                  \
-    Dependencies/xtensor/xtl/xmasked_value_meta.hpp                                             \
-    Dependencies/xtensor/xtl/xmeta_utils.hpp                                                    \
-    Dependencies/xtensor/xtl/xmultimethods.hpp                                                  \
-    Dependencies/xtensor/xtl/xoptional.hpp                                                      \
-    Dependencies/xtensor/xtl/xoptional_meta.hpp                                                 \
-    Dependencies/xtensor/xtl/xoptional_sequence.hpp                                             \
-    Dependencies/xtensor/xtl/xplatform.hpp                                                      \
-    Dependencies/xtensor/xtl/xproxy_wrapper.hpp                                                 \
-    Dependencies/xtensor/xtl/xsequence.hpp                                                      \
-    Dependencies/xtensor/xtl/xspan.hpp                                                          \
-    Dependencies/xtensor/xtl/xspan_impl.hpp                                                     \
-    Dependencies/xtensor/xtl/xsystem.hpp                                                        \
-    Dependencies/xtensor/xtl/xtl_config.hpp                                                     \
-    Dependencies/xtensor/xtl/xtype_traits.hpp                                                   \
-    Dependencies/xtensor/xtl/xvariant.hpp                                                       \
-    Dependencies/xtensor/xtl/xvariant_impl.hpp                                                  \
-    Dependencies/xtensor/xtl/xvisitor.hpp                                                       \
+    OpenRGBEffectsPlugin.h                                                                      \
+    OpenRGBEffectTab.h                                                                          \
+    OpenRGBEffectPage.h                                                                         \
+    OpenRGBEffectSettings.h                                                                     \
+    EffectManager.h                                                                             \
+    ColorPicker.h                                                                               \
+    filesystem.h                                                                                \
+    ColorUtils.h                                                                                \
+    ControllerZone.h                                                                            \
+    ControllerZoneList.h                                                                        \
+    DeviceList.h                                                                                \
+    DeviceListItem.h                                                                            \
+    EffectList.h                                                                                \
+    EffectTabHeader.h                                                                           \
+    LivePreviewController.h                                                                     \
+    PluginInfo.h                                                                                \
+    PreviewWidget.h                                                                             \
+    ZoneListItem.h                                                                              \
+    AudioManager.h                                                                              \
 
-#-------------------------------------------------------------------#
-# Windows GitLab CI Configuration                                   #
-#-------------------------------------------------------------------#
+SOURCES +=                                                                                      \
+    ControllerZoneList.cpp                                                                      \
+    DeviceList.cpp                                                                              \
+    DeviceListItem.cpp                                                                          \
+    EffectList.cpp                                                                              \
+    EffectTabHeader.cpp                                                                         \
+    LivePreviewController.cpp                                                                   \
+    OpenRGBEffectsPlugin.cpp                                                                    \
+    OpenRGBEffectTab.cpp                                                                        \
+    OpenRGBEffectPage.cpp                                                                       \
+    OpenRGBEffectSettings.cpp                                                                   \
+    EffectManager.cpp                                                                           \
+    ColorPicker.cpp                                                                             \
+    PluginInfo.cpp                                                                              \
+    ZoneListItem.cpp                                                                            \
+    PreviewWidget.cpp                                                                           \
+    AudioManager.cpp                                                                            \
+
+FORMS +=                                                                                        \
+    ControllerZoneList.ui                                                                       \
+    DeviceList.ui                                                                               \
+    DeviceListItem.ui                                                                           \
+    EffectList.ui                                                                               \
+    EffectTabHeader.ui                                                                          \
+    LivePreviewController.ui                                                                    \
+    OpenRGBEffectPage.ui                                                                        \
+    OpenRGBEffectTab.ui                                                                         \
+    ColorPicker.ui                                                                              \
+    PluginInfo.ui                                                                               \
+    ZoneListItem.ui
+
+#-----------------------------------------------------------------------------------------------#
+# Effects                                                                                       #
+#-----------------------------------------------------------------------------------------------#
+INCLUDEPATH +=                                                                                  \
+    Effects/                                                                                    \
+
+SOURCES +=                                                                                      \
+    Effects/Rain/Rain.cpp                                                                       \
+    Effects/Wavy/Wavy.cpp                                                                       \
+    Effects/Visor/Visor.cpp                                                                     \
+    Effects/Ambient/Ambient.cpp                                                                 \
+    Effects/AudioSync/AudioSync.cpp                                                             \
+    Effects/Breathing/Breathing.cpp                                                             \
+    Effects/RainbowWave/RainbowWave.cpp                                                         \
+    Effects/StarryNight/StarryNight.cpp                                                         \
+    Effects/GradientWave/GradientWave.cpp                                                       \
+    Effects/AudioVisualizer/AudioVisualizer.cpp                                                 \
+    Effects/Lightning/Lightning.cpp                                                             \
+    Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
+    Effects/Bubbles/Bubbles.cpp                                                                 \
+    Effects/ColorWheelEffect/ColorWheelEffect.cpp                                               \
+    Effects/FractalMotion/FractalMotion.cpp                                                     \
+    Effects/Hypnotoad/Hypnotoad.cpp                                                             \
+    Effects/MotionPoint/MotionPoint.cpp                                                         \
+    Effects/NoiseMap/NoiseMap.cpp                                                               \
+    Effects/RadialRainbow/RadialRainbow.cpp                                                     \
+    Effects/Sequence/Sequence.cpp                                                               \
+    Effects/Stack/Stack.cpp                                                                     \
+    Effects/GifPlayer/GifPlayer.cpp                                                             \
+    Effects/Ambient/ScreenSelection.cpp                                                         \
+
+HEADERS +=                                                                                      \
+    Effects/RGBEffect.h                                                                         \
+    Effects/Rain/Rain.h                                                                         \
+    Effects/Wavy/Wavy.h                                                                         \
+    Effects/Visor/Visor.h                                                                       \
+    Effects/Ambient/Ambient.h                                                                   \
+    Effects/AudioSync/AudioSync.h                                                               \
+    Effects/Breathing/Breathing.h                                                               \
+    Effects/RainbowWave/RainbowWave.h                                                           \
+    Effects/StarryNight/StarryNight.h                                                           \
+    Effects/GradientWave/GradientWave.h                                                         \
+    Effects/SpectrumCycling/SpectrumCycling.h                                                   \
+    Effects/AudioVisualizer/AudioVisualizer.h                                                   \
+    Effects/Lightning/Lightning.h                                                               \
+    Effects/Ambient/ScreenSelection.h                                                           \
+    Effects/Bubbles/Bubbles.h                                                                   \
+    Effects/ColorWheelEffect/ColorWheelEffect.h                                                 \
+    Effects/EffectRegisterer.h                                                                  \
+    Effects/FractalMotion/FractalMotion.h                                                       \
+    Effects/Hypnotoad/Hypnotoad.h                                                               \
+    Effects/MotionPoint/MotionPoint.h                                                           \
+    Effects/NoiseMap/NoiseMap.h                                                                 \
+    Effects/RadialRainbow/RadialRainbow.h                                                       \
+    Effects/Sequence/Sequence.h                                                                 \
+    Effects/Stack/Stack.h                                                                       \
+    Effects/GifPlayer/GifPlayer.h                                                               \
+
+FORMS +=                                                                                        \
+    Effects/Wavy/Wavy.ui                                                                        \
+    Effects/AudioVisualizer/AudioVisualizer.ui                                                  \
+    Effects/Bubbles/Bubbles.ui                                                                  \
+    Effects/ColorWheelEffect/ColorWheelEffect.ui                                                \
+    Effects/FractalMotion/FractalMotion.ui                                                      \
+    Effects/Hypnotoad/Hypnotoad.ui                                                              \
+    Effects/MotionPoint/MotionPoint.ui                                                          \
+    Effects/NoiseMap/NoiseMap.ui                                                                \
+    Effects/RadialRainbow/RadialRainbow.ui                                                      \
+    Effects/Sequence/Sequence.ui                                                                \
+    Effects/Stack/Stack.ui                                                                      \
+    Effects/GifPlayer/GifPlayer.ui                                                              \
+
+
+#-----------------------------------------------------------------------------------------------#
+# Windows  Configuration                                                                        #
+#-----------------------------------------------------------------------------------------------#
+win32:CONFIG += QTPLUGIN c++17
+
 win32:CONFIG(debug, debug|release) {
     win32:DESTDIR = debug
 }
@@ -414,6 +296,7 @@ win32:DEFINES +=                                                        \
 #-----------------------------------------------------------------------#
 unix:!macx {
     LIBS += -lopenal -lstdc++fs
+    QMAKE_CXXFLAGS += -std=c++17
 }
 
 #-----------------------------------------------------------------------#
@@ -425,6 +308,3 @@ macx: {
     CONFIG += c++17
     LIBS += -framework OpenAL
 }
-
-RESOURCES += \
-    Dependencies/Images/resource.qrc

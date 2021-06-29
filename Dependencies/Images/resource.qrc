@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>Reset.png</file>
-        <file>Reset_dark.png</file>
-    </qresource>
-</RCC>

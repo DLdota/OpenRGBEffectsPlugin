@@ -463,7 +463,9 @@ QColor ScreenSelection::CalcColor()
             if (CurrentCount > HightestCount){ MostCommon = ColArray[{CurrentCount , 0}]; };
             return QColor(RGBGetRValue(MostCommon),RGBGetGValue(MostCommon),RGBGetBValue(MostCommon));
         }
+        default: break;
     }
+
     return QColor(255,255,255); // Appease the C++ gods and their stupid "Not all paths return a value" errors
 }
 
