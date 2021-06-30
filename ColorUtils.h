@@ -51,12 +51,22 @@ public:
         return ToRGBColor(r, g, b);
     }
 
-    static RGBColor Enlight(RGBColor color, float brightness)
+    static RGBColor Enlight(RGBColor color, float value)
     {
         hsv_t hsv;
         rgb2hsv(color, &hsv);
 
-        hsv.value *= brightness;
+        hsv.value *= value;
+
+        return RGBColor(hsv2rgb(&hsv));
+    }
+
+    static RGBColor Saturate(RGBColor color, float value)
+    {
+        hsv_t hsv;
+        rgb2hsv(color, &hsv);
+
+        hsv.saturation *= value;
 
         return RGBColor(hsv2rgb(&hsv));
     }

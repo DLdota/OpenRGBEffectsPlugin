@@ -194,6 +194,7 @@ SOURCES +=                                                                      
     Effects/Stack/Stack.cpp                                                                     \
     Effects/GifPlayer/GifPlayer.cpp                                                             \
     Effects/Ambient/ScreenSelection.cpp                                                         \
+    Effects/SmoothBlink/SmoothBlink.cpp                                                         \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -221,6 +222,7 @@ HEADERS +=                                                                      
     Effects/Sequence/Sequence.h                                                                 \
     Effects/Stack/Stack.h                                                                       \
     Effects/GifPlayer/GifPlayer.h                                                               \
+    Effects/SmoothBlink/SmoothBlink.h                                                           \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -235,6 +237,7 @@ FORMS +=                                                                        
     Effects/Sequence/Sequence.ui                                                                \
     Effects/Stack/Stack.ui                                                                      \
     Effects/GifPlayer/GifPlayer.ui                                                              \
+    Effects/SmoothBlink/SmoothBlink.ui                                                          \
 
 
 #-----------------------------------------------------------------------------------------------#

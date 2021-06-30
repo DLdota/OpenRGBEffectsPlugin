@@ -49,6 +49,7 @@ After running the OpenRGB build you downloaded from the link the effects tab sho
 * Rain
 * RainbowWave
 * Sequence
+* SmoothBlink
 * SpectrumCycling
 * Stack
 * StarryNight
