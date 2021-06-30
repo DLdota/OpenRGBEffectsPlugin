@@ -37,11 +37,13 @@ DEFINES +=                                                                      
 # OpenRGB Plugin SDK                                                                            #
 #-----------------------------------------------------------------------------------------------#
 INCLUDEPATH +=                                                                                  \
-    OpenRGB/                                                                                    \
+    OpenRGB                                                                                     \
     OpenRGB/i2c_smbus                                                                           \
     OpenRGB/net_port                                                                            \
     OpenRGB/RGBController                                                                       \
     OpenRGB/dependencies/json                                                                   \
+    OpenRGB/dependencies/ColorWheel                                                             \
+    OpenRGB/qt                                                                                  \
 
 HEADERS +=                                                                                      \
     OpenRGB/NetworkClient.h                                                                     \
@@ -55,39 +57,21 @@ HEADERS +=                                                                      
     OpenRGB/i2c_smbus/i2c_smbus.h                                                               \
     OpenRGB/net_port/net_port.h                                                                 \
     OpenRGB/RGBController/RGBController.h                                                       \
+    OpenRGB/filesystem.h                                                                        \
+    OpenRGB/dependencies/ColorWheel/ColorWheel.h                                                \
+    OpenRGB/qt/hsv.h                                                                            \
+
 
 SOURCES +=                                                                                      \
     OpenRGB/RGBController/RGBController.cpp                                                     \
-
-#-----------------------------------------------------------------------------------------------#
-# HSV                                                                                           #
-#-----------------------------------------------------------------------------------------------#
-INCLUDEPATH +=                                                                                  \
-    Dependencies/HSV/                                                                           \
-
-HEADERS +=                                                                                      \
-    Dependencies/HSV/hsv.h                                                                      \
-
-SOURCES +=                                                                                      \
-    Dependencies/HSV/hsv.cpp                                                                    \
-
-#-----------------------------------------------------------------------------------------------#
-# ColorWheel                                                                                    #
-#-----------------------------------------------------------------------------------------------#
-INCLUDEPATH +=                                                                                  \
-    Dependencies/ColorWheel/                                                                    \
-
-HEADERS +=                                                                                      \
-    Dependencies/ColorWheel/ColorWheel.h                                                        \
-
-SOURCES +=                                                                                      \
-    Dependencies/ColorWheel/ColorWheel.cpp                                                      \
+    OpenRGB/dependencies/ColorWheel/ColorWheel.cpp                                              \
+    OpenRGB/qt/hsv.cpp                                                                          \
 
 #-----------------------------------------------------------------------------------------------#
 # ctkrangeslider                                                                                #
 #-----------------------------------------------------------------------------------------------#
 INCLUDEPATH +=                                                                                  \
-    Dependencies/ctkrangeslider/                                                                \
+    Dependencies/ctkrangeslider                                                                 \
 
 HEADERS +=                                                                                      \
     Dependencies/ctkrangeslider/ctkrangeslider.h                                                \
@@ -100,7 +84,7 @@ SOURCES +=                                                                      
 # chuck_fft                                                                                     #
 #-----------------------------------------------------------------------------------------------#
 INCLUDEPATH +=                                                                                  \
-    Dependencies/chuck_fft/                                                                     \
+    Dependencies/chuck_fft                                                                      \
 
 SOURCES +=                                                                                      \
     Dependencies/chuck_fft/chuck_fft.c
@@ -112,7 +96,7 @@ HEADERS +=                                                                      
 # SimplexNoise                                                                                  #
 #-----------------------------------------------------------------------------------------------#
 INCLUDEPATH +=                                                                                  \
-    Dependencies/SimplexNoise/                                                                  \
+    Dependencies/SimplexNoise                                                                   \
 
 SOURCES +=                                                                                      \
     Dependencies/SimplexNoise/SimplexNoise.cpp                                                  \
@@ -124,7 +108,7 @@ HEADERS +=                                                                      
 # Xtensor (For ambient)                                                                         #
 #-----------------------------------------------------------------------------------------------#
 INCLUDEPATH +=                                                                                  \
-    Dependencies/xtensor/                                                                       \
+    Dependencies/xtensor                                                                        \
 
 #-----------------------------------------------------------------------------------------------#
 # GUI and misc                                                                                  #
@@ -136,7 +120,6 @@ HEADERS +=                                                                      
     OpenRGBEffectSettings.h                                                                     \
     EffectManager.h                                                                             \
     ColorPicker.h                                                                               \
-    filesystem.h                                                                                \
     ColorUtils.h                                                                                \
     ControllerZone.h                                                                            \
     ControllerZoneList.h                                                                        \
@@ -185,7 +168,7 @@ FORMS +=                                                                        
 # Effects                                                                                       #
 #-----------------------------------------------------------------------------------------------#
 INCLUDEPATH +=                                                                                  \
-    Effects/                                                                                    \
+    Effects                                                                                     \
 
 SOURCES +=                                                                                      \
     Effects/Rain/Rain.cpp                                                                       \
