@@ -8,15 +8,22 @@
 #include <QFile>
 #include <iomanip>
 #include <sstream>
+#include <QInputDialog>
+#include <QTextEdit>
+#include <QClipboard>
 
 OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
     QWidget(parent),
     ui(new Ui::OpenRGBEffectPage),
+    effect(effect),
     speeds({1,2,3,4,5,6,7,8,10,15,20,25,30,40,50,60})
 {
-    this->effect = effect;
-
     ui->setupUi(this);
+
+    /*-----------------------------------------------*\
+    | Extra options and custom widgets                |
+    \*-----------------------------------------------*/
+    effect->DefineExtraOptions(ui->ExtraOptions);
 
     InitUi();
 
@@ -41,7 +48,10 @@ OpenRGBEffectPage::~OpenRGBEffectPage()
 }
 
 void OpenRGBEffectPage::InitUi()
-{
+{    
+    colors_layout = new QHBoxLayout();
+    ui->Colors->setLayout(colors_layout);
+
     ui->SpeedFrame->hide();
     ui->UserColorFrame->hide();
     ui->Slider2Frame->hide();
@@ -90,10 +100,15 @@ void OpenRGBEffectPage::InitUi()
     ui->UserColorFrame->setVisible(effect->EffectDetails.UserColors > 0);
     ui->OnlyFirst->setVisible(effect->EffectDetails.AllowOnlyFirst);
 
-    ui->Colors->setLayout(new QHBoxLayout);
 
     if (effect->EffectDetails.UserColors > 0)
     {
+        QLayoutItem *child;
+
+        while ((child = colors_layout->takeAt(0)) != 0) {
+            delete child->widget();
+        }
+
         std::vector<RGBColor> colors = effect->GetUserColors();
 
         if(colors.size() != effect->EffectDetails.UserColors)
@@ -104,19 +119,19 @@ void OpenRGBEffectPage::InitUi()
         for (unsigned int i = 0; i < colors.size(); i++)
         {
             RGBColor UserColor = colors[i];
-            UserColors.push_back(UserColor);            
+            UserColors.push_back(UserColor);
 
             ColorPicker* color_picker = new ColorPicker();
             color_picker->SetRGBColor(colors[i]);
 
             ColorPickers.push_back(color_picker);
 
-            connect(color_picker, &ColorPicker::ColorSelected, [=](QColor color){               
-               UserColors[i] = ColorUtils::fromQColor(color);
-               effect->SetUserColors(UserColors);
+            connect(color_picker, &ColorPicker::ColorSelected, [=](QColor color){
+                UserColors[i] = ColorUtils::fromQColor(color);
+                effect->SetUserColors(UserColors);
             });
 
-            ui->Colors->layout()->addWidget(color_picker);
+            colors_layout->addWidget(color_picker);
         }
 
         effect->SetUserColors(UserColors);
@@ -134,11 +149,6 @@ void OpenRGBEffectPage::InitUi()
         int index = std::distance(speeds.begin(), it);
         ui->FPS_slider->setValue(index);
     }
-
-    /*-----------------------------------------------*\
-    | Extra options and custom widgets                |
-    \*-----------------------------------------------*/
-    effect->DefineExtraOptions(ui->ExtraOptions);
 
     if(effect->IsAutoStart())
     {
@@ -262,4 +272,187 @@ void OpenRGBEffectPage::on_RandomCheckbox_clicked()
 void OpenRGBEffectPage::on_OnlyFirst_clicked()
 {
     effect->SetOnlyFirstColorEnabled(ui->OnlyFirst->isChecked());
+}
+
+void OpenRGBEffectPage::on_save_pattern_clicked()
+{
+    QString filename = QInputDialog::getText(
+                nullptr, "Save pattern to file...", "Choose a filename",
+                QLineEdit::Normal, QString("my-pattern")).trimmed();
+
+    json effect_settings = ToJson();
+
+    OpenRGBEffectSettings::SaveEffectPattern(effect_settings, effect->EffectDetails.EffectClassName, filename.toStdString());
+}
+
+void OpenRGBEffectPage::on_load_pattern_clicked()
+{
+    std::vector<std::string> filenames = OpenRGBEffectSettings::ListPattern(effect->EffectDetails.EffectClassName);
+
+    QStringList file_list;
+
+    for(std::string filename : filenames)
+    {
+        file_list << QString::fromUtf8(filename.c_str());
+    }
+
+    if(file_list.empty())
+    {
+        return;
+    }
+
+    QInputDialog *inp = new QInputDialog(this);
+
+    inp->setOptions(QInputDialog::UseListViewForComboBoxItems);
+    inp->setComboBoxItems(file_list);
+    inp->setWindowTitle("Load pattern from file...");
+    inp->setLabelText("Choose a pattern file from this list:");
+
+    if(!inp->exec()){
+        return;
+    }
+
+    QString filename = inp->textValue();
+
+    json effect_settings = OpenRGBEffectSettings::LoadPattern(effect->EffectDetails.EffectClassName, filename.toStdString());
+
+    try {
+        ApplyJson(effect_settings);
+    }  catch (const std::exception & e) {
+        printf("Cannot apply effect settings, reason: %s\n", e.what());
+    }
+}
+
+json OpenRGBEffectPage::ToJson()
+{
+    json effect_settings;
+
+    effect_settings["EffectClassName"] = effect->EffectDetails.EffectClassName;
+    effect_settings["FPS"] = effect->GetFPS();
+    effect_settings["Speed"] = effect->GetSpeed();
+    effect_settings["Slider2Val"] = effect->GetSlider2Val();
+    effect_settings["RandomColors"] = effect->IsRandomColorsEnabled();
+    effect_settings["AllowOnlyFirst"] = effect->IsOnlyFirstColorEnabled();
+
+    std::vector<RGBColor> colors = effect->GetUserColors();
+
+    for (unsigned int c = 0; c < colors.size(); c++)
+    {
+        effect_settings["UserColors"][c] = colors[c];
+    }
+
+    if (effect->EffectDetails.HasCustomSettings)
+    {
+        json j;
+        effect_settings["CustomSettings"] = effect->SaveCustomSettings(j);
+    }
+
+    return effect_settings;
+}
+
+void OpenRGBEffectPage::ApplyJson(json effect_settings)
+{
+    // Update effect values
+    std::vector<RGBColor> colors;
+
+    for(unsigned int color : effect_settings["UserColors"])
+    {
+        colors.push_back(color);
+    }
+
+    effect->SetFPS(effect_settings["FPS"]);
+    effect->SetUserColors(colors);
+    effect->SetSpeed(effect_settings["Speed"]);
+    effect->SetSlider2Val(effect_settings["Slider2Val"]);
+    effect->SetRandomColorsEnabled(effect_settings["RandomColors"]);
+    effect->SetOnlyFirstColorEnabled(effect_settings["AllowOnlyFirst"]);
+
+    if(effect_settings.contains("CustomSettings"))
+    {
+        effect->LoadCustomSettings(effect_settings["CustomSettings"]);
+    }
+
+    // Update UI components
+    ui->RandomCheckbox->setCheckState(effect->IsRandomColorsEnabled()? Qt::Checked : Qt::Unchecked);
+    ui->OnlyFirst->setCheckState(effect->IsOnlyFirstColorEnabled()? Qt::Checked : Qt::Unchecked);
+    ui->SpeedSlider->setValue(effect->GetSpeed());
+    ui->Slider2->setValue(effect->GetSlider2Val());
+
+    for(int i = 0; i < colors_layout->count(); i++)
+    {
+        ColorPicker* picker = dynamic_cast<ColorPicker*>(colors_layout->itemAt(i)->widget());
+        picker->SetRGBColor(colors[i]);
+    }
+}
+
+void OpenRGBEffectPage::on_edit_pattern_clicked()
+{
+    QDialog* dialog = new QDialog();
+
+    if (OpenRGBEffectsPlugin::DarkTheme)
+    {
+        QPalette pal;
+        pal.setColor(QPalette::WindowText, Qt::white);
+        dialog->setPalette(pal);
+        QFile dark_theme(":/windows_dark.qss");
+        dark_theme.open(QFile::ReadOnly);
+        dialog->setStyleSheet(dark_theme.readAll());
+        dark_theme.close();
+    }
+
+    dialog->setMinimumSize(300,320);
+    dialog->setModal(true);
+    dialog->setWindowTitle("Edit or share your settings.");
+
+    QVBoxLayout* dialog_layout = new QVBoxLayout(dialog);
+
+    QTextEdit* text_edit = new QTextEdit(dialog);
+
+    text_edit->setText(QString::fromStdString(ToJson().dump(4)));
+
+    dialog_layout->addWidget(text_edit);
+
+    QHBoxLayout* buttons_layout = new QHBoxLayout();
+
+    QPushButton* cancel_button = new QPushButton();
+    cancel_button->setText("Cancel");
+    dialog->connect(cancel_button,SIGNAL(clicked()),dialog,SLOT(reject()));
+    buttons_layout->addWidget(cancel_button);
+
+    QPushButton* copy_button = new QPushButton();
+    copy_button->setText("Copy to clipboard");
+
+    dialog->connect(copy_button, &QPushButton::clicked, [=](){
+        std::string text =
+                "**" + effect->EffectDetails.EffectClassName + "**" + "\n" +
+                "```" +
+                text_edit->toPlainText().toStdString() +
+                "```" ;
+
+        QClipboard *clipboard = QGuiApplication::clipboard();
+        clipboard->setText(QString::fromStdString(text));
+    });
+
+    buttons_layout->addWidget(copy_button);
+
+    QPushButton* accept_button = new QPushButton();
+    accept_button->setText("Apply");
+    dialog->connect(accept_button,SIGNAL(clicked()),dialog,SLOT(accept()));
+    buttons_layout->addWidget(accept_button);
+
+    dialog_layout->addLayout(buttons_layout);
+
+    if (dialog->exec())
+    {
+        QString text = text_edit->toPlainText();
+
+        if (!text.isEmpty())
+        {
+            try {
+                ApplyJson(json::parse(text.toStdString()));
+            } catch (const std::exception & e) {
+                printf("Cannot apply effect settings, reason: %s\n", e.what());
+            }
+        }
+    }
 }

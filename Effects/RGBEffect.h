@@ -38,6 +38,8 @@ public:
     explicit RGBEffect(QWidget* parent = nullptr) : QWidget(parent){};
     virtual ~RGBEffect(){};
 
+    // todo: rename this method
+    // => LoadCustomLayout
     virtual void DefineExtraOptions(QLayout*) {}
     virtual void StepEffect(std::vector<ControllerZone*>) {};
     virtual void OnControllerZonesListChanged(std::vector<ControllerZone*>) {}

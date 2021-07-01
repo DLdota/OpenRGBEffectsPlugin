@@ -38,6 +38,9 @@ private slots:
     void on_AutoStart_clicked();
     void on_RandomCheckbox_clicked();
     void on_OnlyFirst_clicked();
+    void on_save_pattern_clicked();
+    void on_load_pattern_clicked();
+    void on_edit_pattern_clicked();
 
 private:
     Ui::OpenRGBEffectPage *ui;
@@ -59,6 +62,11 @@ private:
     QDialog* preview_dialog;
 
     ControllerZone* preview_zone;
+
+    QHBoxLayout* colors_layout = nullptr;    
+
+    json ToJson();
+    void ApplyJson(json);
 };
 
 #endif // OPENRGBEFFECTPAGE_H
