@@ -46,7 +46,6 @@ INCLUDEPATH +=                                                                  
     OpenRGB/qt                                                                                  \
 
 HEADERS +=                                                                                      \
-    Effects/Layers/LayerGroupEntry.h \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -62,9 +61,7 @@ HEADERS +=                                                                      
     OpenRGB/dependencies/ColorWheel/ColorWheel.h                                                \
     OpenRGB/qt/hsv.h                                                                            \
 
-
 SOURCES +=                                                                                      \
-    Effects/Layers/LayerGroupEntry.cpp \
     OpenRGB/RGBController/RGBController.cpp                                                     \
     OpenRGB/dependencies/ColorWheel/ColorWheel.cpp                                              \
     OpenRGB/qt/hsv.cpp                                                                          \
@@ -107,12 +104,6 @@ HEADERS +=                                                                      
     Dependencies/SimplexNoise/SimplexNoise.h                                                    \
 
 #-----------------------------------------------------------------------------------------------#
-# Xtensor (For ambient)                                                                         #
-#-----------------------------------------------------------------------------------------------#
-INCLUDEPATH +=                                                                                  \
-    Dependencies/xtensor                                                                        \
-
-#-----------------------------------------------------------------------------------------------#
 # GUI and misc                                                                                  #
 #-----------------------------------------------------------------------------------------------#
 HEADERS +=                                                                                      \
@@ -132,8 +123,8 @@ HEADERS +=                                                                      
     LivePreviewController.h                                                                     \
     PluginInfo.h                                                                                \
     PreviewWidget.h                                                                             \
-    ZoneListItem.h                                                                              \
-    AudioManager.h                                                                              \    
+    ZoneListItem.h                                                                              \                                                                           \
+    ScreenRecorder.h                                                                            \
 
 SOURCES +=                                                                                      \
     ControllerZoneList.cpp                                                                      \
@@ -152,6 +143,7 @@ SOURCES +=                                                                      
     ZoneListItem.cpp                                                                            \
     PreviewWidget.cpp                                                                           \
     AudioManager.cpp                                                                            \
+    ScreenRecorder.cpp                                                                          \
 
 FORMS +=                                                                                        \
     ControllerZoneList.ui                                                                       \
@@ -159,7 +151,6 @@ FORMS +=                                                                        
     DeviceListItem.ui                                                                           \
     EffectList.ui                                                                               \
     EffectTabHeader.ui                                                                          \
-    Effects/Layers/LayerGroupEntry.ui \
     LivePreviewController.ui                                                                    \
     OpenRGBEffectPage.ui                                                                        \
     OpenRGBEffectTab.ui                                                                         \
@@ -178,6 +169,7 @@ SOURCES +=                                                                      
     Effects/Wavy/Wavy.cpp                                                                       \
     Effects/Visor/Visor.cpp                                                                     \
     Effects/Ambient/Ambient.cpp                                                                 \
+    Effects/Ambient/RectangleSelector.cpp                                                       \
     Effects/AudioSync/AudioSync.cpp                                                             \
     Effects/Breathing/Breathing.cpp                                                             \
     Effects/RainbowWave/RainbowWave.cpp                                                         \
@@ -197,7 +189,6 @@ SOURCES +=                                                                      
     Effects/Sequence/Sequence.cpp                                                               \
     Effects/Stack/Stack.cpp                                                                     \
     Effects/GifPlayer/GifPlayer.cpp                                                             \
-    Effects/Ambient/ScreenSelection.cpp                                                         \
     Effects/SmoothBlink/SmoothBlink.cpp                                                         \
     Effects/BouncingBall/BouncingBallEffect.cpp                                                 \
     Effects/BouncingBall/BouncingBallSimulation.cpp                                             \
@@ -220,7 +211,9 @@ SOURCES +=                                                                      
     Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.cpp                                     \
     Effects/Layers/Layers.cpp                                                                   \
     Effects/Layers/LayerEntry.cpp                                                               \
+    Effects/Layers/LayerGroupEntry.cpp                                                          \
     Effects/Mask/Mask.cpp                                                                       \
+
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -228,6 +221,7 @@ HEADERS +=                                                                      
     Effects/Wavy/Wavy.h                                                                         \
     Effects/Visor/Visor.h                                                                       \
     Effects/Ambient/Ambient.h                                                                   \
+    Effects/Ambient/RectangleSelector.h                                                         \
     Effects/AudioSync/AudioSync.h                                                               \
     Effects/Breathing/Breathing.h                                                               \
     Effects/RainbowWave/RainbowWave.h                                                           \
@@ -236,7 +230,6 @@ HEADERS +=                                                                      
     Effects/SpectrumCycling/SpectrumCycling.h                                                   \
     Effects/AudioVisualizer/AudioVisualizer.h                                                   \
     Effects/Lightning/Lightning.h                                                               \
-    Effects/Ambient/ScreenSelection.h                                                           \
     Effects/Bubbles/Bubbles.h                                                                   \
     Effects/ColorWheelEffect/ColorWheelEffect.h                                                 \
     Effects/EffectRegisterer.h                                                                  \
@@ -271,6 +264,7 @@ HEADERS +=                                                                      
     Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.h                                       \
     Effects/Layers/Layers.h                                                                     \
     Effects/Layers/LayerEntry.h                                                                 \
+    Effects/Layers/LayerGroupEntry.h                                                            \
     Effects/Mask/Mask.h                                                                         \
 
 FORMS +=                                                                                        \
@@ -308,7 +302,9 @@ FORMS +=                                                                        
     Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.ui                                      \
     Effects/Layers/Layers.ui                                                                    \
     Effects/Layers/LayerEntry.ui                                                                \
+    Effects/Layers/LayerGroupEntry.ui                                                           \
     Effects/Mask/Mask.ui                                                                        \
+    Effects/Ambient/Ambient.ui                                                                  \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #

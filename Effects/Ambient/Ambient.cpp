@@ -1,13 +1,19 @@
 ﻿#include "Ambient.h"
 #include "ColorUtils.h"
+#include "RectangleSelector.h"
+#include "ScreenRecorder.h"
 
 REGISTER_EFFECT(Ambient);
 
-Ambient::Ambient() : RGBEffect()
+Ambient::Ambient(QWidget *parent) :
+    RGBEffect(parent),
+    ui(new Ui::Ambient)
 {
+    ui->setupUi(this);
+
     EffectDetails.EffectName = "Ambient";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Takes a portion of the screen and\nsets all of the LEDs to it";
+    EffectDetails.EffectDescription = "Takes a portion of the screen and reflect it to your devices";
     EffectDetails.IsReversable = false;
 
     EffectDetails.MaxSpeed = 0;
@@ -22,37 +28,168 @@ Ambient::Ambient() : RGBEffect()
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
-    SCRNSLCT = new ScreenSelection();
+    ui->mode->addItems({"Calculated average (heavy computing)",
+                        "Most common color (heavy computing)",
+                        "Scaled average",
+                        "Screen copy"});
+
+    rectangle_selector_overlay = new RectangleSelectorOverlay(this);
+
+    connect(rectangle_selector_overlay, &RectangleSelectorOverlay::SelectionUpdated, [=](QRect rect){
+        ui->left->setValue(rect.left());
+        ui->top->setValue(rect.top());
+        ui->width->setValue(rect.width());
+        ui->height->setValue(rect.height());
+    });
+
+    screen_recorder = new ScreenRecorder();
+
+    QList<QScreen*> screens = QGuiApplication::screens();
+
+    for(QScreen* screen: screens)
+    {
+        ui->screen->addItem(screen->name());
+    }
+
+    screen_recorder->SetScreen(0);
+    screen_recorder->SetRect(QRect(left, top, width, height));
 }
 
 Ambient::~Ambient()
 {
-    delete SCRNSLCT;
+    delete ui;
 }
 
-void Ambient::DefineExtraOptions(QLayout* ParentLayout)
-{    
-    ParentLayout->addWidget(SCRNSLCT);
+void Ambient::DefineExtraOptions(QLayout* layout)
+{
+    layout->addWidget(this);
 }
 
 void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
-    SCRNSLCT->GetScreen();
+    if(controller_zones.empty())
+    {
+        return;
+    }
 
-    if(SCRNSLCT->GetCalcType() == SCREEN_COPY_MODE)
+    if(width == 0 || height == 0)
+    {
+        RGBColor color = ColorUtils::OFF();
+
+        for(ControllerZone* controller_zone : controller_zones)
+        {
+            controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, color);
+        }
+
+        return;
+    }
+
+    QImage image = screen_recorder->Capture();
+
+    switch (mode) {
+
+    case CALCULATED_AVERAGE:
+    {
+        int r = 0 , g = 0 , b = 0;
+        int w = image.width();
+        int h = image.height();
+
+        RGBColor color;
+
+        if(w > 0 && h > 0)
+        {
+            for (int x = 0; x < w; x++)
+            {
+                for (int y = 0; y < h; y++)
+                {
+                    QColor c = image.pixelColor(x,y);
+                    r += c.red();
+                    g += c.green();
+                    b += c.blue();
+                }
+            }
+
+            int cr = (r / (w * h));
+            int cg = (g / (w * h));
+            int cb = (b / (w * h));
+
+            color = ToRGBColor(cr, cg, cb);
+        }
+        else
+        {
+            color = ColorUtils::OFF();
+        }
+
+        for(ControllerZone* controller_zone : controller_zones)
+        {
+            controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, color);
+        }
+
+        break;
+    }
+
+    case MOST_COMMON:
+    {
+        std::vector<RGBColor> image_colors;
+        int w = image.width();
+        int h = image.height();
+
+        std::unordered_map<RGBColor, int> colors;
+        RGBColor most_common = ColorUtils::OFF();
+        int max_count = 0;
+
+        for (int x = 0; x < w; x++)
+        {
+            for (int y = 0; y < h; y++)
+            {
+                RGBColor c = ColorUtils::fromQColor(image.pixelColor(x,y));
+
+                if (++colors[c] > max_count) {
+                    most_common = c;
+                    max_count = colors[c];
+                }
+            }
+        }
+
+        RGBColor smoothed = Smooth(most_common);
+
+        for(ControllerZone* controller_zone : controller_zones)
+        {
+            controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, smoothed);
+        }
+
+        break;
+    }
+
+    case SCALED_AVERAGE:
+    {
+        QImage scaled = image.scaled(1, 1);
+
+        RGBColor color = ColorUtils::fromQColor(scaled.pixelColor(0,0));
+
+        RGBColor smoothed = Smooth(color);
+
+        for(ControllerZone* controller_zone : controller_zones)
+        {
+            controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, smoothed);
+        }
+
+        break;
+    }
+
+    case SCREEN_COPY:
     {
         for(ControllerZone* controller_zone : controller_zones)
         {
             unsigned int start_idx = controller_zone->start_idx();
-            zone_type ZT = controller_zone->type();
 
-            if(ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
+            if(controller_zone->type() == ZONE_TYPE_SINGLE || controller_zone->type() == ZONE_TYPE_LINEAR)
             {
                 unsigned int width = controller_zone->leds_count();
                 unsigned int height = 1;
 
 
-                QImage scaled = SCRNSLCT->GetImage(width, height);
+                QImage scaled = image.scaled(width, height);
 
                 for(unsigned int i = 0; i < width; i++)
                 {
@@ -61,13 +198,13 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
                 }
 
             }
-            else if(ZT == ZONE_TYPE_MATRIX)
+            else if(controller_zone->type() == ZONE_TYPE_MATRIX)
             {
                 unsigned int width = controller_zone->matrix_map_width();
                 unsigned int height = controller_zone->matrix_map_height();
                 unsigned int * map = controller_zone->map();
 
-                QImage scaled = SCRNSLCT->GetImage(width, height);
+                QImage scaled = image.scaled(width, height);
 
                 for(unsigned int h = 0; h < height; h++)
                 {
@@ -82,37 +219,121 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
 
             }
         }
+
+        break;
+    }
+    }
+
+}
+
+RGBColor Ambient::Smooth(RGBColor color)
+{
+    RGBColor smoothed;
+
+    if(color != old_single_color)
+    {
+        smoothed = ColorUtils::Interpolate(old_single_color, color, 0.05);
+        old_single_color = smoothed;
+    }
+    else {
+        smoothed = color;
+    }
+
+    return smoothed;
+}
+
+void Ambient::EffectState(bool state)
+{
+    if(state)
+    {
+        screen_recorder->Start();
     }
     else
     {
-        QColor C = SCRNSLCT->CalcColor();
+        screen_recorder->Stop();
+    }
+}
 
-        RGBColor color = ColorUtils::fromQColor(C);
-
-        for (ControllerZone* controller_zone : controller_zones)
-        {
-            controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, color);
-        }
+void Ambient::LoadCustomSettings(json settings)
+{
+    if(settings.contains("left"))
+    {
+        ui->left->setValue(settings["left"]);
     }
 
+    if(settings.contains("top"))
+    {
+        ui->top->setValue(settings["top"]);
+    }
 
+    if(settings.contains("width"))
+    {
+        ui->width->setValue(settings["width"]);
+    }
+
+    if(settings.contains("height"))
+    {
+        ui->height->setValue(settings["height"]);
+    }
+
+    if(settings.contains("mode"))
+    {
+        ui->mode->setCurrentIndex(settings["mode"]);
+    }
+
+    if(settings.contains("screen_index"))
+    {
+        ui->screen->setCurrentIndex(settings["screen_index"]);
+    }
 }
 
-void Ambient::EffectState(bool Auto)
+json Ambient::SaveCustomSettings(json settings)
 {
-    SCRNSLCT->SetAuto(!Auto);
+    settings["left"] = left;
+    settings["top"] = top;
+    settings["height"] = height;
+    settings["width"] = width;
+    settings["mode"] = mode;
+    settings["screen_index"] = screen_index;
+    return settings;
 }
 
-void Ambient::LoadCustomSettings(json Settings)
+void Ambient::on_left_valueChanged(int value)
 {
-    SCRNSLCT->SetCalcType(Settings["CalcMode"]);
-    SCRNSLCT->SetShowState(Settings["PreviewShowing"]);
+    left = value;
+    screen_recorder->SetRect(QRect(left, top, width, height));
 }
 
-json Ambient::SaveCustomSettings(json Settings)
+void Ambient::on_top_valueChanged(int value)
 {
-    Settings["CalcMode"] = SCRNSLCT->GetCalcType();
-    Settings["PreviewShowing"] = !SCRNSLCT->GetShowState();
+    top = value;
+    screen_recorder->SetRect(QRect(left, top, width, height));
+}
 
-    return Settings;
+void Ambient::on_width_valueChanged(int value)
+{
+    width = value;
+    screen_recorder->SetRect(QRect(left, top, width, height));
+}
+
+void Ambient::on_height_valueChanged(int value)
+{
+    height = value;
+    screen_recorder->SetRect(QRect(left, top, width, height));
+}
+
+void Ambient::on_mode_currentIndexChanged(int value)
+{
+    mode = static_cast<AmbientMode>(value);
+}
+
+void Ambient::on_screen_currentIndexChanged(int value)
+{
+    screen_index = value;
+    screen_recorder->SetScreen(screen_index);
+}
+
+
+void Ambient::on_select_rectangle_clicked() {
+    rectangle_selector_overlay->StartSelection(screen_index);
 }
