@@ -162,7 +162,7 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     \*---------------*/
     QHBoxLayout* RBShiftLayout = new QHBoxLayout;
     const QString rainbow_shift_tooltip = "Rainbow shift";
-    QLabel *rainbow_shift_label = new QLabel("Shift the raimbow");
+    QLabel *rainbow_shift_label = new QLabel("Shift the rainbow");
     rainbow_shift_label->setFixedWidth(label_width);
     rainbow_shift_slider->setMinimum(0);
     rainbow_shift_slider->setMaximum(256);
