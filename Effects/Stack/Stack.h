@@ -22,8 +22,8 @@ public:
 
     static std::string const ClassName() {return "Stack";}
     void DefineExtraOptions(QLayout*) override;
-    void StepEffect(std::vector<ControllerZone>) override;   
-    void ASelectionWasChanged(std::vector<ControllerZone>) override;
+    void StepEffect(std::vector<ControllerZone*>) override;
+    void OnControllerZonesListChanged(std::vector<ControllerZone*>) override;
     void LoadCustomSettings(json) override;
     json SaveCustomSettings(json) override;
 
@@ -41,7 +41,7 @@ private:
     std::vector<RGBColor> zone_colors;
 
     RGBColor GetColor(unsigned int, unsigned int);
-    void ResetZone(unsigned int, ControllerZone);
+    void ResetZone(unsigned int, ControllerZone*);
 };
 
 #endif // STACK_H

@@ -47,27 +47,27 @@ void Wavy::DefineExtraOptions(QLayout* layout)
     layout->addWidget(this);
 }
 
-void Wavy::StepEffect(std::vector<ControllerZone> controller_zones)
+void Wavy::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
-    for(ControllerZone& controller_zone : controller_zones)
+    for(ControllerZone* controller_zone : controller_zones)
     {
-        zone_type ZT = controller_zone.type();
-        int start_idx = controller_zone.start_idx();
+        zone_type ZT = controller_zone->type();
+        int start_idx = controller_zone->start_idx();
 
         if (ZT == ZONE_TYPE_LINEAR)
         {            
-            int leds_count = controller_zone.leds_count();
+            int leds_count = controller_zone->leds_count();
 
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
-                controller_zone.controller->SetLED((start_idx + LedID), GetColor(LedID, leds_count));
+                controller_zone->controller->SetLED((start_idx + LedID), GetColor(LedID, leds_count));
             }
         }
 
         else if (ZT == ZONE_TYPE_MATRIX)
         {
-            int cols = controller_zone.matrix_map_width();
-            int rows = controller_zone.matrix_map_height();
+            int cols = controller_zone->matrix_map_width();
+            int rows = controller_zone->matrix_map_height();
 
             for (int col_id = 0; col_id < cols; col_id++)
             {
@@ -75,8 +75,8 @@ void Wavy::StepEffect(std::vector<ControllerZone> controller_zones)
 
                 for (int row_id = 0; row_id < rows; row_id++)
                 {
-                    int LedID = controller_zone.controller->zones[controller_zone.zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                    controller_zone.controller->SetLED(start_idx + LedID, color);
+                    int LedID = controller_zone->controller->zones[controller_zone->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
+                    controller_zone->controller->SetLED(start_idx + LedID, color);
                 }
             }
         }

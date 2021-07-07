@@ -44,7 +44,7 @@ void Sequence::DefineExtraOptions(QLayout* layout)
     layout->addWidget(this);
 }
 
-void Sequence::StepEffect(std::vector<ControllerZone> controller_zones)
+void Sequence::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     unsigned int colors_count = ui->colors_count_spinBox->value();
     unsigned int current_color_index = ((int)ceil(progress)) % colors_count;
@@ -70,7 +70,7 @@ void Sequence::StepEffect(std::vector<ControllerZone> controller_zones)
 
     for(unsigned int i = 0; i < controller_zones.size(); i++)
     {
-        controller_zones[i].controller->SetAllLEDs(color);
+        controller_zones[i]->controller->SetAllLEDs(color);
     }
 
     progress += fade_mult * 0.1 * (float) Speed / (float) FPS;

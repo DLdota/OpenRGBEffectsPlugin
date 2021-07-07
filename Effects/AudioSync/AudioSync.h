@@ -62,7 +62,7 @@ public:
     static std::string const ClassName() {return "AudioSync";}
 
     void DefineExtraOptions(QLayout*)                           override;
-    void StepEffect(std::vector<ControllerZone>)                override;
+    void StepEffect(std::vector<ControllerZone*>)               override;
     void LoadCustomSettings(json)                               override;
     json SaveCustomSettings(json)                               override;
     void EffectState(bool)                                      override;

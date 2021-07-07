@@ -55,14 +55,14 @@ void EffectManager::ClearAssignments()
     previews.clear();
 }
 
-void EffectManager::Assign(std::vector<ControllerZone> controller_zones, RGBEffect* effect)
+void EffectManager::Assign(std::vector<ControllerZone*> controller_zones, RGBEffect* effect)
 {
     printf("[OpenRGBEffectsPlugin] Assigning %lu zones to %s\n", controller_zones.size(), effect->EffectDetails.EffectName.c_str());
 
     effect_zones[effect] = controller_zones;
 
     // remove from other effects
-    std::map<RGBEffect*, std::vector<ControllerZone>>::iterator it;
+    std::map<RGBEffect*, std::vector<ControllerZone*>>::iterator it;
 
     for (it = effect_zones.begin(); it != effect_zones.end(); it++)
     {
@@ -73,10 +73,10 @@ void EffectManager::Assign(std::vector<ControllerZone> controller_zones, RGBEffe
             continue;
         }
 
-        std::vector<ControllerZone> remaining_zones;
-        std::vector<ControllerZone> current_zones = it->second;
+        std::vector<ControllerZone*> remaining_zones;
+        std::vector<ControllerZone*> current_zones = it->second;
 
-        for(ControllerZone& zone : current_zones)
+        for(ControllerZone* zone : current_zones)
         {
             if(std::find(controller_zones.begin(), controller_zones.end(), zone) == controller_zones.end())
             {
@@ -90,9 +90,9 @@ void EffectManager::Assign(std::vector<ControllerZone> controller_zones, RGBEffe
     // force direct mode
     std::set<RGBController*> controllers;
 
-    for(ControllerZone& controller_zone: controller_zones)
+    for(ControllerZone* controller_zone: controller_zones)
     {
-        controllers.insert(controller_zone.controller);
+        controllers.insert(controller_zone->controller);
     }
 
     // todo: use setCustomMode instead?
@@ -111,12 +111,12 @@ void EffectManager::Assign(std::vector<ControllerZone> controller_zones, RGBEffe
     NotifySelectionChanged(effect);
 }
 
-std::vector<ControllerZone> EffectManager::GetAssignedZones(RGBEffect* effect)
+std::vector<ControllerZone*> EffectManager::GetAssignedZones(RGBEffect* effect)
 {
     return effect_zones[effect];
 }
 
-std::map<RGBEffect*, std::vector<ControllerZone>>EffectManager::GetEffectsMapping()
+std::map<RGBEffect*, std::vector<ControllerZone*>>EffectManager::GetEffectsMapping()
 {
     return effect_zones;
 }
@@ -132,7 +132,7 @@ void  EffectManager::EffectThreadFunction(RGBEffect* effect)
     {
         TCount start = clock->now();
 
-        std::vector<ControllerZone> controller_zones =  effect_zones[effect];
+        std::vector<ControllerZone*> controller_zones =  effect_zones[effect];
 
         // Add preview virtual controllers to the list of real devices if any
         if (previews.find(effect) != previews.end())
@@ -145,9 +145,9 @@ void  EffectManager::EffectThreadFunction(RGBEffect* effect)
         // Use a set to update only once the controllers
         std::set<RGBController*> controllers;
 
-        for(ControllerZone& controller_zone: controller_zones)
+        for(ControllerZone* controller_zone: controller_zones)
         {
-            controllers.insert(controller_zone.controller);
+            controllers.insert(controller_zone->controller);
         }
 
         for(RGBController* controller : controllers)
@@ -191,7 +191,7 @@ bool EffectManager::HasActiveEffects()
     return !ActiveEffects.empty();
 }
 
-void EffectManager::AddPreview(RGBEffect* effect, ControllerZone preview)
+void EffectManager::AddPreview(RGBEffect* effect, ControllerZone* preview)
 {
     previews[effect] = preview;
     NotifySelectionChanged(effect);
@@ -205,12 +205,12 @@ void EffectManager::RemovePreview(RGBEffect* effect)
 void EffectManager::NotifySelectionChanged(RGBEffect* effect)
 {
     // notify effect zones has changed
-    std::vector<ControllerZone> new_zones =  effect_zones[effect];
+    std::vector<ControllerZone*> new_zones =  effect_zones[effect];
 
     if (previews.find(effect) != previews.end())
     {
         new_zones.push_back(previews[effect]);
     }
 
-    effect->ASelectionWasChanged(new_zones);
+    effect->OnControllerZonesListChanged(new_zones);
 }

@@ -20,9 +20,9 @@ public:
 
     static std::string const ClassName() {return "Lightning";}
 
-    void StepEffect(std::vector<ControllerZone>) override;
+    void StepEffect(std::vector<ControllerZone*>) override;
     void SetUserColors(std::vector<RGBColor>) override;
-    void ASelectionWasChanged(std::vector<ControllerZone>) override;
+    void OnControllerZonesListChanged(std::vector<ControllerZone*>) override;
 
 private:
     hsv_t UserHSV;

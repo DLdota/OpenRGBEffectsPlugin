@@ -15,7 +15,7 @@ public:
 
     static std::string const ClassName() {return "Visor";}
 
-    void StepEffect(std::vector<ControllerZone>) override;
+    void StepEffect(std::vector<ControllerZone*>) override;
     void SetUserColors(std::vector<RGBColor>) override;
     void SetSlider2Val(unsigned int) override;
     unsigned int GetSlider2Val() override;

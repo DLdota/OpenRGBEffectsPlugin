@@ -45,19 +45,20 @@ void Hypnotoad::DefineExtraOptions(QLayout* layout)
 }
 
 
-void Hypnotoad::StepEffect(std::vector<ControllerZone> controller_zones)
+void Hypnotoad::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     float cx_shift_mult = cx_shift / 100.f;
     float cy_shift_mult = cy_shift / 100.f;
 
-    for(ControllerZone& controller_zone : controller_zones)
+    for(ControllerZone* controller_zone : controller_zones)
     {
-        unsigned int start_idx = controller_zone.start_idx();
-        bool reverse = controller_zone.reverse;
+        unsigned int start_idx = controller_zone->start_idx();
+        bool reverse = controller_zone->reverse;
+        zone_type ZT = controller_zone->type();
 
-        if(controller_zone.type() == ZONE_TYPE_SINGLE || controller_zone.type() == ZONE_TYPE_LINEAR)
+        if(ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
         {
-            unsigned int width = controller_zone.leds_count();
+            unsigned int width = controller_zone->leds_count();
             unsigned int height = 1;
 
             float cx = width * cx_shift_mult;
@@ -66,15 +67,15 @@ void Hypnotoad::StepEffect(std::vector<ControllerZone> controller_zones)
             for(unsigned int i = 0; i < width; i++)
             {
                 QColor color = GetColor(i, 0, cx, cy, reverse);
-                controller_zone.controller->SetLED(start_idx + i, ColorUtils::fromQColor(color));
+                controller_zone->controller->SetLED(start_idx + i, ColorUtils::fromQColor(color));
             }
 
         }
-        else if(controller_zone.type() == ZONE_TYPE_MATRIX)
+        else if(ZT == ZONE_TYPE_MATRIX)
         {
-            unsigned int width = controller_zone.matrix_map_width();
-            unsigned int height = controller_zone.matrix_map_height();
-            unsigned int * map = controller_zone.map();
+            unsigned int width = controller_zone->matrix_map_width();
+            unsigned int height = controller_zone->matrix_map_height();
+            unsigned int * map = controller_zone->map();
 
             float cx = width * cx_shift_mult;
             float cy = height * cy_shift_mult;
@@ -86,7 +87,7 @@ void Hypnotoad::StepEffect(std::vector<ControllerZone> controller_zones)
                     QColor color = GetColor(w, h, cx, cy, reverse);
 
                     unsigned int led_num = map[h * width + w];
-                    controller_zone.controller->SetLED(start_idx + led_num, ColorUtils::fromQColor(color));
+                    controller_zone->controller->SetLED(start_idx + led_num, ColorUtils::fromQColor(color));
                 }
             }
 

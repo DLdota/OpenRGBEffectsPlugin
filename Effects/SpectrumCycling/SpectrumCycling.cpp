@@ -22,7 +22,7 @@ SpectrumCycling::SpectrumCycling() : RGBEffect()
     EffectDetails.HasCustomSettings = false;
 }
 
-void SpectrumCycling::StepEffect(std::vector<ControllerZone> controller_zones)
+void SpectrumCycling::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     hsv_t HSVVal;
 
@@ -30,9 +30,9 @@ void SpectrumCycling::StepEffect(std::vector<ControllerZone> controller_zones)
     HSVVal.saturation = 255;
     HSVVal.hue = CurrentHue;
 
-    for(ControllerZone& controller_zone: controller_zones)
+    for(ControllerZone* controller_zone: controller_zones)
     {
-        controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, RGBColor(hsv2rgb(&HSVVal)));
+        controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, RGBColor(hsv2rgb(&HSVVal)));
     }
 
     CurrentHue += ((float)Speed / (float)FPS);

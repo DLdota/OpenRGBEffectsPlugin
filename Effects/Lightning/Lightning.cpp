@@ -47,7 +47,7 @@ RGBColor Lightning::TriggerLightning(int n)
     return RGBColor(hsv2rgb(&Lightnings[n]));
 }
 
-void  Lightning::ASelectionWasChanged(std::vector<ControllerZone> controller_zones)
+void  Lightning::OnControllerZonesListChanged(std::vector<ControllerZone*> controller_zones)
 {
     Lightnings.clear();
 
@@ -64,19 +64,19 @@ void  Lightning::ASelectionWasChanged(std::vector<ControllerZone> controller_zon
 }
 
 
-void Lightning::StepEffect(std::vector<ControllerZone> controller_zones)
+void Lightning::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     if(Lightnings.size() != controller_zones.size())
     {
-        ASelectionWasChanged(controller_zones);
+        OnControllerZonesListChanged(controller_zones);
     }
 
     int n = 0;
 
-    for(ControllerZone& controller_zone : controller_zones)
+    for(ControllerZone* controller_zone : controller_zones)
     {
         RGBColor color = TriggerLightning(n++);
-        controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, color);
+        controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, color);
     }
 }
 

@@ -15,16 +15,16 @@ class DeviceListItem : public QWidget
     Q_OBJECT
 
 public:
-    DeviceListItem(RGBController*);
+    DeviceListItem(std::vector<ControllerZone*>);
     ~DeviceListItem();    
     void SetEnabled(bool);
 
     void DisableControls();
     void EnableControls();
 
-    std::vector<ControllerZone> GetSelection();
+    std::vector<ControllerZone*> GetSelection();
 
-    void ApplySelection(std::vector<ControllerZone>);
+    void ApplySelection(std::vector<ControllerZone*>);
 
 signals:
     void SelectionChanged();
@@ -43,6 +43,7 @@ private:
 
     void RunGlobalCheckVerification();
 
+    std::vector<ControllerZone*> controller_zones;
     RGBController* controller;
     bool single_zone;
 };

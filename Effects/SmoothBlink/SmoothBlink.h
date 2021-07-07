@@ -23,7 +23,7 @@ public:
 
     static std::string const ClassName() {return "SmoothBlink";}
     void DefineExtraOptions(QLayout*) override;
-    void StepEffect(std::vector<ControllerZone>) override;
+    void StepEffect(std::vector<ControllerZone*>) override;
     void LoadCustomSettings(json) override;
     json SaveCustomSettings(json) override;
 
@@ -84,8 +84,8 @@ private:
 
     RGBColor GetColor(unsigned int, unsigned int, double, double, unsigned int);
 
-    void HandleSolidRendering(std::vector<ControllerZone>);
-    void HandleCircleRendering(std::vector<ControllerZone>);
+    void HandleSolidRendering(std::vector<ControllerZone*>);
+    void HandleCircleRendering(std::vector<ControllerZone*>);
 
 };
 

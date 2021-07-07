@@ -22,7 +22,7 @@ GradientWave::GradientWave() : RGBEffect()
     EffectDetails.HasCustomSettings = false;
 }
 
-void GradientWave::StepEffect(std::vector<ControllerZone> controller_zones)
+void GradientWave::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     int F[3];
     int S[3];
@@ -56,12 +56,12 @@ void GradientWave::StepEffect(std::vector<ControllerZone> controller_zones)
 
     int i = 0;
 
-    for (ControllerZone& controller_zone: controller_zones)
+    for (ControllerZone* controller_zone: controller_zones)
     {
-        zone_type ZT = controller_zone.type();
-        int StartIndex = controller_zone.start_idx();
-        int LEDCount = controller_zone.leds_count();
-        bool RVRS = controller_zone.reverse;
+        zone_type ZT = controller_zone->type();
+        int StartIndex = controller_zone->start_idx();
+        int LEDCount = controller_zone->leds_count();
+        bool RVRS = controller_zone->reverse;
 
         if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
         {
@@ -90,7 +90,7 @@ void GradientWave::StepEffect(std::vector<ControllerZone> controller_zones)
                     RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(LEDCount))*(F[CVal]-S[CVal]));
                 }
 
-                controller_zone.controller->SetLED((RVRS ? StartIndex + ((LEDCount - 1) - LedID) : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
+                controller_zone->controller->SetLED((RVRS ? StartIndex + ((LEDCount - 1) - LedID) : StartIndex + LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
             }
 
             float speed_mult = LEDCount > 0 ? 0.1 * (float) LEDCount : 1.f;
@@ -107,8 +107,8 @@ void GradientWave::StepEffect(std::vector<ControllerZone> controller_zones)
 
         else if (ZT == ZONE_TYPE_MATRIX)
         {
-            int ColumnCount = controller_zone.matrix_map_width();
-            int RowCount = controller_zone.matrix_map_height();
+            int ColumnCount = controller_zone->matrix_map_width();
+            int RowCount = controller_zone->matrix_map_height();
 
             for (int ColumnID = 0; ColumnID < ColumnCount; ColumnID++)
             {
@@ -137,8 +137,8 @@ void GradientWave::StepEffect(std::vector<ControllerZone> controller_zones)
 
                 for (int RowID = 0; RowID < RowCount; RowID++)
                 {
-                    int LedID = controller_zone.controller->zones[controller_zone.zone_idx].matrix_map->map[((RowID * ColumnCount) + (RVRS ? (ColumnCount - 1) - ColumnID: ColumnID ) )];
-                    controller_zone.controller->SetLED(StartIndex + LedID,ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
+                    int LedID = controller_zone->controller->zones[controller_zone->zone_idx].matrix_map->map[((RowID * ColumnCount) + (RVRS ? (ColumnCount - 1) - ColumnID: ColumnID ) )];
+                    controller_zone->controller->SetLED(StartIndex + LedID,ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]));
                 }
             }
 
@@ -157,7 +157,7 @@ void GradientWave::StepEffect(std::vector<ControllerZone> controller_zones)
 }
 
 
-void GradientWave::ASelectionWasChanged(std::vector<ControllerZone>)
+void GradientWave::OnControllerZonesListChanged(std::vector<ControllerZone*>)
 {
     Progress.clear();
 }

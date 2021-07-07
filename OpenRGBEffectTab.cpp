@@ -186,8 +186,8 @@ void OpenRGBEffectTab::on_plugin_infos_clicked()
 
 void OpenRGBEffectTab::on_save_settings_clicked()
 {
-    std::map<RGBEffect*, std::vector<ControllerZone>> effect_zones = EffectManager::Get()->GetEffectsMapping();
-    std::map<RGBEffect*, std::vector<ControllerZone>>::iterator it;
+    std::map<RGBEffect*, std::vector<ControllerZone*>> effect_zones = EffectManager::Get()->GetEffectsMapping();
+    std::map<RGBEffect*, std::vector<ControllerZone*>>::iterator it;
 
     json settings;
 
@@ -198,7 +198,7 @@ void OpenRGBEffectTab::on_save_settings_clicked()
     for (it = effect_zones.begin(); it != effect_zones.end(); it++)
     {
         RGBEffect* effect = it->first;
-        std::vector<ControllerZone> controller_zones = it->second;
+        std::vector<ControllerZone*> controller_zones = it->second;
 
         json effect_settings;
 
@@ -225,9 +225,9 @@ void OpenRGBEffectTab::on_save_settings_clicked()
 
         std::vector<json> zones;
 
-        for(ControllerZone& controller_zone: controller_zones)
+        for(ControllerZone* controller_zone: controller_zones)
         {
-            zones.push_back(controller_zone.to_json());
+            zones.push_back(controller_zone->to_json());
         }
 
         effect_settings["ControllerZones"] = zones;
@@ -271,7 +271,7 @@ void OpenRGBEffectTab::LoadEffectsFromSettings()
 
 void OpenRGBEffectTab::LoadEffectSettings(json effect_settings)
 {
-    std::vector<RGBController*> controllers = OpenRGBEffectsPlugin::RMPointer->GetRGBControllers();
+    //std::vector<RGBController*> controllers = OpenRGBEffectsPlugin::RMPointer->GetRGBControllers();
 
     std::string name = effect_settings["EffectClassName"];
 
@@ -282,24 +282,25 @@ void OpenRGBEffectTab::LoadEffectSettings(json effect_settings)
         colors.push_back(color);
     }
 
-    std::vector<ControllerZone> controller_zones;
+    std::vector<ControllerZone*> saved_zones;
 
     json zones = effect_settings["ControllerZones"];
 
     for(auto j : zones)
-    {
-        for(RGBController* controller: controllers)
+    {        
+        for(ControllerZone* controller_zone: ui->device_list->GetControllerZones())
         {
             if(
-                    controller->name        == j["name"] &&
-                    controller->location    == j["location"] &&
-                    controller->serial      == j["serial"] &&
-                    controller->description == j["description"] &&
-                    controller->version     == j["version"] &&
-                    controller->vendor      == j["vendor"]
+                    controller_zone->controller->name        == j["name"] &&
+                    controller_zone->controller->location    == j["location"] &&
+                    controller_zone->controller->serial      == j["serial"] &&
+                    controller_zone->controller->description == j["description"] &&
+                    controller_zone->controller->version     == j["version"] &&
+                    controller_zone->controller->vendor      == j["vendor"] &&
+                    controller_zone->zone_idx                == j["zone_idx"]
                     )
             {
-                controller_zones.push_back(ControllerZone{controller, j["zone_idx"], j["reverse"]});
+                saved_zones.push_back(controller_zone);
                 break;
             }
         }
@@ -330,8 +331,8 @@ void OpenRGBEffectTab::LoadEffectSettings(json effect_settings)
 
     CreateEffectTab(effect);
 
-    EffectManager::Get()->Assign(controller_zones, effect);
-    ui->device_list->ApplySelection(controller_zones);
+    EffectManager::Get()->Assign(saved_zones, effect);
+    ui->device_list->ApplySelection(saved_zones);
 }
 
 

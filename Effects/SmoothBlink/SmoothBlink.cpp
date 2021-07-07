@@ -66,7 +66,7 @@ void SmoothBlink::DefineExtraOptions(QLayout* layout)
 }
 
 
-void SmoothBlink::StepEffect(std::vector<ControllerZone> controller_zones)
+void SmoothBlink::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     if(RandomColorsEnabled)
     {
@@ -124,28 +124,29 @@ void SmoothBlink::StepEffect(std::vector<ControllerZone> controller_zones)
 
 }
 
-void SmoothBlink::HandleSolidRendering(std::vector<ControllerZone> controller_zones)
+void SmoothBlink::HandleSolidRendering(std::vector<ControllerZone*> controller_zones)
 {
     RGBColor color = ColorUtils::Saturate(current_color, value);
 
-    for(ControllerZone& controller_zone : controller_zones)
+    for(ControllerZone* controller_zone : controller_zones)
     {
-        controller_zone.controller->SetAllLEDs(color);
+        controller_zone->controller->SetAllLEDs(color);
     }
 }
 
-void SmoothBlink::HandleCircleRendering(std::vector<ControllerZone> controller_zones)
+void SmoothBlink::HandleCircleRendering(std::vector<ControllerZone*> controller_zones)
 {
     float cx_shift_mult = cx_shift / 100.f;
     float cy_shift_mult = cy_shift / 100.f;
 
-    for(ControllerZone& controller_zone : controller_zones)
+    for(ControllerZone* controller_zone : controller_zones)
     {
-        unsigned int start_idx = controller_zone.start_idx();
+        unsigned int start_idx = controller_zone->start_idx();
+        zone_type ZT = controller_zone->type();
 
-        if(controller_zone.type() == ZONE_TYPE_SINGLE || controller_zone.type() == ZONE_TYPE_LINEAR)
+        if(ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
         {
-            unsigned int width = controller_zone.leds_count();
+            unsigned int width = controller_zone->leds_count();
             unsigned int height = 1;
 
             float cx = (width - 1) * cx_shift_mult;
@@ -154,15 +155,15 @@ void SmoothBlink::HandleCircleRendering(std::vector<ControllerZone> controller_z
             for(unsigned int i = 0; i < width; i++)
             {
                 RGBColor color = GetColor(i, 0, cx, cy, width);
-                controller_zone.controller->SetLED(start_idx + i, color);
+                controller_zone->controller->SetLED(start_idx + i, color);
             }
 
         }
-        else if(controller_zone.type() == ZONE_TYPE_MATRIX)
+        else if(ZT == ZONE_TYPE_MATRIX)
         {
-            unsigned int width = controller_zone.matrix_map_width();
-            unsigned int height = controller_zone.matrix_map_height();
-            unsigned int * map = controller_zone.map();
+            unsigned int width = controller_zone->matrix_map_width();
+            unsigned int height = controller_zone->matrix_map_height();
+            unsigned int * map = controller_zone->map();
 
             float cx = (width - 1) * cx_shift_mult;
             float cy = (height - 1) * cy_shift_mult;
@@ -174,7 +175,7 @@ void SmoothBlink::HandleCircleRendering(std::vector<ControllerZone> controller_z
                     RGBColor color = GetColor(w, h, cx, cy, width + height);
 
                     unsigned int led_num = map[h * width + w];
-                    controller_zone.controller->SetLED(start_idx + led_num, color);
+                    controller_zone->controller->SetLED(start_idx + led_num, color);
                 }
             }
 

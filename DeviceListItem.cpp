@@ -1,17 +1,17 @@
 #include "DeviceListItem.h"
 #include "ui_DeviceListItem.h"
 
-DeviceListItem::DeviceListItem(RGBController* controller) :
+DeviceListItem::DeviceListItem(std::vector<ControllerZone*> controller_zones) :
     QWidget(nullptr),
-    ui(new Ui::DeviceListItem)
+    ui(new Ui::DeviceListItem),
+    controller_zones(controller_zones),
+    controller(controller_zones.front()->controller)
 {
     ui->setupUi(this);
 
-    this->controller = controller;
-
     bool has_direct = false;
 
-    for(unsigned int i = 0; i <controller->modes.size(); i++)
+    for(unsigned int i = 0; i < controller->modes.size(); i++)
     {
         if(controller->modes[i].name == "Direct")
         {
@@ -41,7 +41,7 @@ DeviceListItem::DeviceListItem(RGBController* controller) :
 
     ui->device_name->setText(display_name);
 
-    single_zone = controller->zones.size() == 1;
+    single_zone = controller_zones.size() == 1;
 
     if(single_zone)
     {
@@ -60,7 +60,7 @@ DeviceListItem::~DeviceListItem()
 
 void DeviceListItem::SetupZonesListItems()
 {
-    ui->zones->setRowCount(controller->zones.size());
+    ui->zones->setRowCount(controller_zones.size());
     ui->zones->setColumnCount(1);
 
     // Hide headers
@@ -85,7 +85,7 @@ void DeviceListItem::SetupZonesListItems()
 
     int final_height = 0;
 
-    for(unsigned int i = 0; i < controller->zones.size(); i++)
+    for(unsigned int i = 0; i < controller_zones.size(); i++)
     {
         ZoneListItem* item = new ZoneListItem(QString::fromStdString(controller->zones[i].name));
         ui->zones->setCellWidget(i,0, item);
@@ -171,15 +171,15 @@ void DeviceListItem::EnableControls()
     }
 }
 
-std::vector<ControllerZone> DeviceListItem::GetSelection()
+std::vector<ControllerZone*> DeviceListItem::GetSelection()
 {
-    std::vector<ControllerZone> selection;
+    std::vector<ControllerZone*> selection;
 
     if(single_zone)
     {
         if(ui->enable->isChecked())
         {
-            selection.push_back(ControllerZone{controller, 0, ui->reverse->isChecked()});
+            selection.push_back(controller_zones.front());
         }
     }
     else
@@ -188,7 +188,7 @@ std::vector<ControllerZone> DeviceListItem::GetSelection()
         {
             if(zone_items[i]->IsEnabled())
             {
-                selection.push_back(ControllerZone{controller, i, zone_items[i]->IsReversed()});
+                selection.push_back(controller_zones[i]);
             }
         }
     }
@@ -196,7 +196,7 @@ std::vector<ControllerZone> DeviceListItem::GetSelection()
     return selection;
 }
 
-void DeviceListItem::ApplySelection(std::vector<ControllerZone> selection)
+void DeviceListItem::ApplySelection(std::vector<ControllerZone*> selection)
 {
     // Reset checkboxes
     ui->enable->setCheckState(Qt::Unchecked);
@@ -209,19 +209,19 @@ void DeviceListItem::ApplySelection(std::vector<ControllerZone> selection)
     }
 
     // Set checked if needed
-    for(ControllerZone& controller_zone : selection)
+    for(ControllerZone* controller_zone : selection)
     {
-        if(controller == controller_zone.controller)
+        if(controller == controller_zone->controller)
         {
             if(single_zone)
             {
                 ui->enable->setCheckState(Qt::Checked);
-                ui->reverse->setCheckState(controller_zone.reverse ? Qt::Checked : Qt::Unchecked);
+                ui->reverse->setCheckState(controller_zone->reverse ? Qt::Checked : Qt::Unchecked);
             }
             else
             {
-                zone_items[controller_zone.zone_idx]->SetEnableChecked(true);
-                zone_items[controller_zone.zone_idx]->SetReverseChecked(controller_zone.reverse);
+                zone_items[controller_zone->zone_idx]->SetEnableChecked(true);
+                zone_items[controller_zone->zone_idx]->SetReverseChecked(controller_zone->reverse);
             }
         }
     }

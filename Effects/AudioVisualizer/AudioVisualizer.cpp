@@ -179,7 +179,7 @@ void AudioVisualizer::DefineExtraOptions(QLayout *Scaler)
     Scaler->addWidget(this);
 }
 
-void AudioVisualizer::StepEffect(std::vector<ControllerZone> controller_zones)
+void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
 
     if (ZoneMaps.size() != controller_zones.size())
@@ -452,11 +452,11 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone> controller_zones)
 
     int i = 0;
 
-    for(ControllerZone& controller_zone: controller_zones)
+    for(ControllerZone* controller_zone: controller_zones)
     {
-        int                 x_count                 = controller_zone.leds_count();
+        int                 x_count                 = controller_zone->leds_count();
         int                 y_count                 = 0;
-        zone_type           type                    = controller_zone.type();
+        zone_type           type                    = controller_zone->type();
         ZoneIndexType *     zone_index_map          = NULL;
 
         /*--------------------------------------------------------------*\
@@ -464,8 +464,8 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone> controller_zones)
         \*--------------------------------------------------------------*/
         if(type == ZONE_TYPE_MATRIX)
         {
-            x_count     = controller_zone.matrix_map_width();
-            y_count     = controller_zone.matrix_map_height();
+            x_count     = controller_zone->matrix_map_width();
+            y_count     = controller_zone->matrix_map_height();
         }
 
         if (ZoneMaps[i] == nullptr)
@@ -493,7 +493,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone> controller_zones)
 
         zone_index_map = ZoneMaps[i];
 
-        switch (controller_zone.type())
+        switch (controller_zone->type())
         {
         case ZONE_TYPE_MATRIX:
             for (int y = 0; y < y_count; y++)
@@ -501,11 +501,11 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone> controller_zones)
                 for (int x = 0; x < x_count; x++)
                 {
                     unsigned int map_idx = (y * x_count) + x;
-                    unsigned int color_idx = controller_zone.controller->zones[controller_zone.zone_idx].matrix_map->map[map_idx];
+                    unsigned int color_idx = controller_zone->controller->zones[controller_zone->zone_idx].matrix_map->map[map_idx];
 
                     if( color_idx != 0xFFFFFFFF )
                     {
-                        controller_zone.controller->zones[controller_zone.zone_idx].colors[color_idx] = pixels_out->pixels[zone_index_map->y_index[y]][zone_index_map->x_index[x]];
+                        controller_zone->controller->zones[controller_zone->zone_idx].colors[color_idx] = pixels_out->pixels[zone_index_map->y_index[y]][zone_index_map->x_index[x]];
                     }
                 }
             }
@@ -514,14 +514,14 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone> controller_zones)
         case ZONE_TYPE_SINGLE:
             for (int r = 0; r < x_count; r++)
             {
-                controller_zone.controller->zones[controller_zone.zone_idx].colors[r] = pixels_out->pixels[ROW_IDX_SINGLE_COLOR][0];
+                controller_zone->controller->zones[controller_zone->zone_idx].colors[r] = pixels_out->pixels[ROW_IDX_SINGLE_COLOR][0];
             }
             break;
 
         case ZONE_TYPE_LINEAR:
             for (int x = 0; x < x_count; x++)
             {
-                controller_zone.controller->zones[controller_zone.zone_idx].colors[x] = pixels_out->pixels[ROW_IDX_BAR_GRAPH][zone_index_map->x_index[x]];
+                controller_zone->controller->zones[controller_zone->zone_idx].colors[x] = pixels_out->pixels[ROW_IDX_BAR_GRAPH][zone_index_map->x_index[x]];
             }
             break;
         }

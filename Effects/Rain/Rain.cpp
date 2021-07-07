@@ -25,14 +25,14 @@ Rain::Rain() : RGBEffect()
     EffectDetails.HasCustomSettings = false;
 }
 
-void Rain::StepEffect(std::vector<ControllerZone> controller_zones)
+void Rain::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(unsigned int i = 0; i < controller_zones.size(); i++)
     {
-        int start_idx = controller_zones[i].start_idx();
-        zone_type ZT = controller_zones[i].type();
-        int leds_count = controller_zones[i].leds_count();
-        bool reverse = controller_zones[i].reverse;
+        int start_idx = controller_zones[i]->start_idx();
+        zone_type ZT = controller_zones[i]->type();
+        int leds_count = controller_zones[i]->leds_count();
+        bool reverse = controller_zones[i]->reverse;
 
         unsigned int w;
         unsigned int h;
@@ -45,14 +45,14 @@ void Rain::StepEffect(std::vector<ControllerZone> controller_zones)
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
                 RGBColor color = GetColor(i, 0, reverse ? leds_count - LedID - 1 : LedID);
-                controller_zones[i].controller->SetLED(start_idx + LedID, color);
+                controller_zones[i]->controller->SetLED(start_idx + LedID, color);
             }
         }
 
         else if (ZT == ZONE_TYPE_MATRIX)
         {
-            int cols = controller_zones[i].matrix_map_width();
-            int rows = controller_zones[i].matrix_map_height();
+            int cols = controller_zones[i]->matrix_map_width();
+            int rows = controller_zones[i]->matrix_map_height();
 
             w = cols;
             h = rows;
@@ -61,9 +61,9 @@ void Rain::StepEffect(std::vector<ControllerZone> controller_zones)
             {
                 for (int row_id = 0; row_id < rows; row_id++)
                 {
-                    int LedID = controller_zones[i].controller->zones[controller_zones[i].zone_idx].matrix_map->map[((row_id * cols) + col_id)];
+                    int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
                     RGBColor color = GetColor(i, col_id, reverse ? rows - row_id - 1: row_id);
-                    controller_zones[i].controller->SetLED(start_idx + LedID, color);
+                    controller_zones[i]->controller->SetLED(start_idx + LedID, color);
                 }
             }
         }
@@ -164,7 +164,7 @@ RGBColor Rain::GetColor(unsigned int controller_zone_index, unsigned int x, unsi
     return ColorUtils::OFF();
 }
 
-void Rain::ASelectionWasChanged(std::vector<ControllerZone> controller_zones)
+void Rain::OnControllerZonesListChanged(std::vector<ControllerZone*> controller_zones)
 {
     unsigned int zones_count = controller_zones.size();
 

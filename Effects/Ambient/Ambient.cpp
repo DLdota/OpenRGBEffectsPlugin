@@ -35,19 +35,20 @@ void Ambient::DefineExtraOptions(QLayout* ParentLayout)
     ParentLayout->addWidget(SCRNSLCT);
 }
 
-void Ambient::StepEffect(std::vector<ControllerZone> controller_zones)
+void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     SCRNSLCT->GetScreen();
 
     if(SCRNSLCT->GetCalcType() == SCREEN_COPY_MODE)
     {
-        for(ControllerZone& controller_zone : controller_zones)
+        for(ControllerZone* controller_zone : controller_zones)
         {
-            unsigned int start_idx = controller_zone.start_idx();
+            unsigned int start_idx = controller_zone->start_idx();
+            zone_type ZT = controller_zone->type();
 
-            if(controller_zone.type() == ZONE_TYPE_SINGLE || controller_zone.type() == ZONE_TYPE_LINEAR)
+            if(ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
             {
-                unsigned int width = controller_zone.leds_count();
+                unsigned int width = controller_zone->leds_count();
                 unsigned int height = 1;
 
 
@@ -56,15 +57,15 @@ void Ambient::StepEffect(std::vector<ControllerZone> controller_zones)
                 for(unsigned int i = 0; i < width; i++)
                 {
                     QColor color = scaled.pixelColor(i, 0);
-                    controller_zone.controller->SetLED(start_idx + i, ColorUtils::fromQColor(color));
+                    controller_zone->controller->SetLED(start_idx + i, ColorUtils::fromQColor(color));
                 }
 
             }
-            else if(controller_zone.type() == ZONE_TYPE_MATRIX)
+            else if(ZT == ZONE_TYPE_MATRIX)
             {
-                unsigned int width = controller_zone.matrix_map_width();
-                unsigned int height = controller_zone.matrix_map_height();
-                unsigned int * map = controller_zone.map();
+                unsigned int width = controller_zone->matrix_map_width();
+                unsigned int height = controller_zone->matrix_map_height();
+                unsigned int * map = controller_zone->map();
 
                 QImage scaled = SCRNSLCT->GetImage(width, height);
 
@@ -75,7 +76,7 @@ void Ambient::StepEffect(std::vector<ControllerZone> controller_zones)
                         QColor color = scaled.pixelColor(w, h);
 
                         unsigned int led_num = map[h * width + w];
-                        controller_zone.controller->SetLED(start_idx + led_num, ColorUtils::fromQColor(color));
+                        controller_zone->controller->SetLED(start_idx + led_num, ColorUtils::fromQColor(color));
                     }
                 }
 
@@ -88,9 +89,9 @@ void Ambient::StepEffect(std::vector<ControllerZone> controller_zones)
 
         RGBColor color = ColorUtils::fromQColor(C);
 
-        for (ControllerZone& controller_zone : controller_zones)
+        for (ControllerZone* controller_zone : controller_zones)
         {
-            controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, color);
+            controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, color);
         }
     }
 

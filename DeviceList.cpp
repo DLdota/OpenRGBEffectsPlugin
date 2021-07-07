@@ -35,6 +35,8 @@ void DeviceList::InitControllersList()
 {
     std::vector<RGBController*> controllers = OpenRGBEffectsPlugin::RMPointer->GetRGBControllers();
 
+    controller_zones.clear();
+
     // Hide headers
     ui->devices->horizontalHeader()->hide();
     ui->devices->verticalHeader()->hide();
@@ -58,7 +60,17 @@ void DeviceList::InitControllersList()
 
     for(RGBController* controller : controllers)
     {
-        DeviceListItem* item = new DeviceListItem(controller);
+        std::vector<ControllerZone*> iteration_zones;
+
+        for(unsigned int i = 0; i < controller->zones.size(); i++)
+        {
+            ControllerZone* controller_zone = new ControllerZone(controller, i, false);
+            controller_zones.push_back(controller_zone);
+            iteration_zones.push_back(controller_zone);
+        }
+
+
+        DeviceListItem* item = new DeviceListItem(iteration_zones);
         ui->devices->setCellWidget(row++, 0, item);
         device_items.push_back(item);
 
@@ -98,13 +110,18 @@ void DeviceList::EnableControls()
     }
 }
 
-std::vector<ControllerZone> DeviceList::GetSelection()
-{    
-    std::vector<ControllerZone> selection;
+std::vector<ControllerZone*> DeviceList::GetControllerZones()
+{
+    return controller_zones;
+}
+
+std::vector<ControllerZone*> DeviceList::GetSelection()
+{
+    std::vector<ControllerZone*> selection;
 
     for(DeviceListItem* item: device_items)
     {
-        for(ControllerZone& controller_zone: item->GetSelection())
+        for(ControllerZone* controller_zone: item->GetSelection())
         {
             selection.push_back(controller_zone);
         }
@@ -113,7 +130,7 @@ std::vector<ControllerZone> DeviceList::GetSelection()
     return selection;
 }
 
-void DeviceList::ApplySelection(std::vector<ControllerZone> selection)
+void DeviceList::ApplySelection(std::vector<ControllerZone*> selection)
 {
     for(DeviceListItem* item: device_items)
     {

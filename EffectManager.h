@@ -19,13 +19,13 @@ public:
     void RemoveMapping(RGBEffect*);
 
     void ClearAssignments();
-    void Assign(std::vector<ControllerZone>, RGBEffect*);
-    std::vector<ControllerZone> GetAssignedZones(RGBEffect*);
-    std::map<RGBEffect*, std::vector<ControllerZone>> GetEffectsMapping();
+    void Assign(std::vector<ControllerZone*>, RGBEffect*);
+    std::vector<ControllerZone*> GetAssignedZones(RGBEffect*);
+    std::map<RGBEffect*, std::vector<ControllerZone*>> GetEffectsMapping();
 
     bool HasActiveEffects();
 
-    void AddPreview(RGBEffect*, ControllerZone);
+    void AddPreview(RGBEffect*, ControllerZone*);
     void RemovePreview(RGBEffect*);
 
 private:
@@ -40,8 +40,8 @@ private:
     std::map<RGBEffect*,std::thread*> EffectThreads;
     std::chrono::steady_clock* clock;
 
-    std::map<RGBEffect*, std::vector<ControllerZone>> effect_zones;
-    std::map<RGBEffect*, ControllerZone> previews;
+    std::map<RGBEffect*, std::vector<ControllerZone*>> effect_zones;
+    std::map<RGBEffect*, ControllerZone*> previews;
 };
 
 #endif // EFFECTMANAGER_H

@@ -15,7 +15,7 @@ public:
 
     static std::string const ClassName() { return "Breathing"; }
 
-    void StepEffect(std::vector<ControllerZone>) override;
+    void StepEffect(std::vector<ControllerZone*>) override;
     void SetUserColors(std::vector<RGBColor>) override;
 
 private:

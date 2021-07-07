@@ -22,8 +22,8 @@ public:
 
     static std::string const ClassName() { return "Rain"; }
 
-    void StepEffect(std::vector<ControllerZone>) override;
-    void ASelectionWasChanged(std::vector<ControllerZone>) override;
+    void StepEffect(std::vector<ControllerZone*>) override;
+    void OnControllerZonesListChanged(std::vector<ControllerZone*>) override;
 
 private:
     RGBColor GetColor(unsigned int, unsigned int, unsigned int);

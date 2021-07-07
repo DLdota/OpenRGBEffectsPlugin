@@ -96,7 +96,7 @@ Methods to override :
 
 * DefineExtraOptions: Allows you to manipulate the custom GUI for your effect.
 * StepEffect: The engine will call this function for every frames.
-* ASelectionWasChanged: You get notified for device selection changes
+* OnControllerZonesListChanged: You get notified for device selection changes
 * EffectState: You get notified when the effect state changes (started/stopped)
 * LoadCustomSettings: Your effect gets the user settings, time to update the GUI
 * SaveCustomSettings: You have to create your own settings json object to be saved.

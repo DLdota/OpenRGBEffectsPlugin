@@ -23,7 +23,7 @@ StarryNight::StarryNight() : RGBEffect()
     EffectDetails.HasCustomSettings = false;
 }
 
-void StarryNight::StepEffect(std::vector<ControllerZone> controller_zones)
+void StarryNight::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     int LEDPerCycle = Slider2Val;
 
@@ -44,8 +44,8 @@ void StarryNight::StepEffect(std::vector<ControllerZone> controller_zones)
             {
                 for (int ZonesMade = 0; ZonesMade < MakeForZone; ZonesMade++)
                 {
-                    int StartingLED = controller_zones[ControllerID].start_idx();
-                    int RandomLedID = rand() % controller_zones[ControllerID].leds_count();
+                    int StartingLED = controller_zones[ControllerID]->start_idx();
+                    int RandomLedID = rand() % controller_zones[ControllerID]->leds_count();
 
                     NewStar LEDStar;
                     LEDStar.Index = ControllerID;
@@ -86,12 +86,12 @@ void StarryNight::StepEffect(std::vector<ControllerZone> controller_zones)
             {
                 ToBeDeleted.push_back(StarIndex);
                 SetColor.value = 0;
-                controller_zones[CTRLR].controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
+                controller_zones[CTRLR]->controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
             }
             else
             {
                 SetColor.value = CurrentStars[StarIndex].state;
-                controller_zones[CTRLR].controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
+                controller_zones[CTRLR]->controller->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor));
                 CurrentStars[StarIndex].state -= (float(Speed) / float(FPS) );
             }
         }
@@ -109,12 +109,12 @@ void StarryNight::StepEffect(std::vector<ControllerZone> controller_zones)
 }
 
 
-void StarryNight::ASelectionWasChanged(std::vector<ControllerZone> controller_zones)
+void StarryNight::OnControllerZonesListChanged(std::vector<ControllerZone*> controller_zones)
 {
     CurrentStars.clear();
 
-    for(ControllerZone& controller_zone : controller_zones)
+    for(ControllerZone* controller_zone : controller_zones)
     {
-        controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, ColorUtils::OFF());
+        controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, ColorUtils::OFF());
     }
 }

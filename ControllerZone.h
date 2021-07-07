@@ -6,8 +6,17 @@
 
 using json = nlohmann::json;
 
-struct ControllerZone
+class ControllerZone
 {
+
+public:
+
+    ControllerZone(RGBController* controller, unsigned int zone_idx, bool reverse):
+        controller(controller),
+        zone_idx(zone_idx),
+        reverse(reverse)
+    {};
+
     RGBController* controller;
     unsigned int zone_idx;
     bool reverse;
@@ -42,11 +51,13 @@ struct ControllerZone
         return controller->zones[zone_idx].matrix_map->map;
     }
 
-    bool operator==(ControllerZone const & rhs) const {
+    bool operator==(ControllerZone const & rhs) const
+    {
         return this->controller == rhs.controller && this->zone_idx == rhs.zone_idx;
     }
 
-    bool operator<(ControllerZone const & rhs) const {
+    bool operator<(ControllerZone const & rhs) const
+    {
         // whatever
         return this->controller != rhs.controller || this->zone_idx != rhs.zone_idx;
     }

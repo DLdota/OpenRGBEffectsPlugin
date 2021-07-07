@@ -15,7 +15,7 @@ public:
 
     static std::string const ClassName() {return "SpectrumCycling";}
 
-    void StepEffect(std::vector<ControllerZone>) override;
+    void StepEffect(std::vector<ControllerZone*>) override;
 
 private:
     float CurrentHue = 0;

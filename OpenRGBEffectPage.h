@@ -57,6 +57,8 @@ private:
     std::vector<unsigned int> speeds;
 
     QDialog* preview_dialog;
+
+    ControllerZone* preview_zone;
 };
 
 #endif // OPENRGBEFFECTPAGE_H

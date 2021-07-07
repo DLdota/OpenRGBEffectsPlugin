@@ -41,7 +41,7 @@ void Stack::DefineExtraOptions(QLayout* layout)
     layout->addWidget(this);
 }
 
-void Stack::StepEffect(std::vector<ControllerZone> controller_zones)
+void Stack::StepEffect(std::vector<ControllerZone*> controller_zones)
 {    
     unsigned int size = controller_zones.size();
 
@@ -57,10 +57,10 @@ void Stack::StepEffect(std::vector<ControllerZone> controller_zones)
 
     for(unsigned int i = 0; i < controller_zones.size(); i++)
     {
-        int start_idx = controller_zones[i].start_idx();
-        zone_type ZT = controller_zones[i].type();
-        int leds_count = controller_zones[i].leds_count();
-        bool reverse = controller_zones[i].reverse;
+        int start_idx = controller_zones[i]->start_idx();
+        zone_type ZT = controller_zones[i]->type();
+        int leds_count = controller_zones[i]->leds_count();
+        bool reverse = controller_zones[i]->reverse;
 
         if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
         {
@@ -68,14 +68,14 @@ void Stack::StepEffect(std::vector<ControllerZone> controller_zones)
             {
                 RGBColor color = GetColor(i, reverse ? leds_count - LedID - 1 : LedID);
                 current_colors[i][LedID] = color;
-                controller_zones[i].controller->SetLED(start_idx + LedID, color);
+                controller_zones[i]->controller->SetLED(start_idx + LedID, color);
             }
         }
 
         else if (ZT == ZONE_TYPE_MATRIX)
         {
-            int cols = controller_zones[i].matrix_map_width();
-            int rows = controller_zones[i].matrix_map_height();
+            int cols = controller_zones[i]->matrix_map_width();
+            int rows = controller_zones[i]->matrix_map_height();
 
             // horizontal
             if(ui->direction->currentIndex() == 0)
@@ -87,8 +87,8 @@ void Stack::StepEffect(std::vector<ControllerZone> controller_zones)
 
                     for (int row_id = 0; row_id < rows; row_id++)
                     {
-                        int LedID = controller_zones[i].controller->zones[controller_zones[i].zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                        controller_zones[i].controller->SetLED(start_idx + LedID, color);
+                        int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
+                        controller_zones[i]->controller->SetLED(start_idx + LedID, color);
                     }
                 }
             }
@@ -102,8 +102,8 @@ void Stack::StepEffect(std::vector<ControllerZone> controller_zones)
 
                     for (int col_id = 0; col_id < cols; col_id++)
                     {
-                        int LedID = controller_zones[i].controller->zones[controller_zones[i].zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                        controller_zones[i].controller->SetLED(start_idx + LedID, color);
+                        int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
+                        controller_zones[i]->controller->SetLED(start_idx + LedID, color);
                     }
                 }
             }
@@ -151,7 +151,7 @@ RGBColor Stack::GetColor(unsigned int controller_zone_idx, unsigned int led_idx)
     return ColorUtils::Enlight(zone_colors[controller_zone_idx], 1 - distance);
 }
 
-void Stack::ASelectionWasChanged(std::vector<ControllerZone> controller_zones)
+void Stack::OnControllerZonesListChanged(std::vector<ControllerZone*> controller_zones)
 {
     stops.clear();
     progress.clear();
@@ -171,24 +171,24 @@ void Stack::ASelectionWasChanged(std::vector<ControllerZone> controller_zones)
     }
 }
 
-void Stack::ResetZone(unsigned int controller_zone_idx, ControllerZone controller_zone)
+void Stack::ResetZone(unsigned int controller_zone_idx, ControllerZone* controller_zone)
 {
     unsigned int leds_count;
 
-    if(controller_zone.type() == ZONE_TYPE_MATRIX)
+    if(controller_zone->type() == ZONE_TYPE_MATRIX)
     {
         if(ui->direction->currentIndex() == 0)
         {
-            leds_count = controller_zone.matrix_map_width();
+            leds_count = controller_zone->matrix_map_width();
         }
         else
         {
-            leds_count = controller_zone.matrix_map_height();
+            leds_count = controller_zone->matrix_map_height();
         }
     }
     else
     {
-        leds_count = controller_zone.leds_count();
+        leds_count = controller_zone->leds_count();
     }
 
     stops[controller_zone_idx] = std::max<unsigned int>(leds_count - 1, 1);

@@ -14,7 +14,7 @@ public:
 
     static std::string const ClassName() { return "RainbowWave"; }
 
-    void StepEffect(std::vector<ControllerZone>) override;
+    void StepEffect(std::vector<ControllerZone*>) override;
 
 private:
     float Progress = 0;

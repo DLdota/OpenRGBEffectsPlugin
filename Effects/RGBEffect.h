@@ -39,8 +39,8 @@ public:
     virtual ~RGBEffect(){};
 
     virtual void DefineExtraOptions(QLayout*) {}
-    virtual void StepEffect(std::vector<ControllerZone>) {};
-    virtual void ASelectionWasChanged(std::vector<ControllerZone>) {}
+    virtual void StepEffect(std::vector<ControllerZone*>) {};
+    virtual void OnControllerZonesListChanged(std::vector<ControllerZone*>) {}
 
     virtual void EffectState(bool Enabled) { EffectEnabled = Enabled; }
 

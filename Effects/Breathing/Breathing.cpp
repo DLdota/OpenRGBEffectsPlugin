@@ -22,7 +22,7 @@ Breathing::Breathing() : RGBEffect()
     EffectDetails.HasCustomSettings = false;
 }
 
-void Breathing::StepEffect(std::vector<ControllerZone> controller_zones)
+void Breathing::StepEffect(std::vector<ControllerZone*> controller_zones)
 {   
     Progress += ((Speed / 100.0) / (float)FPS);
 
@@ -42,9 +42,9 @@ void Breathing::StepEffect(std::vector<ControllerZone> controller_zones)
 
     CurrentColor.value = pow(sin(Progress),3) * 255;
 
-    for (ControllerZone& controller_zone: controller_zones)
+    for (ControllerZone* controller_zone: controller_zones)
     {
-        controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, hsv2rgb(&CurrentColor));
+        controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, hsv2rgb(&CurrentColor));
     }
 }
 
