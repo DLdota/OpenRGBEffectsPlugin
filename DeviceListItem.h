@@ -34,7 +34,7 @@ private slots:
     void on_reverse_clicked();
 
     void OnZoneListItemEnabled(bool);
-    void OnZoneListItemReversed(bool);
+    void OnZoneListItemReversed(bool, int);
 
 private:
     Ui::DeviceListItem *ui;

@@ -93,7 +93,10 @@ void DeviceListItem::SetupZonesListItems()
         zone_items.push_back(item);
 
         connect(item, SIGNAL(Enabled(bool)), this, SLOT(OnZoneListItemEnabled(bool)));
-        connect(item, SIGNAL(Reversed(bool)), this, SLOT(OnZoneListItemReversed(bool)));
+
+        connect(item, &ZoneListItem::Reversed, [=](bool state){
+            OnZoneListItemReversed(state, i);
+        });
     }
 
     ui->zones->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
@@ -127,6 +130,11 @@ void DeviceListItem::on_reverse_clicked()
 {
     bool state = ui->reverse->isChecked();
 
+    if(single_zone)
+    {
+        controller_zones[0]->reverse = state;
+    }
+
     for(ZoneListItem* item:zone_items)
     {
         item->SetReverseChecked(state);
@@ -142,9 +150,11 @@ void DeviceListItem::OnZoneListItemEnabled(bool)
     emit SelectionChanged();
 }
 
-void DeviceListItem::OnZoneListItemReversed(bool)
+void DeviceListItem::OnZoneListItemReversed(bool state, int index)
 {
-    RunGlobalCheckVerification();
+    controller_zones[index]->reverse = state;
+
+    RunGlobalCheckVerification();    
 
     emit SelectionChanged();
 }
@@ -256,4 +266,5 @@ void DeviceListItem::RunGlobalCheckVerification()
 
     ui->enable->setCheckState(enabled_count == controller->zones.size() ? Qt::Checked : Qt::Unchecked);
     ui->reverse->setCheckState(reversed_count == controller->zones.size() ? Qt::Checked : Qt::Unchecked);
+
 }
