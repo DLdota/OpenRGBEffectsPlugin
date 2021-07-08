@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>BouncingBall</class>
+ <widget class="QWidget" name="BouncingBallEffect">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1203</width>
+    <height>609</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="5" column="0">
+    <widget class="QLabel" name="spectrum_velocity_label">
+     <property name="text">
+      <string>Spectrum Velocity</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="2">
+    <widget class="QSlider" name="ball_radius_slider">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>15</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TicksAbove</enum>
+     </property>
+     <property name="tickInterval">
+      <number>10</number>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QSlider" name="horizontal_velocity_slider">
+     <property name="toolTip">
+      <string>How fast the ball moves side to side</string>
+     </property>
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>10</number>
+     </property>
+     <property name="sliderPosition">
+      <number>10</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="invertedControls">
+      <bool>false</bool>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TicksAbove</enum>
+     </property>
+     <property name="tickInterval">
+      <number>10</number>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QSlider" name="spectrum_velocity_slider">
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>10</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TicksAbove</enum>
+     </property>
+     <property name="tickInterval">
+      <number>10</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="reset_defaults_button">
+     <property name="text">
+      <string>Defaults</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="gravity_label">
+     <property name="text">
+      <string>Gravity</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="ball_radius_label">
+     <property name="text">
+      <string>Ball Radius</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QLabel" name="horizontal_velocity_value_label">
+     <property name="text">
+      <string>10</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QLabel" name="spectrum_velocity_value_label">
+     <property name="text">
+      <string>10</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QSlider" name="drop_height_percent_slider">
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>90</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TicksAbove</enum>
+     </property>
+     <property name="tickInterval">
+      <number>10</number>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLabel" name="gravity_value_label">
+     <property name="text">
+      <string>10</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="drop_height_percent_label">
+     <property name="text">
+      <string>Drop Height %</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLabel" name="ball_radius_value_label">
+     <property name="minimumSize">
+      <size>
+       <width>40</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>15</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QLabel" name="drop_height_percent_value_label">
+     <property name="text">
+      <string>90</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="horizontal_velocity_label">
+     <property name="text">
+      <string>Horizontal Velocity</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="QSlider" name="gravity_slider">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>10</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TicksAbove</enum>
+     </property>
+     <property name="tickInterval">
+      <number>10</number>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

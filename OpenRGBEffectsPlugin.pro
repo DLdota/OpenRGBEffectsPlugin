@@ -195,6 +195,8 @@ SOURCES +=                                                                      
     Effects/GifPlayer/GifPlayer.cpp                                                             \
     Effects/Ambient/ScreenSelection.cpp                                                         \
     Effects/SmoothBlink/SmoothBlink.cpp                                                         \
+    Effects/BouncingBall/BouncingBallEffect.cpp                                                 \
+    Effects/BouncingBall/BouncingBallSimulation.cpp                                             \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -223,6 +225,8 @@ HEADERS +=                                                                      
     Effects/Stack/Stack.h                                                                       \
     Effects/GifPlayer/GifPlayer.h                                                               \
     Effects/SmoothBlink/SmoothBlink.h                                                           \
+    Effects/BouncingBall/BouncingBallEffect.h                                                   \
+    Effects/BouncingBall/BouncingBallSimulation.h                                               \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -238,6 +242,7 @@ FORMS +=                                                                        
     Effects/Stack/Stack.ui                                                                      \
     Effects/GifPlayer/GifPlayer.ui                                                              \
     Effects/SmoothBlink/SmoothBlink.ui                                                          \
+    Effects/BouncingBall/BouncingBallEffect.ui                                                  \
 
 
 #-----------------------------------------------------------------------------------------------#
