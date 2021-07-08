@@ -315,7 +315,6 @@ void AudioSine::StepEffect(std::vector<ControllerZone*> controller_zones)
 
 float AudioSine::GetSineValue(unsigned int x, unsigned int width, bool reverse)
 {
-    printf("reverse %d\n", reverse);
     float value = 0;
     double pi = 3.14159265359;
 
