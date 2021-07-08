@@ -197,6 +197,7 @@ SOURCES +=                                                                      
     Effects/SmoothBlink/SmoothBlink.cpp                                                         \
     Effects/BouncingBall/BouncingBallEffect.cpp                                                 \
     Effects/BouncingBall/BouncingBallSimulation.cpp                                             \
+    Effects/AudioSine/AudioSine.cpp                                                             \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -227,6 +228,7 @@ HEADERS +=                                                                      
     Effects/SmoothBlink/SmoothBlink.h                                                           \
     Effects/BouncingBall/BouncingBallEffect.h                                                   \
     Effects/BouncingBall/BouncingBallSimulation.h                                               \
+    Effects/AudioSine/AudioSine.h                                                               \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -243,6 +245,7 @@ FORMS +=                                                                        
     Effects/GifPlayer/GifPlayer.ui                                                              \
     Effects/SmoothBlink/SmoothBlink.ui                                                          \
     Effects/BouncingBall/BouncingBallEffect.ui                                                  \
+    Effects/AudioSine/AudioSine.ui                                                              \
 
 
 #-----------------------------------------------------------------------------------------------#
