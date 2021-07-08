@@ -205,6 +205,10 @@ void OpenRGBEffectPage::OpenPreview()
 
     ui->PreviewButton->setDisabled(true);
 
+    connect(preview, &LivePreviewController::ReversedChanged, [=](bool state){
+        preview_zone->reverse = state;
+    });
+
     connect(preview_dialog, &QDialog::finished, [=](){
         ui->PreviewButton->setDisabled(false);
         EffectManager::Get()->RemovePreview(effect);

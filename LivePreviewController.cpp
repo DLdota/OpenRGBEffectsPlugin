@@ -134,7 +134,19 @@ void LivePreviewController::DeviceUpdateLEDs() {
 void LivePreviewController::on_presets_currentIndexChanged(int value)
 {
     ZonePreset& preset = presets[value];
-    SetupZone(preset.name, preset.zt, preset.width, preset.height);
+    width = preset.width;
+    height = preset.height;
+
+    ui->width->blockSignals(true);
+    ui->height->blockSignals(true);
+
+    ui->width->setValue(width);
+    ui->height->setValue(height);
+
+    ui->width->blockSignals(false);
+    ui->height->blockSignals(false);
+
+    Update(preset.name, preset.zt);
 }
 
 void LivePreviewController::Draw(QImage image){
@@ -149,4 +161,26 @@ void LivePreviewController::Draw(QImage image){
                                                        Qt::KeepAspectRatio, Qt::FastTransformation))
                                       );
     }
+}
+
+void LivePreviewController::Update(std::string name, zone_type zt)
+{
+    SetupZone(name, zt, width, height);
+}
+
+void LivePreviewController::on_width_valueChanged(int value)
+{
+    width = value;
+    Update("Custom", ZONE_TYPE_MATRIX);
+}
+
+void LivePreviewController::on_height_valueChanged(int value)
+{
+    height = value;
+    Update("Custom", ZONE_TYPE_MATRIX);
+}
+
+void LivePreviewController::on_reverse_stateChanged(int value)
+{
+    emit ReversedChanged(value);
 }

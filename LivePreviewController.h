@@ -30,14 +30,21 @@ public:
 
 signals:
     void Rendered(QImage);
+    void ReversedChanged(bool);
 
 private slots:
     void on_presets_currentIndexChanged(int);
+    void on_width_valueChanged(int);
+    void on_height_valueChanged(int);
+    void on_reverse_stateChanged(int);
     void Draw(QImage);
 
 private:
     Ui::LivePreviewController *ui;
+
     void SetupZone(std::string, zone_type, unsigned int, unsigned int);
+
+    void Update(std::string, zone_type);
 
     struct ZonePreset{
         std::string name;
@@ -69,6 +76,9 @@ private:
         {"Linear 72 LEDs", ZONE_TYPE_LINEAR, 72, 1},
         {"Linear 128 LEDs", ZONE_TYPE_LINEAR, 128, 1}
     };
+
+    unsigned int width = presets[0].width;
+    unsigned int height = presets[0].height;
 
 
 };
