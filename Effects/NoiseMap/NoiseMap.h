@@ -35,6 +35,8 @@ private slots:
     void on_lacunarity_valueChanged(int);
     void on_persistence_valueChanged(int);
     void on_octaves_valueChanged(int);
+    void on_motion_speed_valueChanged(int);
+    void on_motion_currentIndexChanged(int);
 
     void on_defaults_clicked();
 
@@ -56,12 +58,16 @@ private:
     float default_lacunarity = 0.75;
     float default_persistence = 0.5;
     int default_octaves = 2;
+    int default_motion = 0;
+    int default_motion_speed = 0;
 
     float frequency = default_frequency;
     float amplitude = default_amplitude;
     float lacunarity = default_lacunarity;
     float persistence = default_persistence;
     unsigned int octaves = default_octaves;
+    unsigned int motion = default_motion;
+    unsigned int motion_speed = default_motion_speed;
 
     SimplexNoise* noise;
 

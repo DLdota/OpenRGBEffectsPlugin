@@ -32,6 +32,8 @@ NoiseMap::NoiseMap(QWidget *parent) :
     ui->colors_choice->addItems({"Rainbow", "Inverse rainbow", "Custom"});
     ui->colors_frame->hide();
 
+    ui->motion->addItems({"Up", "Down", "Left", "Right"});
+
     ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->colors->setLayout(new QHBoxLayout());
     ui->colors->layout()->setSizeConstraint(QLayout::SetFixedSize);
@@ -83,7 +85,7 @@ void NoiseMap::GenerateGradient()
         QGradientStop stop = QGradientStop(
                     i * color_step,
                     QColor(RGBGetRValue(colors[i]), RGBGetGValue(colors[i]), RGBGetBValue(colors[i]))
-        );
+                    );
 
         stops << stop;
     }
@@ -173,7 +175,21 @@ void NoiseMap::StepEffect(std::vector<ControllerZone*> controller_zones)
 
 RGBColor NoiseMap::GetColor(unsigned int x, unsigned int y)
 {
-    float value = noise->fractal(octaves, x, y, progress);
+    float x_shift = 0;
+    float y_shift = 0;
+
+    switch (motion) {
+
+    case 0: y_shift = motion_speed * progress; break;
+    case 1: y_shift = motion_speed * -progress;  break;
+    case 2: x_shift = motion_speed * progress;  break;
+    case 3: x_shift = motion_speed * -progress;  break;
+
+    default: break;
+    }
+
+
+    float value = noise->fractal(octaves, x + x_shift, y + y_shift, progress);
     float frac = (1+value)*0.5;
 
     int color_choice = ui->colors_choice->currentIndex();
@@ -181,22 +197,22 @@ RGBColor NoiseMap::GetColor(unsigned int x, unsigned int y)
 
     switch (color_choice)
     {
-        case 0:
-            hsv.hue = 360 * frac;
-            hsv.saturation = 255;
-            hsv.value = 255 ;
-            return RGBColor(hsv2rgb(&hsv));
+    case 0:
+        hsv.hue = 360 * frac;
+        hsv.saturation = 255;
+        hsv.value = 255 ;
+        return RGBColor(hsv2rgb(&hsv));
 
-        case 1:
-            hsv.hue = 360 - 360 * frac;
-            hsv.saturation = 255;
-            hsv.value = 255 ;
-            return RGBColor(hsv2rgb(&hsv));
+    case 1:
+        hsv.hue = 360 - 360 * frac;
+        hsv.saturation = 255;
+        hsv.value = 255 ;
+        return RGBColor(hsv2rgb(&hsv));
 
-        case 2:
-            int color_x = (1 - frac) * 100;
-            QColor c = image.pixelColor(color_x, 0);
-            return ColorUtils::fromQColor(c);
+    case 2:
+        int color_x = (1 - frac) * 100;
+        QColor c = image.pixelColor(color_x, 0);
+        return ColorUtils::fromQColor(c);
     }
 
     return ColorUtils::OFF();
@@ -209,12 +225,16 @@ void NoiseMap::LoadCustomSettings(json settings)
     if(settings.contains("lacunarity"))  lacunarity  = settings["lacunarity"];
     if(settings.contains("persistence"))  persistence  = settings["persistence"];
     if(settings.contains("octaves"))  octaves  = settings["octaves"];
+    if(settings.contains("motion"))   motion  = settings["motion"];
+    if(settings.contains("motion_speed"))  motion_speed  = settings["motion_speed"];
 
     ui->amplitude->setValue(amplitude * val_mult);
     ui->frequency->setValue(frequency * val_mult);
     ui->lacunarity->setValue(lacunarity * val_mult);
     ui->persistence->setValue(persistence * val_mult);
     ui->octaves->setValue(octaves);
+    ui->motion_speed->setValue(motion_speed);
+    ui->motion->setCurrentIndex(motion);
 
 
     if (settings.contains("colors_choice"))
@@ -248,6 +268,9 @@ json NoiseMap::SaveCustomSettings(json settings)
     settings["colors"] = colors;
     settings["colors_choice"] = ui->colors_choice->currentIndex();
 
+    settings["motion"] = motion;
+    settings["motion_speed"] = motion_speed;
+
     return settings;
 }
 
@@ -279,6 +302,16 @@ void NoiseMap::on_octaves_valueChanged(int value)
 {
     octaves = value;
     ResetNoise();
+}
+
+void NoiseMap::on_motion_speed_valueChanged(int value)
+{
+    motion_speed = value;
+}
+
+void NoiseMap::on_motion_currentIndexChanged(int value)
+{
+    motion = value;
 }
 
 void NoiseMap::on_defaults_clicked()
