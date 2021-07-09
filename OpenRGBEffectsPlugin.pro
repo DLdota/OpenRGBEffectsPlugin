@@ -200,6 +200,7 @@ SOURCES +=                                                                      
     Effects/AudioSine/AudioSine.cpp                                                             \
     Effects/SwirlCircles/SwirlCircles.cpp                                                       \
     Effects/SwirlCirclesAudio/SwirlCirclesAudio.cpp                                             \
+    Effects/CrossingBeams/CrossingBeams.cpp                                                     \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -233,6 +234,7 @@ HEADERS +=                                                                      
     Effects/AudioSine/AudioSine.h                                                               \
     Effects/SwirlCircles/SwirlCircles.h                                                         \
     Effects/SwirlCirclesAudio/SwirlCirclesAudio.h                                               \
+    Effects/CrossingBeams/CrossingBeams.h                                                       \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -252,6 +254,7 @@ FORMS +=                                                                        
     Effects/AudioSine/AudioSine.ui                                                              \
     Effects/SwirlCircles/SwirlCircles.ui                                                        \
     Effects/SwirlCirclesAudio/SwirlCirclesAudio.ui                                              \
+    Effects/CrossingBeams/CrossingBeams.ui                                                      \
 
 
 #-----------------------------------------------------------------------------------------------#
