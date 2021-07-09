@@ -1,29 +1,28 @@
-#include "AudioSine.h"
+#include "SwirlCirclesAudio.h"
 #include "ColorUtils.h"
 #include "AudioManager.h"
 
+REGISTER_EFFECT(SwirlCirclesAudio);
 
-REGISTER_EFFECT(AudioSine);
-
-AudioSine::AudioSine(QWidget *parent) :
+SwirlCirclesAudio::SwirlCirclesAudio(QWidget *parent) :
     RGBEffect(parent),
-    ui(new Ui::AudioSine)
+    ui(new Ui::SwirlCirclesAudio)
 {
     ui->setupUi(this);
 
-    EffectDetails.EffectName = "AudioSine";
+    EffectDetails.EffectName = "SwirlCirclesAudio";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Sinusoidal audio rendering";
+    EffectDetails.EffectDescription = "Rotating circles reacting to audio";
 
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;
-    EffectDetails.MinSpeed     = 0;
-    EffectDetails.UserColors   = 0;
+    EffectDetails.MinSpeed     = 1;
+    EffectDetails.UserColors   = 2;
     EffectDetails.AllowOnlyFirst = false;
 
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
+    EffectDetails.MaxSlider2Val = 100;
+    EffectDetails.MinSlider2Val = 1;
+    EffectDetails.Slider2Name   = "Glow";
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
@@ -48,68 +47,21 @@ AudioSine::AudioSine(QWidget *parent) :
         fft[i] = 0.0f;
         fft_nrml[i] = offset + (scale * (i / 256.0f));
     }
-
-    ui->color_mode->addItems({"Spectrum cycle", "Static"});
-    ui->background->SetRGBColor(background);
-    ui->wave_color->SetRGBColor(wave_color);
 }
 
-AudioSine::~AudioSine()
+SwirlCirclesAudio::~SwirlCirclesAudio()
 {
     delete ui;
 }
 
-void AudioSine::EffectState(const bool state)
-{
-    EffectEnabled = state;
-    state ? Start() : Stop();
-}
 
-void AudioSine::Start()
-{
-    if(audio_device_idx >= 0)
-    {
-        AudioManager::get()->RegisterClient(audio_device_idx, this);
-    }
-}
-
-void AudioSine::Stop()
-{
-    if(audio_device_idx >= 0)
-    {
-        AudioManager::get()->UnRegisterClient(audio_device_idx, this);
-    }
-}
-
-void AudioSine::on_color_mode_currentIndexChanged(int value)
-{
-    color_mode = value;
-}
-
-void AudioSine::on_devices_currentIndexChanged(int value)
-{
-    bool was_running = EffectEnabled;
-
-    if(EffectEnabled)
-    {
-        Stop();
-    }
-
-    audio_device_idx = value;
-
-    if(was_running)
-    {
-        Start();
-    }
-}
-
-
-void AudioSine::DefineExtraOptions(QLayout* layout)
+void SwirlCirclesAudio::DefineExtraOptions(QLayout* layout)
 {
     layout->addWidget(this);
 }
 
-void AudioSine::StepEffect(std::vector<ControllerZone*> controller_zones)
+
+void SwirlCirclesAudio::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     float fft_tmp[512];
 
@@ -252,24 +204,20 @@ void AudioSine::StepEffect(std::vector<ControllerZone*> controller_zones)
         }
     }
 
+
+    current_level = 0.f;
+
     for(int i = 0; i < 256; i++)
     {
         fft_fltr[i] = fft_fltr[i] + (filter_constant * (fft[i] - fft_fltr[i]));
+
+        current_level += fft_fltr[i];
     }
-
-    float amp = 0;
-
-    for(int i = 0; i < 256; i += avg_size)
-    {
-        //printf("fft_fltr[%d] %f\n",i, fft_fltr[i]);
-        amp += fft_fltr[i];
-    }
-
-    //printf("%f\n",amp);
 
     for(ControllerZone* controller_zone : controller_zones)
     {
         unsigned int start_idx = controller_zone->start_idx();
+        bool reverse = controller_zone->reverse;
         zone_type ZT = controller_zone->type();
 
         if(ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
@@ -277,11 +225,15 @@ void AudioSine::StepEffect(std::vector<ControllerZone*> controller_zones)
             unsigned int width = controller_zone->leds_count();
             unsigned int height = 1;
 
+            float hx = 0.5 * width;
+            float hy = 0.5 * height;
+
+            float y1 = hy + hy * sin(reverse ? -progress : progress);
+            float x1 = hx + hx * cos(reverse ? -progress : progress);
+
             for(unsigned int i = 0; i < width; i++)
             {
-                float sine_value = GetSineValue(i, width, controller_zone->reverse);
-
-                RGBColor color = GetColor(sine_value, 0, height);
+                RGBColor color = GetColor(i, 0, width, height, x1, y1);
                 controller_zone->controller->SetLED(start_idx + i, color);
             }
 
@@ -292,176 +244,171 @@ void AudioSine::StepEffect(std::vector<ControllerZone*> controller_zones)
             unsigned int height = controller_zone->matrix_map_height();
             unsigned int * map = controller_zone->map();
 
-            for(unsigned int w = 0; w <  width; w++)
-            {
-                float sine_value = GetSineValue(w, width, controller_zone->reverse);
+            float hx = 0.5 * width;
+            float hy = 0.5 * height;
 
-                for(unsigned int h = 0; h < height; h++)
+            float y1 = hy + hy * sin(reverse ? -progress : progress);
+            float x1 = hx + hx * cos(reverse ? -progress : progress);
+
+            for(unsigned int h = 0; h < height; h++)
+            {
+                for(unsigned int w = 0; w <  width; w++)
                 {
-                    RGBColor color = GetColor(sine_value, h, height);
+                    RGBColor color = GetColor(w, h, width, height, x1, y1);
 
                     unsigned int led_num = map[h * width + w];
-                    controller_zone->controller->SetLED(start_idx + led_num, color);
+                    controller_zone->controller->SetLED(start_idx + led_num,color);
                 }
             }
+
         }
     }
 
-    x_time += (float) Speed / (float) FPS;
-    oscillation_time += (float) oscillation / (float) FPS;
-    color_time += (float) color_change_speed / (float) FPS;
+    progress +=  0.1 * (float) Speed / (float) FPS;
 
-    height_mult = oscillation > 0 ? sin(oscillation_time * 0.1) : 1;
-}
-
-float AudioSine::GetSineValue(unsigned int x, unsigned int width, bool reverse)
-{
-    float value = 0;
-    double pi = 3.14159265359;
-
-    x++;
-    width++;
-
-    if(Speed > 0)
+    if(RandomColorsEnabled)
     {
-        x = reverse ? x - x_time : x + x_time;
+        hsv1.hue++;
+        hsv2.hue++;
     }
 
-    float x_percent = (float)x / (float)width;
-
-    for (int i = 0; i < 256; i+= avg_size)
-    {
-        value += height_mult * fft[i] * sin(x_percent * 0.25 * repeat * (i / (float) avg_size) * pi);
-    }
-
-    return value;
 }
 
-RGBColor AudioSine::GetColor(float sine, unsigned int y, unsigned int height)
+RGBColor SwirlCirclesAudio::GetColor(unsigned int x, unsigned int y, unsigned int w, unsigned int h, float x1, float y1)
 {
-    float half_height = height * 0.5;
-    float peak = half_height + sine * half_height;
+    float glow_mult = 0.001 * Slider2Val;
 
-    float real_distance = fabs(peak - y);
+    double distance1 = sqrt(pow(x1 - x, 2) + pow(y1 - y, 2));
+    float distance1_percent = pow(distance1 / (h+w), glow_mult * current_level);
 
-    float distance = real_distance > 0.01 * thickness * height ?
-                pow(real_distance / (float)height, 0.01 * glow)
-              : 0;
+    hsv_t hsv_tmp;
 
-    distance = std::min<float>(std::max<float>(distance, 0), 1);
+    hsv_tmp.value = hsv1.value * (1 - distance1_percent);
+    hsv_tmp.hue = hsv1.hue;
+    hsv_tmp.saturation = hsv1.saturation;
 
-    RGBColor color;
+    RGBColor color1 = RGBColor(hsv2rgb(&hsv_tmp));
 
-    if(color_mode == 0)
+    float y2 = h - y1;
+    float x2 = w - x1;
+
+    double distance2 = sqrt(pow(x2 - x, 2) + pow(y2 - y, 2));
+    float distance2_percent = pow(distance2 / (h+w),  glow_mult * current_level);
+
+    hsv_tmp.value = hsv2.value * (1 - distance2_percent);
+    hsv_tmp.hue = hsv2.hue;
+    hsv_tmp.saturation = hsv2.saturation;
+
+    RGBColor color2 = RGBColor(hsv2rgb(&hsv_tmp));
+
+    return ColorUtils::Screen(color1, color2);
+}
+
+void SwirlCirclesAudio::SetUserColors(std::vector<RGBColor> colors)
+{
+    UserColors = colors;
+
+    ResetUserColors();
+}
+
+void SwirlCirclesAudio::SetRandomColorsEnabled(bool value)
+{
+    RandomColorsEnabled = value;
+
+    if(!RandomColorsEnabled)
     {
-        hsv_t hsv;
-        hsv.hue = (int) color_time % 360;
-        hsv.saturation = 255;
-        hsv.value = 255 - 255 * distance;
-
-        color = RGBColor(hsv2rgb(&hsv));
+        ResetUserColors();
     }
     else
     {
-       color = ColorUtils::Enlight(wave_color, 1 - distance);
-    }
+        hsv1.hue = 0;
+        hsv1.value = 255;
+        hsv1.saturation = 255;
 
-    return ColorUtils::Interpolate(color, background, distance);
+        hsv2.hue = 180;
+        hsv2.value = 255;
+        hsv2.saturation = 255;
+    }
 }
 
 
-void AudioSine::on_amplitude_valueChanged(int value)
+void SwirlCirclesAudio::ResetUserColors()
+{
+    rgb2hsv(UserColors[0], &hsv1);
+    rgb2hsv(UserColors[1], &hsv2);
+}
+
+
+void SwirlCirclesAudio::EffectState(const bool state)
+{
+    EffectEnabled = state;
+    state ? Start() : Stop();
+}
+
+void SwirlCirclesAudio::Start()
+{
+    if(audio_device_idx >= 0)
+    {
+        AudioManager::get()->RegisterClient(audio_device_idx, this);
+    }
+}
+
+void SwirlCirclesAudio::Stop()
+{
+    if(audio_device_idx >= 0)
+    {
+        AudioManager::get()->UnRegisterClient(audio_device_idx, this);
+    }
+}
+
+void SwirlCirclesAudio::on_devices_currentIndexChanged(int value)
+{
+    bool was_running = EffectEnabled;
+
+    if(EffectEnabled)
+    {
+        Stop();
+    }
+
+    audio_device_idx = value;
+
+    if(was_running)
+    {
+        Start();
+    }
+}
+
+void SwirlCirclesAudio::on_amplitude_valueChanged(int value)
 {
     amplitude = value;
 }
 
-void AudioSine::on_repeat_valueChanged(int value)
+void SwirlCirclesAudio::on_decay_valueChanged(int value)
 {
-    repeat = value;
+    decay = value;
 }
 
-void AudioSine::on_glow_valueChanged(int value)
-{
-    glow = value;
-}
-
-void AudioSine::on_thickness_valueChanged(int value)
-{
-    thickness = value;
-}
-
-void AudioSine::on_average_valueChanged(int value)
+void SwirlCirclesAudio::on_average_valueChanged(int value)
 {
     avg_size = value;
 }
 
-void AudioSine::on_oscillation_valueChanged(int value)
-{
-    oscillation = value;
-}
-
-void AudioSine::on_color_change_speed_valueChanged(int value)
-{
-    color_change_speed = value;
-}
-
-
-void AudioSine::on_background_ColorSelected(QColor color)
-{
-    background = ColorUtils::fromQColor(color);
-}
-
-void AudioSine::on_wave_color_ColorSelected(QColor color)
-{
-    wave_color = ColorUtils::fromQColor(color);
-}
-
-json AudioSine::SaveCustomSettings(json Settings)
+json SwirlCirclesAudio::SaveCustomSettings(json Settings)
 {
     Settings["audio_device_idx"] = audio_device_idx;
-    Settings["color_mode"] = color_mode;
     Settings["amplitude"] = amplitude;
-    Settings["avg_size"] = avg_size;
-    Settings["repeat"] = repeat;
-    Settings["glow"] = glow;
-    Settings["thickness"] = thickness;
-    Settings["oscillation"] = oscillation;
-    Settings["color_change_speed"] = color_change_speed;
+    Settings["decay"] = decay;
     return Settings;
 }
 
-void AudioSine::LoadCustomSettings(json Settings)
+void SwirlCirclesAudio::LoadCustomSettings(json Settings)
 {
     if (Settings.contains("audio_device_idx"))
         ui->devices->setCurrentIndex(Settings["audio_device_idx"]);
 
-    if (Settings.contains("color_mode"))
-        ui->color_mode->setCurrentIndex(Settings["color_mode"]);
-
     if (Settings.contains("amplitude"))
         ui->amplitude->setValue(Settings["amplitude"]);
 
-    if (Settings.contains("avg_size"))
-        ui->average->setValue(Settings["avg_size"]);
-
-    if (Settings.contains("repeat"))
-        ui->repeat->setValue(Settings["repeat"]);
-
-    if (Settings.contains("glow"))
-        ui->glow->setValue(Settings["glow"]);
-
-    if (Settings.contains("thickness"))
-        ui->thickness->setValue(Settings["thickness"]);
-
-    if (Settings.contains("oscillation"))
-        ui->oscillation->setValue(Settings["oscillation"]);
-
-    if (Settings.contains("color_change_speed"))
-        ui->color_change_speed->setValue(Settings["color_change_speed"]);
-
-    if (Settings.contains("background"))
-        ui->background->SetRGBColor(Settings["background"]);
-
-    if (Settings.contains("wave_color"))
-        ui->wave_color->SetRGBColor(Settings["wave_color"]);
+    if (Settings.contains("decay"))
+        ui->decay->setValue(Settings["decay"]);
 }

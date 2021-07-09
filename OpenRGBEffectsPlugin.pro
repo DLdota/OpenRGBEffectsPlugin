@@ -199,6 +199,7 @@ SOURCES +=                                                                      
     Effects/BouncingBall/BouncingBallSimulation.cpp                                             \
     Effects/AudioSine/AudioSine.cpp                                                             \
     Effects/SwirlCircles/SwirlCircles.cpp                                                       \
+    Effects/SwirlCirclesAudio/SwirlCirclesAudio.cpp                                             \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -231,6 +232,7 @@ HEADERS +=                                                                      
     Effects/BouncingBall/BouncingBallSimulation.h                                               \
     Effects/AudioSine/AudioSine.h                                                               \
     Effects/SwirlCircles/SwirlCircles.h                                                         \
+    Effects/SwirlCirclesAudio/SwirlCirclesAudio.h                                               \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -249,6 +251,7 @@ FORMS +=                                                                        
     Effects/BouncingBall/BouncingBallEffect.ui                                                  \
     Effects/AudioSine/AudioSine.ui                                                              \
     Effects/SwirlCircles/SwirlCircles.ui                                                        \
+    Effects/SwirlCirclesAudio/SwirlCirclesAudio.ui                                              \
 
 
 #-----------------------------------------------------------------------------------------------#
