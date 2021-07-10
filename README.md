@@ -33,11 +33,14 @@ After running the OpenRGB build you downloaded from the link the effects tab sho
 ## What Effects do you have?
 
 * Ambient
+* AudioSine
 * AudioSync
 * AudioVisualizer (A port of [Keyboard visualizer](https://gitlab.com/CalcProgrammer1/KeyboardVisualizer))
+* BouncingBall
 * Breathing
 * Bubbles
 * ColorWheelEffect
+* CrossingBeams
 * FractalMotion
 * GifPlayer
 * GradientWave
@@ -48,11 +51,14 @@ After running the OpenRGB build you downloaded from the link the effects tab sho
 * RadialRainbow
 * Rain
 * RainbowWave
+* RotatingBeam
 * Sequence
 * SmoothBlink
 * SpectrumCycling
 * Stack
 * StarryNight
+* SwirlCircles
+* SwirlCirclesAudio
 * Visor
 * Wavy
 
