@@ -201,6 +201,7 @@ SOURCES +=                                                                      
     Effects/SwirlCircles/SwirlCircles.cpp                                                       \
     Effects/SwirlCirclesAudio/SwirlCirclesAudio.cpp                                             \
     Effects/CrossingBeams/CrossingBeams.cpp                                                     \
+    Effects/RotatingBeam/RotatingBeam.cpp                                                       \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -235,6 +236,7 @@ HEADERS +=                                                                      
     Effects/SwirlCircles/SwirlCircles.h                                                         \
     Effects/SwirlCirclesAudio/SwirlCirclesAudio.h                                               \
     Effects/CrossingBeams/CrossingBeams.h                                                       \
+    Effects/RotatingBeam/RotatingBeam.h                                                         \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -255,6 +257,7 @@ FORMS +=                                                                        
     Effects/SwirlCircles/SwirlCircles.ui                                                        \
     Effects/SwirlCirclesAudio/SwirlCirclesAudio.ui                                              \
     Effects/CrossingBeams/CrossingBeams.ui                                                      \
+    Effects/RotatingBeam/RotatingBeam.ui                                                        \
 
 
 #-----------------------------------------------------------------------------------------------#
