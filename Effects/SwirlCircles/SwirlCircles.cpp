@@ -106,7 +106,7 @@ RGBColor SwirlCircles::GetColor(unsigned int x, unsigned int y, unsigned int w, 
     float glow = 0.01 * Slider2Val;
 
     double distance1 = sqrt(pow(x1 - x, 2) + pow(y1 - y, 2));
-    float distance1_percent = pow(distance1 / (h+w), glow);
+    float distance1_percent = distance1 < radius ? 0 : pow(distance1 / (h+w), glow);
 
     hsv_t hsv_tmp;
 
@@ -120,7 +120,7 @@ RGBColor SwirlCircles::GetColor(unsigned int x, unsigned int y, unsigned int w, 
     float x2 = w - x1;
 
     double distance2 = sqrt(pow(x2 - x, 2) + pow(y2 - y, 2));
-    float distance2_percent = pow(distance2 / (h+w), glow);
+    float distance2_percent = distance2 < radius ? 0 : pow(distance2 / (h+w), glow);
 
     hsv_tmp.value = hsv2.value * (1 - distance2_percent);
     hsv_tmp.hue = hsv2.hue;
@@ -163,4 +163,23 @@ void SwirlCircles::ResetUserColors()
 {
     rgb2hsv(UserColors[0], &hsv1);
     rgb2hsv(UserColors[1], &hsv2);
+}
+
+void SwirlCircles::on_radius_valueChanged(int value)
+{
+    radius = value;
+}
+
+
+void SwirlCircles::LoadCustomSettings(json Settings)
+{
+    if (Settings.contains("radius")) radius    = Settings["radius"];
+
+    ui->radius->setValue(radius);
+}
+
+json SwirlCircles::SaveCustomSettings(json Settings)
+{
+    Settings["radius"]    = radius;
+    return Settings;
 }

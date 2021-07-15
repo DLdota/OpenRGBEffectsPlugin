@@ -27,11 +27,16 @@ public:
     void StepEffect(std::vector<ControllerZone*>) override;
     void SetUserColors(std::vector<RGBColor> colors) override;
     void SetRandomColorsEnabled(bool value) override;
+    void LoadCustomSettings(json) override;
+    json SaveCustomSettings(json) override;
 
+private slots:
+    void on_radius_valueChanged(int);
 
 private:
     Ui::SwirlCircles *ui;
     double progress = 0.0;
+    int radius = 0;
 
     void ResetUserColors();
 
