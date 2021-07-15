@@ -122,7 +122,7 @@ void OpenRGBEffectPage::InitUi()
         effect->SetUserColors(UserColors);
     }
 
-
+    effect->SetRandomColorsEnabled(effect->IsRandomColorsEnabled());
 
     ui->FPS_slider->setMinimum(0);
     ui->FPS_slider->setMaximum(speeds.size() - 1);

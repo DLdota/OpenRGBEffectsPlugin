@@ -123,7 +123,7 @@ void CrossingBeams::LoadCustomSettings(json Settings)
     if (Settings.contains("v_speed"))    v_speed    = Settings["v_speed"];
     if (Settings.contains("h_speed"))        h_speed        = Settings["h_speed"];
     if (Settings.contains("glow")) glow = Settings["glow"];
-    if (Settings.contains("thickness")) glow = Settings["thickness"];
+    if (Settings.contains("thickness")) thickness = Settings["thickness"];
 
     ui->v_speed->setValue(v_speed);
     ui->h_speed->setValue(h_speed);
