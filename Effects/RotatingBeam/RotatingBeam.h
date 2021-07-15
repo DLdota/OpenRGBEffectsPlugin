@@ -32,11 +32,14 @@ public:
 
 private slots:
     void on_mode_currentIndexChanged(int);
+    void on_thickness_valueChanged(int);
 
 private:
     Ui::RotatingBeam *ui;
 
     double progress = 0.0;
+
+    int thickness = 0;
 
     RGBColor GetColor(float, float, QLineF, float, float);
 

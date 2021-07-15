@@ -189,7 +189,7 @@ RGBColor RotatingBeam::GetColor(float x0, float y0, QLineF l, float w, float h)
 
     hsv_t hsv_tmp;
 
-    hsv_tmp.value = hsv1.value - hsv1.value * pow(distance / (0.5*(w+h)) , glow);
+    hsv_tmp.value = hsv1.value - hsv1.value * pow(distance / (0.5*(w+h)) , distance < thickness ? 1 : glow);
     hsv_tmp.hue = hsv1.hue;
     hsv_tmp.saturation = hsv1.saturation;
 
@@ -197,7 +197,7 @@ RGBColor RotatingBeam::GetColor(float x0, float y0, QLineF l, float w, float h)
 
     RGBColor color2 = RGBColor(hsv2rgb(&hsv2));
 
-    return ColorUtils::Interpolate(color2, color1, 1 - distance / ((w+h)) );
+    return ColorUtils::Interpolate(color2, color1, 1 - distance / (0.5*(w+h)) );
 }
 
 
@@ -240,14 +240,23 @@ void RotatingBeam::on_mode_currentIndexChanged(int value)
     mode = static_cast<RotatingBeamMode>(value);
 }
 
+void RotatingBeam::on_thickness_valueChanged(int value)
+{
+    thickness = value;
+}
+
 void RotatingBeam::LoadCustomSettings(json settings)
 {
     if(settings.contains("mode"))
         ui->mode->setCurrentIndex(settings["mode"]);
+
+    if(settings.contains("thickness"))
+        ui->thickness->setValue(settings["thickness"]);
 }
 
 json RotatingBeam::SaveCustomSettings(json settings)
 {
     settings["mode"] = mode;
+    settings["thickness"] = thickness;
     return settings;
 }
