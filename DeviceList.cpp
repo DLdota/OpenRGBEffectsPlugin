@@ -69,6 +69,10 @@ void DeviceList::InitControllersList()
             iteration_zones.push_back(controller_zone);
         }
 
+        if(iteration_zones.empty())
+        {
+            continue;
+        }
 
         DeviceListItem* item = new DeviceListItem(iteration_zones);
         ui->devices->setCellWidget(row++, 0, item);
