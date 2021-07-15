@@ -33,6 +33,7 @@ private slots:
     void on_v_speed_valueChanged(int);
     void on_h_speed_valueChanged(int);
     void on_glow_valueChanged(int);
+    void on_thickness_valueChanged(int);
 
 private:
     Ui::CrossingBeams *ui;
@@ -43,6 +44,7 @@ private:
     int v_speed = 1;
     int h_speed = 1;
     int glow = 1;
+    int thickness = 0;
 
     hsv_t hsv1;
     hsv_t hsv2;

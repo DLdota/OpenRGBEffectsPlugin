@@ -14,17 +14,16 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Glow</string>
+   <item row="3" column="1">
+    <widget class="QSlider" name="glow">
+     <property name="minimum">
+      <number>1</number>
      </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Horizontal speed</string>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
@@ -41,6 +40,26 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="0" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Glow</string>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="1">
     <widget class="QSlider" name="h_speed">
      <property name="minimum">
@@ -54,16 +73,10 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
-    <widget class="QSlider" name="glow">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Horizontal speed</string>
      </property>
     </widget>
    </item>
@@ -74,18 +87,19 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="2">
-    <spacer name="verticalSpacer">
+   <item row="4" column="1">
+    <widget class="QSlider" name="thickness">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Thickness</string>
      </property>
-    </spacer>
+    </widget>
    </item>
   </layout>
  </widget>

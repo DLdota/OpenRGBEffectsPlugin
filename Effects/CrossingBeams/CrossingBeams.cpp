@@ -94,10 +94,12 @@ RGBColor CrossingBeams::GetColor(unsigned int x, unsigned int y, unsigned int w,
     float y_progress = 0.5 * (1 + sine_y) * h;
 
     float distance_x = fabs(x_progress - x);
-    float distance_x_percent = std::min<float>(1,pow(distance_x / w, 0.01 * glow));
+    float distance_x_percent = std::min<float>(1,pow(distance_x / w,
+                                                     distance_x > thickness ? 0.01 * glow : 1));
 
     float distance_y = fabs(y_progress - y);
-    float distance_y_percent = std::min<float>(1,pow(distance_y / h, 0.01 * glow));
+    float distance_y_percent = std::min<float>(1, pow(distance_y / h,
+                                                      distance_y > thickness ? 0.01 * glow : 1));
 
     hsv_t hsv_tmp;
 
@@ -121,10 +123,12 @@ void CrossingBeams::LoadCustomSettings(json Settings)
     if (Settings.contains("v_speed"))    v_speed    = Settings["v_speed"];
     if (Settings.contains("h_speed"))        h_speed        = Settings["h_speed"];
     if (Settings.contains("glow")) glow = Settings["glow"];
+    if (Settings.contains("thickness")) glow = Settings["thickness"];
 
     ui->v_speed->setValue(v_speed);
     ui->h_speed->setValue(h_speed);
     ui->glow->setValue(glow);
+    ui->thickness->setValue(thickness);
 }
 
 json CrossingBeams::SaveCustomSettings(json Settings)
@@ -132,6 +136,7 @@ json CrossingBeams::SaveCustomSettings(json Settings)
     Settings["v_speed"]    = v_speed;
     Settings["h_speed"]        = h_speed;
     Settings["glow"] = glow;
+    Settings["thickness"] = thickness;
     return Settings;
 }
 
@@ -150,6 +155,10 @@ void CrossingBeams::on_glow_valueChanged(int value)
     glow = value;
 }
 
+void CrossingBeams::on_thickness_valueChanged(int value)
+{
+    thickness = value;
+}
 
 void CrossingBeams::SetUserColors(std::vector<RGBColor> colors)
 {
