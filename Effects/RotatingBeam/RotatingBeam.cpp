@@ -47,8 +47,8 @@ QLineF RotatingBeam::Rotate()
     {
     case CLOCKWISE:
     {
-        float x = cos(progress);
-        float y = sin(progress);
+        float x = 0.5 * (1 + cos(progress));
+        float y = 0.5 * (1 + sin(progress));
 
         p1.setX(x);
         p1.setY(y);
@@ -60,8 +60,8 @@ QLineF RotatingBeam::Rotate()
     }
     case COUNTER_CLOCKWISE:
     {
-        float x = cos(-progress);
-        float y = sin(-progress);
+        float x = 0.5 * (1 + cos(-progress));
+        float y = 0.5 * (1 + sin(-progress));
 
         p1.setX(x);
         p1.setY(y);
