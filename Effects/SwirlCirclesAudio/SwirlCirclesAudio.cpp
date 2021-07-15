@@ -279,11 +279,11 @@ RGBColor SwirlCirclesAudio::GetColor(unsigned int x, unsigned int y, unsigned in
     float glow_mult = 0.001 * Slider2Val;
 
     double distance1 = sqrt(pow(x1 - x, 2) + pow(y1 - y, 2));
-    float distance1_percent = pow(distance1 / (h+w), glow_mult * current_level);
+    float distance1_percent = distance1 < radius ? 1 / (0.000001 + current_level) : pow(distance1 / (h+w), glow_mult * current_level);
 
     hsv_t hsv_tmp;
 
-    hsv_tmp.value = hsv1.value * (1 - distance1_percent);
+    hsv_tmp.value = std::min<float>(255 , std::max<float>(0, hsv1.value * (1 - distance1_percent)));
     hsv_tmp.hue = hsv1.hue;
     hsv_tmp.saturation = hsv1.saturation;
 
@@ -293,9 +293,9 @@ RGBColor SwirlCirclesAudio::GetColor(unsigned int x, unsigned int y, unsigned in
     float x2 = w - x1;
 
     double distance2 = sqrt(pow(x2 - x, 2) + pow(y2 - y, 2));
-    float distance2_percent = pow(distance2 / (h+w),  glow_mult * current_level);
+    float distance2_percent = distance2 < radius ? 1 / (0.000001 + current_level) : pow(distance2 / (h+w), glow_mult * current_level);
 
-    hsv_tmp.value = hsv2.value * (1 - distance2_percent);
+    hsv_tmp.value = std::min<float>(255 , std::max<float>(0, hsv2.value * (1 - distance2_percent)));
     hsv_tmp.hue = hsv2.hue;
     hsv_tmp.saturation = hsv2.saturation;
 
@@ -392,12 +392,17 @@ void SwirlCirclesAudio::on_average_valueChanged(int value)
 {
     avg_size = value;
 }
+void SwirlCirclesAudio::on_radius_valueChanged(int value)
+{
+    radius = value;
+}
 
 json SwirlCirclesAudio::SaveCustomSettings(json Settings)
 {
     Settings["audio_device_idx"] = audio_device_idx;
     Settings["amplitude"] = amplitude;
     Settings["decay"] = decay;
+    Settings["radius"] = radius;
     return Settings;
 }
 
@@ -411,4 +416,7 @@ void SwirlCirclesAudio::LoadCustomSettings(json Settings)
 
     if (Settings.contains("decay"))
         ui->decay->setValue(Settings["decay"]);
+
+    if (Settings.contains("radius"))
+        ui->radius->setValue(Settings["radius"]);
 }

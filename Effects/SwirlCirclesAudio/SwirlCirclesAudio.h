@@ -37,6 +37,7 @@ private slots:
     void on_amplitude_valueChanged(int);
     void on_decay_valueChanged(int);
     void on_average_valueChanged(int);
+    void on_radius_valueChanged(int);
 
 private:
     Ui::SwirlCirclesAudio *ui;
@@ -60,6 +61,7 @@ private:
     float amplitude = 100.f;
     float decay = 85.f;
     int avg_size = 32;
+    int radius = 0;
 
     float current_level = 0.f;
 
