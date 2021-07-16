@@ -204,6 +204,7 @@ SOURCES +=                                                                      
     Effects/RotatingBeam/RotatingBeam.cpp                                                       \
     Effects/AudioStar/AudioStar.cpp                                                             \
     Effects/Sunrise/Sunrise.cpp                                                                 \
+    Effects/Marquee/Marquee.cpp                                                                 \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -241,6 +242,7 @@ HEADERS +=                                                                      
     Effects/RotatingBeam/RotatingBeam.h                                                         \
     Effects/AudioStar/AudioStar.h                                                               \
     Effects/Sunrise/Sunrise.h                                                                   \
+    Effects/Marquee/Marquee.h                                                                   \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -264,6 +266,7 @@ FORMS +=                                                                        
     Effects/RotatingBeam/RotatingBeam.ui                                                        \
     Effects/AudioStar/AudioStar.ui                                                              \
     Effects/Sunrise/Sunrise.ui                                                                  \
+    Effects/Marquee/Marquee.ui                                                                  \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #
