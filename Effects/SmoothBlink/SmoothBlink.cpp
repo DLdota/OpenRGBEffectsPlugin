@@ -130,7 +130,7 @@ void SmoothBlink::HandleSolidRendering(std::vector<ControllerZone*> controller_z
 
     for(ControllerZone* controller_zone : controller_zones)
     {
-        controller_zone->controller->SetAllLEDs(color);
+        controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, color);
     }
 }
 

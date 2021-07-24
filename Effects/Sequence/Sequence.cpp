@@ -68,9 +68,9 @@ void Sequence::StepEffect(std::vector<ControllerZone*> controller_zones)
         fade_mult = 1.f;
     }
 
-    for(unsigned int i = 0; i < controller_zones.size(); i++)
+    for(ControllerZone* controller_zone : controller_zones)
     {
-        controller_zones[i]->controller->SetAllLEDs(color);
+        controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, color);
     }
 
     progress += fade_mult * 0.1 * (float) Speed / (float) FPS;
