@@ -46,9 +46,12 @@ private:
     double time = 0;
     double random_fade_timer = 0;
 
-    RGBColor current_color;
-    RGBColor random_color;
-    RGBColor next_color;
+    RGBColor current_color_1;
+    RGBColor current_color_2;
+    RGBColor random_color_1;
+    RGBColor random_color_2;
+    RGBColor next_color_1;
+    RGBColor next_color_2;
 
     enum PulseMode {
         Saturation = 0,

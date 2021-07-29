@@ -25,7 +25,7 @@ SmoothBlink::SmoothBlink(QWidget *parent) :
     EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 0;
     EffectDetails.MinSpeed     = 0;
-    EffectDetails.UserColors   = 1;
+    EffectDetails.UserColors   = 2;
     EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
@@ -35,8 +35,10 @@ SmoothBlink::SmoothBlink(QWidget *parent) :
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
-    random_color = ColorUtils::RandomRGBColor();
-    next_color = ColorUtils::RandomRGBColor();
+    random_color_1 = ColorUtils::RandomRGBColor();
+    random_color_2 = ColorUtils::RandomRGBColor();
+    next_color_1 = ColorUtils::RandomRGBColor();
+    next_color_2 = ColorUtils::RandomRGBColor();
 
     ui->rendering->addItems({"Solid", "Circle"});
 
@@ -72,16 +74,19 @@ void SmoothBlink::StepEffect(std::vector<ControllerZone*> controller_zones)
     {
         if(random_fade_timer <= 0.5 * interval)
         {
-            current_color = ColorUtils::Interpolate(random_color, next_color, random_fade_timer / (0.5 * interval));
+            current_color_1 = ColorUtils::Interpolate(random_color_1, next_color_1, random_fade_timer / (0.5 * interval));
+            current_color_2 = ColorUtils::Interpolate(random_color_2, next_color_2, random_fade_timer / (0.5 * interval));
         }
         else
         {
-            random_color = next_color;
+            random_color_1 = next_color_1;
+            random_color_2 = next_color_2;
         }
     }
     else
     {
-        current_color = UserColors[0];
+        current_color_1 = UserColors[0];
+        current_color_2 = UserColors[1];
     }
 
     pulses_total_duration = pulses * pulse_duration;
@@ -118,7 +123,8 @@ void SmoothBlink::StepEffect(std::vector<ControllerZone*> controller_zones)
     if(time >= total_effect_duration)
     {
         time = time - total_effect_duration;
-        next_color = ColorUtils::RandomRGBColor();
+        next_color_1 = ColorUtils::RandomRGBColor();
+        next_color_2 = ColorUtils::RandomRGBColor();
         random_fade_timer = 0;
     }
 
@@ -126,7 +132,7 @@ void SmoothBlink::StepEffect(std::vector<ControllerZone*> controller_zones)
 
 void SmoothBlink::HandleSolidRendering(std::vector<ControllerZone*> controller_zones)
 {
-    RGBColor color = ColorUtils::Saturate(current_color, value);
+    RGBColor color = ColorUtils::Interpolate(current_color_1, current_color_2, value);
 
     for(ControllerZone* controller_zone : controller_zones)
     {
@@ -187,13 +193,13 @@ RGBColor SmoothBlink::GetColor(unsigned int x, unsigned int y, double cx, double
 {
     if(value >= 1)
     {
-        return current_color;
+        return current_color_2;
     }
 
     double distance = sqrt(pow(cx - x, 2) + pow(cy - y, 2));
     float distance_percent = distance / max_distance;
 
-    return ColorUtils::Saturate(current_color, std::min<double>(1,value + distance_percent));
+    return ColorUtils::Interpolate(current_color_1, current_color_2, std::min<double>(1,value + distance_percent));
 }
 
 void SmoothBlink::LoadCustomSettings(json settings)
