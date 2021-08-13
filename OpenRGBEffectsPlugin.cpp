@@ -45,7 +45,7 @@ QWidget* OpenRGBEffectsPlugin::GetWidget()
 
     RMPointer->WaitForDeviceDetection();
 
-    OpenRGBEffectTab* ui = new OpenRGBEffectTab(nullptr);
+    OpenRGBEffectTab* ui = new OpenRGBEffectTab();
 
     this->ui = ui;
 

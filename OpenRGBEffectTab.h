@@ -36,6 +36,8 @@ private slots:
     void on_plugin_infos_clicked();
     void on_profiles_currentIndexChanged(int);
 
+    void OnStopEffects();
+
 private:
     Ui::OpenRGBEffectTab *ui;
     EffectList* effect_list = nullptr;

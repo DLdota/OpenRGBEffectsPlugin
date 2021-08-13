@@ -6,11 +6,13 @@
 #include "OpenRGBEffectsPlugin.h"
 #include "PluginInfo.h"
 
-#include <QTabBar>
-#include <QTimer>
+#include <QAction>
 #include <QDialog>
 #include <QFile>
 #include <QInputDialog>
+#include <QTabBar>
+#include <QTimer>
+#include <QMainWindow>
 
 OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     QWidget(parent),
@@ -27,6 +29,20 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     QTimer::singleShot(2000, [=](){
         ReloadProfileList();
     });
+
+    for (QWidget *w : QApplication::topLevelWidgets())
+    {
+        if (QMainWindow* mainWin = qobject_cast<QMainWindow*>(w))
+        {
+            QAction* actionLightsOff = mainWin->findChild<QAction *>("ActionLightsOff");
+
+            if(actionLightsOff)
+            {
+                connect(actionLightsOff, SIGNAL(triggered()), this, SLOT(OnStopEffects()));
+                break;
+            }
+        }
+    }
 }
 
 OpenRGBEffectTab::~OpenRGBEffectTab()
@@ -429,4 +445,9 @@ void OpenRGBEffectTab::StopAll()
     {
         page->StopEffect();
     }
+}
+
+void OpenRGBEffectTab::OnStopEffects()
+{
+    StopAll();
 }
