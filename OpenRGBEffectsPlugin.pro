@@ -208,6 +208,7 @@ SOURCES +=                                                                      
     Effects/Comet/Comet.cpp                                                                     \
     Effects/Fill/Fill.cpp                                                                       \
     Effects/Swap/Swap.cpp                                                                       \
+    Effects/CustomMarquee/CustomMarquee.cpp                                                     \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -249,6 +250,7 @@ HEADERS +=                                                                      
     Effects/Comet/Comet.h                                                                       \
     Effects/Fill/Fill.h                                                                         \
     Effects/Swap/Swap.h                                                                         \
+    Effects/CustomMarquee/CustomMarquee.h                                                       \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -276,6 +278,7 @@ FORMS +=                                                                        
     Effects/Comet/Comet.ui                                                                      \
     Effects/Fill/Fill.ui                                                                        \
     Effects/Swap/Swap.ui                                                                        \
+    Effects/CustomMarquee/CustomMarquee.ui                                                      \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #
