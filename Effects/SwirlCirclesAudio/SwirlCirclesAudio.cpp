@@ -167,27 +167,19 @@ void SwirlCirclesAudio::StepEffect(std::vector<ControllerZone*> controller_zones
         sum1 += fft[k];
         sum2 += fft[255 - k];
     }
-
-    /*--------------------------------------------*\
-    | Apply averaging over given number of values  |
-    \*--------------------------------------------*/
-    sum1 = 0;
-    sum2 = 0;
-    for (k = 0; k < avg_size; k++)
-    {
-        sum1 += fft[k];
-        sum2 += fft[255 - k];
-    }
     /*------------------------------*\
     | Compute averages for end bars  |
     \*------------------------------*/
+
     sum1 = sum1 / k;
     sum2 = sum2 / k;
+
     for (k = 0; k < avg_size; k++)
     {
         fft[k] = sum1;
         fft[255 - k] = sum2;
     }
+
     for (int i = 0; i < (256 - avg_size); i += avg_size)
     {
         float sum = 0;
@@ -203,7 +195,6 @@ void SwirlCirclesAudio::StepEffect(std::vector<ControllerZone*> controller_zones
             fft[i + j] = avg;
         }
     }
-
 
     current_level = 0.f;
 

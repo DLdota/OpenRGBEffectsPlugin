@@ -134,8 +134,7 @@ void AudioStar::StepEffect(std::vector<ControllerZone*> controller_zones)
     apply_window(fft_tmp, win_hanning, 256);
 
     /*------------------------*\
-    | Run the FFT calculation  |    void EffectState(bool) override;
-
+    | Run the FFT calculation  |
     \*------------------------*/
     rfft(fft_tmp, 256, 1);
 
@@ -207,29 +206,22 @@ void AudioStar::StepEffect(std::vector<ControllerZone*> controller_zones)
         sum2 += fft[255 - k];
     }
 
-    /*--------------------------------------------*\
-    | Apply averaging over given number of values  |
-    \*--------------------------------------------*/
-    sum1 = 0;
-    sum2 = 0;
-    for (k = 0; k < avg_size; k++)
-    {
-        sum1 += fft[k];
-        sum2 += fft[255 - k];
-    }
     /*------------------------------*\
     | Compute averages for end bars  |
     \*------------------------------*/
     sum1 = sum1 / k;
     sum2 = sum2 / k;
+
     for (k = 0; k < avg_size; k++)
     {
         fft[k] = sum1;
         fft[255 - k] = sum2;
     }
+
     for (int i = 0; i < (256 - avg_size); i += avg_size)
     {
         float sum = 0;
+
         for (int j = 0; j < avg_size; j += 1)
         {
             sum += fft[i + j];

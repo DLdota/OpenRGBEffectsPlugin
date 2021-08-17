@@ -541,20 +541,7 @@ void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)
         fft[(i * 2) + 1] = fft[i * 2];
         fft[(i * 2) + 2] = fft[i * 2];
         fft[(i * 2) + 3] = fft[i * 2];
-    }
-
-
-    /*--------------------------------------------*\
-    | Apply averaging over given number of values  |
-    \*--------------------------------------------*/
-    int k;
-    float sum1 = 0;
-    float sum2 = 0;
-    for (k = 0; k < current_settings.avg_size; k++)
-    {
-        sum1 += fft[k];
-        sum2 += fft[255 - k];
-    }
+    } 
 
     if (current_settings.avg_mode == 0)
     {
