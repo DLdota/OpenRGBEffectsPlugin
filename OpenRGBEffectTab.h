@@ -17,6 +17,9 @@ public:
     explicit OpenRGBEffectTab(QWidget *parent = nullptr);
     ~OpenRGBEffectTab();
 
+    void StartAll();
+    void StopAll();
+
 public slots:
     void DeviceListChanged();
 
@@ -38,9 +41,6 @@ private:
     void LoadEffectSettings(json);
 
     void SetFirstTabStyle();
-
-    void StartAll();
-    void StopAll();
 };
 
 #endif // OPENRGBEFFECTTAB_H

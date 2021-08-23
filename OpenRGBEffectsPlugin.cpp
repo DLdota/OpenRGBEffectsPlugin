@@ -2,6 +2,8 @@
 #include "OpenRGBEffectTab.h"
 #include "EffectManager.h"
 #include "EffectList.h"
+#include <QSystemTrayIcon>
+#include <QMenu>
 
 bool OpenRGBEffectsPlugin::DarkTheme = false;
 ResourceManager* OpenRGBEffectsPlugin::RMPointer = nullptr;
@@ -20,7 +22,7 @@ OpenRGBPluginInfo OpenRGBEffectsPlugin::Initialize(bool Dt, ResourceManager *RM)
     return PInfo;
 }
 
-QWidget* OpenRGBEffectsPlugin::CreateGUI(QWidget*)
+QWidget* OpenRGBEffectsPlugin::CreateGUI(QWidget* parent)
 {
     printf("[OpenRGBEffectsPlugin] version %s (%s), build date %s\n", VERSION_STRING, GIT_COMMIT_ID, GIT_COMMIT_DATE);
 
@@ -37,6 +39,32 @@ QWidget* OpenRGBEffectsPlugin::CreateGUI(QWidget*)
 
     RMPointer->RegisterDeviceListChangeCallback(DeviceListChangedCallback, ui);
     RMPointer->RegisterDetectionProgressCallback(DeviceListChangedCallback, ui);
+
+    QSystemTrayIcon* trayIcon = parent->findChild<QSystemTrayIcon*>();
+
+    if(trayIcon)
+    {
+        QMenu* pluginsMenu = new QMenu("Effects", parent);
+
+        QAction* actionStartAll = new QAction("Start all effects", this);
+
+        connect(actionStartAll, &QAction::triggered, [ui](){
+            ui->StartAll();
+        });
+
+        pluginsMenu->addAction(actionStartAll);
+
+        QAction* actionStopAll = new QAction("Stop all effects", this);
+
+        connect(actionStopAll, &QAction::triggered, [ui](){
+            ui->StopAll();
+        });
+
+        pluginsMenu->addAction(actionStopAll);
+
+        trayIcon->contextMenu()->addMenu(pluginsMenu);
+    }
+
 
     return ui;
 }
