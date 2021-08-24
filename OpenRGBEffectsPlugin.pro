@@ -188,6 +188,7 @@ SOURCES +=                                                                      
     Effects/FractalMotion/FractalMotion.cpp                                                     \
     Effects/Hypnotoad/Hypnotoad.cpp                                                             \
     Effects/MotionPoint/MotionPoint.cpp                                                         \
+    Effects/MotionPoints/MotionPoints.cpp                                                         \
     Effects/NoiseMap/NoiseMap.cpp                                                               \
     Effects/RadialRainbow/RadialRainbow.cpp                                                     \
     Effects/Sequence/Sequence.cpp                                                               \
@@ -232,6 +233,7 @@ HEADERS +=                                                                      
     Effects/FractalMotion/FractalMotion.h                                                       \
     Effects/Hypnotoad/Hypnotoad.h                                                               \
     Effects/MotionPoint/MotionPoint.h                                                           \
+    Effects/MotionPoints/MotionPoints.h                                                           \
     Effects/NoiseMap/NoiseMap.h                                                                 \
     Effects/RadialRainbow/RadialRainbow.h                                                       \
     Effects/Sequence/Sequence.h                                                                 \
@@ -262,6 +264,7 @@ FORMS +=                                                                        
     Effects/FractalMotion/FractalMotion.ui                                                      \
     Effects/Hypnotoad/Hypnotoad.ui                                                              \
     Effects/MotionPoint/MotionPoint.ui                                                          \
+    Effects/MotionPoints/MotionPoints.ui                                                          \
     Effects/NoiseMap/NoiseMap.ui                                                                \
     Effects/RadialRainbow/RadialRainbow.ui                                                      \
     Effects/Sequence/Sequence.ui                                                                \

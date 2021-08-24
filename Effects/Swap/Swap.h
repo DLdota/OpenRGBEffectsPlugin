@@ -35,7 +35,6 @@ private:
     RGBColor random1;
     RGBColor random2;
 
-
     double time = 0.0;
     double progress = 0.0;
     bool dir = 0;
