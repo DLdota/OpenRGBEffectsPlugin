@@ -1,6 +1,7 @@
 #include "OpenRGBEffectsPlugin.h"
 #include "EffectManager.h"
 #include "EffectList.h"
+#include "OpenRGBEffectSettings.h"
 #include <QSystemTrayIcon>
 #include <QMenu>
 
@@ -63,6 +64,10 @@ QMenu* OpenRGBEffectsPlugin::GetTrayMenu()
 {
     QMenu* pluginsMenu = new QMenu("Effects", nullptr);
 
+    QMenu* profilesMenu = new QMenu("Profiles", pluginsMenu);
+
+    // START ALL EFFECTS
+
     QAction* actionStartAll = new QAction("Start all effects", this);
 
     OpenRGBEffectTab* ui = this->ui;
@@ -73,6 +78,8 @@ QMenu* OpenRGBEffectsPlugin::GetTrayMenu()
 
     pluginsMenu->addAction(actionStartAll);
 
+    // STOP ALL EFFECTS
+
     QAction* actionStopAll = new QAction("Stop all effects", this);
 
     connect(actionStopAll, &QAction::triggered, [ui](){
@@ -80,6 +87,27 @@ QMenu* OpenRGBEffectsPlugin::GetTrayMenu()
     });
 
     pluginsMenu->addAction(actionStopAll);
+
+    // PROFILES SHORTUCTS
+
+    connect(ui, &OpenRGBEffectTab::ProfileListUpdated, [=](){
+        profilesMenu->clear();
+
+        std::vector<std::string> profiles = OpenRGBEffectSettings::ListProfiles();
+
+        for(const std::string& profile: profiles)
+        {
+            QAction* profileAction = new QAction(QString::fromStdString(profile), this);
+
+            connect(profileAction, &QAction::triggered, [ui, profile](){
+                ui->LoadProfile(profile);
+            });
+
+            profilesMenu->addAction(profileAction);
+        }
+    });
+
+    pluginsMenu->addMenu(profilesMenu);
 
     return(pluginsMenu);
 }

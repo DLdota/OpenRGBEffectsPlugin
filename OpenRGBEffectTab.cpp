@@ -10,6 +10,7 @@
 #include <QTimer>
 #include <QDialog>
 #include <QFile>
+#include <QInputDialog>
 
 OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     QWidget(parent),
@@ -24,13 +25,18 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     InitEffectTabs();
 
     QTimer::singleShot(1000, [=](){
-        LoadEffectsFromSettings();
+        ReloadProfileList();
     });
 }
 
 OpenRGBEffectTab::~OpenRGBEffectTab()
 {
     delete ui;
+}
+
+void OpenRGBEffectTab::LoadProfile(std::string profile)
+{
+    ui->profiles->setCurrentText(QString::fromStdString(profile));
 }
 
 void OpenRGBEffectTab::InitEffectTabs()
@@ -70,14 +76,14 @@ void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
 {
     int tab_position = ui->EffectTabs->count();
 
-    EffectTabHeader* effect_header = new EffectTabHeader(nullptr, effect);    
+    EffectTabHeader* effect_header = new EffectTabHeader(nullptr, effect);
     OpenRGBEffectPage* effect_page = new OpenRGBEffectPage(nullptr, effect);
 
-    ui->EffectTabs->insertTab(tab_position, effect_page , "");    
+    ui->EffectTabs->insertTab(tab_position, effect_page , "");
     ui->EffectTabs->tabBar()->setTabButton(tab_position, QTabBar::RightSide, effect_header);
 
     connect(effect_page, &OpenRGBEffectPage::EffectState, [=](bool state){
-       effect_header->ToogleRunningIndicator(state);
+        effect_header->ToogleRunningIndicator(state);
     });
 
     connect(effect_header, &EffectTabHeader::CloseRequest, [=](){
@@ -113,6 +119,44 @@ void OpenRGBEffectTab::DeviceListChanged()
 
     printf("[OpenRGBEffectsPlugin] Init device list\n");
     ui->device_list->InitControllersList();
+}
+
+void OpenRGBEffectTab::ReloadProfileList()
+{
+    std::vector<std::string> profiles = OpenRGBEffectSettings::ListProfiles();
+
+    ui->profiles->clear();
+
+    for (const std::string& file_name: profiles)
+    {
+        ui->profiles->addItem(QString::fromStdString(file_name));
+    }
+
+    emit ProfileListUpdated();
+}
+
+void OpenRGBEffectTab::on_profiles_currentIndexChanged(int)
+{
+    printf("Selecting profile\n");
+
+    StopAll();
+    ClearAll();
+
+    LoadEffectsFromSettings();
+}
+
+void OpenRGBEffectTab::ClearAll()
+{
+    for(OpenRGBEffectPage* effect_page: ui->EffectTabs->findChildren<OpenRGBEffectPage*>())
+    {
+        int tab_idx = ui->EffectTabs->indexOf(effect_page);
+        ui->EffectTabs->removeTab(tab_idx);
+        delete effect_page;
+    }
+
+    effect_list->ShowStartStopButton(false);
+
+    EffectManager::Get()->ClearAssignments();
 }
 
 void OpenRGBEffectTab::on_EffectTabs_currentChanged(int current)
@@ -186,66 +230,86 @@ void OpenRGBEffectTab::on_plugin_infos_clicked()
 
 void OpenRGBEffectTab::on_save_settings_clicked()
 {
-    std::map<RGBEffect*, std::vector<ControllerZone*>> effect_zones = EffectManager::Get()->GetEffectsMapping();
-    std::map<RGBEffect*, std::vector<ControllerZone*>>::iterator it;
+    QString current_text = ui->profiles->currentText();
 
-    json settings;
+    bool ok;
 
-    settings["version"] = OpenRGBEffectSettings::version;
-
-    std::vector<json> effects_settings;
-
-    QList<OpenRGBEffectPage*> pages = ui->EffectTabs->findChildren<OpenRGBEffectPage*>();
-
-    for(OpenRGBEffectPage* page: pages)
+    QString profile_name = QInputDialog::getText(this, tr("Save profile"),
+                                                 tr("Profile name:"), QLineEdit::Normal,
+                                                 current_text, &ok);
+    if (ok && !profile_name.isEmpty())
     {
-        RGBEffect* effect = page->GetEffect();
-        std::vector<ControllerZone*> controller_zones = effect_zones[effect];
+        std::map<RGBEffect*, std::vector<ControllerZone*>> effect_zones = EffectManager::Get()->GetEffectsMapping();
+        std::map<RGBEffect*, std::vector<ControllerZone*>>::iterator it;
 
-        json effect_settings;
+        json settings;
 
-        effect_settings["EffectClassName"] = effect->EffectDetails.EffectClassName;
-        effect_settings["FPS"] = effect->GetFPS();
-        effect_settings["Speed"] = effect->GetSpeed();
-        effect_settings["Slider2Val"] = effect->GetSlider2Val();
-        effect_settings["AutoStart"] = effect->IsAutoStart();
-        effect_settings["RandomColors"] = effect->IsRandomColorsEnabled();
-        effect_settings["AllowOnlyFirst"] = effect->IsOnlyFirstColorEnabled();
+        settings["version"] = OpenRGBEffectSettings::version;
 
-        std::vector<RGBColor> colors = effect->GetUserColors();
+        std::vector<json> effects_settings;
 
-        for (unsigned int c = 0; c < colors.size(); c++)
+        QList<OpenRGBEffectPage*> pages = ui->EffectTabs->findChildren<OpenRGBEffectPage*>();
+
+        for(OpenRGBEffectPage* page: pages)
         {
-            effect_settings["UserColors"][c] = colors[c];
+            RGBEffect* effect = page->GetEffect();
+            std::vector<ControllerZone*> controller_zones = effect_zones[effect];
+
+
+            json effect_settings;
+
+            effect_settings["EffectClassName"] = effect->EffectDetails.EffectClassName;
+            effect_settings["FPS"] = effect->GetFPS();
+            effect_settings["Speed"] = effect->GetSpeed();
+            effect_settings["Slider2Val"] = effect->GetSlider2Val();
+            effect_settings["AutoStart"] = effect->IsAutoStart();
+            effect_settings["RandomColors"] = effect->IsRandomColorsEnabled();
+            effect_settings["AllowOnlyFirst"] = effect->IsOnlyFirstColorEnabled();
+
+            std::vector<RGBColor> colors = effect->GetUserColors();
+
+            for (unsigned int c = 0; c < colors.size(); c++)
+            {
+                effect_settings["UserColors"][c] = colors[c];
+            }
+
+            if (effect->EffectDetails.HasCustomSettings)
+            {
+                json j;
+                effect_settings["CustomSettings"] = effect->SaveCustomSettings(j);
+            }
+
+            std::vector<json> zones;
+
+            for(ControllerZone* controller_zone: controller_zones)
+            {
+                zones.push_back(controller_zone->to_json());
+            }
+
+            effect_settings["ControllerZones"] = zones;
+
+            effects_settings.push_back(effect_settings);
         }
 
-        if (effect->EffectDetails.HasCustomSettings)
-        {
-            json j;
-            effect_settings["CustomSettings"] = effect->SaveCustomSettings(j);
+        settings["Effects"] = effects_settings;
+
+        OpenRGBEffectSettings::SaveUserSettings(settings, profile_name.toStdString());
+
+        if(ui->profiles->findText(profile_name) == -1){
+            ui->profiles->addItem(profile_name);
+            ui->profiles->setCurrentText(profile_name);
+            emit ProfileListUpdated();
         }
-
-        std::vector<json> zones;
-
-        for(ControllerZone* controller_zone: controller_zones)
-        {
-            zones.push_back(controller_zone->to_json());
-        }
-
-        effect_settings["ControllerZones"] = zones;
-
-        effects_settings.push_back(effect_settings);
     }
-
-    settings["Effects"] = effects_settings;
-
-    OpenRGBEffectSettings::SaveUserSettings(settings);
 }
 
 void OpenRGBEffectTab::LoadEffectsFromSettings()
 {
+    QString profile = ui->profiles->currentText();
+
     printf("[OpenRGBEffectsPlugin] Loading effects settings if any.\n");
-    json settings = OpenRGBEffectSettings::LoadUserSettings();
+
+    json settings = OpenRGBEffectSettings::LoadUserSettings(profile.toStdString());
 
     if(!settings.contains("version") || settings["version"] != OpenRGBEffectSettings::version)
     {
@@ -273,8 +337,6 @@ void OpenRGBEffectTab::LoadEffectsFromSettings()
 
 void OpenRGBEffectTab::LoadEffectSettings(json effect_settings)
 {
-    //std::vector<RGBController*> controllers = OpenRGBEffectsPlugin::RMPointer->GetRGBControllers();
-
     std::string name = effect_settings["EffectClassName"];
 
     std::vector<RGBColor> colors;
@@ -289,7 +351,7 @@ void OpenRGBEffectTab::LoadEffectSettings(json effect_settings)
     json zones = effect_settings["ControllerZones"];
 
     for(auto j : zones)
-    {        
+    {
         for(ControllerZone* controller_zone: ui->device_list->GetControllerZones())
         {
             if(

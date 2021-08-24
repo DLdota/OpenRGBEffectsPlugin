@@ -74,7 +74,7 @@
      <property name="lineWidth">
       <number>1</number>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0,0">
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0,0,0">
       <property name="spacing">
        <number>9</number>
       </property>
@@ -99,6 +99,9 @@
          <string>Save settings</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="profiles"/>
       </item>
       <item>
        <widget class="QPushButton" name="plugin_infos">

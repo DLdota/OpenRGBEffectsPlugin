@@ -13,8 +13,9 @@ class OpenRGBEffectSettings
 {
 
 public:
-    static void SaveUserSettings(json UserSettings);
-    static json LoadUserSettings();
+    static void SaveUserSettings(json UserSettings, std::string filename = "Default");
+    static json LoadUserSettings(std::string filename = "Default");
+    static std::vector<std::string> ListProfiles();
 
     static void SaveEffectPattern(json, std::string, std::string);
     static std::vector<std::string> ListPattern(std::string);
@@ -24,9 +25,11 @@ public:
 
 private:
     static bool CreateSettingsDirectory();
+    static bool CreateEffectProfilesDirectory();
     static bool CreateEffectPatternsDirectory(std::string);
 
     static const std::string SettingsFolder;
+    static const std::string ProfilesFolder;
     static const std::string PatternsFolder;
     static const std::string SettingsFileName;
 };

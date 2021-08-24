@@ -20,14 +20,21 @@ public:
     void StartAll();
     void StopAll();
 
+    void LoadProfile(std::string);
+
+signals:
+    void ProfileListUpdated();
+
 public slots:
     void DeviceListChanged();
+    void ReloadProfileList();
 
 private slots:
     void on_device_list_SelectionChanged();
     void on_EffectTabs_currentChanged(int);
     void on_save_settings_clicked();
     void on_plugin_infos_clicked();
+    void on_profiles_currentIndexChanged(int);
 
 private:
     Ui::OpenRGBEffectTab *ui;
@@ -41,6 +48,8 @@ private:
     void LoadEffectSettings(json);
 
     void SetFirstTabStyle();
+
+    void ClearAll();
 };
 
 #endif // OPENRGBEFFECTTAB_H

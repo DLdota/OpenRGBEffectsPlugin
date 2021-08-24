@@ -7,10 +7,11 @@
 unsigned int OpenRGBEffectSettings::version = 2;
 
 const std::string OpenRGBEffectSettings::SettingsFolder     = "plugins/settings/";
+const std::string OpenRGBEffectSettings::ProfilesFolder     = OpenRGBEffectSettings::SettingsFolder + "effect-profiles/";
 const std::string OpenRGBEffectSettings::PatternsFolder     = OpenRGBEffectSettings::SettingsFolder + "effect-patterns/";
 const std::string OpenRGBEffectSettings::SettingsFileName   = "EffectSettings.json";
 
-void OpenRGBEffectSettings::SaveUserSettings(json Settings)
+void OpenRGBEffectSettings::SaveUserSettings(json Settings, std::string filename)
 {
     if(!CreateSettingsDirectory())
     {
@@ -18,7 +19,13 @@ void OpenRGBEffectSettings::SaveUserSettings(json Settings)
         return;
     }
 
-    std::ofstream EffectFile((OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() + SettingsFolder + SettingsFileName), std::ios::out | std::ios::binary);
+    if(!CreateEffectProfilesDirectory())
+    {
+        printf("Cannot create profiles directory.\n");
+        return;
+    }
+
+    std::ofstream EffectFile((OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() + ProfilesFolder + filename), std::ios::out | std::ios::binary);
 
     if(EffectFile)
     {
@@ -29,15 +36,28 @@ void OpenRGBEffectSettings::SaveUserSettings(json Settings)
         {
             printf("Cannot write settings: %s\n", e.what());
         }
+
         EffectFile.close();
     }
 }
 
-json OpenRGBEffectSettings::LoadUserSettings()
+json OpenRGBEffectSettings::LoadUserSettings(std::string filename)
 {
     json Settings;
 
-    std::ifstream SFile(OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() + SettingsFolder + SettingsFileName, std::ios::in | std::ios::binary);
+    if(!CreateSettingsDirectory())
+    {
+        printf("Cannot create settings directory.\n");
+        return Settings;
+    }
+
+    if(!CreateEffectProfilesDirectory())
+    {
+        printf("Cannot create profiles directory.\n");
+        return Settings;
+    }
+
+    std::ifstream SFile(OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() + ProfilesFolder + filename, std::ios::in | std::ios::binary);
 
     if(SFile)
     {
@@ -79,6 +99,18 @@ bool OpenRGBEffectSettings::CreateEffectPatternsDirectory(std::string effect_nam
     return filesystem::create_directories(directory);
 }
 
+bool OpenRGBEffectSettings::CreateEffectProfilesDirectory()
+{
+    std::string directory = OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() + ProfilesFolder;
+
+    if(filesystem::exists(directory))
+    {
+        return true;
+    }
+
+    return filesystem::create_directories(directory);
+}
+
 void OpenRGBEffectSettings::SaveEffectPattern(json content, std::string effect_name, std::string file_name)
 {
     if(!CreateEffectPatternsDirectory(effect_name))
@@ -98,6 +130,7 @@ void OpenRGBEffectSettings::SaveEffectPattern(json content, std::string effect_n
         {
             printf("Cannot write pattern file: %s\n", e.what());
         }
+
         PatternFile.close();
     }
 }
@@ -105,6 +138,24 @@ void OpenRGBEffectSettings::SaveEffectPattern(json content, std::string effect_n
 std::vector<std::string> OpenRGBEffectSettings::ListPattern(std::string effect_name)
 {
     std::string path = OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() + PatternsFolder + effect_name;
+
+    std::vector<std::string> filenames;
+
+    if(filesystem::exists(path))
+    {
+        for (filesystem::directory_entry entry : filesystem::directory_iterator(path))
+        {
+            filenames.push_back(entry.path().filename().u8string());
+        }
+    }
+
+    return filenames;
+}
+
+
+std::vector<std::string> OpenRGBEffectSettings::ListProfiles()
+{
+    std::string path = OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() + ProfilesFolder;
 
     std::vector<std::string> filenames;
 
