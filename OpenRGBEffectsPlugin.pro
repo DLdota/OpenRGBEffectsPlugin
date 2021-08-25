@@ -131,7 +131,7 @@ HEADERS +=                                                                      
     PluginInfo.h                                                                                \
     PreviewWidget.h                                                                             \
     ZoneListItem.h                                                                              \
-    AudioManager.h                                                                              \
+    AudioManager.h                                                                              \    
 
 SOURCES +=                                                                                      \
     ControllerZoneList.cpp                                                                      \
@@ -188,7 +188,7 @@ SOURCES +=                                                                      
     Effects/FractalMotion/FractalMotion.cpp                                                     \
     Effects/Hypnotoad/Hypnotoad.cpp                                                             \
     Effects/MotionPoint/MotionPoint.cpp                                                         \
-    Effects/MotionPoints/MotionPoints.cpp                                                         \
+    Effects/MotionPoints/MotionPoints.cpp                                                       \
     Effects/NoiseMap/NoiseMap.cpp                                                               \
     Effects/RadialRainbow/RadialRainbow.cpp                                                     \
     Effects/Sequence/Sequence.cpp                                                               \
@@ -212,6 +212,7 @@ SOURCES +=                                                                      
     Effects/CustomMarquee/CustomMarquee.cpp                                                     \
     Effects/Mosaic/Mosaic.cpp                                                                   \
     Effects/Bloom/Bloom.cpp                                                                     \
+    Effects/Spiral/Spiral.cpp                                                                   \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -234,7 +235,7 @@ HEADERS +=                                                                      
     Effects/FractalMotion/FractalMotion.h                                                       \
     Effects/Hypnotoad/Hypnotoad.h                                                               \
     Effects/MotionPoint/MotionPoint.h                                                           \
-    Effects/MotionPoints/MotionPoints.h                                                           \
+    Effects/MotionPoints/MotionPoints.h                                                         \
     Effects/NoiseMap/NoiseMap.h                                                                 \
     Effects/RadialRainbow/RadialRainbow.h                                                       \
     Effects/Sequence/Sequence.h                                                                 \
@@ -257,6 +258,7 @@ HEADERS +=                                                                      
     Effects/CustomMarquee/CustomMarquee.h                                                       \
     Effects/Mosaic/Mosaic.h                                                                     \
     Effects/Bloom/Bloom.h                                                                       \
+    Effects/Spiral/Spiral.h                                                                     \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -266,7 +268,7 @@ FORMS +=                                                                        
     Effects/FractalMotion/FractalMotion.ui                                                      \
     Effects/Hypnotoad/Hypnotoad.ui                                                              \
     Effects/MotionPoint/MotionPoint.ui                                                          \
-    Effects/MotionPoints/MotionPoints.ui                                                          \
+    Effects/MotionPoints/MotionPoints.ui                                                        \
     Effects/NoiseMap/NoiseMap.ui                                                                \
     Effects/RadialRainbow/RadialRainbow.ui                                                      \
     Effects/Sequence/Sequence.ui                                                                \
@@ -288,6 +290,7 @@ FORMS +=                                                                        
     Effects/CustomMarquee/CustomMarquee.ui                                                      \
     Effects/Mosaic/Mosaic.ui                                                                    \
     Effects/Bloom/Bloom.ui                                                                      \
+    Effects/Spiral/Spiral.ui                                                                    \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #
