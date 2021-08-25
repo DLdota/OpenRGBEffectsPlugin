@@ -215,6 +215,8 @@ SOURCES +=                                                                      
     Effects/Spiral/Spiral.cpp                                                                   \
     Effects/RotatingRainbow/RotatingRainbow.cpp                                                 \
     Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.cpp                                     \
+    Effects/Layers/Layers.cpp                                                                   \
+    Effects/Layers/LayerEntry.cpp                                                               \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -263,6 +265,8 @@ HEADERS +=                                                                      
     Effects/Spiral/Spiral.h                                                                     \
     Effects/RotatingRainbow/RotatingRainbow.h                                                   \
     Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.h                                       \
+    Effects/Layers/Layers.h                                                                     \
+    Effects/Layers/LayerEntry.h                                                                 \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -297,6 +301,8 @@ FORMS +=                                                                        
     Effects/Spiral/Spiral.ui                                                                    \
     Effects/RotatingRainbow/RotatingRainbow.ui                                                  \
     Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.ui                                      \
+    Effects/Layers/Layers.ui                                                                    \
+    Effects/Layers/LayerEntry.ui                                                                \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #
