@@ -302,6 +302,7 @@ void OpenRGBEffectTab::LoadEffectSettings(json effect_settings)
                     controller_zone->zone_idx                == j["zone_idx"]
                     )
             {
+                controller_zone->reverse = j["reverse"];
                 saved_zones.push_back(controller_zone);
                 break;
             }
