@@ -195,10 +195,12 @@ void OpenRGBEffectTab::on_save_settings_clicked()
 
     std::vector<json> effects_settings;
 
-    for (it = effect_zones.begin(); it != effect_zones.end(); it++)
+    QList<OpenRGBEffectPage*> pages = ui->EffectTabs->findChildren<OpenRGBEffectPage*>();
+
+    for(OpenRGBEffectPage* page: pages)
     {
-        RGBEffect* effect = it->first;
-        std::vector<ControllerZone*> controller_zones = it->second;
+        RGBEffect* effect = page->GetEffect();
+        std::vector<ControllerZone*> controller_zones = effect_zones[effect];
 
         json effect_settings;
 
