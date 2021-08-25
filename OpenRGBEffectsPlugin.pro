@@ -214,6 +214,7 @@ SOURCES +=                                                                      
     Effects/Bloom/Bloom.cpp                                                                     \
     Effects/Spiral/Spiral.cpp                                                                   \
     Effects/RotatingRainbow/RotatingRainbow.cpp                                                 \
+    Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.cpp                                     \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -261,6 +262,7 @@ HEADERS +=                                                                      
     Effects/Bloom/Bloom.h                                                                       \
     Effects/Spiral/Spiral.h                                                                     \
     Effects/RotatingRainbow/RotatingRainbow.h                                                   \
+    Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.h                                       \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -294,6 +296,7 @@ FORMS +=                                                                        
     Effects/Bloom/Bloom.ui                                                                      \
     Effects/Spiral/Spiral.ui                                                                    \
     Effects/RotatingRainbow/RotatingRainbow.ui                                                  \
+    Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.ui                                      \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #
