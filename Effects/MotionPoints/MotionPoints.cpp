@@ -109,6 +109,8 @@ void MotionPoints::SetSlider2Val(unsigned int value)
     Slider2Val = value;
     points.clear();
 
+    UserColors.resize(2);
+
     for(unsigned int i = 0; i < value; i++)
     {
         MovingPoint point;
