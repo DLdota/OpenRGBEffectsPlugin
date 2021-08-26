@@ -109,6 +109,11 @@ public:
                     );
     };
 
+    static RGBColor Mask(RGBColor color1, RGBColor color2)
+    {
+        return color2 > 0 ? color1 : 0;
+    };
+
     static RGBColor OFF()
     {
         return ToRGBColor(0,0,0);
@@ -154,6 +159,11 @@ private:
     static unsigned char BurnChanel(unsigned char a, unsigned char b)
     {
         return 0 == a ? a : std::max<int>(0, 255 - ((255 - b) << 8) / a);
+    }
+
+    static unsigned char MaskChanel(unsigned char a, unsigned char b)
+    {
+        return b > 0 ? a : 0;
     }
 };
 

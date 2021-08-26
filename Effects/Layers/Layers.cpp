@@ -107,6 +107,7 @@ RGBColor Layers::ApplyComposerFn(RGBColor c1, RGBColor c2, EffectComposerFn fn)
     case OVERLAY:  return ColorUtils::Overlay(c1, c2);
     case DODGE:    return ColorUtils::Dodge(c1, c2);
     case BURN:     return ColorUtils::Burn(c1, c2);
+    case MASK:     return ColorUtils::Mask(c1, c2);
     default:       return ColorUtils::OFF();
     }
 }

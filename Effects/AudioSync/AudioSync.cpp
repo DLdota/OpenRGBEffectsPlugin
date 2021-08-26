@@ -778,10 +778,10 @@ RGBColor AudioSync::GetColor(int row, int col, int zone_width, int zone_height)
 
     case RollMode::RADIAL:
 
-        int center_x = zone_width/2;
-        int center_y = zone_height/2;
+        float center_x = (zone_width - 1) * 0.5;
+        float center_y = (zone_height - 1) * 0.5;
 
-        int distance = sqrt(pow(center_x - row, 2) + pow(center_y - col, 2));
+        int distance = round(sqrt(pow(center_x - row, 2) + pow(center_y - col, 2)));
 
         return colors_rotation[distance];
     }
