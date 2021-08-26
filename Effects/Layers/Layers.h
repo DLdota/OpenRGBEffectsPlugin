@@ -20,6 +20,8 @@ enum EffectComposerFn
     DODGE = 3,
     BURN = 4,
     MASK = 5,
+    LIGHTEN = 6,
+    DARKEN = 7
 };
 
 class Layer
@@ -65,7 +67,9 @@ private:
         "Overlay",
         "Dodge",
         "Burn",
-        "Mask"
+        "Mask",
+        "Lighten",
+        "Darken"
     };
 
     std::vector<Layer*> layers;

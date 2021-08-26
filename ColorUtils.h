@@ -109,6 +109,24 @@ public:
                     );
     };
 
+    static RGBColor Lighten(RGBColor color1, RGBColor color2)
+    {
+        return ToRGBColor(
+                    LightenChanel(RGBGetRValue(color1), RGBGetRValue(color2)),
+                    LightenChanel(RGBGetGValue(color1), RGBGetGValue(color2)),
+                    LightenChanel(RGBGetBValue(color1), RGBGetBValue(color2))
+                    );
+    };
+
+    static RGBColor Darken(RGBColor color1, RGBColor color2)
+    {
+        return ToRGBColor(
+                    DarkenChanel(RGBGetRValue(color1), RGBGetRValue(color2)),
+                    DarkenChanel(RGBGetGValue(color1), RGBGetGValue(color2)),
+                    DarkenChanel(RGBGetBValue(color1), RGBGetBValue(color2))
+                    );
+    };
+
     static RGBColor Mask(RGBColor color1, RGBColor color2)
     {
         return color2 > 0 ? color1 : 0;
@@ -165,6 +183,17 @@ private:
     {
         return b > 0 ? a : 0;
     }
+
+    static unsigned char LightenChanel(unsigned char a, unsigned char b)
+    {
+        return std::max<int>(a, b);
+    }
+
+    static unsigned char DarkenChanel(unsigned char a, unsigned char b)
+    {
+        return std::min<int>(a, b);
+    }
+
 };
 
 #endif // COLORUTILS_H
