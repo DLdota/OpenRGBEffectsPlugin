@@ -70,12 +70,12 @@ void ColorWheelEffect::StepEffect(std::vector<ControllerZone*> controller_zones)
             int cols = controller_zones[i]->matrix_map_width();
             int rows = controller_zones[i]->matrix_map_height();
 
-            double cx = cols * cx_shift_mult;
-            double cy = rows * cy_shift_mult;
+            double cx = (cols - 1) * cx_shift_mult;
+            double cy = (rows - 1) * cy_shift_mult;
 
             for (int col_id = 0; col_id < cols; col_id++)
             {
-                for (int row_id = 0; row_id < rows; row_id++)
+                 for (int row_id = 0; row_id < rows; row_id++)
                 {
                     RGBColor color = GetColor(col_id, row_id, cx, cy, reverse);
                     int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];

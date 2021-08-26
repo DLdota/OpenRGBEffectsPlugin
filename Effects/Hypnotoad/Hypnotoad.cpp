@@ -61,7 +61,7 @@ void Hypnotoad::StepEffect(std::vector<ControllerZone*> controller_zones)
             unsigned int width = controller_zone->leds_count();
             unsigned int height = 1;
 
-            float cx = width * cx_shift_mult;
+            float cx = (width-1) * cx_shift_mult;
             float cy = height * cy_shift_mult;
 
             for(unsigned int i = 0; i < width; i++)
@@ -77,8 +77,8 @@ void Hypnotoad::StepEffect(std::vector<ControllerZone*> controller_zones)
             unsigned int height = controller_zone->matrix_map_height();
             unsigned int * map = controller_zone->map();
 
-            float cx = width * cx_shift_mult;
-            float cy = height * cy_shift_mult;
+            float cx = (width-1) * cx_shift_mult;
+            float cy = (height-1) * cy_shift_mult;
 
             for(unsigned int h = 0; h < height; h++)
             {

@@ -70,8 +70,8 @@ void RadialRainbow::StepEffect(std::vector<ControllerZone*> controller_zones)
             int cols = controller_zones[i]->matrix_map_width();
             int rows = controller_zones[i]->matrix_map_height();
 
-            double cx = cols * cx_shift_mult;
-            double cy = rows * cy_shift_mult;
+            double cx = (cols - 1) * cx_shift_mult;
+            double cy = (rows - 1) * cy_shift_mult;
 
             for (int col_id = 0; col_id < cols; col_id++)
             {
@@ -136,7 +136,7 @@ void RadialRainbow::LoadCustomSettings(json settings)
 {
     if(settings.contains("cx")) cx_shift = settings["cx"];
     if(settings.contains("cy")) cy_shift = settings["cy"];
-    if(settings.contains("shape")) cy_shift = settings["shape"];
+    if(settings.contains("shape")) shape = settings["shape"];
 
     ui->cx->setValue(cx_shift);
     ui->cy->setValue(cy_shift);

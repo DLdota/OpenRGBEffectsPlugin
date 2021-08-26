@@ -61,11 +61,14 @@ void RotatingRainbow::StepEffect(std::vector<ControllerZone*> controller_zones)
             int cols = controller_zones[i]->matrix_map_width();
             int rows = controller_zones[i]->matrix_map_height();
 
+            float cx = (cols - 1) * 0.5;
+            float cy = (rows - 1) * 0.5;
+
             for (int col_id = 0; col_id < cols; col_id++)
             {
                 for (int row_id = 0; row_id < rows; row_id++)
                 {
-                   RGBColor color = GetColor(col_id, row_id, cols * 0.5, rows * 0.5, reverse);
+                   RGBColor color = GetColor(col_id, row_id, cx, cy, reverse);
                    int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
                    controller_zones[i]->controller->SetLED(start_idx + LedID, color);
                 }
