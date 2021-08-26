@@ -125,15 +125,14 @@ void CustomMarquee::ResetColors()
 
 }
 
-
 void CustomMarquee::on_colors_count_spinBox_valueChanged(int)
 {
     ResetColors();
 }
 
-
 void CustomMarquee::LoadCustomSettings(json settings)
-{    if (settings.contains("colors"))
+{
+    if (settings.contains("colors"))
     {
         colors.clear();
 
@@ -144,6 +143,8 @@ void CustomMarquee::LoadCustomSettings(json settings)
 
         ui->colors_count_spinBox->setValue(colors.size());
     }
+
+    ResetColors();
 }
 
 json CustomMarquee::SaveCustomSettings(json settings)

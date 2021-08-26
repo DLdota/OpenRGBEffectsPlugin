@@ -124,6 +124,8 @@ void Sequence::LoadCustomSettings(json Settings)
 
         ui->colors_count_spinBox->setValue(colors.size());
     }
+
+    ResetColors();
 }
 
 json Sequence::SaveCustomSettings(json Settings)

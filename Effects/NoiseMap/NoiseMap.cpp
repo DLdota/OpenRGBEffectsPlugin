@@ -253,8 +253,9 @@ void NoiseMap::LoadCustomSettings(json settings)
         }
 
         ui->colors_count_spinBox->setValue(colors.size());
-
     }
+
+    ResetColors();
 }
 
 json NoiseMap::SaveCustomSettings(json settings)
