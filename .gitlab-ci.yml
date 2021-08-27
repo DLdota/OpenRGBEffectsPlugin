@@ -250,9 +250,9 @@ before_script:
   - eval $(/usr/local/bin/brew shellenv)
   - arch -x86_64 /usr/local/bin/qmake OpenRGBEffectsPlugin.pro
   - arch -x86_64 make -j16
-  - arch -x86_64 install_name_tool libOpenRGBEffectsPlugin.1.0.0.dylib -change /usr/local/bin/opt/qt@5/lib/QtWidgets.framework/Versions/5/QtWidgets @executable_path/../Frameworks/QtWidgets.framework/Versions/5/QtWidgets
-  - arch -x86_64 install_name_tool libOpenRGBEffectsPlugin.1.0.0.dylib -change /usr/local/bin/opt/qt@5/lib/QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui
-  - arch -x86_64 install_name_tool libOpenRGBEffectsPlugin.1.0.0.dylib -change /usr/local/bin/opt/qt@5/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore
+  - arch -x86_64 install_name_tool libOpenRGBEffectsPlugin.1.0.0.dylib -change /usr/local/opt/qt@5/lib/QtWidgets.framework/Versions/5/QtWidgets @executable_path/../Frameworks/QtWidgets.framework/Versions/5/QtWidgets
+  - arch -x86_64 install_name_tool libOpenRGBEffectsPlugin.1.0.0.dylib -change /usr/local/opt/qt@5/lib/QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui
+  - arch -x86_64 install_name_tool libOpenRGBEffectsPlugin.1.0.0.dylib -change /usr/local/opt/qt@5/lib/QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore
   - arch -x86_64 codesign --force --verify -s OpenRGB libOpenRGBEffectsPlugin.1.0.0.dylib
   artifacts:
     name: "${CI_PROJECT_NAME}_MacOS_Intel_${CI_COMMIT_SHORT_SHA}"
