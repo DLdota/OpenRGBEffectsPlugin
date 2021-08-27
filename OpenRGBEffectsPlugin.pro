@@ -46,6 +46,7 @@ INCLUDEPATH +=                                                                  
     OpenRGB/qt                                                                                  \
 
 HEADERS +=                                                                                      \
+    Effects/Layers/LayerGroupEntry.h \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -63,6 +64,7 @@ HEADERS +=                                                                      
 
 
 SOURCES +=                                                                                      \
+    Effects/Layers/LayerGroupEntry.cpp \
     OpenRGB/RGBController/RGBController.cpp                                                     \
     OpenRGB/dependencies/ColorWheel/ColorWheel.cpp                                              \
     OpenRGB/qt/hsv.cpp                                                                          \
@@ -157,6 +159,7 @@ FORMS +=                                                                        
     DeviceListItem.ui                                                                           \
     EffectList.ui                                                                               \
     EffectTabHeader.ui                                                                          \
+    Effects/Layers/LayerGroupEntry.ui \
     LivePreviewController.ui                                                                    \
     OpenRGBEffectPage.ui                                                                        \
     OpenRGBEffectTab.ui                                                                         \
@@ -217,6 +220,7 @@ SOURCES +=                                                                      
     Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.cpp                                     \
     Effects/Layers/Layers.cpp                                                                   \
     Effects/Layers/LayerEntry.cpp                                                               \
+    Effects/Mask/Mask.cpp                                                                       \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -267,6 +271,7 @@ HEADERS +=                                                                      
     Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.h                                       \
     Effects/Layers/Layers.h                                                                     \
     Effects/Layers/LayerEntry.h                                                                 \
+    Effects/Mask/Mask.h                                                                         \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -303,6 +308,7 @@ FORMS +=                                                                        
     Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.ui                                      \
     Effects/Layers/Layers.ui                                                                    \
     Effects/Layers/LayerEntry.ui                                                                \
+    Effects/Mask/Mask.ui                                                                        \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #

@@ -5,34 +5,12 @@
 #include "ui_Layers.h"
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
-
-#include "LayerEntry.h"
+#include "LayerGroupEntry.h"
+#include "ColorUtils.h"
 
 namespace Ui {
 class Layers;
 }
-
-enum EffectComposerFn
-{
-    MULTIPLY = 0,
-    SCREEN = 1,
-    OVERLAY = 2,
-    DODGE = 3,
-    BURN = 4,
-    MASK = 5,
-    LIGHTEN = 6,
-    DARKEN = 7
-};
-
-class Layer
-{
-
-public:
-    Layer() {};
-
-    RGBEffect* effect = nullptr;
-    EffectComposerFn composer_fn = MULTIPLY;
-};
 
 class Layers : public RGBEffect
 {
@@ -55,34 +33,17 @@ public:
 
 
 private slots:
-    void on_add_layer_clicked();
+    void on_add_layer_group_clicked();
     void on_clear_clicked();
 
 private:
     Ui::Layers *ui;
 
-    std::vector<std::string> function_names = {
-        "Multiply",
-        "Screen",
-        "Overlay",
-        "Dodge",
-        "Burn",
-        "Mask",
-        "Lighten",
-        "Darken"
-    };
-
-    std::vector<Layer*> layers;
-
-    RGBColor ApplyComposerFn(RGBColor, RGBColor, EffectComposerFn);
-
-    LayerEntry* AddLayer();
-    void ClearLayers();
-
     std::vector<ControllerZone*> assigned_zones;
+    std::vector<LayerGroupEntry*> layer_groups_entries;
 
-    std::mutex mutex;
-
+    LayerGroupEntry* AddLayerGroup();
+    void ClearLayerGroups();
 };
 
 #endif // LAYERS_H

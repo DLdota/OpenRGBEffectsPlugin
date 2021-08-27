@@ -5,6 +5,29 @@
 #include "hsv.h"
 #include <QColor>
 
+enum ColorBlendFn
+{
+    MULTIPLY = 0,
+    SCREEN = 1,
+    OVERLAY = 2,
+    DODGE = 3,
+    BURN = 4,
+    MASK = 5,
+    LIGHTEN = 6,
+    DARKEN = 7
+};
+
+static std::vector<std::string> COLOR_BLEND_FN_NAMES = {
+    "Multiply",
+    "Screen",
+    "Overlay",
+    "Dodge",
+    "Burn",
+    "Mask",
+    "Lighten",
+    "Darken"
+};
+
 class ColorUtils {
 
 public:
@@ -44,7 +67,7 @@ public:
         hsv.saturation *= value;
 
         return RGBColor(hsv2rgb(&hsv));
-    }    
+    }
 
     static RGBColor Invert(RGBColor color)
     {
@@ -126,6 +149,22 @@ public:
                     DarkenChanel(RGBGetBValue(color1), RGBGetBValue(color2))
                     );
     };
+
+    static RGBColor ApplyColorBlendFn(RGBColor c1, RGBColor c2, ColorBlendFn fn)
+    {
+        switch (fn)
+        {
+        case MULTIPLY: return Multiply(c1, c2);
+        case SCREEN:   return Screen(c1, c2);
+        case OVERLAY:  return Overlay(c1, c2);
+        case DODGE:    return Dodge(c1, c2);
+        case BURN:     return Burn(c1, c2);
+        case MASK:     return Mask(c1, c2);
+        case LIGHTEN:  return Lighten(c1, c2);
+        case DARKEN:   return Darken(c1, c2);
+        default:       return OFF();
+        }
+    }
 
     static RGBColor Mask(RGBColor color1, RGBColor color2)
     {

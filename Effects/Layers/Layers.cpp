@@ -28,11 +28,10 @@ Layers::Layers(QWidget *parent) :
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
-    ui->layers->setLayout(new QVBoxLayout());
-    ui->layers->layout()->setSizeConstraint(QLayout::SetFixedSize);
+    ui->layer_groups->setLayout(new QVBoxLayout());
+    ui->layer_groups->layout()->setSizeConstraint(QLayout::SetFixedSize);
     ui->scrollArea->setWidgetResizable(true);
 
-    printf("%d\n",ToRGBColor(0,0,255));
 }
 
 Layers::~Layers()
@@ -45,18 +44,44 @@ void Layers::DefineExtraOptions(QLayout* layout)
     layout->addWidget(this);
 }
 
+LayerGroupEntry* Layers::AddLayerGroup()
+{
+    LayerGroupEntry* layer_group_entry = new LayerGroupEntry(this);
+
+    connect(layer_group_entry, &LayerGroupEntry::Remove, [=](){
+        layer_groups_entries.erase(std::remove(layer_groups_entries.begin(), layer_groups_entries.end(), layer_group_entry), layer_groups_entries.end());
+        ui->layer_groups->layout()->removeWidget(layer_group_entry);
+        delete layer_group_entry;
+    });
+
+    ui->layer_groups->layout()->addWidget(layer_group_entry);
+    layer_groups_entries.push_back(layer_group_entry);
+
+    layer_group_entry->OnControllerZonesListChanged(assigned_zones);
+    layer_group_entry->EffectState(EffectEnabled);
+
+    return layer_group_entry;
+}
+
+void Layers::ClearLayerGroups()
+{
+    QLayoutItem *child;
+
+    while ((child = ui->layer_groups->layout()->takeAt(0)) != 0) {
+        delete child->widget();
+    }
+
+    layer_groups_entries.clear();
+}
+
 void Layers::StepEffect(std::vector<ControllerZone*> controller_zones)
-{    
-    mutex.lock();
-
-    for(unsigned int l = 0; l < layers.size(); l++){
-
-        RGBEffect* effect = layers[l]->effect;
+{
+    for(unsigned int g = 0; g < layer_groups_entries.size(); g++){
 
         std::vector<std::vector<RGBColor>> previous_states;
 
         // save state
-        if(l > 0)
+        if(g > 0)
         {
             for(ControllerZone* controller_zone: controller_zones)
             {
@@ -73,14 +98,11 @@ void Layers::StepEffect(std::vector<ControllerZone*> controller_zones)
             }
         }
 
-        // run effect
-        if(effect != nullptr)
-        {
-            effect->StepEffect(controller_zones);
-        }
+        // run group
+        layer_groups_entries[g]->StepEffect(controller_zones);
 
         // compose + set new state
-        if(l > 0)
+        if(g > 0)
         {
             for(unsigned int z = 0; z < controller_zones.size(); z++)
             {
@@ -88,160 +110,30 @@ void Layers::StepEffect(std::vector<ControllerZone*> controller_zones)
 
                 for(unsigned int i = 0; i < controller_zones[z]->leds_count(); i ++)
                 {
-                    current[i] = ApplyComposerFn(previous_states[z][i], current[i], layers[l]->composer_fn);
+                    current[i] = ColorUtils::ApplyColorBlendFn(previous_states[z][i], current[i], layer_groups_entries[g]->composer_fn);
                 }
             }
         }
-
-    }
-
-    mutex.unlock();
-}
-
-RGBColor Layers::ApplyComposerFn(RGBColor c1, RGBColor c2, EffectComposerFn fn)
-{
-    switch (fn)
-    {
-    case MULTIPLY: return ColorUtils::Multiply(c1, c2);
-    case SCREEN:   return ColorUtils::Screen(c1, c2);
-    case OVERLAY:  return ColorUtils::Overlay(c1, c2);
-    case DODGE:    return ColorUtils::Dodge(c1, c2);
-    case BURN:     return ColorUtils::Burn(c1, c2);
-    case MASK:     return ColorUtils::Mask(c1, c2);
-    case LIGHTEN:  return ColorUtils::Lighten(c1, c2);
-    case DARKEN:   return ColorUtils::Darken(c1, c2);
-    default:       return ColorUtils::OFF();
     }
 }
 
-LayerEntry* Layers::AddLayer()
+void Layers::on_add_layer_group_clicked()
 {
-    std::map<std::string, std::vector<std::string>> effects_and_presets;
-
-    std::map<std::string, std::function<RGBEffect*()>>::iterator it;
-
-    for (it =  EffectList::effects_construtors.begin(); it !=  EffectList::effects_construtors.end(); it++)
-    {
-        std::vector<std::string> patterns = OpenRGBEffectSettings::ListPattern(it->first);
-
-        if(!patterns.empty() && it->first != ClassName())
-        {
-            effects_and_presets[it->first] = patterns;
-        }
-    }
-
-    LayerEntry* layer_ui = new LayerEntry(this, effects_and_presets, function_names);
-
-    Layer* layer = new Layer();
-
-    layers.push_back(layer);
-
-     connect(layer_ui, &LayerEntry::BlendingUpdated, [=](int fn){
-          layer->composer_fn = static_cast<EffectComposerFn>(fn);
-     });
-
-    connect(layer_ui, &LayerEntry::PresetUpdated, [=](std::string name, std::string preset){
-
-        mutex.lock();
-
-        printf("PresetUpdated\n");
-
-        if(layer->effect != nullptr)
-        {
-            delete layer->effect;
-        }
-
-        layer->effect = EffectList::effects_construtors[name]();
-
-        json effect_settings = OpenRGBEffectSettings::LoadPattern(name, preset);
-
-        if(!effect_settings.is_null())
-        {
-            printf("Applying settings\n");
-
-            std::vector<RGBColor> colors;
-
-            for(unsigned int color : effect_settings["UserColors"])
-            {
-                colors.push_back(color);
-            }
-
-            layer->effect->SetUserColors(colors);
-            layer->effect->SetSpeed(effect_settings["Speed"]);
-            layer->effect->SetSlider2Val(effect_settings["Slider2Val"]);
-            layer->effect->SetRandomColorsEnabled(effect_settings["RandomColors"]);
-            layer->effect->SetOnlyFirstColorEnabled(effect_settings["AllowOnlyFirst"]);
-
-            if(effect_settings.contains("CustomSettings"))
-            {
-                layer->effect->LoadCustomSettings(effect_settings["CustomSettings"]);
-            }
-
-            layer->effect->DefineExtraOptions(new QHBoxLayout);
-            layer->effect->OnControllerZonesListChanged(assigned_zones);
-            layer->effect->EffectState(EffectEnabled);
-            printf("Settings applied\n");
-        }
-
-        mutex.unlock();
-
-    });
-
-    connect(layer_ui, &LayerEntry::Remove, [=](){
-
-        mutex.lock();
-
-        if(layer->effect != nullptr)
-        {
-            layer->effect->EffectState(false);
-            delete layer->effect;
-        }
-
-        layers.erase(std::remove(layers.begin(), layers.end(), layer), layers.end());
-        ui->layers->layout()->removeWidget(layer_ui);
-        delete layer_ui;
-
-        mutex.unlock();
-    });
-
-    ui->layers->layout()->addWidget(layer_ui);
-
-    return layer_ui;
-}
-
-void Layers::ClearLayers()
-{
-    QLayoutItem *child;
-
-    while ((child = ui->layers->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-    }
-
-    layers.clear();
-}
-
-
-void Layers::on_add_layer_clicked()
-{
-    AddLayer();
+    AddLayerGroup();
 }
 
 void Layers::on_clear_clicked()
 {
-    ClearLayers();
+    ClearLayerGroups();
 }
-
 
 void Layers::OnControllerZonesListChanged(std::vector<ControllerZone*> controller_zones)
 {
     assigned_zones = controller_zones;
 
-    for(Layer* layer: layers)
+    for(LayerGroupEntry* layer_group_entry: layer_groups_entries)
     {
-        if(layer->effect != nullptr)
-        {
-            layer->effect->OnControllerZonesListChanged(controller_zones);
-        }
+        layer_group_entry->OnControllerZonesListChanged(controller_zones);
     }
 }
 
@@ -249,39 +141,36 @@ void Layers::EffectState(bool state)
 {
     EffectEnabled = state;
 
-    for(Layer* layer: layers)
+    for(LayerGroupEntry* layer_group_entry: layer_groups_entries)
     {
-        if(layer->effect != nullptr)
-        {
-            layer->effect->EffectState(state);
-        }
+        layer_group_entry->EffectState(state);
     }
 }
 
 void Layers::LoadCustomSettings(json j)
 {
-    ClearLayers();
+    ClearLayerGroups();
 
-    if(j.contains("layers"))
+    if(j.contains("groups"))
     {
-        for(json layer_json : j["layers"])
+        for(json group_json : j["groups"])
         {
-            LayerEntry* layer_ui = AddLayer();
-            layer_ui->FromJson(layer_json);
+            LayerGroupEntry* layer_group_entry = AddLayerGroup();
+            layer_group_entry->FromJson(group_json);
         }
     }
 }
 
 json Layers::SaveCustomSettings(json j)
 {
-    std::vector<json> layers_json;
+    std::vector<json> groups;
 
-    for(LayerEntry* layer_ui: ui->layers->findChildren<LayerEntry*>())
+    for(LayerGroupEntry* layer_group_entry: layer_groups_entries)
     {
-        layers_json.push_back(layer_ui->ToJson());
+        groups.push_back(layer_group_entry->ToJson());
     }
 
-    j["layers"] = layers_json;
+    j["groups"] = groups;
 
     return j;
 }

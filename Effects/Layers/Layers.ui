@@ -15,9 +15,9 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
-    <widget class="QPushButton" name="add_layer">
+    <widget class="QPushButton" name="add_layer_group">
      <property name="text">
-      <string>Add layer</string>
+      <string>Add group</string>
      </property>
     </widget>
    </item>
@@ -33,7 +33,7 @@
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
-     <widget class="QWidget" name="layers">
+     <widget class="QWidget" name="layer_groups">
       <property name="geometry">
        <rect>
         <x>0</x>
