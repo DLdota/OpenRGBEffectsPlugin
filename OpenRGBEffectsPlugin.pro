@@ -364,3 +364,6 @@ macx: {
     CONFIG += c++17
     LIBS += -framework OpenAL
 }
+
+RESOURCES += \
+    resources.qrc
