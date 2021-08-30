@@ -32,35 +32,55 @@ After running the OpenRGB build you downloaded from the link the effects tab sho
 
 ## What Effects do you have?
 
-* Ambient
-* AudioSine
-* AudioSync
-* AudioVisualizer (A port of [Keyboard visualizer](https://gitlab.com/CalcProgrammer1/KeyboardVisualizer))
-* BouncingBall
-* Breathing
-* Bubbles
-* ColorWheelEffect
-* CrossingBeams
-* FractalMotion
-* GifPlayer
-* GradientWave
-* Hypnotoad
-* Lightning
-* MotionPoint
-* NoiseMap
-* RadialRainbow
-* Rain
-* RainbowWave
-* RotatingBeam
-* Sequence
-* SmoothBlink
-* SpectrumCycling
-* Stack
-* StarryNight
-* SwirlCircles
-* SwirlCirclesAudio
-* Visor
-* Wavy
+```
+OpenRGBEffectPlugin/Effects
+├── Ambient
+├── AudioSine
+├── AudioStar
+├── AudioSync
+├── AudioVisualizer
+├── Bloom
+├── BouncingBall
+├── Breathing
+├── Bubbles
+├── ColorWheelEffect
+├── Comet
+├── CrossingBeams
+├── CustomMarquee
+├── DoubleRotatingRainbow
+├── EffectRegisterer.h
+├── Fill
+├── FractalMotion
+├── GifPlayer
+├── GradientWave
+├── Hypnotoad
+├── Layers
+├── Lightning
+├── Marquee
+├── Mask
+├── Mosaic
+├── MotionPoint
+├── MotionPoints
+├── NoiseMap
+├── RadialRainbow
+├── Rain
+├── RainbowWave
+├── RGBEffect.h
+├── RotatingBeam
+├── RotatingRainbow
+├── Sequence
+├── SmoothBlink
+├── SpectrumCycling
+├── Spiral
+├── Stack
+├── StarryNight
+├── Sunrise
+├── Swap
+├── SwirlCircles
+├── SwirlCirclesAudio
+├── Visor
+└── Wavy
+```
 
 ## Common Issues
 
@@ -84,10 +104,3 @@ The very nature of ambient is to do massive calulation to get the average or mos
 
 Please read the [contributing guide](./CONTRIBUTING.md) if you want to add effects or bring new features.
 
-## Donations
-
-This plugin is free and always will be but donations are still nice to get
-
-* CoffeeIsLife
-
-  * Venmo (@joel-fankhauser-2)
