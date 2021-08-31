@@ -21,6 +21,11 @@ This is a plugin for [OpenRGB](https://gitlab.com/CalcProgrammer1/OpenRGB) that 
 * Launch OpenRGB
 * From the Settings -> Plugins menu, click the "Install plugin" button
 
+### Linux
+
+You need `libopenal` installed.
+
+
 ## What Effects do you have?
 
 ```
