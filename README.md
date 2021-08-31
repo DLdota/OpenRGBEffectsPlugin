@@ -44,7 +44,6 @@ OpenRGBEffectPlugin/Effects
 ├── CrossingBeams
 ├── CustomMarquee
 ├── DoubleRotatingRainbow
-├── EffectRegisterer.h
 ├── Fill
 ├── FractalMotion
 ├── GifPlayer
@@ -61,7 +60,6 @@ OpenRGBEffectPlugin/Effects
 ├── RadialRainbow
 ├── Rain
 ├── RainbowWave
-├── RGBEffect.h
 ├── RotatingBeam
 ├── RotatingRainbow
 ├── Sequence
