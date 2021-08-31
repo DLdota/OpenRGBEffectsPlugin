@@ -24,7 +24,7 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
 
     InitEffectTabs();
 
-    QTimer::singleShot(1000, [=](){
+    QTimer::singleShot(2000, [=](){
         ReloadProfileList();
     });
 }
