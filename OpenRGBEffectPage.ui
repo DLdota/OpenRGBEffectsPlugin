@@ -40,8 +40,14 @@
        <property name="text">
         <string>EffectDescription</string>
        </property>
+       <property name="textFormat">
+        <enum>Qt::RichText</enum>
+       </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
+       </property>
+       <property name="openExternalLinks">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

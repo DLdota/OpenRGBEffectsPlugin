@@ -13,7 +13,7 @@ Layers::Layers(QWidget *parent) :
 
     EffectDetails.EffectName = "Layers";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Combine effect. \nOnly effects that have saved patterns will appear here.";
+    EffectDetails.EffectDescription = "Combine effects together. <br />Only effects that have saved patterns will appear here.<br /> <a href=\"https://en.wikipedia.org/wiki/Blend_modes\">Help about blend modes</a>";
 
     EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 0;

@@ -11,7 +11,7 @@ Bloom::Bloom(QWidget *parent) :
 
     EffectDetails.EffectName = "Bloom";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Bloom effect";
+    EffectDetails.EffectDescription = "Flower blooming effect";
 
     EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 200;

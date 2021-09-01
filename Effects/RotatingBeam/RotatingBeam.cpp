@@ -11,7 +11,7 @@ RotatingBeam::RotatingBeam(QWidget *parent) :
 
     EffectDetails.EffectName = "RotatingBeam";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "";
+    EffectDetails.EffectDescription = "Rotating beams effect";
 
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;
