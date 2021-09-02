@@ -32,10 +32,14 @@ private slots:
     void on_w_valueChanged(double);
     void on_h_valueChanged(double);
 
+    void on_invert_colors_stateChanged(int);
+
 private:
     Ui::Mask *ui;
     RGBColor GetColor(float, float, float, float);
     QRectF restrict = QRectF(0.f, 0.f, 1.f, 1.f);
+
+    bool invert_colors = false;
 };
 
 #endif // MASK_H

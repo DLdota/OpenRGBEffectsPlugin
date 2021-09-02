@@ -78,10 +78,10 @@ RGBColor Mask::GetColor(float x, float y, float w, float h)
 {
     if(w == 0 || h == 0)
     {
-        return UserColors[0];
+        return UserColors[invert_colors ? 1 : 0];
     }
 
-    return restrict.contains(x/w, y/h) ? UserColors[0] : UserColors[1];
+    return restrict.contains(x/w, y/h) ? UserColors[invert_colors? 1: 0] : UserColors[invert_colors? 0: 1];
 }
 
 void Mask::on_x_valueChanged(double value)
@@ -104,12 +104,18 @@ void Mask::on_h_valueChanged(double value)
     restrict.setHeight(value);
 }
 
+void Mask::on_invert_colors_stateChanged(int state)
+{
+    invert_colors = state;
+}
+
 void Mask::LoadCustomSettings(json j)
 {
     if (j.contains("x")) ui->x->setValue(j["x"]);
     if (j.contains("y")) ui->y->setValue(j["y"]);
     if (j.contains("w")) ui->w->setValue(j["w"]);
     if (j.contains("h")) ui->h->setValue(j["h"]);
+    if (j.contains("invert_colors")) ui->invert_colors->setChecked(j["invert_colors"]);
 }
 
 json Mask::SaveCustomSettings(json j)
@@ -118,5 +124,7 @@ json Mask::SaveCustomSettings(json j)
     j["y"] = restrict.top();
     j["w"] = restrict.width();
     j["h"] = restrict.height();
+    j["invert_colors"] =  ui->invert_colors->isChecked();
+
     return j;
 }

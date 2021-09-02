@@ -14,17 +14,20 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="1" rowspan="2">
-    <widget class="QDoubleSpinBox" name="y">
-     <property name="maximum">
-      <double>1.000000000000000</double>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>x</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QDoubleSpinBox" name="x">
+   <item row="4" column="1" rowspan="2">
+    <widget class="QDoubleSpinBox" name="w">
      <property name="maximum">
       <double>1.000000000000000</double>
+     </property>
+     <property name="stepType">
+      <enum>QAbstractSpinBox::AdaptiveDecimalStepType</enum>
      </property>
     </widget>
    </item>
@@ -35,10 +38,23 @@
      </property>
     </widget>
    </item>
+   <item row="2" column="1" rowspan="2">
+    <widget class="QDoubleSpinBox" name="y">
+     <property name="maximum">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="stepType">
+      <enum>QAbstractSpinBox::AdaptiveDecimalStepType</enum>
+     </property>
+    </widget>
+   </item>
    <item row="6" column="1">
     <widget class="QDoubleSpinBox" name="h">
      <property name="maximum">
       <double>1.000000000000000</double>
+     </property>
+     <property name="stepType">
+      <enum>QAbstractSpinBox::AdaptiveDecimalStepType</enum>
      </property>
     </widget>
    </item>
@@ -49,24 +65,20 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_2">
+   <item row="7" column="0">
+    <widget class="QCheckBox" name="invert_colors">
      <property name="text">
-      <string>y</string>
+      <string>Invert colors</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1" rowspan="2">
-    <widget class="QDoubleSpinBox" name="w">
+   <item row="1" column="1">
+    <widget class="QDoubleSpinBox" name="x">
      <property name="maximum">
       <double>1.000000000000000</double>
      </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>x</string>
+     <property name="stepType">
+      <enum>QAbstractSpinBox::AdaptiveDecimalStepType</enum>
      </property>
     </widget>
    </item>
@@ -82,6 +94,13 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>y</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
