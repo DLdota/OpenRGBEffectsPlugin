@@ -1,5 +1,6 @@
 #include "EffectList.h"
 #include "ui_EffectList.h"
+#include "ColorUtils.h"
 
 std::map<std::string, std::function<RGBEffect*()>> EffectList::effects_construtors = {};
 
@@ -30,6 +31,17 @@ void EffectList::on_add_effect_clicked()
 {
     QString selected_effect = ui->effects->currentText();
     RGBEffect* effect = effects_construtors[selected_effect.toStdString()]();
+
+    // Add some random colors, so we already see something fancy
+    std::vector<RGBColor> random_colors;
+
+    for(unsigned int i = 0; i < effect->EffectDetails.UserColors; i ++)
+    {
+        random_colors.push_back(ColorUtils::RandomRGBColor());
+    }
+
+    effect->SetUserColors(random_colors);
+
     emit EffectAdded(effect);
 }
 
