@@ -1,5 +1,9 @@
 #include "AudioManager.h"
 
+#ifdef _WIN32
+#include <stringapiset.h>
+#endif
+
 AudioManager* AudioManager::instance;
 
 AudioManager* AudioManager::get()
@@ -211,9 +215,9 @@ void AudioManager::InitAudioDeviceList()
 
             if (varName->pwszVal != NULL)
             {
-                int len = (int)wcslen(varName->pwszVal) + 1;
+                int len = WideCharToMultiByte(CP_UTF8, 0, varName->pwszVal, -1, nullptr, 0, nullptr, nullptr);
                 char* new_device = new char[len + 11];
-                wcstombs(new_device, varName->pwszVal, len);
+                WideCharToMultiByte(CP_UTF8, 0, varName->pwszVal, -1, new_device, len, nullptr, nullptr);
                 strncat(new_device, " (Loopback)", len);
                 known_audio_devices.push_back(new_device);
                 pMMDevices.push_back(pEndpoint);
@@ -255,9 +259,9 @@ void AudioManager::InitAudioDeviceList()
 
             if (varName->pwszVal != NULL)
             {
-                int len = (int)wcslen(varName->pwszVal) + 1;
+                int len = WideCharToMultiByte(CP_UTF8, 0, varName->pwszVal, -1, nullptr, 0, nullptr, nullptr);
                 char* new_device = new char[len];
-                wcstombs(new_device, varName->pwszVal, len);
+                WideCharToMultiByte(CP_UTF8, 0, varName->pwszVal, -1, new_device, len, nullptr, nullptr);
                 known_audio_devices.push_back(new_device);
                 pMMDevices.push_back(pEndpoint);
                 isCapture.push_back(true);
