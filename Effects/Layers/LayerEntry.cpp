@@ -28,6 +28,11 @@ LayerEntry::LayerEntry(QWidget *parent) :
             ui->effect->addItem(QString::fromStdString(effect_name));
 
             effects_and_presets[effect_name] = patterns;
+
+            for(std::string preset: patterns)
+            {
+                ui->preset->addItem(QString::fromStdString(preset));
+            }
         }
     }
 
