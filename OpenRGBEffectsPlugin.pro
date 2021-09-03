@@ -213,6 +213,7 @@ SOURCES +=                                                                      
     Effects/Layers/LayerEntry.cpp                                                               \
     Effects/Layers/LayerGroupEntry.cpp                                                          \
     Effects/Mask/Mask.cpp                                                                       \
+    Effects/MovingPanes/MovingPanes.cpp                                                         \
 
 
 HEADERS +=                                                                                      \
@@ -266,6 +267,7 @@ HEADERS +=                                                                      
     Effects/Layers/LayerEntry.h                                                                 \
     Effects/Layers/LayerGroupEntry.h                                                            \
     Effects/Mask/Mask.h                                                                         \
+    Effects/MovingPanes/MovingPanes.h                                                           \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -305,6 +307,7 @@ FORMS +=                                                                        
     Effects/Layers/LayerGroupEntry.ui                                                           \
     Effects/Mask/Mask.ui                                                                        \
     Effects/Ambient/Ambient.ui                                                                  \
+    Effects/MovingPanes/MovingPanes.ui                                                          \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #
