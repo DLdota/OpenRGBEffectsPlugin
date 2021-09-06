@@ -59,7 +59,7 @@ void AudioSync::Init()
 
     for(const char * str : devices)
     {
-        device_list_selector->addItem(QString::fromLocal8Bit(str));
+        device_list_selector->addItem(QString::fromUtf8(str));
     }
 
     RestoreDefaultSettings();

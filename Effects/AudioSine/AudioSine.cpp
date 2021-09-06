@@ -31,7 +31,7 @@ AudioSine::AudioSine(QWidget *parent) :
 
     for(const char * str : devices)
     {
-        ui->devices->addItem(QString::fromLocal8Bit(str));
+        ui->devices->addItem(QString::fromUtf8(str));
     }
 
     hanning(win_hanning, 256);

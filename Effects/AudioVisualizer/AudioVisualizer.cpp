@@ -144,7 +144,7 @@ AudioVisualizer::AudioVisualizer(QWidget* parent):
 
     for(const char * str : devices)
     {
-        ui->comboBox_Audio_Device->addItem(QString::fromLocal8Bit(str));
+        ui->comboBox_Audio_Device->addItem(QString::fromUtf8(str));
     }
 
     ui->comboBox_Audio_Device->setCurrentIndex(audio_device_idx);
