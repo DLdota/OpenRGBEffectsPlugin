@@ -16,7 +16,7 @@
 #include <QSlider>
 #include <QLabel>
 #include <QPushButton>
-#include <QGraphicsView>
+#include <QSpacerItem>
 #include <QTimer>
 
 struct AudioSyncSettings
@@ -85,11 +85,11 @@ private slots:
     void HighChanged(int);
     void RestoreDefaultSettings();
     void UpdateUiSettings();
-    void UpdateGraph();
+    void UpdateGraph(QPixmap);
     void PresetChanged(int);
 
 signals:
-    void UpdateGraphSignal() const;
+    void UpdateGraphSignal(QPixmap) const;
 
 private:
     /*-----*\
@@ -99,10 +99,7 @@ private:
     QFrame* PrimaryFrame;
     QFrame* AudioSyncFrame;
 
-    QImage*         image;
-    QGraphicsScene* scene;
-    QPixmap         pixmap;
-    QGraphicsView*  graphics_view;
+    QLabel*         preview;
     ctkRangeSlider* bypass_slider;
     QSlider*        rainbow_shift_slider;
     QSlider*        fade_step_slider;
@@ -158,7 +155,7 @@ private:
     unsigned char buffer[256];
     float         win_hanning[256];
     float         fft_nrml[256];
-    float         fft_fltr[256];
+    float         fft_fltr[256] = { 0 };
 
     /*--------*\
     | Methods  |

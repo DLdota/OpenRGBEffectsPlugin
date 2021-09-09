@@ -42,7 +42,7 @@ private:
     unsigned char buffer[256];
     float win_hanning[256];
     float fft_nrml[256];
-    float fft_fltr[256];
+    float fft_fltr[256] = { 0 };
     float decay = 90.f;
     float filter_constant = 1.f;
 

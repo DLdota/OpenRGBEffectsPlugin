@@ -215,6 +215,7 @@ SOURCES +=                                                                      
     Effects/Mask/Mask.cpp                                                                       \
     Effects/MovingPanes/MovingPanes.cpp                                                         \
     Effects/BreathingCircle/BreathingCircle.cpp                                                 \
+    Effects/AudioParty/AudioParty.cpp                                                           \
 
 
 HEADERS +=                                                                                      \
@@ -270,6 +271,7 @@ HEADERS +=                                                                      
     Effects/Mask/Mask.h                                                                         \
     Effects/MovingPanes/MovingPanes.h                                                           \
     Effects/BreathingCircle/BreathingCircle.h                                                   \
+    Effects/AudioParty/AudioParty.h                                                             \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -311,6 +313,7 @@ FORMS +=                                                                        
     Effects/Ambient/Ambient.ui                                                                  \
     Effects/MovingPanes/MovingPanes.ui                                                          \
     Effects/BreathingCircle/BreathingCircle.ui                                                  \
+    Effects/AudioParty/AudioParty.ui                                                            \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #

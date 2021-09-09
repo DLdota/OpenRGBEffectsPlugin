@@ -94,7 +94,7 @@ void AudioSync::Init()
     /*--------------------------*\
     | Map signal to UpdateGraph  |
     \*--------------------------*/
-    connect(this, SIGNAL(UpdateGraphSignal()), this, SLOT(UpdateGraph()));
+    connect(this, SIGNAL(UpdateGraphSignal(QPixmap)), this, SLOT(UpdateGraph(QPixmap)));
 }
 
 void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
@@ -108,20 +108,18 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     QVBoxLayout* MainAudioSyncLayout = new QVBoxLayout;
 
     int label_width = 120;
+    QSpacerItem* spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    MainAudioSyncLayout->addSpacerItem(spacer);
 
     /*------------------*\
     | Frequency preview  |
     \*------------------*/
-    graphics_view = new QGraphicsView();
-    graphics_view->resize(256, 64);
-    image = new QImage(256, 64, QImage::Format_RGB30);
-    scene = new QGraphicsScene();
-    graphics_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    graphics_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    graphics_view->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    preview = new QLabel();
+    preview->setScaledContents(true);
+    preview->setMinimumHeight(64);
+    preview->setMinimumWidth(256);
 
-    graphics_view->setScene(scene);
-    MainAudioSyncLayout->addWidget(graphics_view);
+    MainAudioSyncLayout->addWidget(preview);
 
     /*-----------*\
     | Device list |
@@ -614,6 +612,9 @@ void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     hsv_t HSVPixel;
 
+    QImage image(256, 64, QImage::Format_RGB30);
+    QPixmap pixmap;
+
     for(int i = 0; i < 256; i++)
     {
         fft_fltr[i] = fft_fltr[i] + (current_settings.filter_constant * (fft[i] - fft_fltr[i]));
@@ -645,15 +646,16 @@ void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)
         for(int y = 0; y < 64; y++)
         {
             if(value > y || y == 0){
-                image->setPixel(i, 63 - y, color);
+                image.setPixel(i, 63 - y, color);
             } else {
-                image->setPixel(i, 63 - y, ColorUtils::OFF());
+                image.setPixel(i, 63 - y, ColorUtils::OFF());
             }
         }
     }
 
-    emit UpdateGraphSignal();
+    pixmap.convertFromImage(image);
 
+    emit UpdateGraphSignal(pixmap);
 
     /*----------------------------------------------*\
     | find the main frequency in defined band width  |
@@ -968,34 +970,14 @@ void AudioSync::ToggleAmplitudeChangeInputs()
     }
 }
 
-void AudioSync::UpdateGraph()
+void AudioSync::UpdateGraph(QPixmap pixmap)
 {
     if(!is_running)
     {
         return;
     }
 
-    /*----------------------------------*\
-    | Set bounds for drawing visualizer  |
-    \*----------------------------------*/
-    QRectF bounds = scene->itemsBoundingRect();
-    bounds.setWidth(bounds.width());
-    bounds.setHeight(bounds.height());
-
-    graphics_view->fitInView(bounds, Qt::IgnoreAspectRatio);
-    graphics_view->centerOn(0, 0);
-
-    /*----------------------------------*\
-    | Scale image to fit preview window  |
-    \*----------------------------------*/
-    image->scaled(graphics_view->width(), graphics_view->height(), Qt::IgnoreAspectRatio);
-
-    /*--------------------------------------------------------*\
-    | Convert to image, Wipe previous pixmap, Set the new one  |
-    \*--------------------------------------------------------*/
-    pixmap.convertFromImage(*image);
-    scene->clear();
-    scene->addPixmap(pixmap);
+    preview->setPixmap(pixmap);
 }
 
 void AudioSync::RestoreDefaultSettings()
@@ -1016,7 +998,7 @@ void AudioSync::UpdateUiSettings()
     device_list_selector->setCurrentIndex(audio_device_idx >= 0 ? audio_device_idx: 0);
     bypass_slider->setMinimum(0);
     bypass_slider->setMaximum(256);
-    bypass_slider->setValues(current_settings.bypass_min, current_settings.bypass_max);
+    bypass_slider->setValues(current_settings.bypass_min,current_settings.bypass_max);
     rainbow_shift_slider->setValue(current_settings.rainbow_shift);
     fade_step_slider->setValue(current_settings.fade_step);
     decay_slider->setValue(current_settings.decay);
