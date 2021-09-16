@@ -121,7 +121,7 @@ std::map<RGBEffect*, std::vector<ControllerZone*>>EffectManager::GetEffectsMappi
     return effect_zones;
 }
 
-void  EffectManager::EffectThreadFunction(RGBEffect* effect)
+void EffectManager::EffectThreadFunction(RGBEffect* effect)
 {
     printf("[OpenRGBEffectsPlugin] Effect %s thread started\n", effect->EffectDetails.EffectName.c_str());
 

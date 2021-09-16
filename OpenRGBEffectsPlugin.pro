@@ -67,6 +67,57 @@ SOURCES +=                                                                      
     OpenRGB/qt/hsv.cpp                                                                          \
 
 #-----------------------------------------------------------------------------------------------#
+# QCodeEditor                                                                                   #
+#-----------------------------------------------------------------------------------------------#
+INCLUDEPATH +=                                                                                  \
+    Dependencies/QCodeEditor/include                                                            \
+    Dependencies/QCodeEditor/include/internal                                                   \
+
+HEADERS +=                                                                                      \
+    Dependencies/QCodeEditor/include/internal/QCodeEditor.hpp                                   \
+    Dependencies/QCodeEditor/include/internal/QGLSLCompleter.hpp                                \
+    Dependencies/QCodeEditor/include/internal/QHighlightRule.hpp                                \
+    Dependencies/QCodeEditor/include/internal/QLineNumberArea.hpp                               \
+    Dependencies/QCodeEditor/include/internal/QPythonCompleter.hpp                              \
+    Dependencies/QCodeEditor/include/internal/QSyntaxStyle.hpp                                  \
+    Dependencies/QCodeEditor/include/internal/QCXXHighlighter.hpp                               \
+    Dependencies/QCodeEditor/include/internal/QGLSLHighlighter.hpp                              \
+    Dependencies/QCodeEditor/include/internal/QJSONHighlighter.hpp                              \
+    Dependencies/QCodeEditor/include/internal/QLuaCompleter.hpp                                 \
+    Dependencies/QCodeEditor/include/internal/QPythonHighlighter.hpp                            \
+    Dependencies/QCodeEditor/include/internal/QXMLHighlighter.hpp                               \
+    Dependencies/QCodeEditor/include/internal/QFramedTextAttribute.hpp                          \
+    Dependencies/QCodeEditor/include/internal/QHighlightBlockRule.hpp                           \
+    Dependencies/QCodeEditor/include/internal/QLanguage.hpp                                     \
+    Dependencies/QCodeEditor/include/internal/QLuaHighlighter.hpp                               \
+    Dependencies/QCodeEditor/include/internal/QStyleSyntaxHighlighter.hpp                       \
+    Dependencies/QCodeEditor/include/internal/QJSHighlighter.hpp                                \
+    Dependencies/QCodeEditor/include/internal/QJavaHighlighter.hpp                              \
+
+SOURCES +=                                                                                      \
+    Dependencies/QCodeEditor/src/internal/QCodeEditor.cpp                                       \
+    Dependencies/QCodeEditor/src/internal/QGLSLCompleter.cpp                                    \
+    Dependencies/QCodeEditor/src/internal/QLanguage.cpp                                         \
+    Dependencies/QCodeEditor/src/internal/QLuaHighlighter.cpp                                   \
+    Dependencies/QCodeEditor/src/internal/QStyleSyntaxHighlighter.cpp                           \
+    Dependencies/QCodeEditor/src/internal/QCXXHighlighter.cpp                                   \
+    Dependencies/QCodeEditor/src/internal/QGLSLHighlighter.cpp                                  \
+    Dependencies/QCodeEditor/src/internal/QLineNumberArea.cpp                                   \
+    Dependencies/QCodeEditor/src/internal/QPythonCompleter.cpp                                  \
+    Dependencies/QCodeEditor/src/internal/QSyntaxStyle.cpp                                      \
+    Dependencies/QCodeEditor/src/internal/QFramedTextAttribute.cpp                              \
+    Dependencies/QCodeEditor/src/internal/QJSONHighlighter.cpp                                  \
+    Dependencies/QCodeEditor/src/internal/QLuaCompleter.cpp                                     \
+    Dependencies/QCodeEditor/src/internal/QPythonHighlighter.cpp                                \
+    Dependencies/QCodeEditor/src/internal/QXMLHighlighter.cpp                                   \
+    Dependencies/QCodeEditor/src/internal/QJSHighlighter.cpp                                    \
+    Dependencies/QCodeEditor/src/internal/QJavaHighlighter.cpp                                  \
+    Dependencies/QCodeEditor/src/internal/QtCompat.hpp                                          \
+
+RESOURCES +=                                                                                    \
+    Dependencies/QCodeEditor/resources/qcodeeditor_resources.qrc
+
+#-----------------------------------------------------------------------------------------------#
 # ctkrangeslider                                                                                #
 #-----------------------------------------------------------------------------------------------#
 INCLUDEPATH +=                                                                                  \
@@ -216,6 +267,10 @@ SOURCES +=                                                                      
     Effects/MovingPanes/MovingPanes.cpp                                                         \
     Effects/BreathingCircle/BreathingCircle.cpp                                                 \
     Effects/AudioParty/AudioParty.cpp                                                           \
+    Effects/Shaders/Shaders.cpp                                                                 \
+    Effects/Shaders/ShaderRenderer.cpp                                                          \
+    Effects/Shaders/GLSLHighlighter.cpp                                                         \
+    Effects/Shaders/GLSLCodeEditor.cpp                                                          \
 
 
 HEADERS +=                                                                                      \
@@ -272,6 +327,10 @@ HEADERS +=                                                                      
     Effects/MovingPanes/MovingPanes.h                                                           \
     Effects/BreathingCircle/BreathingCircle.h                                                   \
     Effects/AudioParty/AudioParty.h                                                             \
+    Effects/Shaders/Shaders.h                                                                   \
+    Effects/Shaders/ShaderRenderer.h                                                            \
+    Effects/Shaders/GLSLHighlighter.h                                                           \
+    Effects/Shaders/GLSLCodeEditor.h                                                            \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -314,6 +373,8 @@ FORMS +=                                                                        
     Effects/MovingPanes/MovingPanes.ui                                                          \
     Effects/BreathingCircle/BreathingCircle.ui                                                  \
     Effects/AudioParty/AudioParty.ui                                                            \
+    Effects/Shaders/Shaders.ui                                                                  \
+    Effects/Shaders/GLSLCodeEditor.ui                                                           \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #
@@ -337,12 +398,14 @@ win32:contains(QMAKE_TARGET.arch, x86_64) {
     LIBS +=                                                             \
         -lws2_32                                                        \
         -lole32                                                         \
+        -lOpenGL32                                                      \
 }
 
 win32:contains(QMAKE_TARGET.arch, x86) {
     LIBS +=                                                             \
         -lws2_32                                                        \
         -lole32                                                         \
+        -lOpenGL32                                                      \
 }
 
 win32:DEFINES +=                                                        \

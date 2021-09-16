@@ -1,5 +1,23 @@
 <RCC>
     <qresource prefix="/">
         <file>OpenRGBEffectsPlugin.png</file>
+        <file>shaders/stars.fs</file>
+        <file>shaders/sunset.fs</file>
+        <file>shaders/sea-sun.fs</file>
+        <file>shaders/fireworks.fs</file>
+        <file>shaders/rainbow.fs</file>
+        <file>shaders/bubble-gum.fs</file>
+        <file>shaders/bubbles.fs</file>
+        <file>shaders/wobble.fs</file>
+        <file>shaders/custom.fs</file>
+        <file>styles/drakula.xml</file>
+        <file>styles/default.xml</file>
+        <file>shaders/double-wave.fs</file>
+        <file>shaders/beams.fs</file>
+        <file>shaders/cross.fs</file>
+        <file>shaders/rainbow-2.fs</file>
+        <file>shaders/wavy-rainbow.fs</file>
+        <file>shaders/pulses.fs</file>
+        <file>shaders/cartoon-waves.fs</file>
     </qresource>
 </RCC>
