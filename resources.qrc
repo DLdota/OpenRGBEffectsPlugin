@@ -19,5 +19,15 @@
         <file>shaders/wavy-rainbow.fs</file>
         <file>shaders/pulses.fs</file>
         <file>shaders/cartoon-waves.fs</file>
+        <file>shaders/colored-waves.fs</file>
+        <file>shaders/polar.fs</file>
+        <file>shaders/rotating-borders.fs</file>
+        <file>shaders/grid-runner.fs</file>
+        <file>shaders/color-fader.fs</file>
+        <file>shaders/rainbow-explosion.fs</file>
+        <file>shaders/hypno-swirl.fs</file>
+        <file>shaders/beach.fs</file>
+        <file>shaders/flow.fs</file>
+        <file>shaders/moving-tiles.fs</file>
     </qresource>
 </RCC>
