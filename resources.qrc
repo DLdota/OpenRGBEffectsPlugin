@@ -29,5 +29,18 @@
         <file>shaders/beach.fs</file>
         <file>shaders/flow.fs</file>
         <file>shaders/moving-tiles.fs</file>
+        <file>shaders/grid.fs</file>
+        <file>shaders/watery.fs</file>
+        <file>shaders/squid.fs</file>
+        <file>shaders/in-out-circles.fs</file>
+        <file>shaders/rainbow-sine.fs</file>
+        <file>shaders/raster-bars.fs</file>
+        <file>shaders/sin-bars.fs</file>
+        <file>shaders/circle-pulse.fs</file>
+        <file>shaders/distorded-mosaic.fs</file>
+        <file>shaders/custom-sine.fs</file>
+        <file>shaders/marquee-stagger.fs</file>
+        <file>shaders/crazy-lines.fs</file>
+        <file>shaders/crosses.fs</file>
     </qresource>
 </RCC>

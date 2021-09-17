@@ -123,15 +123,18 @@ void Shaders::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     iTime += 0.001 * Speed / (float) FPS;
 
+    image_mutex.lock();
+
     shader_renderer->SetITime(iTime);
 
     if(image.isNull())
     {
+        image_mutex.unlock();
         return;
     }
 
-    image_mutex.lock();
     QImage copy = image.copy();
+
     image_mutex.unlock();
 
     for(ControllerZone* controller_zone : controller_zones)
