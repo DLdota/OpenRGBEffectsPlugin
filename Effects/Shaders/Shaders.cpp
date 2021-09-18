@@ -23,7 +23,7 @@ Shaders::Shaders(QWidget *parent) :
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Shaders effect";
 
-    EffectDetails.IsReversable = true;
+    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 2000;
     EffectDetails.MinSpeed     = 0;
     EffectDetails.UserColors   = 0;
@@ -48,9 +48,9 @@ Shaders::Shaders(QWidget *parent) :
     connect(shader_renderer, &ShaderRenderer::Image, [this](const QImage& image){
         image_mutex.lock();
         this->image = image;
-        image_mutex.unlock();
 
         ui->preview->setPixmap(QPixmap::fromImage(image));
+        image_mutex.unlock();
     });
 
     connect(shader_renderer, &ShaderRenderer::Log, editor, &GLSLCodeEditor::SetLog);
