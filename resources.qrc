@@ -42,5 +42,6 @@
         <file>shaders/marquee-stagger.fs</file>
         <file>shaders/crazy-lines.fs</file>
         <file>shaders/crosses.fs</file>
+        <file>shaders/supershapes.fs</file>
     </qresource>
 </RCC>
