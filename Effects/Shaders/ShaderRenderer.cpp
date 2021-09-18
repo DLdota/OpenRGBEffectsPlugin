@@ -107,7 +107,8 @@ void ShaderRenderer::update()
     program->bind();
     fbo->bind();
 
-    program->setUniformValue("iTime", iTime);
+    program->setUniformValue("iTime", data.iTime);
+    program->setUniformValueArray("iAudio", data.iAudio, 256, 1);
     program->setUniformValue("iResolution", QVector3D(width, height, 1));
 
     program->enableAttributeArray(0);
@@ -136,9 +137,9 @@ ShaderRenderer::~ShaderRenderer()
     Stop();
 }
 
-void ShaderRenderer::SetITime(float value)
+void ShaderRenderer::Update(const ShaderData& data)
 {
-    iTime = value;
+    this->data = data;
 }
 
 void ShaderRenderer::SetShader(std::string shader)
@@ -171,6 +172,7 @@ std::string ShaderRenderer::MakeFragmentShader(std::string shader)
             "#define HW_PERFORMANCE 1 \n"
             "uniform vec3      iResolution;\n"
             "uniform float     iTime;\n"
+            "uniform float     iAudio[256];\n"
         ;
 
 

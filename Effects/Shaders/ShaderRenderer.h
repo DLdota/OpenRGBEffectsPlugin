@@ -14,6 +14,12 @@
 
 typedef std::chrono::time_point<std::chrono::steady_clock,std::chrono::duration<long long, std::ratio<1,10000000000>>> TCount;
 
+struct ShaderData
+{
+    float iTime;
+    float *iAudio;
+};
+
 class ShaderRenderer : public QObject
 {
     Q_OBJECT
@@ -22,7 +28,7 @@ public:
     explicit ShaderRenderer(QObject *parent = nullptr);
     ~ShaderRenderer();
 
-    void SetITime(float);
+    void Update(const ShaderData&);
     void SetShader(std::string);
     void Resize(int, int);
     void Start();
@@ -43,7 +49,8 @@ private:
 
     float width = 128;
     float height = 128;
-    float iTime = 0.f;
+
+    ShaderData data;
 
     std::string shader;
 

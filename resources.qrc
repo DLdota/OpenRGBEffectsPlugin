@@ -43,5 +43,8 @@
         <file>shaders/crazy-lines.fs</file>
         <file>shaders/crosses.fs</file>
         <file>shaders/supershapes.fs</file>
+        <file>shaders/audio-example.fs</file>
+        <file>shaders/audio-example-2.fs</file>
+        <file>shaders/audio-example-3.fs</file>
     </qresource>
 </RCC>

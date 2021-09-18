@@ -14,6 +14,7 @@
 #include "ShaderRenderer.h"
 #include "GLSLCodeEditor.h"
 #include "ColorUtils.h"
+#include "chuck_fft.h"
 
 namespace Ui {
 class Shaders;
@@ -40,17 +41,23 @@ public:
 
 
 private slots:
-    void on_show_rendering_clicked();
+    void on_show_rendering_stateChanged(int);
+    void on_use_audio_stateChanged(int);
     void on_shaders_currentIndexChanged(int);
+    void on_audio_device_currentIndexChanged(int);
 
     void on_width_valueChanged(int);
     void on_height_valueChanged(int);
+
+    void on_amplitude_valueChanged(int);
+    void on_decay_valueChanged(int);
+    void on_average_valueChanged(int);
 
     void on_edit_clicked();
 
 private:
     Ui::Shaders *ui;
-    float iTime = 0.f;
+    ShaderData shader_data;
     QImage image;
 
     ShaderRenderer* shader_renderer = nullptr;
@@ -67,7 +74,28 @@ private:
     std::vector<QString> shader_paths;
     unsigned int current_shader_idx = 0;
 
+    bool show_rendering = false;
+
     std::mutex image_mutex;
+
+    // Audio stuff
+    float fft[256];
+    unsigned char buffer[256];
+    float win_hanning[256];
+    float fft_nrml[256];
+    float fft_fltr[256] = { 0 };
+
+    bool use_audio = false;
+
+    void StartAudio();
+    void StopAudio();
+    void HandleAudioCapture();
+
+    int audio_device_idx = 0;
+    float amplitude = 100.f;
+    float decay = 85.f;
+    float filter_constant = 1.f;
+    unsigned int avg_size = 8;
 };
 
 #endif // SHADERS_H
