@@ -67,8 +67,9 @@ void OpenRGBEffectPage::InitUi()
     ui->AutoStart->setCheckState(effect->IsAutoStart()? Qt::Checked : Qt::Unchecked);
     ui->RandomCheckbox->setCheckState(effect->IsRandomColorsEnabled()? Qt::Checked : Qt::Unchecked);
     ui->OnlyFirst->setCheckState(effect->IsOnlyFirstColorEnabled()? Qt::Checked : Qt::Unchecked);
-    ui->SpeedSlider->setValue(effect->GetSpeed());
-    ui->Slider2->setValue(effect->GetSlider2Val());
+
+    int speed = effect->GetSpeed();
+    int slider2Val = effect->GetSlider2Val();
 
     /*-----------------------------------------------*\
     | Speed slider + extra slider                     |
@@ -80,6 +81,8 @@ void OpenRGBEffectPage::InitUi()
         ui->SpeedFrame->show();
     }
 
+    ui->SpeedSlider->setValue(speed);
+
     if (effect->EffectDetails.MinSlider2Val < effect->EffectDetails.MaxSlider2Val)
     {
         ui->Slider2->setMaximum(effect->EffectDetails.MaxSlider2Val);
@@ -87,6 +90,8 @@ void OpenRGBEffectPage::InitUi()
         ui->Slider2Label->setText(QString().fromStdString(effect->EffectDetails.Slider2Name));
         ui->Slider2Frame->show();
     }
+
+    ui->Slider2->setValue(slider2Val);
 
     if (effect->EffectDetails.HasCustomWidgets)
     {
