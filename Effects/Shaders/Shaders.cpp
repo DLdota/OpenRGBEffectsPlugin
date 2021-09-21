@@ -62,10 +62,17 @@ Shaders::Shaders(QWidget *parent) :
     | combo box                                       |
     \*-----------------------------------------------*/
     QDirIterator it(":/shaders");
+    QStringList shader_list;
 
     while (it.hasNext())
+    {        
+        shader_list << it.next();
+    }
+
+    shader_list.sort();
+
+    for(const QString& path: shader_list)
     {
-        QString path = it.next();
         shader_paths.push_back(path);
         ui->shaders->addItem(path.split( "/" ).last());
     }
