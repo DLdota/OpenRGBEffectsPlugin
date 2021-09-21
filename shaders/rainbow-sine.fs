@@ -3,7 +3,7 @@
 #define thickness 1.0
 #define frequency 4.0
 #define speed 4.0
-#define amplitude 2
+#define amplitude 2.0
 
 vec3 background = vec3(0.0, 0.0, 0.0);
 

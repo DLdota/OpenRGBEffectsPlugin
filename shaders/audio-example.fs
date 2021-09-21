@@ -23,9 +23,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float c = abs(cos(iTime));
 
     vec3 color = vec3(
-       s * iAudio[floor((0.5+uv.x)*128.)],
-       c * iAudio[floor((0.5+uv.x+uv.y)*128.)],
-       iAudio[floor((0.5+uv.y)*128.)]
+       s * iAudio[int(floor((0.5+uv.x)*128.))],
+       c * iAudio[int(floor((0.5+uv.x+uv.y)*128.))],
+       iAudio[int(floor((0.5+uv.y)*128.))]
     );
 
     fragColor = abs(vec4(color,1.0));

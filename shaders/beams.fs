@@ -2,7 +2,7 @@
 
 float time = iTime;
 
-vec2 resolution = iResolution;
+vec2 resolution = iResolution.xy;
 
 //f0:start zoom:
 float f0 = 0.5;

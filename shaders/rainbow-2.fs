@@ -1,12 +1,12 @@
 //f0:freq:
 float f0 = 0.5;
 //f1:amp:
-float f1 =0.5;
+float f1 = 0.5;
 //f2:rays:
-float f2 =0.5;
+float f2 = 0.5;
 
 float time = iTime;
-vec2 resolution = iResolution;
+vec2 resolution = iResolution.xy;
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
 

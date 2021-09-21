@@ -12,7 +12,7 @@ float f2 = 0.5;
 float motion = 0.0;
 
 float time = iTime;
-vec2 resolution = iResolution;
+vec2 resolution = iResolution.xy;
 
 vec3 hsv2rgb(vec3 c) {
   vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);

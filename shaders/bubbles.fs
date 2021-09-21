@@ -7,7 +7,7 @@ float GetCircle(vec2 uv, vec2 position, float radius)
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-    vec2 uv = 1 * vec2(fragCoord.xy - 0.5 * iResolution.xy) / iResolution.y;
+    vec2 uv = vec2(fragCoord.xy - 0.5 * iResolution.xy) / iResolution.y;
 
     float pixel = 0.;
 

@@ -12,13 +12,13 @@ float b = 0.4;
  // -iTime for reverse
 float time = iTime;
 
-vec2 resolution = iResolution;
+vec2 resolution = iResolution.xy;
 
 float m = min(resolution.x, resolution.y);
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-    vec2 position = gl_FragCoord.xy / m - vec2(0.5 * resolution.x / m, 0.5 * resolution.y / m) * 2. *vec2(f0, f1);
+    vec2 position = fragColor.xy / m - vec2(0.5 * resolution.x / m, 0.5 * resolution.y / m) * 2. *vec2(f0, f1);
     vec2 point = vec2(cos(time), sin(time));
     float c = 0.0;
 
