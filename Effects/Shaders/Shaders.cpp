@@ -160,7 +160,8 @@ void Shaders::LoadShader(std::string fragmentShader)
 void Shaders::Apply()
 {    
     std::string fragmentShader = editor->GetContent();
-    shader_renderer->SetShader(fragmentShader);
+    std::string version = editor->GetVersion();
+    shader_renderer->SetShader(version, fragmentShader);
 }
 
 void Shaders::Resize()
@@ -242,6 +243,9 @@ void Shaders::LoadCustomSettings(json Settings)
     if(Settings.contains("fragmentShader"))
         editor->SetContent(QString::fromStdString(Settings["fragmentShader"]));
 
+    if(Settings.contains("shaderVersion"))
+        editor->SetVersion(QString::fromStdString(Settings["shaderVersion"]));
+
     if(Settings.contains("width"))
         ui->width->setValue(Settings["width"]);
 
@@ -273,6 +277,7 @@ json Shaders::SaveCustomSettings(json Settings)
 {
     Settings["shader_name"]      = ui->shaders->currentText().toStdString();
     Settings["fragmentShader"]   = editor->GetContent();
+    Settings["shaderVersion"]    = editor->GetVersion();
     Settings["width"]            = width;
     Settings["height"]           = height;
     Settings["show_rendering"]   = show_rendering;

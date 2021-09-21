@@ -149,8 +149,9 @@ void ShaderRenderer::Update(const ShaderData& data)
     this->data = data;
 }
 
-void ShaderRenderer::SetShader(std::string shader)
+void ShaderRenderer::SetShader(std::string version, std::string shader)
 {
+    this->pre_processor_version = version;
     this->shader = shader;
     recompile_shader = true;
 }
@@ -175,7 +176,7 @@ std::string ShaderRenderer::MakeVertexShader()
 std::string ShaderRenderer::MakeFragmentShader(std::string shader)
 {
     std::string header =
-            "#define version 400\n"
+            "#version " + pre_processor_version +  "\n"
             "#define HW_PERFORMANCE 1 \n"
             "uniform vec3      iResolution;\n"
             "uniform float     iTime;\n"

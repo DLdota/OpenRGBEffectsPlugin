@@ -17,7 +17,10 @@ public:
     ~GLSLCodeEditor();
 
     void SetContent(QString);
+    void SetVersion(QString);
+
     std::string GetContent();
+    std::string GetVersion();
 
 signals:
     void Applied();

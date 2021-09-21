@@ -29,7 +29,7 @@ public:
     ~ShaderRenderer();
 
     void Update(const ShaderData&);
-    void SetShader(std::string);
+    void SetShader(std::string, std::string);
     void Resize(int, int);
     void Start();
     void Stop();
@@ -67,6 +67,8 @@ private:
     bool running = false;
 
     std::chrono::steady_clock* clock;
+
+    std::string pre_processor_version = "110";
 
 signals:
     void Image(const QImage&);

@@ -63,10 +63,21 @@ std::string GLSLCodeEditor::GetContent()
     return ui->content->toPlainText().toStdString();
 }
 
+std::string GLSLCodeEditor::GetVersion()
+{
+    return ui->version->text().toStdString();
+}
+
 void GLSLCodeEditor::SetContent(QString content)
 {
     ui->content->clear();
     ui->content->setText(content);
+}
+
+void GLSLCodeEditor::SetVersion(QString version)
+{
+    ui->version->clear();
+    ui->version->setText(version);
 }
 
 void GLSLCodeEditor::SetLog(QString log)

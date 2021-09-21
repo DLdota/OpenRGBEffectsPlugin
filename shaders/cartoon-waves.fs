@@ -1,17 +1,18 @@
 // https://www.shadertoy.com/view/ldjBRw
 
-float _tanh(float x){
-    return (exp(x) - exp(-1.*x)) / (exp(x) + exp(-1.*x))) ;
+float fast_tanh(float x){
+  float x2 = x * x;
+  float a = x * (135135. + x2 * (17325. + x2 * (378. + x2)));
+  float b = 135135. + x2 * (62370. + x2 * (3150. + x2 * 28.));
+  return a / b;
 }
 
-
-void mainImage(out vec4 O, vec2 U)
+void mainImage(out vec4 O, in vec2 U)
 {
     O.xyz = iResolution;
-
     float y, i=-15., k=O.y, c;
 
-    U /= k;
+        U /= k;
 
     while (i++ < 15.)
         c = exp(-.1*i*i),
@@ -20,7 +21,7 @@ void mainImage(out vec4 O, vec2 U)
             - i/2. + 1.5 - U.y,
         O += max(0., 1.-exp(-y*k*c) )
              * (
-                 _tanh(40.*y)
+                 fast_tanh(40.*y)
                  * (0.5 + .4 * sin(iTime+i+vec4(0,1,1,0)))
                  - O
              );
