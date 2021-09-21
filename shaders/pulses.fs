@@ -6,7 +6,7 @@ float f1 = 0.5;
 float f2 = 0.8;
 
 float time = iTime;
-vec2 resolution = iResolution;
+vec2 resolution = iResolution.xy;
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {

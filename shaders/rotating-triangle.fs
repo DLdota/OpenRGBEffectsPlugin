@@ -16,7 +16,7 @@ vec2 rotateUV(vec2 uv, float rotation, float mid)
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord )
 {
-    vec2 uv = rotateUV(vec2(fragCoord / iResolution)-center,1.7*iTime, 0.);
+    vec2 uv = rotateUV(vec2(fragCoord / iResolution.xy)-center,1.7*iTime, 0.);
     float angle = mod(atan(uv.x, uv.y), 2.*pi);
-    fragColor = vec4((angle < 2*pi/3.)?color1:(angle < 4*pi/3.)?color2:color3, 1.0);
+    fragColor = vec4((angle < 2.*pi/3.)?color1:(angle < 4.*pi/3.)?color2:color3, 1.0);
 }

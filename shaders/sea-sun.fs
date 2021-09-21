@@ -1,3 +1,6 @@
+#define SUN_DIR normalize(vec3(-0.2, 0.15, -0.8))
+#define SUN_COL vec3(0.9, 0.4, 0.2)
+
 float quintic(float x) {
         return x*x*x*(6.*x*x-15.*x+10.);
 }
@@ -59,8 +62,6 @@ vec3 calcNormal(in vec3 p) {
 
 }
 
-const vec3 SUN_DIR = normalize(vec3(-0.2, 0.15, -0.8));
-const vec3 SUN_COL = vec3(0.9, 0.4, 0.2);
 
 vec3 sky(in vec3 rd, vec3 sunDir, float fac) {
     rd.y = max(0., rd.y);

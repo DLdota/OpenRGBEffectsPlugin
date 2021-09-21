@@ -15,7 +15,7 @@ vec3 color2 = vec3(0.4,0.7,1.0);
 vec3 color3 = vec3(0.0,0.0,0.0);
 
 float time = iTime;
-vec2 resolution = iResolution;
+vec2 resolution = iResolution.xy;
 
 float line(float x){
     return -0.01*sin(30.0*x+time) / f0+
