@@ -47,5 +47,6 @@
         <file>shaders/audio-example-2.fs</file>
         <file>shaders/audio-example-3.fs</file>
         <file>shaders/audio-example-4.fs</file>
+        <file>shaders/rotating-triangle.fs</file>
     </qresource>
 </RCC>
