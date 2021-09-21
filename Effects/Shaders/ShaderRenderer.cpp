@@ -40,8 +40,15 @@ void ShaderRenderer::RendererThreadFunction()
     context->create();
     context->makeCurrent(surface);
 
+    QOpenGLFunctions* functions = context->functions();
+
+    std::string vendor = reinterpret_cast<const char*>(functions->glGetString(GL_VENDOR));
+    std::string renderer = reinterpret_cast<const char*>(functions->glGetString(GL_RENDERER));
+    std::string version = reinterpret_cast<const char*>(functions->glGetString(GL_VERSION));
+
+    printf("[OpenRGBEffectsPlugin] OpenGL vendor: %s, renderer: %s, version: %s\n", vendor.c_str(), renderer.c_str(), version.c_str());
+
     surface->setFormat(context->format());
-    //qDebug() << "context->isValid() " << context->isValid();
 
     fbo = new QOpenGLFramebufferObject(width, height);
 
