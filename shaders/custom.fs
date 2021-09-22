@@ -1,14 +1,9 @@
 /*
-Shader inputs:
+Make your own shader program.
 
-uniform vec3      iResolution;           // viewport resolution (in pixels)
-uniform float     iTime;                 // shader playback time (in seconds)
+Make sure to read the documentation.
 
-You must implement:
-
-    "void mainImage( out vec4 fragColor, in vec2 fragCoord )"
-
-Exemple:
+https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/blob/master/Effects/Shaders/README.md
 */
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )

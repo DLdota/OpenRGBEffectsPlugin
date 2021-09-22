@@ -11,14 +11,10 @@
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 #include <thread>
+#include <mutex>
+#include "ShaderProgram.h"
 
 typedef std::chrono::time_point<std::chrono::steady_clock,std::chrono::duration<long long, std::ratio<1,10000000000>>> TCount;
-
-struct ShaderData
-{
-    float iTime;
-    float *iAudio;
-};
 
 class ShaderRenderer : public QObject
 {
@@ -28,51 +24,36 @@ public:
     explicit ShaderRenderer(QObject *parent = nullptr);
     ~ShaderRenderer();
 
-    void Update(const ShaderData&);
-    void SetShader(std::string, std::string);
-    void Resize(int, int);
     void Start();
     void Stop();
     void SetFPS(int);
 
-private slots:
-    void update();
+    bool isRunning();
+
+    ShaderProgram* Program();
+    void SetProgram(ShaderProgram*);
+
+    Uniforms uniforms;
 
 private:
     std::thread* thread = nullptr;
     void RendererThreadFunction();
 
-    QOpenGLFramebufferObject* fbo = nullptr;
-    QOpenGLShaderProgram* program = nullptr;
-    QOffscreenSurface * surface = nullptr;
-    QOpenGLContext * context = nullptr;
-
-    float width = 128;
-    float height = 128;
-
-    ShaderData data;
-
-    std::string shader;
-
-    QString last_log;
-
-    bool resize = false;
-    bool recompile_shader = false;
+    ShaderProgram* shader_program = nullptr;
+    QOffscreenSurface* surface = nullptr;
+    QOpenGLContext* context = nullptr;
 
     int FPS = 60;
-
-    std::string MakeFragmentShader(std::string);
-    std::string MakeVertexShader();
 
     bool running = false;
 
     std::chrono::steady_clock* clock;
 
-    std::string pre_processor_version = "110";
+    std::mutex program_lock;
 
 signals:
     void Image(const QImage&);
-    void Log(QString);
+    void Log(const QString&);
 };
 
 #endif // SHADERRENDERER_H

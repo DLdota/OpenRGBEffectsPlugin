@@ -15,6 +15,7 @@
 #include "GLSLCodeEditor.h"
 #include "ColorUtils.h"
 #include "chuck_fft.h"
+#include "ShaderProgram.h"
 
 namespace Ui {
 class Shaders;
@@ -54,22 +55,22 @@ private slots:
     void on_average_valueChanged(int);
 
     void on_edit_clicked();
+    void on_time_reset_clicked();
 
 private:
     Ui::Shaders *ui;
-    ShaderData shader_data;
     QImage image;
 
     ShaderRenderer* shader_renderer = nullptr;
     GLSLCodeEditor* editor = nullptr;
     GLSLHighlighter* highlighter = nullptr;
 
+    float time = 0.f;
+
     unsigned int width = 128;
     unsigned int height = 128;
 
     void Resize();
-    void Apply();
-    void LoadShader(std::string);    
 
     std::vector<QString> shader_paths;
     unsigned int current_shader_idx = 0;

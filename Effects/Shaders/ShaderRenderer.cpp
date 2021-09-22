@@ -2,20 +2,31 @@
 
 ShaderRenderer::ShaderRenderer(QObject *parent) :
     QObject(parent),
+    shader_program(new ShaderProgram),
     clock(new std::chrono::steady_clock())
 {}
 
 void ShaderRenderer::Start()
 {
-    Stop();
+    printf("ShaderRenderer::Start\n");
 
-    recompile_shader = true;
+    if(running)
+    {
+        printf("ShaderRenderer already running\n");
+        return;
+    }
+
+    shader_program->initialized = false;
+    shader_program->recompile = true;
+
     running = true;
     thread = new std::thread(&ShaderRenderer::RendererThreadFunction, this);
 }
 
 void ShaderRenderer::Stop()
 {
+    printf("ShaderRenderer::Stop\n");
+
     if(thread != nullptr)
     {
         running = false;
@@ -32,6 +43,8 @@ void ShaderRenderer::SetFPS(int value)
 
 void ShaderRenderer::RendererThreadFunction()
 {
+    printf("ShaderRenderer thread started\n");
+
     surface = new QOffscreenSurface();
     surface->create();
 
@@ -48,22 +61,32 @@ void ShaderRenderer::RendererThreadFunction()
 
     printf("[OpenRGBEffectsPlugin] OpenGL vendor: %s, renderer: %s, version: %s\n", vendor.c_str(), renderer.c_str(), version.c_str());
 
-    surface->setFormat(context->format());
-
-    fbo = new QOpenGLFramebufferObject(width, height);
-
-    program = new QOpenGLShaderProgram();
-
-    //program->addShaderFromSourceCode(QOpenGLShader::Vertex, MakeVertexShader().c_str());
-    program->link();
-
-    //qDebug() << "program linked " << program->isLinked();
+    surface->setFormat(context->format());   
 
     while(running)
     {
         TCount start = clock->now();
 
-        update();
+        // DRAW program
+        program_lock.lock();
+
+        if(!shader_program->initialized)
+        {
+            shader_program->Init();
+        }
+
+        if(shader_program->recompile)
+        {
+            emit Log(shader_program->Compile());
+        }
+
+        shader_program->Draw(uniforms, context->functions());
+
+        emit Image(shader_program->Image());
+
+        program_lock.unlock();
+        // .....
+
 
         TCount end = clock->now();
 
@@ -83,119 +106,44 @@ void ShaderRenderer::RendererThreadFunction()
     }
 
     // clean
-    delete fbo;
+    //delete shader_program;
+
     delete surface;
     delete context;
-    delete program;
+
+    printf("ShaderRenderer thread stopped\n");
 }
 
-void ShaderRenderer::update()
-{
-    if(resize)
-    {
-        delete fbo;
-        fbo = new QOpenGLFramebufferObject(width, height);
-        resize = false;
-    }
-
-    if(recompile_shader && !shader.empty())
-    {
-        program->link();
-        program->removeAllShaders();
-
-        program->addShaderFromSourceCode(QOpenGLShader::Vertex, MakeVertexShader().c_str());
-        program->addShaderFromSourceCode(QOpenGLShader::Fragment, MakeFragmentShader(shader).c_str());
-
-        emit Log(program->log());
-
-        recompile_shader = false;
-    }
-
-    program->bind();
-    fbo->bind();
-
-    program->setUniformValue("iTime", data.iTime);
-    program->setUniformValueArray("iAudio", data.iAudio, 256, 1);
-    program->setUniformValue("iResolution", QVector3D(width, height, 1));
-
-    program->enableAttributeArray(0);
-    program->setAttributeBuffer(0, GL_FLOAT, 0, 3);
-
-    glViewport(0, 0, width, height);
-
-    glClear(GL_COLOR_BUFFER_BIT);
-    glBegin(GL_QUADS);
-    glVertex2f(-1.0, -1.0);
-    glVertex2f(-1.0, 1.0);
-    glVertex2f(1.0, 1.0);
-    glVertex2f(1.0, -1.0);
-    glEnd();
-
-    fbo->release();
-    program->release();
-
-    glBindTexture(GL_TEXTURE_2D, fbo->texture());
-
-    emit Image(fbo->toImage());
-}
 
 ShaderRenderer::~ShaderRenderer()
 {
+    printf("ShaderRenderer::~ShaderRenderer\n");
+
     Stop();
+
+    if(shader_program != nullptr)
+    {
+        delete shader_program;
+    }
 }
 
-void ShaderRenderer::Update(const ShaderData& data)
+ShaderProgram* ShaderRenderer::Program()
 {
-    this->data = data;
+    return shader_program;
 }
 
-void ShaderRenderer::SetShader(std::string version, std::string shader)
+bool ShaderRenderer::isRunning()
 {
-    this->pre_processor_version = version;
-    this->shader = shader;
-    recompile_shader = true;
+    return running;
 }
 
-void ShaderRenderer::Resize(int width, int height)
+void ShaderRenderer::SetProgram(ShaderProgram* program)
 {
-    this->width = width;
-    this->height = height;
+    printf("ShaderRenderer::SetProgram\n");
 
-    resize = true;
+    program_lock.lock();
+    shader_program = program;
+    shader_program->recompile = true;
+    program_lock.unlock();
 }
 
-std::string ShaderRenderer::MakeVertexShader()
-{
-    return  "attribute highp vec4 vertices;\n"
-            "varying highp vec2 frag_coords;\n"
-            "void main() {\n"
-                "gl_Position = vec4(vertices.xy,0.0,1.0);\n"
-            "}\n";
-}
-
-std::string ShaderRenderer::MakeFragmentShader(std::string shader)
-{
-    std::string header =
-            "#version " + pre_processor_version +  "\n"
-            "#define HW_PERFORMANCE 1 \n"
-            "uniform vec3      iResolution;\n"
-            "uniform float     iTime;\n"
-            "uniform float     iAudio[256];\n"
-        ;
-
-
-    std::string footer =
-            "\n"
-            "void main( void )\n"
-              "{\n"
-                "vec4 color = vec4(0.0,0.0,0.0,1.0);\n"
-                "mainImage(color, gl_FragCoord.xy);\n"
-                "gl_FragColor = vec4(color.xyz,1.0);\n"
-            "}\n"
-        ;
-
-    return
-            header +
-            shader +
-            footer ;
-}

@@ -14,7 +14,6 @@
         <file>styles/default.xml</file>
         <file>shaders/double-wave.fs</file>
         <file>shaders/beams.fs</file>
-        <file>shaders/cross.fs</file>
         <file>shaders/rainbow-2.fs</file>
         <file>shaders/wavy-rainbow.fs</file>
         <file>shaders/pulses.fs</file>
@@ -43,11 +42,17 @@
         <file>shaders/crazy-lines.fs</file>
         <file>shaders/crosses.fs</file>
         <file>shaders/supershapes.fs</file>
-        <file>shaders/audio-example.fs</file>
+        <file>shaders/audio-example-1.fs</file>
         <file>shaders/audio-example-2.fs</file>
         <file>shaders/audio-example-3.fs</file>
         <file>shaders/audio-example-4.fs</file>
         <file>shaders/rotating-triangle.fs</file>
         <file>shaders/fabled.fs</file>
+        <file>shaders/hypnotoad.fs</file>
+        <file>shaders/color-alternalte.fs</file>
+        <file>shaders/moving-bands.fs</file>
+        <file>shaders/audio-example-5.fs</file>
+        <file>shaders/audio-exemple-6.fs</file>
+        <file>shaders/beam.fs</file>
     </qresource>
 </RCC>

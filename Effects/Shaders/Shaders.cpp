@@ -38,20 +38,21 @@ Shaders::Shaders(QWidget *parent) :
     EffectDetails.HasCustomSettings = true;
 
     shader_renderer = new ShaderRenderer(this);
-    editor = new GLSLCodeEditor(this);
+
+    editor = new GLSLCodeEditor(this, shader_renderer->Program());
 
     ui->preview->hide();
 
-    connect(editor, &GLSLCodeEditor::Applied, [this](){
-        Apply();
+    // Connect slots
+    connect(editor, &GLSLCodeEditor::Applied, [this](ShaderProgram* program){
+        program->Resize(width, height);
+        shader_renderer->SetProgram(program);
     });
 
-    connect(shader_renderer, &ShaderRenderer::Image, [this](const QImage& image){
+    connect(shader_renderer, &ShaderRenderer::Image, [this](const QImage& image){        
         image_mutex.lock();
         this->image = image;
-        QMetaObject::invokeMethod(ui->preview, "setPixmap",
-                                  Qt::QueuedConnection, Q_ARG(QPixmap, QPixmap::fromImage(image)));
-        //ui->preview->setPixmap(QPixmap::fromImage(image));
+        QMetaObject::invokeMethod(ui->preview, "setPixmap", Qt::QueuedConnection, Q_ARG(QPixmap, QPixmap::fromImage(image)));
         image_mutex.unlock();
     });
 
@@ -101,11 +102,9 @@ Shaders::Shaders(QWidget *parent) :
     {
         fft[i] = 0.0f;
         fft_nrml[i] = offset + (scale * (i / 256.0f));
-
     }
 
-     shader_data.iTime = 0;
-     shader_data.iAudio = fft_fltr;
+    SetSpeed(1000);
 }
 
 void Shaders::SetFPS(unsigned int value)
@@ -116,7 +115,7 @@ void Shaders::SetFPS(unsigned int value)
 
 void Shaders::EffectState(bool state)
 {
-    EffectEnabled = state;
+    EffectEnabled = state;    
 
     if(state)
     {
@@ -148,39 +147,30 @@ void Shaders::DefineExtraOptions(QLayout* layout)
     layout->addWidget(this);
 }
 
-void Shaders::LoadShader(std::string fragmentShader)
-{    
-    editor->SetContent(QString::fromStdString(fragmentShader));
-    shader_data.iTime = 0;
-    shader_renderer->Update(shader_data);
-    Apply();
-}
-
-
-void Shaders::Apply()
-{    
-    std::string fragmentShader = editor->GetContent();
-    std::string version = editor->GetVersion();
-    shader_renderer->SetShader(version, fragmentShader);
-}
-
 void Shaders::Resize()
 {
-    shader_renderer->Resize(width, height);
+    shader_renderer->Program()->Resize(width, height);
 }
 
 void Shaders::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
-    shader_data.iTime += 0.001 * Speed / (float) FPS;
+    time += 0.001 * Speed / (float) FPS;
 
     if(use_audio)
     {
         HandleAudioCapture();
     }
 
-    image_mutex.lock();
+    if(!shader_renderer->isRunning())
+    {
+        printf("Skipping step effect. \n");
+        return;
+    }
 
-    shader_renderer->Update(shader_data);
+    shader_renderer->uniforms.iTime = time;
+    shader_renderer->uniforms.iAudio = fft_fltr;
+
+    image_mutex.lock();
 
     if(image.isNull())
     {
@@ -234,17 +224,16 @@ void Shaders::StepEffect(std::vector<ControllerZone*> controller_zones)
     }
 }
 
-
 void Shaders::LoadCustomSettings(json Settings)
 {
     if(Settings.contains("shader_name"))
         ui->shaders->setCurrentText(QString::fromStdString(Settings["shader_name"]));
 
-    if(Settings.contains("fragmentShader"))
-        editor->SetContent(QString::fromStdString(Settings["fragmentShader"]));
-
-    if(Settings.contains("shaderVersion"))
-        editor->SetVersion(QString::fromStdString(Settings["shaderVersion"]));
+    if(Settings.contains("shader_program"))
+    {
+        shader_renderer->SetProgram(ShaderProgram::FromJSON(Settings["shader_program"]));
+        editor->SetProgram(shader_renderer->Program());
+    }
 
     if(Settings.contains("width"))
         ui->width->setValue(Settings["width"]);
@@ -270,14 +259,12 @@ void Shaders::LoadCustomSettings(json Settings)
     if(Settings.contains("avg_size"))
         ui->average->setValue(Settings["avg_size"]);
 
-    Apply();
 }
 
 json Shaders::SaveCustomSettings(json Settings)
 {
     Settings["shader_name"]      = ui->shaders->currentText().toStdString();
-    Settings["fragmentShader"]   = editor->GetContent();
-    Settings["shaderVersion"]    = editor->GetVersion();
+    Settings["shader_program"]   = shader_renderer->Program()->ToJSON();
     Settings["width"]            = width;
     Settings["height"]           = height;
     Settings["show_rendering"]   = show_rendering;
@@ -497,7 +484,11 @@ void Shaders::on_shaders_currentIndexChanged(int idx)
 
     QTextStream frag_in(&frag);
 
-    LoadShader(frag_in.readAll().toStdString());
+    ShaderProgram* program = new ShaderProgram();
+    program->main_pass->data.fragment_shader = frag_in.readAll().toStdString();
+    program->Resize(width, height);
+    shader_renderer->SetProgram(program);
+    editor->SetProgram(program);
 }
 
 void Shaders::on_width_valueChanged(int value)
@@ -515,6 +506,10 @@ void Shaders::on_height_valueChanged(int value)
 void Shaders::on_edit_clicked()
 {
     editor->show();
+}
+void Shaders::on_time_reset_clicked()
+{
+    time = 0.f;
 }
 
 void Shaders::on_amplitude_valueChanged(int value)

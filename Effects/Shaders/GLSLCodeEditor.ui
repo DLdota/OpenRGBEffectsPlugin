@@ -14,37 +14,10 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="8" column="1" colspan="3">
-    <widget class="QPushButton" name="apply">
-     <property name="text">
-      <string>Apply</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="QComboBox" name="styles"/>
-   </item>
-   <item row="7" column="1" colspan="3">
-    <widget class="QLabel" name="logs">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="textInteractionFlags">
-      <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="1" colspan="2">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Style</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="QLineEdit" name="version">
-     <property name="text">
-      <string>110</string>
      </property>
     </widget>
    </item>
@@ -55,26 +28,74 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1" colspan="3">
-    <widget class="QCodeEditor" name="content" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>256</height>
-      </size>
+   <item row="2" column="1" colspan="4">
+    <widget class="QTabWidget" name="files">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Tab 1</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2"/>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Tab 2</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+   <item row="7" column="1" colspan="3">
+    <widget class="QPushButton" name="apply">
+     <property name="text">
+      <string>Apply</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="4">
+    <widget class="QToolButton" name="help_shaders">
+     <property name="text">
+      <string>?</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QLineEdit" name="version">
+     <property name="text">
+      <string>110</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QComboBox" name="styles"/>
+   </item>
+   <item row="1" column="4">
+    <widget class="QToolButton" name="help_versions">
+     <property name="text">
+      <string>?</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QToolButton" name="help_styles">
+     <property name="text">
+      <string>?</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" colspan="4">
+    <widget class="QLabel" name="logs">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="textInteractionFlags">
+      <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QCodeEditor</class>
-   <extends>QWidget</extends>
-   <header location="global">Dependencies/QCodeEditor/include/internal/QCodeEditor.hpp</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
