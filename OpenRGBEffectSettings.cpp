@@ -10,13 +10,11 @@ bool OpenRGBEffectSettings::SaveUserSettings(json j, std::string filename)
 {
     if(!CreateSettingsDirectory())
     {
-        printf("Cannot create settings directory.\n");
         return false;
     }
 
     if(!CreateEffectProfilesDirectory())
     {
-        printf("Cannot create profiles directory.\n");
         return false;
     }
 
@@ -29,13 +27,11 @@ json OpenRGBEffectSettings::LoadUserSettings(std::string filename)
 
     if(!CreateSettingsDirectory())
     {
-        printf("Cannot create settings directory.\n");
         return Settings;
     }
 
     if(!CreateEffectProfilesDirectory())
     {
-        printf("Cannot create profiles directory.\n");
         return Settings;
     }
 
@@ -46,7 +42,6 @@ bool OpenRGBEffectSettings::SaveEffectPattern(json j, std::string effect_name, s
 {
     if(!CreateEffectPatternsDirectory(effect_name))
     {
-        printf("Cannot create pattern directory for effect [%s].\n", effect_name.c_str());
         return false;
     }
 
@@ -105,7 +100,7 @@ bool OpenRGBEffectSettings::write_file(std::string file_name, json j)
         }
         catch(const std::exception& e)
         {
-            printf("Cannot write file: %s\n", e.what());
+            printf("[OpenRGBEffectsPlugin] Cannot write file: %s\n", e.what());
             return false;
         }
     }
@@ -128,7 +123,7 @@ json OpenRGBEffectSettings::load_json_file(std::string file_name)
         }
         catch(const std::exception& e)
         {
-             printf("Cannot read file: %s\n", e.what());
+             printf("[OpenRGBEffectsPlugin] Cannot read file: %s\n", e.what());
         }
     }
 
@@ -152,11 +147,8 @@ std::vector<std::string> OpenRGBEffectSettings::list_files(std::string path)
 
 bool OpenRGBEffectSettings::create_dir(std::string directory)
 {
-    printf("Creating folder: %s\n", directory.c_str());
-
     if(filesystem::exists(directory))
     {
-        printf("Already exists : %s\n", directory.c_str());
         return true;
     }
 

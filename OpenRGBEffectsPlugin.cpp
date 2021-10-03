@@ -41,12 +41,7 @@ QWidget* OpenRGBEffectsPlugin::GetWidget()
 {
     printf("[OpenRGBEffectsPlugin] version %s (%s), build date %s\n", VERSION_STRING, GIT_COMMIT_ID, GIT_COMMIT_DATE);
 
-    std::map<std::string, std::function<RGBEffect*()>>::iterator it;
-
-    for (it = EffectList::effects_construtors.begin(); it != EffectList::effects_construtors.end(); it++)
-    {
-        printf("[OpenRGBEffectsPlugin] %s effect registered\n", it->first.c_str());
-    }
+    printf("[OpenRGBEffectsPlugin] %lu effects registered\n", EffectList::effects_construtors.size());
 
     RMPointer->WaitForDeviceDetection();
 

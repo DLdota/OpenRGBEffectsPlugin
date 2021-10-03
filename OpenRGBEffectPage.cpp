@@ -324,7 +324,7 @@ void OpenRGBEffectPage::on_load_pattern_clicked()
     try {
         ApplyJson(effect_settings);
     }  catch (const std::exception & e) {
-        printf("Cannot apply effect settings, reason: %s\n", e.what());
+        printf("[OpenRGBEffectsPlugin] Cannot apply effect settings, reason: %s\n", e.what());
     }
 }
 
@@ -456,7 +456,7 @@ void OpenRGBEffectPage::on_edit_pattern_clicked()
             try {
                 ApplyJson(json::parse(text.toStdString()));
             } catch (const std::exception & e) {
-                printf("Cannot apply effect settings, reason: %s\n", e.what());
+                printf("[OpenRGBEffectsPlugin] Cannot apply effect settings, reason: %s\n", e.what());
             }
         }
     }

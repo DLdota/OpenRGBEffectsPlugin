@@ -8,11 +8,8 @@ ShaderRenderer::ShaderRenderer(QObject *parent) :
 
 void ShaderRenderer::Start()
 {
-    printf("ShaderRenderer::Start\n");
-
     if(running)
     {
-        printf("ShaderRenderer already running\n");
         return;
     }
 
@@ -25,8 +22,6 @@ void ShaderRenderer::Start()
 
 void ShaderRenderer::Stop()
 {
-    printf("ShaderRenderer::Stop\n");
-
     if(thread != nullptr)
     {
         running = false;
@@ -43,8 +38,6 @@ void ShaderRenderer::SetFPS(int value)
 
 void ShaderRenderer::RendererThreadFunction()
 {
-    printf("ShaderRenderer thread started\n");
-
     surface = new QOffscreenSurface();
     surface->create();
 
@@ -110,15 +103,11 @@ void ShaderRenderer::RendererThreadFunction()
 
     delete surface;
     delete context;
-
-    printf("ShaderRenderer thread stopped\n");
 }
 
 
 ShaderRenderer::~ShaderRenderer()
 {
-    printf("ShaderRenderer::~ShaderRenderer\n");
-
     Stop();
 
     if(shader_program != nullptr)
@@ -139,8 +128,6 @@ bool ShaderRenderer::isRunning()
 
 void ShaderRenderer::SetProgram(ShaderProgram* program)
 {
-    printf("ShaderRenderer::SetProgram\n");
-
     program_lock.lock();
     shader_program = program;
     shader_program->recompile = true;

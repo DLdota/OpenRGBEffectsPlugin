@@ -3,8 +3,6 @@
 
 ShaderPass::ShaderPass(Type type)
 {
-    printf("ShaderPass::ShaderPass (type=%d)\n", type);
-
     this->type = type;
 
     switch (type) {
@@ -23,8 +21,6 @@ ShaderPass::ShaderPass(Type type)
 
 void ShaderPass::Init(int width, int height)
 {
-    printf("ShaderPass::Init\n");
-
     Resize(width, height);
 
     program = new QOpenGLShaderProgram();
@@ -33,8 +29,6 @@ void ShaderPass::Init(int width, int height)
 
 void ShaderPass::Resize(int width, int height)
 {
-    printf("ShaderPass::Resize\n");
-
     this->width = width;
     this->height = height;
 
@@ -48,8 +42,6 @@ void ShaderPass::Resize(int width, int height)
 
 QString ShaderPass::Recompile(std::string version)
 {
-    printf("ShaderPass::Recompile\n");
-
     // re-link necessary??
     program->link();
 
@@ -83,11 +75,6 @@ QString ShaderPass::Recompile(std::string version)
                         );
             texture->create();
         }
-        else
-        {
-            printf("No texture path given\n");
-        }
-
     }
     else if(type == AUDIO)
     {
@@ -294,8 +281,6 @@ QImage ShaderPass::toImage()
 
 ShaderPass::~ShaderPass()
 {
-    printf("ShaderPass::~ShaderPass\n");
-
     if(fbo != nullptr)
     {
         delete fbo;
@@ -309,7 +294,6 @@ ShaderPass::~ShaderPass()
 
 ShaderPass* ShaderPass::Copy()
 {
-    printf("ShaderPass::Copy\n");
     ShaderPass* copy = new ShaderPass(type);
 
     copy->data = data;

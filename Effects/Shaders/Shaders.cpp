@@ -163,7 +163,6 @@ void Shaders::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     if(!shader_renderer->isRunning())
     {
-        printf("Skipping step effect. \n");
         return;
     }
 

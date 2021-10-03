@@ -39,8 +39,6 @@ GLSLCodeEditor::GLSLCodeEditor(QWidget *parent, ShaderProgram* program) :
 
 void GLSLCodeEditor::RecreateFileTabs()
 {
-    printf("GLSLCodeEditor::RecreateFileTabs\n");
-
     pass_editors.clear();
 
     /*-----------------------------------------------*\

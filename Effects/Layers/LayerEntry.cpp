@@ -99,8 +99,6 @@ void LayerEntry::on_preset_currentIndexChanged(int)
 
     if(!effect_settings.is_null())
     {
-        printf("Applying settings\n");
-
         std::vector<RGBColor> colors;
 
         for(unsigned int color : effect_settings["UserColors"])
@@ -122,7 +120,6 @@ void LayerEntry::on_preset_currentIndexChanged(int)
         effect->DefineExtraOptions(new QHBoxLayout);
         effect->EffectState(state);
         effect->OnControllerZonesListChanged(assigned_zones);
-        printf("Settings applied\n");
     }
 
     mut.unlock();

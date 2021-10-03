@@ -54,5 +54,8 @@
         <file>shaders/audio-example-5.fs</file>
         <file>shaders/audio-exemple-6.fs</file>
         <file>shaders/beam.fs</file>
+        <file>shaders/moving-ball.fs</file>
+        <file>shaders/rotating-colors.fs</file>
+        <file>shaders/rotating-spiral.fs</file>
     </qresource>
 </RCC>

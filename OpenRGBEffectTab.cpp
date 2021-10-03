@@ -137,7 +137,7 @@ void OpenRGBEffectTab::ReloadProfileList()
 
 void OpenRGBEffectTab::on_profiles_currentIndexChanged(int)
 {
-    printf("Selecting profile\n");
+    printf("[OpenRGBEffectsPlugin] Selecting profile\n");
 
     StopAll();
     ClearAll();

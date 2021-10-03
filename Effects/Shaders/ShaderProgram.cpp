@@ -2,14 +2,11 @@
 
 ShaderProgram::ShaderProgram()
 {    
-    printf("ShaderProgram::ShaderProgram\n");
     main_pass = new ShaderPass(ShaderPass::BUFFER);
 }
 
 ShaderProgram::~ShaderProgram()
 {
-    printf("ShaderProgram::~ShaderProgram\n");
-
     passes.clear();
 
     delete main_pass;
@@ -17,8 +14,6 @@ ShaderProgram::~ShaderProgram()
 
 void ShaderProgram::Init()
 {
-    printf("ShaderProgram::Init (pre_passes:%d)\n", (int)passes.size());
-
     for(ShaderPass* pass: passes)
     {
         pass->Init(width, height);
@@ -31,8 +26,6 @@ void ShaderProgram::Init()
 
 QString ShaderProgram::Compile()
 {
-    printf("ShaderProgram::Compile\n");
-
     QString log = main_pass->Recompile(version);
 
     for(ShaderPass* pass: passes)
@@ -77,8 +70,6 @@ QImage ShaderProgram::Image()
 
 void ShaderProgram::Resize(int width, int height)
 {
-    printf("ShaderProgram::Resize\n");
-
     this->width = width;
     this->height = height;
 
@@ -97,8 +88,6 @@ std::string ShaderProgram::GetVersion()
 
 ShaderProgram* ShaderProgram::Copy()
 {
-    printf("ShaderProgram::Copy\n");
-
     ShaderProgram* copy = new ShaderProgram();
 
     copy->main_pass = main_pass->Copy();
