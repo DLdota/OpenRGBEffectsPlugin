@@ -81,9 +81,6 @@ void Sunrise::StepEffect(std::vector<ControllerZone*> controller_zones)
             unsigned int width = controller_zone->leds_count();
             unsigned int height = 1;
 
-            float hx = 0.5 * width;
-            float hy = 0.5 * height;
-
             for(unsigned int i = 0; i < width; i++)
             {
                 RGBColor color = GetColor(i, 0, width, height);

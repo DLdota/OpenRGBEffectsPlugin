@@ -52,7 +52,7 @@ void BouncingBallSimulation::StepEffect()
     // Draw ball
     baseColor.hue = hueDegrees;
     newLedIds.clear();
-    for (int i = 0; i < pointsInBall.size(); i++) {
+    for (unsigned int i = 0; i < pointsInBall.size(); i++) {
         QPoint point = pointsInBall[i];
         int rx = point.x();
         int ry = point.y();
