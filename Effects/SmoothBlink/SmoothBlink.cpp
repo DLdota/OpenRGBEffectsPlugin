@@ -136,7 +136,7 @@ void SmoothBlink::HandleSolidRendering(std::vector<ControllerZone*> controller_z
 
     for(ControllerZone* controller_zone : controller_zones)
     {
-        controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, color);
+        controller_zone->SetAllZoneLEDs(color, Brightness);
     }
 }
 
@@ -161,7 +161,7 @@ void SmoothBlink::HandleCircleRendering(std::vector<ControllerZone*> controller_
             for(unsigned int i = 0; i < width; i++)
             {
                 RGBColor color = GetColor(i, 0, cx, cy, width);
-                controller_zone->controller->SetLED(start_idx + i, color);
+                controller_zone->SetLED(start_idx + i, color, Brightness);
             }
 
         }
@@ -181,7 +181,7 @@ void SmoothBlink::HandleCircleRendering(std::vector<ControllerZone*> controller_
                     RGBColor color = GetColor(w, h, cx, cy, width + height);
 
                     unsigned int led_num = map[h * width + w];
-                    controller_zone->controller->SetLED(start_idx + led_num, color);
+                    controller_zone->SetLED(start_idx + led_num, color, Brightness);
                 }
             }
 

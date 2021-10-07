@@ -75,13 +75,13 @@ MyNewEffect::MyNewEffect() : RGBEffect()
     EffectDetails.HasCustomSettings = false;
 }
 
-void MyNewEffect::StepEffect(std::vector<ControllerZone> controller_zones)
+void MyNewEffect::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
-    for (ControllerZone& controller_zone: controller_zones)
+    for (ControllerZone* controller_zone: controller_zones)
     {
         // use the progress variable to generate a color
         RGBColor myColor = ToRGBColor(255,0,0);
-        controller_zone.controller->SetAllZoneLEDs(controller_zone.zone_idx, myColor);
+        controller_zone->SetAllZoneLEDs(myColor);
     }
 
     progress += (float) Speed / (float) FPS;

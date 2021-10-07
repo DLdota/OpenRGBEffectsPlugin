@@ -99,7 +99,7 @@ void Layers::StepEffect(std::vector<ControllerZone*> controller_zones)
         }
 
         // run group
-        layer_groups_entries[g]->StepEffect(controller_zones);
+        layer_groups_entries[g]->StepEffect(controller_zones, Brightness);
 
         // compose + set new state
         if(g > 0)

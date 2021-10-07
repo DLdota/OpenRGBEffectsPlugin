@@ -265,6 +265,7 @@ void OpenRGBEffectTab::on_save_settings_clicked()
             effect_settings["AutoStart"] = effect->IsAutoStart();
             effect_settings["RandomColors"] = effect->IsRandomColorsEnabled();
             effect_settings["AllowOnlyFirst"] = effect->IsOnlyFirstColorEnabled();
+            effect_settings["Brightness"] = effect->GetBrightness();
 
             std::vector<RGBColor> colors = effect->GetUserColors();
 
@@ -384,6 +385,15 @@ void OpenRGBEffectTab::LoadEffectSettings(json effect_settings)
     effect->SetSlider2Val(effect_settings["Slider2Val"]);
     effect->SetRandomColorsEnabled(effect_settings["RandomColors"]);
     effect->SetOnlyFirstColorEnabled(effect_settings["AllowOnlyFirst"]);
+
+    if(effect_settings.contains("Brightness"))
+    {
+        effect->SetBrightness(effect_settings["Brightness"]);
+    }
+    else
+    {
+        effect->SetBrightness(100);
+    }
 
     printf("[OpenRGBEffectsPlugin] Effect %s: Loading custom settings\n", name.c_str());
 

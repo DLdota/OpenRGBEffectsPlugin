@@ -1,6 +1,7 @@
 #ifndef CONTROLLERZONE_H
 #define CONTROLLERZONE_H
 
+#include "ColorUtils.h"
 #include "RGBController.h"
 #include "json.hpp"
 
@@ -80,6 +81,17 @@ public:
         j["vendor"] = controller->vendor;
         return j;
     }
+
+    void SetAllZoneLEDs(RGBColor color, int brightness)
+    {
+        controller->SetAllZoneLEDs(zone_idx, ColorUtils::apply_brightness(color, brightness / 100.f));
+    }
+
+    void SetLED(int idx, RGBColor color, int brightness)
+    {
+         controller->SetLED(idx, ColorUtils::apply_brightness(color, brightness / 100.f));
+    }
+
 };
 
 #endif // CONTROLLERZONE_H

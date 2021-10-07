@@ -45,7 +45,7 @@ void Rain::StepEffect(std::vector<ControllerZone*> controller_zones)
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
                 RGBColor color = GetColor(i, 0, reverse ? leds_count - LedID - 1 : LedID);
-                controller_zones[i]->controller->SetLED(start_idx + LedID, color);
+                controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
             }
         }
 
@@ -63,7 +63,7 @@ void Rain::StepEffect(std::vector<ControllerZone*> controller_zones)
                 {
                     int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
                     RGBColor color = GetColor(i, col_id, reverse ? rows - row_id - 1: row_id);
-                    controller_zones[i]->controller->SetLED(start_idx + LedID, color);
+                    controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
                 }
             }
         }

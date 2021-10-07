@@ -70,6 +70,9 @@ public:
     virtual unsigned int GetSlider2Val() { return Slider2Val; }
     virtual void SetSlider2Val(unsigned int value) { Slider2Val = value; }
 
+    virtual unsigned int GetBrightness() { return Brightness; }
+    virtual void SetBrightness(unsigned int value) { Brightness = value; }
+
     EffectInfo EffectDetails;
 
     void EmitMeasure(float t, int d){ emit TimeMeasured(t, d); }
@@ -86,6 +89,7 @@ protected:
     bool AutoStart = false;
     bool OnlyFirstColorEnabled = false;
     bool EffectEnabled = false;
+    float Brightness = 100;
 };
 
 #endif // RGBEFFECT_H

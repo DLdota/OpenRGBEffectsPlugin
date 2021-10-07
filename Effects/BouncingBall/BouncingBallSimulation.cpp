@@ -7,11 +7,11 @@ BouncingBallSimulation::BouncingBallSimulation(
     unsigned int gravity,
     unsigned int horizontalVelocity,
     unsigned int spectrumVelocity,
-    unsigned int dropHeightPercent)
+    unsigned int dropHeightPercent):
+    controllerZone(controllerZone)
 {
     this->zoneIndex = controllerZone->zone_idx;
     this->zoneType = controllerZone->type();
-    this->rgbController = controllerZone->controller;
     this->startIndex = controllerZone->start_idx();
 
     if (this->zoneType == ZONE_TYPE_MATRIX) {
@@ -31,7 +31,7 @@ BouncingBallSimulation::BouncingBallSimulation(
     this->dx = getHorizontalVelocity(horizontalVelocity);
     this->spectrumVelocity = spectrumVelocity;
     this->ddx = 0;
-    this->ddy = BouncingBallSimulation::GetGravity(gravity);
+    this->ddy = GetGravity(gravity);
 
     rng = std::default_random_engine(std::random_device{}());
     rndX = std::uniform_int_distribution<>(0, width-1); // [min, max] inclusive
@@ -71,9 +71,9 @@ void BouncingBallSimulation::StepEffect()
 
         // Set new LED color
         unsigned int ledId = zoneType == ZONE_TYPE_MATRIX
-                ? rgbController->zones[zoneIndex].matrix_map->map[ledIndex]
+                ? controllerZone->controller->zones[zoneIndex].matrix_map->map[ledIndex]
                 : ledIndex;
-        rgbController->SetLED(startIndex + ledId, RGBColor(hsv2rgb(&pixelColor)));
+        controllerZone->SetLED(startIndex + ledId, RGBColor(hsv2rgb(&pixelColor)), Brightness);
 
         // Update new and old LED indices
         newLedIds.insert(ledId);
@@ -82,7 +82,7 @@ void BouncingBallSimulation::StepEffect()
 
     // Turn off LEDs no longer within radius of ball
     for (const unsigned int& oldLedId : oldLedIds) {
-        rgbController->SetLED(startIndex + oldLedId, off);
+        controllerZone->SetLED(startIndex + oldLedId, off, Brightness);
     }
 
     // New LEDs changed this frame will be old LEDs next frame
@@ -199,7 +199,14 @@ void BouncingBallSimulation::initSimulation()
 
     oldLedIds.clear();
     newLedIds.clear();
-    rgbController->SetAllZoneLEDs(zoneIndex, off);
+    controllerZone->SetAllZoneLEDs(off, Brightness);
+}
+
+void BouncingBallSimulation::SetBrightness(unsigned int Brightness)
+{
+    this->lockObj.lock();
+    this->Brightness = Brightness;
+    this->lockObj.unlock();
 }
 
 void BouncingBallSimulation::SetFps(unsigned int fps)
@@ -242,7 +249,7 @@ void BouncingBallSimulation::SetRadius(unsigned int radius)
 void BouncingBallSimulation::SetGravity(unsigned int gravity)
 {
     this->lockObj.lock();
-    this->ddy = BouncingBallSimulation::GetGravity(gravity);
+    this->ddy = GetGravity(gravity);
     initSimulation();
     this->lockObj.unlock();
 }

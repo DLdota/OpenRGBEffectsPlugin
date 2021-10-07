@@ -82,6 +82,15 @@ void BouncingBallEffect::SetFPS(unsigned int value)
     }
 }
 
+void BouncingBallEffect::SetBrightness(unsigned int value)
+{
+    Brightness = value;
+
+    for (const auto& pair : bouncingBallSimulations) {
+        pair.second->SetBrightness(Brightness);
+    }
+}
+
 void BouncingBallEffect::checkForDimensionChange(
     ControllerZone* controllerZone,
     BouncingBallSimulation* bouncingBallSim)

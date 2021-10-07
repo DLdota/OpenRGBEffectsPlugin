@@ -747,7 +747,7 @@ void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)
 
             for (int LedID = 0; LedID < leds_count && LedID < colors_count; LedID++)
             {
-                controller_zone->controller->SetLED(start_idx + LedID, GetColor(1, LedID, leds_count, 1));
+                controller_zone->SetLED(start_idx + LedID, GetColor(1, LedID, leds_count, 1), Brightness);
             }
         }
 
@@ -761,7 +761,7 @@ void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)
                 for (int row_id = 0; row_id < rows; row_id++)
                 {
                     int LedID = controller_zone->controller->zones[controller_zone->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                    controller_zone->controller->SetLED(start_idx + LedID, GetColor(row_id, col_id, rows, cols));
+                    controller_zone->SetLED(start_idx + LedID, GetColor(row_id, col_id, rows, cols), Brightness);
                 }
             }
         }

@@ -112,6 +112,11 @@ void LayerEntry::on_preset_currentIndexChanged(int)
         effect->SetRandomColorsEnabled(effect_settings["RandomColors"]);
         effect->SetOnlyFirstColorEnabled(effect_settings["AllowOnlyFirst"]);
 
+        if(effect_settings.contains("Brightness"))
+        {
+             effect->SetBrightness(effect_settings["Brightness"]);
+        }
+
         if(effect_settings.contains("CustomSettings"))
         {
             effect->LoadCustomSettings(effect_settings["CustomSettings"]);

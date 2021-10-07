@@ -27,7 +27,10 @@ LivePreviewController::LivePreviewController(QWidget *parent) :
     modes[0].name = "Direct";
     modes[0].colors = colors;
     modes[0].value = 0;
-    modes[0].flags = MODE_FLAG_HAS_PER_LED_COLOR;
+    modes[0].flags = MODE_FLAG_HAS_PER_LED_COLOR | MODE_FLAG_HAS_BRIGHTNESS;
+    modes[0].brightness_min = 0;
+    modes[0].brightness_max = 100;
+    modes[0].brightness = 100;
     modes[0].color_mode = MODE_COLORS_PER_LED;
 
     connect(this, SIGNAL(Rendered(QImage)), this, SLOT(Draw(QImage)));
@@ -38,6 +41,7 @@ LivePreviewController::LivePreviewController(QWidget *parent) :
     }
 
     ui->preview_widget->setScaledContents(true);
+    ui->brightness->setValue(modes[0].brightness);
 }
 
 LivePreviewController::~LivePreviewController()
@@ -99,6 +103,8 @@ void LivePreviewController::DeviceUpdateLEDs() {
 
     zone_type zt = zones[0].type;
 
+    float brightness = modes[0].brightness / 100.f;
+
     if(zt == ZONE_TYPE_LINEAR || zt == ZONE_TYPE_SINGLE)
     {
         QImage image(zones[0].leds_count, 1, QImage::Format_ARGB32);
@@ -106,7 +112,7 @@ void LivePreviewController::DeviceUpdateLEDs() {
         for(unsigned int idx = 0 ; idx < zones[0].leds_count; idx++)
         {
             int rgb = colors[idx];
-            QColor color = QColor(RGBGetRValue(rgb), RGBGetGValue(rgb), RGBGetBValue(rgb));
+            QColor color = QColor(RGBGetRValue(rgb) * brightness, RGBGetGValue(rgb) * brightness, RGBGetBValue(rgb) * brightness);
             image.setPixelColor(idx, 0, color);
         }
         emit Rendered(image);
@@ -121,7 +127,7 @@ void LivePreviewController::DeviceUpdateLEDs() {
             for(unsigned  int w = 0; w < zones[0].matrix_map->width; w++)
             {
                 int rgb = colors[(h*zones[0].matrix_map->width) + w];
-                QColor color = QColor(RGBGetRValue(rgb), RGBGetGValue(rgb), RGBGetBValue(rgb));
+                QColor color = QColor(RGBGetRValue(rgb) * brightness, RGBGetGValue(rgb) * brightness, RGBGetBValue(rgb) * brightness);
                 image.setPixelColor(w, h, color);
             }
         }
@@ -183,4 +189,9 @@ void LivePreviewController::on_height_valueChanged(int value)
 void LivePreviewController::on_reverse_stateChanged(int value)
 {
     emit ReversedChanged(value);
+}
+
+void LivePreviewController::on_brightness_valueChanged(int value)
+{
+    modes[0].brightness = value;
 }

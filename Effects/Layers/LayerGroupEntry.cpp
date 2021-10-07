@@ -24,11 +24,11 @@ LayerGroupEntry::~LayerGroupEntry()
     delete ui;
 }
 
-void LayerGroupEntry::StepEffect(std::vector<ControllerZone*> controller_zones)
+void LayerGroupEntry::StepEffect(std::vector<ControllerZone*> controller_zones, int Brightness)
 {
     for(ControllerZone* controller_zone: controller_zones)
     {
-        controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, ColorUtils::OFF());
+        controller_zone->SetAllZoneLEDs(ColorUtils::OFF(), 0.f);
     }
 
     for(unsigned int l = 0; l < layer_entries.size(); l++){
@@ -67,6 +67,17 @@ void LayerGroupEntry::StepEffect(std::vector<ControllerZone*> controller_zones)
                     current[i] = ColorUtils::ApplyColorBlendFn(previous_states[z][i], current[i], layer_entries[l]->composer_fn);
                 }
             }
+        }
+    }
+
+    // apply global brightness
+    for(ControllerZone* controller_zone: controller_zones)
+    {
+        RGBColor* current = controller_zone->controller->zones[controller_zone->zone_idx].colors;
+
+        for(unsigned int i = 0; i < controller_zone->leds_count(); i ++)
+        {
+            current[i] = ColorUtils::apply_brightness(current[i], Brightness / 100.f);
         }
     }
 }

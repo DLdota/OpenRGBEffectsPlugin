@@ -93,6 +93,8 @@ void OpenRGBEffectPage::InitUi()
 
     ui->Slider2->setValue(slider2Val);
 
+    ui->Brightness_slider->setValue(effect->GetBrightness());
+
     if (effect->EffectDetails.HasCustomWidgets)
     {
         ui->It_Goes_On_The_Bottom->changeSize(0,0,QSizePolicy::Fixed); // Gone
@@ -263,6 +265,11 @@ void OpenRGBEffectPage::on_FPS_slider_valueChanged(int value)
     ui->FPS_value->setText(QString::number(FPS));
 }
 
+void OpenRGBEffectPage::on_Brightness_slider_valueChanged(int value)
+{
+    effect->SetBrightness(value);
+}
+
 void OpenRGBEffectPage::on_AutoStart_clicked()
 {
     AutoStart = ui->AutoStart->isChecked();
@@ -338,6 +345,7 @@ json OpenRGBEffectPage::ToJson()
     effect_settings["Slider2Val"] = effect->GetSlider2Val();
     effect_settings["RandomColors"] = effect->IsRandomColorsEnabled();
     effect_settings["AllowOnlyFirst"] = effect->IsOnlyFirstColorEnabled();
+    effect_settings["Brightness"] = effect->GetBrightness();
 
     std::vector<RGBColor> colors = effect->GetUserColors();
 
@@ -371,6 +379,11 @@ void OpenRGBEffectPage::ApplyJson(json effect_settings)
     effect->SetSlider2Val(effect_settings["Slider2Val"]);
     effect->SetRandomColorsEnabled(effect_settings["RandomColors"]);
     effect->SetOnlyFirstColorEnabled(effect_settings["AllowOnlyFirst"]);
+
+    if(effect_settings.contains("Brightness"))
+    {
+        effect->SetBrightness(effect_settings["Brightness"]);
+    }
 
     if(effect_settings.contains("CustomSettings"))
     {

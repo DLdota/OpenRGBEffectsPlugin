@@ -67,7 +67,7 @@ void Hypnotoad::StepEffect(std::vector<ControllerZone*> controller_zones)
             for(unsigned int i = 0; i < width; i++)
             {
                 QColor color = GetColor(i, 0, cx, cy, reverse);
-                controller_zone->controller->SetLED(start_idx + i, ColorUtils::fromQColor(color));
+                controller_zone->SetLED(start_idx + i, ColorUtils::fromQColor(color), Brightness);
             }
 
         }
@@ -87,7 +87,7 @@ void Hypnotoad::StepEffect(std::vector<ControllerZone*> controller_zones)
                     QColor color = GetColor(w, h, cx, cy, reverse);
 
                     unsigned int led_num = map[h * width + w];
-                    controller_zone->controller->SetLED(start_idx + led_num, ColorUtils::fromQColor(color));
+                    controller_zone->SetLED(start_idx + led_num, ColorUtils::fromQColor(color), Brightness);
                 }
             }
 

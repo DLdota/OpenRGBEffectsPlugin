@@ -186,6 +186,15 @@ public:
         return QColor(RGBGetRValue(c), RGBGetGValue(c), RGBGetBValue(c));
     }
 
+    static RGBColor apply_brightness(RGBColor color, float brightness)
+    {
+        return ToRGBColor(
+                    (int)(RGBGetRValue(color) * brightness),
+                    (int)(RGBGetGValue(color) * brightness),
+                    (int)(RGBGetBValue(color) * brightness)
+                    );
+    }
+
 private:
 
     static unsigned char InterpolateChanel(unsigned char a, unsigned char b, float x)

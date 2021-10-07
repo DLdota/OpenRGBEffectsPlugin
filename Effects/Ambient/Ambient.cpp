@@ -78,7 +78,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
 
         for(ControllerZone* controller_zone : controller_zones)
         {
-            controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, color);
+            controller_zone->SetAllZoneLEDs(color, Brightness);
         }
 
         return;
@@ -122,7 +122,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
 
         for(ControllerZone* controller_zone : controller_zones)
         {
-            controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, color);
+            controller_zone->SetAllZoneLEDs(color, Brightness);
         }
 
         break;
@@ -155,7 +155,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
 
         for(ControllerZone* controller_zone : controller_zones)
         {
-            controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, smoothed);
+            controller_zone->SetAllZoneLEDs(smoothed, Brightness);
         }
 
         break;
@@ -171,7 +171,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
 
         for(ControllerZone* controller_zone : controller_zones)
         {
-            controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, smoothed);
+            controller_zone->SetAllZoneLEDs(smoothed, Brightness);
         }
 
         break;
@@ -194,7 +194,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
                 for(unsigned int i = 0; i < width; i++)
                 {
                     QColor color = scaled.pixelColor(i, 0);
-                    controller_zone->controller->SetLED(start_idx + i, ColorUtils::fromQColor(color));
+                    controller_zone->SetLED(start_idx + i, ColorUtils::fromQColor(color), Brightness);
                 }
 
             }
@@ -213,7 +213,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
                         QColor color = scaled.pixelColor(w, h);
 
                         unsigned int led_num = map[h * width + w];
-                        controller_zone->controller->SetLED(start_idx + led_num, ColorUtils::fromQColor(color));
+                        controller_zone->SetLED(start_idx + led_num, ColorUtils::fromQColor(color), Brightness);
                     }
                 }
 

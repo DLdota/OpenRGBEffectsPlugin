@@ -52,7 +52,7 @@ void DoubleRotatingRainbow::StepEffect(std::vector<ControllerZone*> controller_z
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
                 RGBColor color = GetColor(LedID, 0.5, leds_count  * 0.5, 0.5, reverse);
-                controller_zones[i]->controller->SetLED(start_idx + LedID, color);
+                controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
             }
         }
 
@@ -67,7 +67,7 @@ void DoubleRotatingRainbow::StepEffect(std::vector<ControllerZone*> controller_z
                 {
                    RGBColor color = GetColor(col_id, row_id, (cols - 1) * 0.5, (rows - 1) * 0.5, reverse);
                    int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                   controller_zones[i]->controller->SetLED(start_idx + LedID, color);
+                   controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
                 }
             }
 

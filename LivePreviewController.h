@@ -34,6 +34,7 @@ signals:
 
 private slots:
     void on_presets_currentIndexChanged(int);
+    void on_brightness_valueChanged(int);
     void on_width_valueChanged(int);
     void on_height_valueChanged(int);
     void on_reverse_stateChanged(int);

@@ -35,6 +35,7 @@ private slots:
     void on_SpeedSlider_valueChanged(int value);
     void on_Slider2_valueChanged(int value);
     void on_FPS_slider_valueChanged(int value);
+    void on_Brightness_slider_valueChanged(int value);
     void on_AutoStart_clicked();
     void on_RandomCheckbox_clicked();
     void on_OnlyFirst_clicked();

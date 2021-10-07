@@ -70,7 +70,7 @@ void GifPlayer::StepEffect(std::vector<ControllerZone*> controller_zones)
             for(unsigned int i = 0; i < width; i++)
             {
                 QColor color = scaled.pixelColor(i, 0);
-                controller_zone->controller->SetLED(start_idx + i, ColorUtils::fromQColor(color));
+                controller_zone->SetLED(start_idx + i, ColorUtils::fromQColor(color), Brightness);
             }
 
         }
@@ -89,7 +89,7 @@ void GifPlayer::StepEffect(std::vector<ControllerZone*> controller_zones)
                     QColor color = scaled.pixelColor(w, h);
 
                     unsigned int led_num = map[h * width + w];
-                    controller_zone->controller->SetLED(start_idx + led_num, ColorUtils::fromQColor(color));
+                    controller_zone->SetLED(start_idx + led_num, ColorUtils::fromQColor(color), Brightness);
                 }
             }
 

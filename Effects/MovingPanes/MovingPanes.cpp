@@ -51,7 +51,7 @@ void MovingPanes::StepEffect(std::vector<ControllerZone*> controller_zones)
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
                 RGBColor color = GetColor(LedID, LedID, leds_count, leds_count, reverse);
-                controller_zones[i]->controller->SetLED(start_idx + LedID, color);
+                controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
             }
         }
 
@@ -67,7 +67,7 @@ void MovingPanes::StepEffect(std::vector<ControllerZone*> controller_zones)
                     RGBColor color = GetColor(col_id, row_id, cols, rows, reverse);
 
                     int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                    controller_zones[i]->controller->SetLED(start_idx + LedID, color);
+                    controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
                 }
             }
 

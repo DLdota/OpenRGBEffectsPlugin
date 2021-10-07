@@ -28,6 +28,7 @@ public:
     int GetHeight();
 
     void SetFps(unsigned int fps);
+    void SetBrightness(unsigned int Brightness);
     void SetWidth(unsigned int width);
     void SetHeight(unsigned int height);
     void SetRadius(unsigned int radius);
@@ -47,7 +48,7 @@ private:
     std::mutex lockObj;
 
     zone_type zoneType;
-    RGBController* rgbController;
+    ControllerZone* controllerZone;
     unsigned int zoneIndex;
     unsigned int startIndex;
 
@@ -66,6 +67,7 @@ private:
     float impactVelocity;
 
     unsigned int fps;
+    float Brightness;
     int width;
     int height;
     int numLeds;

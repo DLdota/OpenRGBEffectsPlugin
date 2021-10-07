@@ -30,9 +30,11 @@ void SpectrumCycling::StepEffect(std::vector<ControllerZone*> controller_zones)
     HSVVal.saturation = 255;
     HSVVal.hue = CurrentHue;
 
+    RGBColor color = RGBColor(hsv2rgb(&HSVVal));
+
     for(ControllerZone* controller_zone: controller_zones)
     {
-        controller_zone->controller->SetAllZoneLEDs(controller_zone->zone_idx, RGBColor(hsv2rgb(&HSVVal)));
+        controller_zone->SetAllZoneLEDs(color, Brightness);
     }
 
     CurrentHue += ((float)Speed / (float)FPS);
