@@ -47,12 +47,12 @@ INCLUDEPATH +=                                                                  
     OpenRGB/qt                                                                                  \
 
 HEADERS +=                                                                                      \
-    Effects/Shaders/NewShaderPassTabHeader.h \
-    Effects/Shaders/ShaderFileTabHeader.h \
-    Effects/Shaders/ShaderPass.h \
-    Effects/Shaders/ShaderPassData.h \
-    Effects/Shaders/ShaderPassEditor.h \
-    Effects/Shaders/ShaderProgram.h \
+    Effects/Shaders/NewShaderPassTabHeader.h                                                    \
+    Effects/Shaders/ShaderFileTabHeader.h                                                       \
+    Effects/Shaders/ShaderPass.h                                                                \
+    Effects/Shaders/ShaderPassData.h                                                            \
+    Effects/Shaders/ShaderPassEditor.h                                                          \
+    Effects/Shaders/ShaderProgram.h                                                             \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
@@ -67,17 +67,19 @@ HEADERS +=                                                                      
     OpenRGB/filesystem.h                                                                        \
     OpenRGB/dependencies/ColorWheel/ColorWheel.h                                                \
     OpenRGB/qt/hsv.h                                                                            \
+    SaveProfilePopup.h
 
 SOURCES +=                                                                                      \
-    Effects/Shaders/NewShaderPassTabHeader.cpp \
-    Effects/Shaders/ShaderFileTabHeader.cpp \
-    Effects/Shaders/ShaderPass.cpp \
-    Effects/Shaders/ShaderPassData.cpp \
-    Effects/Shaders/ShaderPassEditor.cpp \
-    Effects/Shaders/ShaderProgram.cpp \
+    Effects/Shaders/NewShaderPassTabHeader.cpp                                                  \
+    Effects/Shaders/ShaderFileTabHeader.cpp                                                     \
+    Effects/Shaders/ShaderPass.cpp                                                              \
+    Effects/Shaders/ShaderPassData.cpp                                                          \
+    Effects/Shaders/ShaderPassEditor.cpp                                                        \
+    Effects/Shaders/ShaderProgram.cpp                                                           \
     OpenRGB/RGBController/RGBController.cpp                                                     \
     OpenRGB/dependencies/ColorWheel/ColorWheel.cpp                                              \
     OpenRGB/qt/hsv.cpp                                                                          \
+    SaveProfilePopup.cpp
 
 #-----------------------------------------------------------------------------------------------#
 # QCodeEditor                                                                                   #
@@ -187,7 +189,7 @@ HEADERS +=                                                                      
     LivePreviewController.h                                                                     \
     PluginInfo.h                                                                                \
     PreviewWidget.h                                                                             \
-    ZoneListItem.h                                                                              \                                                                           \
+    ZoneListItem.h                                                                              \
     ScreenRecorder.h                                                                            \
 
 SOURCES +=                                                                                      \
@@ -215,14 +217,15 @@ FORMS +=                                                                        
     DeviceListItem.ui                                                                           \
     EffectList.ui                                                                               \
     EffectTabHeader.ui                                                                          \
-    Effects/Shaders/NewShaderPassTabHeader.ui \
-    Effects/Shaders/ShaderFileTabHeader.ui \
-    Effects/Shaders/ShaderPassEditor.ui \
+    Effects/Shaders/NewShaderPassTabHeader.ui                                                   \
+    Effects/Shaders/ShaderFileTabHeader.ui                                                      \
+    Effects/Shaders/ShaderPassEditor.ui                                                         \
     LivePreviewController.ui                                                                    \
     OpenRGBEffectPage.ui                                                                        \
     OpenRGBEffectTab.ui                                                                         \
     ColorPicker.ui                                                                              \
     PluginInfo.ui                                                                               \
+    SaveProfilePopup.ui                                                                         \
     ZoneListItem.ui
 
 #-----------------------------------------------------------------------------------------------#

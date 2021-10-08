@@ -6,7 +6,65 @@
 
 unsigned int OpenRGBEffectSettings::version = 2;
 
-bool OpenRGBEffectSettings::SaveUserSettings(json j, std::string filename)
+
+bool OpenRGBEffectSettings::SetDefaultProfile(std::string filename)
+{
+    json j;
+    j["default_profile"] = filename;
+
+    return write_file(SettingsFolder() + folder_separator() + "EffectSettings.json", j);
+}
+
+bool OpenRGBEffectSettings::DeleteProfile(std::string filename)
+{
+    if(filename.empty())
+    {
+        return false;
+    }
+
+    std::string path = ProfilesFolder() + folder_separator() + filename;
+
+    if(filesystem::exists(path))
+    {
+        if(filename == DefaultProfile())
+        {
+            SetDefaultProfile("");
+        }
+
+        return filesystem::remove(path);
+    }
+
+    return false;
+}
+
+std::string OpenRGBEffectSettings::DefaultProfile()
+{
+    json j;
+
+    std::ifstream file(SettingsFolder() + folder_separator() + "EffectSettings.json");
+
+    if(file)
+    {
+        try
+        {
+            file >> j;
+            file.close();
+        }
+        catch(const std::exception& e)
+        {
+             printf("[OpenRGBEffectsPlugin] Cannot read file: %s\n", e.what());
+        }
+    }
+
+    if(j.contains("default_profile"))
+    {
+        return j["default_profile"];
+    }
+
+    return "";
+}
+
+bool OpenRGBEffectSettings::SaveUserProfile(json j, std::string filename)
 {
     if(!CreateSettingsDirectory())
     {
@@ -21,7 +79,7 @@ bool OpenRGBEffectSettings::SaveUserSettings(json j, std::string filename)
     return write_file(ProfilesFolder() + folder_separator() + filename, j);
 }
 
-json OpenRGBEffectSettings::LoadUserSettings(std::string filename)
+json OpenRGBEffectSettings::LoadUserProfile(std::string filename)
 {
     json Settings;
 
@@ -141,6 +199,9 @@ std::vector<std::string> OpenRGBEffectSettings::list_files(std::string path)
             filenames.push_back(entry.path().filename().u8string());
         }
     }
+
+    // alphabetical sort
+    std::sort(filenames.begin(), filenames.end());
 
     return filenames;
 }

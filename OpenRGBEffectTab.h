@@ -27,12 +27,13 @@ signals:
 
 public slots:
     void DeviceListChanged();
-    void ReloadProfileList();
+    void LoadProfileList();
 
 private slots:
     void on_device_list_SelectionChanged();
     void on_EffectTabs_currentChanged(int);
     void on_save_settings_clicked();
+    void on_delete_profile_clicked();
     void on_plugin_infos_clicked();
     void on_profiles_currentIndexChanged(int);
 
@@ -46,8 +47,8 @@ private:
     void CreateEffectTab(RGBEffect*);
     void InitDeviceList();    
 
-    void LoadEffectsFromSettings();
-    void LoadEffectSettings(json);
+    void LoadEffectsFromCurrentProfile();
+    void LoadEffect(json);
 
     void SetFirstTabStyle();
 

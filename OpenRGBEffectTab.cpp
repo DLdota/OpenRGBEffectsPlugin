@@ -5,6 +5,7 @@
 #include "EffectTabHeader.h"
 #include "OpenRGBEffectsPlugin.h"
 #include "PluginInfo.h"
+#include "SaveProfilePopup.h"
 
 #include <QAction>
 #include <QDialog>
@@ -13,6 +14,7 @@
 #include <QTabBar>
 #include <QTimer>
 #include <QMainWindow>
+#include <QMessageBox>
 
 OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     QWidget(parent),
@@ -25,10 +27,6 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     effect_list = new EffectList;
 
     InitEffectTabs();
-
-    QTimer::singleShot(2000, [=](){
-        ReloadProfileList();
-    });
 
     for (QWidget *w : QApplication::topLevelWidgets())
     {
@@ -43,6 +41,12 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
             }
         }
     }
+
+    // Give a bit to other plugins before loading.
+    // So we make sure all virtual devices are ready
+    QTimer::singleShot(2000, [=](){
+        LoadProfileList();
+    });
 }
 
 OpenRGBEffectTab::~OpenRGBEffectTab()
@@ -137,9 +141,12 @@ void OpenRGBEffectTab::DeviceListChanged()
     ui->device_list->InitControllersList();
 }
 
-void OpenRGBEffectTab::ReloadProfileList()
+void OpenRGBEffectTab::LoadProfileList()
 {
     std::vector<std::string> profiles = OpenRGBEffectSettings::ListProfiles();
+    std::string default_profile = OpenRGBEffectSettings::DefaultProfile();
+
+    ui->profiles->blockSignals(true);
 
     ui->profiles->clear();
 
@@ -148,17 +155,30 @@ void OpenRGBEffectTab::ReloadProfileList()
         ui->profiles->addItem(QString::fromStdString(file_name));
     }
 
+    if(!default_profile.empty())
+    {
+        ui->profiles->setCurrentText(QString::fromStdString(default_profile));
+    }
+    else if(!profiles.empty())
+    {
+        ui->profiles->setCurrentIndex(0);
+    }
+
+    ui->profiles->blockSignals(false);
+
+    LoadEffectsFromCurrentProfile();
+
     emit ProfileListUpdated();
 }
 
 void OpenRGBEffectTab::on_profiles_currentIndexChanged(int)
 {
-    printf("[OpenRGBEffectsPlugin] Selecting profile\n");
+    printf("[OpenRGBEffectsPlugin] Selecting profile: %s\n", ui->profiles->currentText().toStdString().c_str());
 
     StopAll();
     ClearAll();
 
-    LoadEffectsFromSettings();
+    LoadEffectsFromCurrentProfile();
 }
 
 void OpenRGBEffectTab::ClearAll()
@@ -244,89 +264,137 @@ void OpenRGBEffectTab::on_plugin_infos_clicked()
     dialog->exec();
 }
 
+void OpenRGBEffectTab::on_delete_profile_clicked()
+{
+    QMessageBox msgBox;
+    msgBox.setText("Delete profile?");
+    msgBox.setInformativeText("Are you sure to want to delete this profile?");
+    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Cancel);
+    int ret = msgBox.exec();
+
+    switch (ret) {
+      case QMessageBox::Ok:
+          if(OpenRGBEffectSettings::DeleteProfile(ui->profiles->currentText().toStdString()))
+          {
+            ui->profiles->removeItem(ui->profiles->currentIndex());
+          }
+          break;
+      default:
+          break;
+    }
+}
+
 void OpenRGBEffectTab::on_save_settings_clicked()
 {
     QString current_text = ui->profiles->currentText();
 
-    bool ok;
+    QDialog* dialog = new QDialog(this);
 
-    QString profile_name = QInputDialog::getText(this, tr("Save profile"),
-                                                 tr("Profile name:"), QLineEdit::Normal,
-                                                 current_text, &ok);
-    if (ok && !profile_name.isEmpty())
-    {
-        std::map<RGBEffect*, std::vector<ControllerZone*>> effect_zones = EffectManager::Get()->GetEffectsMapping();
-        std::map<RGBEffect*, std::vector<ControllerZone*>>::iterator it;
+    dialog->setWindowTitle("Save to profile");
 
-        json settings;
+    dialog->setModal(true);
 
-        settings["version"] = OpenRGBEffectSettings::version;
+    QVBoxLayout* dialog_layout = new QVBoxLayout(dialog);
 
-        std::vector<json> effects_settings;
+    SaveProfilePopup* save_profile_popup = new SaveProfilePopup(dialog);
 
-        QList<OpenRGBEffectPage*> pages = ui->EffectTabs->findChildren<OpenRGBEffectPage*>();
+    save_profile_popup->SetFileName(current_text);
 
-        for(OpenRGBEffectPage* page: pages)
+    dialog_layout->addWidget(save_profile_popup);
+
+    connect(save_profile_popup, &SaveProfilePopup::Accept, [=](){
+
+        QString profile_name = save_profile_popup->Filename();
+        bool should_load_at_startup = save_profile_popup->ShouldLoadAtStartup();
+
+        if (!profile_name.isEmpty())
         {
-            RGBEffect* effect = page->GetEffect();
-            std::vector<ControllerZone*> controller_zones = effect_zones[effect];
+            std::map<RGBEffect*, std::vector<ControllerZone*>> effect_zones = EffectManager::Get()->GetEffectsMapping();
+            std::map<RGBEffect*, std::vector<ControllerZone*>>::iterator it;
 
+            json settings;
 
-            json effect_settings;
+            settings["version"] = OpenRGBEffectSettings::version;
 
-            effect_settings["EffectClassName"] = effect->EffectDetails.EffectClassName;
-            effect_settings["FPS"] = effect->GetFPS();
-            effect_settings["Speed"] = effect->GetSpeed();
-            effect_settings["Slider2Val"] = effect->GetSlider2Val();
-            effect_settings["AutoStart"] = effect->IsAutoStart();
-            effect_settings["RandomColors"] = effect->IsRandomColorsEnabled();
-            effect_settings["AllowOnlyFirst"] = effect->IsOnlyFirstColorEnabled();
-            effect_settings["Brightness"] = effect->GetBrightness();
+            std::vector<json> effects_settings;
 
-            std::vector<RGBColor> colors = effect->GetUserColors();
+            QList<OpenRGBEffectPage*> pages = ui->EffectTabs->findChildren<OpenRGBEffectPage*>();
 
-            for (unsigned int c = 0; c < colors.size(); c++)
+            for(OpenRGBEffectPage* page: pages)
             {
-                effect_settings["UserColors"][c] = colors[c];
+                RGBEffect* effect = page->GetEffect();
+                std::vector<ControllerZone*> controller_zones = effect_zones[effect];
+
+                json effect_settings;
+
+                effect_settings["EffectClassName"] = effect->EffectDetails.EffectClassName;
+                effect_settings["FPS"] = effect->GetFPS();
+                effect_settings["Speed"] = effect->GetSpeed();
+                effect_settings["Slider2Val"] = effect->GetSlider2Val();
+                effect_settings["AutoStart"] = effect->IsAutoStart();
+                effect_settings["RandomColors"] = effect->IsRandomColorsEnabled();
+                effect_settings["AllowOnlyFirst"] = effect->IsOnlyFirstColorEnabled();
+                effect_settings["Brightness"] = effect->GetBrightness();
+
+                std::vector<RGBColor> colors = effect->GetUserColors();
+
+                for (unsigned int c = 0; c < colors.size(); c++)
+                {
+                    effect_settings["UserColors"][c] = colors[c];
+                }
+
+                if (effect->EffectDetails.HasCustomSettings)
+                {
+                    json j;
+                    effect_settings["CustomSettings"] = effect->SaveCustomSettings(j);
+                }
+
+                std::vector<json> zones;
+
+                for(ControllerZone* controller_zone: controller_zones)
+                {
+                    zones.push_back(controller_zone->to_json());
+                }
+
+                effect_settings["ControllerZones"] = zones;
+
+                effects_settings.push_back(effect_settings);
             }
 
-            if (effect->EffectDetails.HasCustomSettings)
-            {
-                json j;
-                effect_settings["CustomSettings"] = effect->SaveCustomSettings(j);
+            settings["Effects"] = effects_settings;
+
+            OpenRGBEffectSettings::SaveUserProfile(settings, profile_name.toStdString());
+
+            if(ui->profiles->findText(profile_name) == -1){
+                ui->profiles->addItem(profile_name);
+                ui->profiles->setCurrentText(profile_name);
+                emit ProfileListUpdated();
             }
 
-            std::vector<json> zones;
-
-            for(ControllerZone* controller_zone: controller_zones)
+            if(should_load_at_startup)
             {
-                zones.push_back(controller_zone->to_json());
+                OpenRGBEffectSettings::SetDefaultProfile(profile_name.toStdString());
             }
-
-            effect_settings["ControllerZones"] = zones;
-
-            effects_settings.push_back(effect_settings);
         }
 
-        settings["Effects"] = effects_settings;
+        dialog->accept();
+    });
 
-        OpenRGBEffectSettings::SaveUserSettings(settings, profile_name.toStdString());
+    connect(save_profile_popup, &SaveProfilePopup::Reject, [=](){
+        dialog->reject();
+    });
 
-        if(ui->profiles->findText(profile_name) == -1){
-            ui->profiles->addItem(profile_name);
-            ui->profiles->setCurrentText(profile_name);
-            emit ProfileListUpdated();
-        }
-    }
+    dialog->exec();
 }
 
-void OpenRGBEffectTab::LoadEffectsFromSettings()
+void OpenRGBEffectTab::LoadEffectsFromCurrentProfile()
 {
     QString profile = ui->profiles->currentText();
 
     printf("[OpenRGBEffectsPlugin] Loading effects settings if any.\n");
 
-    json settings = OpenRGBEffectSettings::LoadUserSettings(profile.toStdString());
+    json settings = OpenRGBEffectSettings::LoadUserProfile(profile.toStdString());
 
     if(!settings.contains("version") || settings["version"] != OpenRGBEffectSettings::version)
     {
@@ -339,7 +407,7 @@ void OpenRGBEffectTab::LoadEffectsFromSettings()
     for(json effect_settings : effects_settings)
     {
         try {
-            LoadEffectSettings(effect_settings);
+            LoadEffect(effect_settings);
         }
         catch (const std::exception& e)
         {
@@ -352,7 +420,7 @@ void OpenRGBEffectTab::LoadEffectsFromSettings()
     }
 }
 
-void OpenRGBEffectTab::LoadEffectSettings(json effect_settings)
+void OpenRGBEffectTab::LoadEffect(json effect_settings)
 {
     std::string name = effect_settings["EffectClassName"];
 

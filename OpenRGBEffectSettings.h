@@ -14,8 +14,12 @@ class OpenRGBEffectSettings
 public:    
     static unsigned int version;
 
-    static bool SaveUserSettings(json, std::string);
-    static json LoadUserSettings(std::string);
+    static bool DeleteProfile(std::string);
+    static bool SetDefaultProfile(std::string);
+    static std::string DefaultProfile();
+
+    static bool SaveUserProfile(json, std::string);
+    static json LoadUserProfile(std::string);
     static std::vector<std::string> ListProfiles();
 
     static bool SaveEffectPattern(json, std::string, std::string);
