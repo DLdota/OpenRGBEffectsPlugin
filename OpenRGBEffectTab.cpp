@@ -266,28 +266,38 @@ void OpenRGBEffectTab::on_plugin_infos_clicked()
 
 void OpenRGBEffectTab::on_delete_profile_clicked()
 {
-    QMessageBox msgBox;
-    msgBox.setText("Delete profile?");
-    msgBox.setInformativeText("Are you sure to want to delete this profile?");
-    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-    msgBox.setDefaultButton(QMessageBox::Cancel);
-    int ret = msgBox.exec();
+    QString current_profile = ui->profiles->currentText();
 
-    switch (ret) {
-      case QMessageBox::Ok:
-          if(OpenRGBEffectSettings::DeleteProfile(ui->profiles->currentText().toStdString()))
-          {
-            ui->profiles->removeItem(ui->profiles->currentIndex());
-          }
-          break;
-      default:
-          break;
+    if(!current_profile.isEmpty())
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Delete profile?");
+        msgBox.setInformativeText("Are you sure to want to delete this profile?");
+        msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Cancel);
+        int ret = msgBox.exec();
+
+        switch (ret) {
+        case QMessageBox::Ok:
+            if(OpenRGBEffectSettings::DeleteProfile(current_profile.toStdString()))
+            {
+                ui->profiles->removeItem(ui->profiles->currentIndex());
+            }
+            break;
+        default:
+            break;
+        }
     }
 }
 
 void OpenRGBEffectTab::on_save_settings_clicked()
 {
     QString current_text = ui->profiles->currentText();
+
+    if(current_text.isEmpty())
+    {
+        current_text = "my-profile";
+    }
 
     QDialog* dialog = new QDialog(this);
 
@@ -394,28 +404,31 @@ void OpenRGBEffectTab::LoadEffectsFromCurrentProfile()
 
     printf("[OpenRGBEffectsPlugin] Loading effects settings if any.\n");
 
-    json settings = OpenRGBEffectSettings::LoadUserProfile(profile.toStdString());
-
-    if(!settings.contains("version") || settings["version"] != OpenRGBEffectSettings::version)
+    if(!profile.isEmpty())
     {
-        printf("[OpenRGBEffectsPlugin] Trying to load an old settings file version. Aborting.\n");
-        return;
-    }
+        json settings = OpenRGBEffectSettings::LoadUserProfile(profile.toStdString());
 
-    json effects_settings = settings["Effects"];
+        if(!settings.contains("version") || settings["version"] != OpenRGBEffectSettings::version)
+        {
+            printf("[OpenRGBEffectsPlugin] Trying to load an old settings file version. Aborting.\n");
+            return;
+        }
 
-    for(json effect_settings : effects_settings)
-    {
-        try {
-            LoadEffect(effect_settings);
-        }
-        catch (const std::exception& e)
+        json effects_settings = settings["Effects"];
+
+        for(json effect_settings : effects_settings)
         {
-            printf("[OpenRGBEffectsPlugin] Something went wrong while loading effect: %s.\n", e.what());
-        }
-        catch(...)
-        {
-            printf("[OpenRGBEffectsPlugin] Unknown error while loading effect.\n");
+            try {
+                LoadEffect(effect_settings);
+            }
+            catch (const std::exception& e)
+            {
+                printf("[OpenRGBEffectsPlugin] Something went wrong while loading effect: %s.\n", e.what());
+            }
+            catch(...)
+            {
+                printf("[OpenRGBEffectsPlugin] Unknown error while loading effect.\n");
+            }
         }
     }
 }
