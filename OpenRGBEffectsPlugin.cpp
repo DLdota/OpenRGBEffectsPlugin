@@ -124,6 +124,8 @@ QMenu* OpenRGBEffectsPlugin::GetTrayMenu()
 
 void OpenRGBEffectsPlugin::Unload()
 {
+    printf("[OpenRGBEffectsPlugin] Unloading\n");
+
     ui->StopAll();
 }
 
