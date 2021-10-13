@@ -29,8 +29,8 @@ You need `libopenal` installed.
 ## What Effects do you have?
 
 ```
-OpenRGBEffectPlugin/Effects
 ├── Ambient
+├── AudioParty
 ├── AudioSine
 ├── AudioStar
 ├── AudioSync
@@ -38,10 +38,12 @@ OpenRGBEffectPlugin/Effects
 ├── Bloom
 ├── BouncingBall
 ├── Breathing
+├── BreathingCircle
 ├── Bubbles
 ├── ColorWheelEffect
 ├── Comet
 ├── CrossingBeams
+├── CustomGradientWave
 ├── CustomMarquee
 ├── DoubleRotatingRainbow
 ├── Fill
@@ -56,6 +58,7 @@ OpenRGBEffectPlugin/Effects
 ├── Mosaic
 ├── MotionPoint
 ├── MotionPoints
+├── MovingPanes
 ├── NoiseMap
 ├── RadialRainbow
 ├── Rain
@@ -63,6 +66,7 @@ OpenRGBEffectPlugin/Effects
 ├── RotatingBeam
 ├── RotatingRainbow
 ├── Sequence
+├── Shaders
 ├── SmoothBlink
 ├── SpectrumCycling
 ├── Spiral

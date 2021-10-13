@@ -290,6 +290,7 @@ SOURCES +=                                                                      
     Effects/Shaders/ShaderRenderer.cpp                                                          \
     Effects/Shaders/GLSLHighlighter.cpp                                                         \
     Effects/Shaders/GLSLCodeEditor.cpp                                                          \
+    Effects/CustomGradientWave/CustomGradientWave.cpp                                           \
 
 
 HEADERS +=                                                                                      \
@@ -350,6 +351,7 @@ HEADERS +=                                                                      
     Effects/Shaders/ShaderRenderer.h                                                            \
     Effects/Shaders/GLSLHighlighter.h                                                           \
     Effects/Shaders/GLSLCodeEditor.h                                                            \
+    Effects/CustomGradientWave/CustomGradientWave.h                                             \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -394,6 +396,7 @@ FORMS +=                                                                        
     Effects/AudioParty/AudioParty.ui                                                            \
     Effects/Shaders/Shaders.ui                                                                  \
     Effects/Shaders/GLSLCodeEditor.ui                                                           \
+    Effects/CustomGradientWave/CustomGradientWave.ui                                            \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #
