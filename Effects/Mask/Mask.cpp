@@ -17,7 +17,6 @@ Mask::Mask(QWidget *parent) :
     EffectDetails.MaxSpeed     = 0;
     EffectDetails.MinSpeed     = 0;
     EffectDetails.UserColors   = 2;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;

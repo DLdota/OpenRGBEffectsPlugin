@@ -20,6 +20,8 @@ SpectrumCycling::SpectrumCycling() : RGBEffect()
 
     EffectDetails.HasCustomWidgets = false;
     EffectDetails.HasCustomSettings = false;
+
+    SetSpeed(50);
 }
 
 void SpectrumCycling::StepEffect(std::vector<ControllerZone*> controller_zones)
@@ -28,7 +30,7 @@ void SpectrumCycling::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     HSVVal.value = 255;
     HSVVal.saturation = 255;
-    HSVVal.hue = CurrentHue;
+    HSVVal.hue = int(progress) % 360;
 
     RGBColor color = RGBColor(hsv2rgb(&HSVVal));
 
@@ -37,11 +39,6 @@ void SpectrumCycling::StepEffect(std::vector<ControllerZone*> controller_zones)
         controller_zone->SetAllZoneLEDs(color, Brightness);
     }
 
-    CurrentHue += ((float)Speed / (float)FPS);
-
-    if(CurrentHue >= 360)
-    {
-        CurrentHue = 0;
-    }
+    progress += (float) Speed / (float) FPS;
 }
 

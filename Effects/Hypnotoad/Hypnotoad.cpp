@@ -21,7 +21,6 @@ Hypnotoad::Hypnotoad(QWidget *parent) :
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 0;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;
@@ -32,6 +31,8 @@ Hypnotoad::Hypnotoad(QWidget *parent) :
 
     ui->color_rotation_direction->addItems({"Clockwise","Counter-clockwise"});
     ui->animation_direction->addItems({"To the inside","To the outside"});
+
+    SetSpeed(50);
 }
 
 Hypnotoad::~Hypnotoad()

@@ -17,7 +17,6 @@ MovingPanes::MovingPanes(QWidget *parent) :
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 50;
     EffectDetails.MinSlider2Val = 2;
@@ -25,6 +24,9 @@ MovingPanes::MovingPanes(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
+
+    SetSpeed(50);
+    SetSlider2Val(4);
 }
 
 MovingPanes::~MovingPanes()

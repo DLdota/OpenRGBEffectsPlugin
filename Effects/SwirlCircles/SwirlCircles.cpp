@@ -17,7 +17,6 @@ SwirlCircles::SwirlCircles(QWidget *parent) :
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
@@ -26,6 +25,8 @@ SwirlCircles::SwirlCircles(QWidget *parent) :
     EffectDetails.HasCustomWidgets = false;
     EffectDetails.HasCustomSettings = false;
 
+    SetSpeed(50);
+    SetSlider2Val(50);
 }
 
 SwirlCircles::~SwirlCircles()

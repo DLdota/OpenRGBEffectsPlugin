@@ -17,7 +17,6 @@ Mosaic::Mosaic(QWidget *parent) :
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 1000;
     EffectDetails.MinSlider2Val = 10;
@@ -25,6 +24,8 @@ Mosaic::Mosaic(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
+
+    SetSpeed(10);
 }
 
 Mosaic::~Mosaic()

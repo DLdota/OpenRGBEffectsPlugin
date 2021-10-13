@@ -18,7 +18,6 @@ RotatingRainbow::RotatingRainbow(QWidget *parent) :
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 0;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
@@ -26,6 +25,9 @@ RotatingRainbow::RotatingRainbow(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = false;
     EffectDetails.HasCustomSettings = false;
+
+    SetSpeed(20);
+    SetSlider2Val(30);
 }
 
 RotatingRainbow::~RotatingRainbow()

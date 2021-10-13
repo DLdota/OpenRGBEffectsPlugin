@@ -27,12 +27,14 @@ Wavy::Wavy(QWidget *parent) :
 
     ui->oscillation_speed_slider->setMinimum(1);
     ui->oscillation_speed_slider->setMaximum(200);
+    ui->oscillation_speed_slider->setValue(100);
 
     ui->wave_freq_slider->setMinimum(1);
     ui->wave_freq_slider->setMaximum(20);
 
     ui->wave_speed_slider->setMinimum(1);
     ui->wave_speed_slider->setMaximum(200);
+    ui->wave_speed_slider->setValue(50);
 
     GenerateRandomColors();
 }

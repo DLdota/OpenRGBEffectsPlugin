@@ -28,10 +28,12 @@ Ambient::Ambient(QWidget *parent) :
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
-    ui->mode->addItems({"Calculated average (heavy computing)",
-                        "Most common color (heavy computing)",
-                        "Scaled average",
-                        "Screen copy"});
+    ui->mode->addItems({
+                           "Scaled average",
+                           "Screen copy",
+                           "Calculated average (heavy computing)",
+                           "Most common color (heavy computing)",
+                       });
 
     rectangle_selector_overlay = new RectangleSelectorOverlay(this);
 

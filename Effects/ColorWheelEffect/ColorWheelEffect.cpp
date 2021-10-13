@@ -17,7 +17,6 @@ ColorWheelEffect::ColorWheelEffect(QWidget *parent) :
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 10;
     EffectDetails.UserColors   = 0;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;
@@ -25,6 +24,8 @@ ColorWheelEffect::ColorWheelEffect(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
+
+    SetSpeed(100);
 
     ui->direction->addItems({"Clockwise", "Counter-clockwise"});
 }

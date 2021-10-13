@@ -17,7 +17,6 @@ Sunrise::Sunrise(QWidget *parent) :
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 4;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;
@@ -32,7 +31,7 @@ Sunrise::Sunrise(QWidget *parent) :
     UserColors[2] = ColorUtils::fromQColor(Qt::red);
     UserColors[3] = ColorUtils::fromQColor(Qt::black);
 
-
+    SetSpeed(10);
 }
 
 Sunrise::~Sunrise()

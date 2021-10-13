@@ -27,7 +27,7 @@ public:
 private:
     Ui::Spiral *ui;
 
-    double time = 0.0;
+    double time = 1000.0;
 
     RGBColor GetColor(float, float, float, float, bool);
 };

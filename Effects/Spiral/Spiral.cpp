@@ -17,7 +17,6 @@ Spiral::Spiral(QWidget *parent) :
     EffectDetails.MaxSpeed     = 500;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
@@ -25,6 +24,9 @@ Spiral::Spiral(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
+
+    SetSpeed(200);
+    SetSlider2Val(10);
 }
 
 Spiral::~Spiral()

@@ -20,7 +20,6 @@ NoiseMap::NoiseMap(QWidget *parent) :
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 0;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;
@@ -39,6 +38,7 @@ NoiseMap::NoiseMap(QWidget *parent) :
     ui->colors->layout()->setSizeConstraint(QLayout::SetFixedSize);
     ui->scrollArea->setWidgetResizable(true);
 
+    SetSpeed(50);
     Defaults();
     ResetNoise();
     ResetColors();

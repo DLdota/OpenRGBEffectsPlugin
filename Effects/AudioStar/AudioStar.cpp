@@ -18,7 +18,6 @@ AudioStar::AudioStar(QWidget *parent) :
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 0;
     EffectDetails.UserColors   = 0;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;
@@ -26,6 +25,8 @@ AudioStar::AudioStar(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
+
+    SetSpeed(50);
 
     std::vector<char *> devices = AudioManager::get()->GetAudioDevices();
 

@@ -17,7 +17,6 @@ Comet::Comet(QWidget *parent) :
     EffectDetails.MaxSpeed     = 50;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;

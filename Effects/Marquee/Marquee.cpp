@@ -14,10 +14,9 @@ Marquee::Marquee(QWidget *parent) :
     EffectDetails.EffectDescription = "Marquee effect";
 
     EffectDetails.IsReversable = true;
-    EffectDetails.MaxSpeed     = 50;
+    EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 20;
     EffectDetails.MinSlider2Val = 2;
@@ -29,6 +28,8 @@ Marquee::Marquee(QWidget *parent) :
     random.saturation = 255;
     random.value = 255;
     random.hue = 0;
+
+    SetSpeed(50);
 }
 
 Marquee::~Marquee()
@@ -78,7 +79,7 @@ void Marquee::StepEffect(std::vector<ControllerZone*> controller_zones)
         }
     }
 
-    progress += Speed / (float) FPS;
+    progress += 0.1 * Speed / (float) FPS;
 
     if(RandomColorsEnabled)
     {

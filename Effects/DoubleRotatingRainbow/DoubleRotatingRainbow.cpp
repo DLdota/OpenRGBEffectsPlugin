@@ -18,7 +18,6 @@ DoubleRotatingRainbow::DoubleRotatingRainbow(QWidget *parent) :
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 0;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 0;
@@ -26,6 +25,8 @@ DoubleRotatingRainbow::DoubleRotatingRainbow(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
+
+    SetSpeed(50);
 }
 
 DoubleRotatingRainbow::~DoubleRotatingRainbow()

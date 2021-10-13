@@ -18,7 +18,6 @@ Stack::Stack(QWidget *parent) :
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;
@@ -28,6 +27,8 @@ Stack::Stack(QWidget *parent) :
     EffectDetails.HasCustomSettings = true;
 
     ui->direction->addItems({"Horizontal", "Vertical"});
+
+    SetSpeed(10);
 }
 
 Stack::~Stack()

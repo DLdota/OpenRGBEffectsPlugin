@@ -28,7 +28,6 @@ Shaders::Shaders(QWidget *parent) :
     EffectDetails.MaxSpeed     = 2000;
     EffectDetails.MinSpeed     = 0;
     EffectDetails.UserColors   = 0;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;

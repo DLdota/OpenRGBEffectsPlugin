@@ -11,7 +11,7 @@ Breathing::Breathing() : RGBEffect()
 
     EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 200;
-    EffectDetails.MinSpeed     = 40;
+    EffectDetails.MinSpeed     = 10;
     EffectDetails.UserColors   = 1;
 
     EffectDetails.MaxSlider2Val = 0;
@@ -20,6 +20,8 @@ Breathing::Breathing() : RGBEffect()
 
     EffectDetails.HasCustomWidgets = false;
     EffectDetails.HasCustomSettings = false;
+
+    SetSpeed(100);
 }
 
 void Breathing::StepEffect(std::vector<ControllerZone*> controller_zones)

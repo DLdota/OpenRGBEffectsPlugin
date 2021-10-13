@@ -14,10 +14,9 @@ MotionPoints::MotionPoints(QWidget *parent) :
     EffectDetails.EffectDescription = "Multiple points moving effect";
 
     EffectDetails.IsReversable = true;
-    EffectDetails.MaxSpeed     = 20;
+    EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
@@ -25,6 +24,9 @@ MotionPoints::MotionPoints(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = false;
     EffectDetails.HasCustomSettings = false;
+
+    SetSpeed(100);
+    RGBEffect::SetSlider2Val(20);
 }
 
 MotionPoints::~MotionPoints()
@@ -80,7 +82,7 @@ void MotionPoints::UpdatePoints()
 {
     for(MovingPoint& point: points)
     {
-        point.Move(0.001 * Speed * point.speed_mult);
+        point.Move(0.0001 * Speed * point.speed_mult);
 
         if(point.IsOut())
         {

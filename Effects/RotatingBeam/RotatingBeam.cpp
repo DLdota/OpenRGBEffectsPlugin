@@ -17,7 +17,6 @@ RotatingBeam::RotatingBeam(QWidget *parent) :
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 50;
     EffectDetails.MinSlider2Val = 1;
@@ -27,6 +26,9 @@ RotatingBeam::RotatingBeam(QWidget *parent) :
     EffectDetails.HasCustomSettings = true;
 
     ui->mode->addItems(modes);
+
+    SetSpeed(50);
+    SetSlider2Val(10);
 }
 
 RotatingBeam::~RotatingBeam()

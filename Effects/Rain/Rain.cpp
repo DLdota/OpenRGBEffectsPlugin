@@ -11,18 +11,21 @@ Rain::Rain() : RGBEffect()
     EffectDetails.EffectDescription = "Droplet effect";
 
     EffectDetails.IsReversable = true;
-    EffectDetails.MaxSpeed = 25;
+    EffectDetails.MaxSpeed = 200;
     EffectDetails.MinSpeed = 1;
 
     EffectDetails.AllowOnlyFirst = true;
     EffectDetails.UserColors = 5;
 
-    EffectDetails.MaxSlider2Val = 20;
+    EffectDetails.MaxSlider2Val = 50;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Drops";
 
     EffectDetails.HasCustomWidgets = false;
     EffectDetails.HasCustomSettings = false;
+
+    SetSpeed(100);
+    SetSlider2Val(10);
 }
 
 void Rain::StepEffect(std::vector<ControllerZone*> controller_zones)
@@ -112,7 +115,7 @@ void Rain::RunDrops(unsigned int controller_zone_index)
 {
     for(Drop& drop: drops[controller_zone_index])
     {
-        drop.progress += drop.speed_mult * Speed / (float) FPS;
+        drop.progress += 0.1 * drop.speed_mult * Speed / (float) FPS;
     }
 }
 

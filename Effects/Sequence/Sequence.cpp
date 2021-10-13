@@ -17,7 +17,6 @@ Sequence::Sequence(QWidget *parent) :
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 0;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
@@ -32,6 +31,8 @@ Sequence::Sequence(QWidget *parent) :
     ui->scrollArea->setWidgetResizable(true);
 
     ResetColors();
+
+    SetSpeed(10);
 }
 
 Sequence::~Sequence()

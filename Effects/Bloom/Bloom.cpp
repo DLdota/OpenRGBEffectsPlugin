@@ -17,7 +17,6 @@ Bloom::Bloom(QWidget *parent) :
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 10;
     EffectDetails.UserColors   = 0;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;
@@ -25,6 +24,8 @@ Bloom::Bloom(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = false;
     EffectDetails.HasCustomSettings = false;
+
+    SetSpeed(100);
 }
 
 Bloom::~Bloom()

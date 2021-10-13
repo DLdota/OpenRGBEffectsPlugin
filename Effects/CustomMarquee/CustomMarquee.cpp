@@ -17,7 +17,6 @@ CustomMarquee::CustomMarquee(QWidget *parent) :
     EffectDetails.MaxSpeed     = 50;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 0;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;
@@ -30,6 +29,8 @@ CustomMarquee::CustomMarquee(QWidget *parent) :
     ui->colors->setLayout(new QHBoxLayout());
     ui->colors->layout()->setSizeConstraint(QLayout::SetFixedSize);
     ui->scrollArea->setWidgetResizable(true);
+
+    SetSpeed(25);
 
     ResetColors();
 }

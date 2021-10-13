@@ -17,7 +17,6 @@ Swap::Swap(QWidget *parent) :
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;
@@ -28,6 +27,8 @@ Swap::Swap(QWidget *parent) :
 
     random1 = ColorUtils::RandomRGBColor();
     random2 = ColorUtils::RandomRGBColor();
+
+    SetSpeed(10);
 }
 
 Swap::~Swap()

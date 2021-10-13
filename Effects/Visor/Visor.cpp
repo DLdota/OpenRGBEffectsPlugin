@@ -11,7 +11,7 @@ Visor::Visor() : RGBEffect()
 
     EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 100;
-    EffectDetails.MinSpeed     = 10;
+    EffectDetails.MinSpeed     = 1;
 
     EffectDetails.UserColors   = 2;
 
@@ -21,6 +21,8 @@ Visor::Visor() : RGBEffect()
 
     EffectDetails.HasCustomWidgets = false;
     EffectDetails.HasCustomSettings = false;
+
+    SetSpeed(50);
 }
 
 void Visor::StepEffect(std::vector<ControllerZone*> controller_zones)

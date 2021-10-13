@@ -18,7 +18,6 @@ CrossingBeams::CrossingBeams(QWidget *parent) :
     EffectDetails.MaxSpeed     = 10;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;
@@ -26,6 +25,8 @@ CrossingBeams::CrossingBeams(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
+
+    SetSpeed(5);
 
 }
 

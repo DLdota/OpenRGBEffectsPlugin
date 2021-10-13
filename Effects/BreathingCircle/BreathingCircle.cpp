@@ -17,7 +17,6 @@ BreathingCircle::BreathingCircle(QWidget *parent) :
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 10;
     EffectDetails.UserColors   = 1;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 20;
     EffectDetails.MinSlider2Val = 1;

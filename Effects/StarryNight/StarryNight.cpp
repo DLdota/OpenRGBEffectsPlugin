@@ -2,6 +2,9 @@
 #include "hsv.h"
 #include "ColorUtils.h"
 
+// Note: when assigning to a lot of zones, the last zones in the list do not get a lot of stars.
+// This need to be reviewed
+
 REGISTER_EFFECT(StarryNight);
 
 StarryNight::StarryNight() : RGBEffect()
@@ -12,15 +15,18 @@ StarryNight::StarryNight() : RGBEffect()
 
     EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed = 100;
-    EffectDetails.MinSpeed = 20;
+    EffectDetails.MinSpeed = 1;
     EffectDetails.UserColors = 5;
 
-    EffectDetails.MaxSlider2Val = 20;
-    EffectDetails.MinSlider2Val = 5;
+    EffectDetails.MaxSlider2Val = 50;
+    EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Star Count";
 
     EffectDetails.HasCustomWidgets = false;
     EffectDetails.HasCustomSettings = false;
+
+    SetSpeed(50);
+    SetSlider2Val(20);
 }
 
 void StarryNight::StepEffect(std::vector<ControllerZone*> controller_zones)
@@ -31,6 +37,9 @@ void StarryNight::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     for (unsigned int ControllerID = 0; ControllerID < controller_zones.size(); ControllerID++)
     {
+        // Note: this rand() call is the cause, see comment at the top of the file
+        // CurrentStars should be a map <ControllerZone*, std::vector<NewStar>>
+        // also NewStar should be renamed to "Star" or something more explicit.
         if (rand() % 2)
         {
             int MakeForZone = 0;

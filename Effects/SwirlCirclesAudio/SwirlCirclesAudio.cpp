@@ -18,7 +18,6 @@ SwirlCirclesAudio::SwirlCirclesAudio(QWidget *parent) :
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
@@ -26,6 +25,9 @@ SwirlCirclesAudio::SwirlCirclesAudio(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
+
+    SetSpeed(50);
+    SetSlider2Val(50);
 
     std::vector<char *> devices = AudioManager::get()->GetAudioDevices();
 

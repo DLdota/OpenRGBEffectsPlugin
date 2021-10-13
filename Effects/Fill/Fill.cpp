@@ -17,7 +17,6 @@ Fill::Fill(QWidget *parent) :
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 10;
     EffectDetails.UserColors   = 1;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;
@@ -27,6 +26,8 @@ Fill::Fill(QWidget *parent) :
     EffectDetails.HasCustomSettings = false;
 
     random = ColorUtils::RandomRGBColor();
+
+    SetSpeed(50);
 }
 
 Fill::~Fill()

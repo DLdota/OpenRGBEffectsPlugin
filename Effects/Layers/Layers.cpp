@@ -19,7 +19,6 @@ Layers::Layers(QWidget *parent) :
     EffectDetails.MaxSpeed     = 0;
     EffectDetails.MinSpeed     = 0;
     EffectDetails.UserColors   = 0;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;

@@ -52,7 +52,7 @@ private:
     int audio_device_idx = 0;
     float amplitude = 100.f;
     int avg_size = 8;
-    bool edge_beat = true;
+    bool edge_beat = false;
 
     RGBColor GetColor(float, float, float, float);
 

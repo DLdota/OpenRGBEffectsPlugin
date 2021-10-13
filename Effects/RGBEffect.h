@@ -10,24 +10,23 @@ using json = nlohmann::json;
 
 struct EffectInfo
 {
-    std::string EffectName;
-    std::string EffectClassName;
-    std::string EffectDescription;
-    int         EffectIndex;
+    std::string EffectName = "";
+    std::string EffectClassName = "";
+    std::string EffectDescription = "";
 
-    bool IsReversable;
-    int  MaxSpeed;
-    int  MinSpeed;
+    bool IsReversable = false;
+    int  MaxSpeed = 0;
+    int  MinSpeed = 0;
 
-    bool AllowOnlyFirst;
-    unsigned int  UserColors;
+    bool AllowOnlyFirst = false;
+    unsigned int  UserColors = 0;
 
-    int         MaxSlider2Val;
-    int         MinSlider2Val;
-    std::string Slider2Name;
+    int         MaxSlider2Val = 0;
+    int         MinSlider2Val = 0;
+    std::string Slider2Name = "";
 
-    bool HasCustomWidgets;
-    bool HasCustomSettings;
+    bool HasCustomWidgets = false;
+    bool HasCustomSettings = false;
 };
 
 class RGBEffect : public QWidget

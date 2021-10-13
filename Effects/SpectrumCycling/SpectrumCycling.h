@@ -18,7 +18,7 @@ public:
     void StepEffect(std::vector<ControllerZone*>) override;
 
 private:
-    float CurrentHue = 0;
+    double progress = 0.0;
 };
 
 #endif // SPECTRUMCYCLING_H

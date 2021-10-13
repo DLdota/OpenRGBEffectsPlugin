@@ -15,10 +15,9 @@ RadialRainbow::RadialRainbow(QWidget *parent) :
     EffectDetails.EffectDescription = "Radial rainbow wave";
 
     EffectDetails.IsReversable = true;
-    EffectDetails.MaxSpeed     = 100;
-    EffectDetails.MinSpeed     = 10;
+    EffectDetails.MaxSpeed     = 200;
+    EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 0;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
@@ -28,6 +27,9 @@ RadialRainbow::RadialRainbow(QWidget *parent) :
     EffectDetails.HasCustomSettings = true;
 
     ui->shape->addItems({"Circles", "Squares"});
+
+    SetSpeed(100);
+    SetSlider2Val(50);
 }
 
 RadialRainbow::~RadialRainbow()

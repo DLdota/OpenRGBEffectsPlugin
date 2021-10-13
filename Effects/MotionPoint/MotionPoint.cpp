@@ -16,7 +16,6 @@ MotionPoint::MotionPoint(QWidget *parent) :
     EffectDetails.MaxSpeed     = 50;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;
@@ -26,6 +25,8 @@ MotionPoint::MotionPoint(QWidget *parent) :
     EffectDetails.HasCustomSettings = true;
 
     ui->background->SetRGBColor(background);
+
+    SetSpeed(25);
 }
 
 MotionPoint::~MotionPoint()

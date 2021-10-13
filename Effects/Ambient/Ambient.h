@@ -52,10 +52,10 @@ private:
     RectangleSelectorOverlay* rectangle_selector_overlay;
 
     enum AmbientMode{
-        CALCULATED_AVERAGE = 0,
-        MOST_COMMON = 1,
-        SCALED_AVERAGE = 2,
-        SCREEN_COPY = 3
+        SCALED_AVERAGE = 0,
+        SCREEN_COPY = 1,
+        CALCULATED_AVERAGE = 2,
+        MOST_COMMON = 3
     };
 
     AmbientMode mode = CALCULATED_AVERAGE;

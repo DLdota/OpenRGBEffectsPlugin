@@ -16,7 +16,6 @@ FractalMotion::FractalMotion(QWidget *parent) :
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 20;
     EffectDetails.UserColors   = 1;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 0;
     EffectDetails.MinSlider2Val = 0;

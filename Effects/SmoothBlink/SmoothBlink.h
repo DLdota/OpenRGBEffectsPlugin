@@ -53,15 +53,9 @@ private:
     RGBColor next_color_1;
     RGBColor next_color_2;
 
-    enum PulseMode {
-        Saturation = 0,
-        Brightness = 1
-    };
-
     enum PulseRendering {
         Solid = 0,
-        Circle = 1,
-        Square = 2
+        Circle = 1
     };
 
     double pi = 3.14159265358979323846;

@@ -18,7 +18,6 @@ AudioParty::AudioParty(QWidget *parent) :
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 0;
-    EffectDetails.AllowOnlyFirst = false;
 
     EffectDetails.MaxSlider2Val = 50;
     EffectDetails.MinSlider2Val = 1;
@@ -26,6 +25,9 @@ AudioParty::AudioParty(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
+
+    SetSpeed(50);
+    SetSlider2Val(25);
 
     std::vector<char *> devices = AudioManager::get()->GetAudioDevices();
 

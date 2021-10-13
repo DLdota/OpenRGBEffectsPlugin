@@ -20,6 +20,8 @@ Lightning::Lightning(QWidget *parent) :
 
     EffectDetails.HasCustomWidgets = false;
     EffectDetails.HasCustomSettings = false;
+
+    SetSpeed(20);
 }
 
 RGBColor Lightning::TriggerLightning(int n)
