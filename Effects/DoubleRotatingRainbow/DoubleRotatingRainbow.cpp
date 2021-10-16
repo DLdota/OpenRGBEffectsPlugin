@@ -92,7 +92,7 @@ RGBColor DoubleRotatingRainbow::GetColor(float x, float y, float cx, float cy, b
 
     hsv_t hsv;
 
-    hsv.hue = (int)(time * Slider2Val + 360 * (frequency * (y - cy) * 3 * c + (56 - fabs(x - cx)) * frequency * 3 * s) / 128) % 360;
+    hsv.hue = (int)(time * Slider2Val + 360 * (frequency * (y - cy) * c + (56 - fabs(x - cx)) * frequency * s) / 128.0) % 360;
     hsv.value = 255;
     hsv.saturation = 255;
 

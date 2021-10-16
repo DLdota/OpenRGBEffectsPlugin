@@ -33,7 +33,7 @@ private slots:
 private:
     Ui::DoubleRotatingRainbow *ui;
 
-    double time = 0.0;
+    double time = 1000.0;
 
     double cos_time;
     double sin_time;
