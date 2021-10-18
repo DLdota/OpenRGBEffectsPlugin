@@ -8,20 +8,15 @@ Lightning::Lightning(QWidget *parent) :
     EffectDetails.EffectName = "Lightning";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Lightning effect";
-
-    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 50;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;
-
     EffectDetails.MaxSlider2Val = 60;
-    EffectDetails.MinSlider2Val = 10;
+    EffectDetails.MinSlider2Val = 2;
     EffectDetails.Slider2Name   = "Decay";
 
-    EffectDetails.HasCustomWidgets = false;
-    EffectDetails.HasCustomSettings = false;
-
     SetSpeed(20);
+    SetSlider2Val(10);
 }
 
 RGBColor Lightning::TriggerLightning(int n)

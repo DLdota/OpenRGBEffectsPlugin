@@ -12,17 +12,11 @@ Sequence::Sequence(QWidget *parent) :
     EffectDetails.EffectName = "Sequence";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Alternates colors with a fade effect";
-
-    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;
-    EffectDetails.UserColors   = 0;
-
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Fade time";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

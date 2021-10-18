@@ -13,18 +13,12 @@ RotatingRainbow::RotatingRainbow(QWidget *parent) :
     EffectDetails.EffectName = "RotatingRainbow";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Rotating rainbow effect";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
-    EffectDetails.UserColors   = 0;
-
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Color speed";
-
-    EffectDetails.HasCustomWidgets = false;
-    EffectDetails.HasCustomSettings = false;
 
     SetSpeed(20);
     SetSlider2Val(30);

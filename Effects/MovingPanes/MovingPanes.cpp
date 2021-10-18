@@ -12,17 +12,13 @@ MovingPanes::MovingPanes(QWidget *parent) :
     EffectDetails.EffectName = "MovingPanes";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Moving panes effect";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-
     EffectDetails.MaxSlider2Val = 50;
     EffectDetails.MinSlider2Val = 2;
     EffectDetails.Slider2Name   = "Divisions";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     SetSpeed(50);

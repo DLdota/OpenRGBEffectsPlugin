@@ -12,17 +12,13 @@ Marquee::Marquee(QWidget *parent) :
     EffectDetails.EffectName = "Marquee";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Marquee effect";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;
-
     EffectDetails.MaxSlider2Val = 20;
     EffectDetails.MinSlider2Val = 2;
     EffectDetails.Slider2Name   = "Spacing";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     random.saturation = 255;

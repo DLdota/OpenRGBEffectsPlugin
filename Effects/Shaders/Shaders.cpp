@@ -23,17 +23,8 @@ Shaders::Shaders(QWidget *parent) :
     EffectDetails.EffectName = "Shaders";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Shaders effect";
-
-    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 2000;
-    EffectDetails.MinSpeed     = 0;
-    EffectDetails.UserColors   = 0;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
+    EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;
 
     shader_renderer = new ShaderRenderer(this);

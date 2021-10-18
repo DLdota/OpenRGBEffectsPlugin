@@ -20,18 +20,8 @@ SmoothBlink::SmoothBlink(QWidget *parent) :
 
     EffectDetails.EffectName = "SmoothBlink";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Whoop whoop";
-
-    EffectDetails.IsReversable = false;
-    EffectDetails.MaxSpeed     = 0;
-    EffectDetails.MinSpeed     = 0;
+    EffectDetails.EffectDescription = "Whoop whoop";    
     EffectDetails.UserColors   = 2;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     random_color_1 = ColorUtils::RandomRGBColor();

@@ -13,17 +13,8 @@ Bloom::Bloom(QWidget *parent) :
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Flower blooming effect";
 
-    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 10;
-    EffectDetails.UserColors   = 0;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = false;
-    EffectDetails.HasCustomSettings = false;
 
     SetSpeed(100);
 }

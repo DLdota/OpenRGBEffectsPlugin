@@ -12,18 +12,13 @@ MotionPoints::MotionPoints(QWidget *parent) :
     EffectDetails.EffectName = "MotionPoints";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Multiple points moving effect";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Number of points";
-
-    EffectDetails.HasCustomWidgets = false;
-    EffectDetails.HasCustomSettings = false;
 
     SetSpeed(100);
     RGBEffect::SetSlider2Val(20);

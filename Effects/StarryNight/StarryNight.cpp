@@ -12,18 +12,12 @@ StarryNight::StarryNight() : RGBEffect()
     EffectDetails.EffectName = "Starry Night";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Selects a random LED and fades it in an out";
-
-    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed = 100;
     EffectDetails.MinSpeed = 1;
     EffectDetails.UserColors = 5;
-
     EffectDetails.MaxSlider2Val = 50;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Star Count";
-
-    EffectDetails.HasCustomWidgets = false;
-    EffectDetails.HasCustomSettings = false;
 
     SetSpeed(50);
     SetSlider2Val(20);

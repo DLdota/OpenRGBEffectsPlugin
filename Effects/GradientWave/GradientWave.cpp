@@ -8,18 +8,12 @@ GradientWave::GradientWave() : RGBEffect()
     EffectDetails.EffectName = "Gradient Wave";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Similar to rainbow wave but with 2 colors";
-
     EffectDetails.IsReversable  = true;
     EffectDetails.MaxSpeed      = 30;
     EffectDetails.MinSpeed      = 1;
     EffectDetails.UserColors    = 2;
 
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = false;
-    EffectDetails.HasCustomSettings = false;
+    SetSpeed(10);
 }
 
 void GradientWave::StepEffect(std::vector<ControllerZone*> controller_zones)

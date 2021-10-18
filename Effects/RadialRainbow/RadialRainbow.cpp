@@ -13,17 +13,12 @@ RadialRainbow::RadialRainbow(QWidget *parent) :
     EffectDetails.EffectName = "Radial Rainbow";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Radial rainbow wave";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 1;
-    EffectDetails.UserColors   = 0;
-
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Frequency";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     ui->shape->addItems({"Circles", "Squares"});

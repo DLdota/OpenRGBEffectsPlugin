@@ -12,17 +12,13 @@ BreathingCircle::BreathingCircle(QWidget *parent) :
     EffectDetails.EffectName = "BreathingCircle";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "A breathing circle effect";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 10;
     EffectDetails.UserColors   = 1;
-
     EffectDetails.MaxSlider2Val = 20;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Thickness";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 }
 

@@ -12,17 +12,13 @@ Comet::Comet(QWidget *parent) :
     EffectDetails.EffectName = "Comet";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Comet effect";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 50;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;
-
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Comet size";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     SetSpeed(25);

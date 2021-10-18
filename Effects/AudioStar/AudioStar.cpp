@@ -13,17 +13,8 @@ AudioStar::AudioStar(QWidget *parent) :
     EffectDetails.EffectName = "AudioStar";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Star audio visualizer";
-
-    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 100;
-    EffectDetails.MinSpeed     = 0;
-    EffectDetails.UserColors   = 0;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
+    EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;
 
     SetSpeed(50);

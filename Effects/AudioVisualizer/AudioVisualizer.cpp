@@ -36,21 +36,9 @@ AudioVisualizer::AudioVisualizer(QWidget* parent):
 {
     ui->setupUi(this);
 
-
     EffectDetails.EffectName = "Audio Visualizer";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "A ported version of <a href=\"https://gitlab.com/CalcProgrammer1/KeyboardVisualizer\">KeyboardVisualizer</a>";
-
-    EffectDetails.IsReversable = false;
-    EffectDetails.MaxSpeed = 0;
-    EffectDetails.MinSpeed = 0;
-
-    EffectDetails.UserColors = 0;
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     /*---------------------*\

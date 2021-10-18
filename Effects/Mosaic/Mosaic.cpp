@@ -12,17 +12,13 @@ Mosaic::Mosaic(QWidget *parent) :
     EffectDetails.EffectName = "Mosaic";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Mosaic effect";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-
     EffectDetails.MaxSlider2Val = 1000;
     EffectDetails.MinSlider2Val = 10;
     EffectDetails.Slider2Name   = "Rarity";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     SetSpeed(10);

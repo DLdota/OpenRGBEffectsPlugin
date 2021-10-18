@@ -13,17 +13,7 @@ Bubbles::Bubbles(QWidget *parent) :
     EffectDetails.EffectName = "Bubbles";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Bloop bloop";
-
-    EffectDetails.IsReversable = false;
-    EffectDetails.MaxSpeed     = 0;
-    EffectDetails.MinSpeed     = 0;
     EffectDetails.UserColors   = 1;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     background = ColorUtils::OFF();

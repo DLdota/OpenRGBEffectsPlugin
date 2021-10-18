@@ -15,17 +15,8 @@ NoiseMap::NoiseMap(QWidget *parent) :
     EffectDetails.EffectName = "NoiseMap";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Floor is lava";
-
-    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
-    EffectDetails.UserColors   = 0;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     ui->colors_choice->addItems({"Rainbow", "Inverse rainbow", "Custom"});

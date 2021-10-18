@@ -8,19 +8,12 @@ Visor::Visor() : RGBEffect()
     EffectDetails.EffectName = "Visor";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "A back and forth effect motion, flipping colors";
-
-    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
-
     EffectDetails.UserColors   = 2;
-
     EffectDetails.MinSlider2Val = 3;
     EffectDetails.MaxSlider2Val = 50;
     EffectDetails.Slider2Name   = "Width";
-
-    EffectDetails.HasCustomWidgets = false;
-    EffectDetails.HasCustomSettings = false;
 
     SetSpeed(50);
 }

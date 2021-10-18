@@ -11,18 +11,8 @@ Mask::Mask(QWidget *parent) :
 
     EffectDetails.EffectName = "Mask";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "A simple mask for using in layers.";
-
-    EffectDetails.IsReversable = false;
-    EffectDetails.MaxSpeed     = 0;
-    EffectDetails.MinSpeed     = 0;
+    EffectDetails.EffectDescription = "A simple mask for using in layers.";    
     EffectDetails.UserColors   = 2;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 }
 

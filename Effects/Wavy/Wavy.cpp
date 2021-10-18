@@ -12,17 +12,7 @@ Wavy::Wavy(QWidget *parent) :
     EffectDetails.EffectName = "Wavy";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Alternate colors like waves";
-
-    EffectDetails.IsReversable = false;
-    EffectDetails.MaxSpeed     = 0;
-    EffectDetails.MinSpeed     = 0;
     EffectDetails.UserColors   = 2;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     ui->oscillation_speed_slider->setMinimum(1);

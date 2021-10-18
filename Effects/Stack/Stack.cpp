@@ -13,17 +13,10 @@ Stack::Stack(QWidget *parent) :
     EffectDetails.EffectName = "Stack";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Fills and stack the zones";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     ui->direction->addItems({"Horizontal", "Vertical"});

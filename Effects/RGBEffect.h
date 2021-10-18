@@ -25,7 +25,6 @@ struct EffectInfo
     int         MinSlider2Val = 0;
     std::string Slider2Name = "";
 
-    bool HasCustomWidgets = false;
     bool HasCustomSettings = false;
 };
 

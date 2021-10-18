@@ -11,17 +11,9 @@ FractalMotion::FractalMotion(QWidget *parent) :
     EffectDetails.EffectName = "FractalMotion";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Psychedelic wave";
-
-    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 20;
     EffectDetails.UserColors   = 1;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     ui->background->SetRGBColor(ColorUtils::OFF());
@@ -29,6 +21,7 @@ FractalMotion::FractalMotion(QWidget *parent) :
     random_color = ColorUtils::RandomRGBColor();
     next_random_color = ColorUtils::RandomRGBColor();
 
+    SetSpeed(50);
     Defaults();
 }
 

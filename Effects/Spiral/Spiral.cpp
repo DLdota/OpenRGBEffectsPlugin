@@ -12,17 +12,13 @@ Spiral::Spiral(QWidget *parent) :
     EffectDetails.EffectName = "Spiral";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Spiral effect";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 500;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;
-
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Spiral shape";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     SetSpeed(200);

@@ -12,18 +12,10 @@ Fill::Fill(QWidget *parent) :
     EffectDetails.EffectName = "Fill";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Fills the zones";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 10;
     EffectDetails.UserColors   = 1;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = false;
-    EffectDetails.HasCustomSettings = false;
 
     random = ColorUtils::RandomRGBColor();
 

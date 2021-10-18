@@ -11,17 +11,9 @@ MotionPoint::MotionPoint(QWidget *parent) :
     EffectDetails.EffectName = "MotionPoint";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Single moving point";
-
-    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 50;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     ui->background->SetRGBColor(background);

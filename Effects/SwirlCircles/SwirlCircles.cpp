@@ -12,18 +12,13 @@ SwirlCircles::SwirlCircles(QWidget *parent) :
     EffectDetails.EffectName = "SwirlCircles";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Rotating circles";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Glow";
-
-    EffectDetails.HasCustomWidgets = false;
-    EffectDetails.HasCustomSettings = false;
 
     SetSpeed(50);
     SetSlider2Val(50);

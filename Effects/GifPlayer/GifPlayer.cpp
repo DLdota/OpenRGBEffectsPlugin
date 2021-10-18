@@ -15,17 +15,6 @@ GifPlayer::GifPlayer(QWidget *parent) :
     EffectDetails.EffectName = "GifPlayer";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Use GIFs to create your own effect";
-
-    EffectDetails.IsReversable = false;
-    EffectDetails.MaxSpeed     = 0;
-    EffectDetails.MinSpeed     = 0;
-    EffectDetails.UserColors   = 0;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 }
 

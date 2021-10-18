@@ -63,7 +63,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <spacer name="It_Goes_On_The_Bottom">
+       <spacer name="spacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>

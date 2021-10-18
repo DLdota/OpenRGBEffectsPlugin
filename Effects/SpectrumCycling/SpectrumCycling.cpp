@@ -8,18 +8,8 @@ SpectrumCycling::SpectrumCycling() : RGBEffect()
     EffectDetails.EffectName = "Spectrum Cycling";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Goes through every solid color";
-
-    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
-    EffectDetails.UserColors   = 0;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = false;
-    EffectDetails.HasCustomSettings = false;
 
     SetSpeed(50);
 }

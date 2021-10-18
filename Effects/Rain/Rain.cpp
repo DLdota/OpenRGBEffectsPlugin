@@ -9,20 +9,14 @@ Rain::Rain() : RGBEffect()
     EffectDetails.EffectName = "Rain";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Droplet effect";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed = 200;
     EffectDetails.MinSpeed = 1;
-
     EffectDetails.AllowOnlyFirst = true;
     EffectDetails.UserColors = 5;
-
     EffectDetails.MaxSlider2Val = 50;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Drops";
-
-    EffectDetails.HasCustomWidgets = false;
-    EffectDetails.HasCustomSettings = false;
 
     SetSpeed(100);
     SetSlider2Val(10);

@@ -11,17 +11,6 @@ BouncingBallEffect::BouncingBallEffect(QWidget *parent) :
     EffectDetails.EffectName = "Bouncing Ball";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "A ball bounces around your RGB setup";
-
-    EffectDetails.IsReversable = false;
-    EffectDetails.MaxSpeed     = 0;
-    EffectDetails.MinSpeed     = 0;
-    EffectDetails.UserColors   = 0;
-
-    EffectDetails.Slider2Name   = "";
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.MaxSlider2Val = 0;
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     radius = ui->ball_radius_slider->value();

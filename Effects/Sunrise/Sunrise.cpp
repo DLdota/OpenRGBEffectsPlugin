@@ -12,17 +12,9 @@ Sunrise::Sunrise(QWidget *parent) :
     EffectDetails.EffectName = "Sunrise";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Sunrise/Sunset effect";
-
-    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 4;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     UserColors.resize(4);

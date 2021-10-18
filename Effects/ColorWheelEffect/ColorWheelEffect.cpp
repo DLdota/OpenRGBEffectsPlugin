@@ -12,17 +12,9 @@ ColorWheelEffect::ColorWheelEffect(QWidget *parent) :
     EffectDetails.EffectName = "Color Wheel";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "A rotating rainbow";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 10;
-    EffectDetails.UserColors   = 0;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     SetSpeed(100);

@@ -14,17 +14,6 @@ Layers::Layers(QWidget *parent) :
     EffectDetails.EffectName = "Layers";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Combine effects together. <br />Only effects that have saved patterns will appear here.<br /> <a href=\"https://en.wikipedia.org/wiki/Blend_modes\">Help about blend modes</a>";
-
-    EffectDetails.IsReversable = false;
-    EffectDetails.MaxSpeed     = 0;
-    EffectDetails.MinSpeed     = 0;
-    EffectDetails.UserColors   = 0;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     ui->layer_groups->setLayout(new QVBoxLayout());

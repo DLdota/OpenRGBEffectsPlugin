@@ -8,18 +8,12 @@ RainbowWave::RainbowWave() : RGBEffect()
     EffectDetails.EffectName = "Rainbow Wave";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "A sliding Rainbow";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
-    EffectDetails.UserColors   = 0;
-
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.MaxSlider2Val = 50;
     EffectDetails.Slider2Name   = "Frequency";
-
-    EffectDetails.HasCustomWidgets = false;
-    EffectDetails.HasCustomSettings = false;
 
     SetSpeed(40);
     SetSlider2Val(10);

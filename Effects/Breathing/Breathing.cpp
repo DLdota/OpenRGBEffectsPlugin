@@ -8,18 +8,9 @@ Breathing::Breathing() : RGBEffect()
     EffectDetails.EffectName = "Breathing";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Fading in and out 1 color across an entire zone";
-
-    EffectDetails.IsReversable = false;
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 10;
     EffectDetails.UserColors   = 1;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = false;
-    EffectDetails.HasCustomSettings = false;
 
     SetSpeed(100);
 }

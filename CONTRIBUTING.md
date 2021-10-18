@@ -71,7 +71,6 @@ MyNewEffect::MyNewEffect() : RGBEffect()
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Some other control";
 
-    EffectDetails.HasCustomWidgets = false;
     EffectDetails.HasCustomSettings = false;
 }
 

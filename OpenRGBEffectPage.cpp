@@ -95,12 +95,6 @@ void OpenRGBEffectPage::InitUi()
 
     ui->Brightness_slider->setValue(effect->GetBrightness());
 
-    if (effect->EffectDetails.HasCustomWidgets)
-    {
-        ui->It_Goes_On_The_Bottom->changeSize(0,0,QSizePolicy::Fixed); // Gone
-        resize(this->minimumSize());
-    }
-
     /*-----------------------------------------------*\
     | Colors                                          |
     \*-----------------------------------------------*/

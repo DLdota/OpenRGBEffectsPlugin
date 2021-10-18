@@ -13,17 +13,9 @@ AudioSine::AudioSine(QWidget *parent) :
     EffectDetails.EffectName = "AudioSine";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Sinusoidal audio rendering";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;
-    EffectDetails.MinSpeed     = 0;
-    EffectDetails.UserColors   = 0;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
+    EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;
 
     SetSpeed(50);

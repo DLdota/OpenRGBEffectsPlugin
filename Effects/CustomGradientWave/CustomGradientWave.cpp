@@ -13,17 +13,9 @@ CustomGradientWave::CustomGradientWave(QWidget *parent) :
     EffectDetails.EffectName = "CustomGradientWave";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Custom gradient wave";
-
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 50;
     EffectDetails.MinSpeed     = 1;
-    EffectDetails.UserColors   = 0;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

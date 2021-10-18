@@ -14,18 +14,6 @@ Ambient::Ambient(QWidget *parent) :
     EffectDetails.EffectName = "Ambient";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Takes a portion of the screen and reflect it to your devices";
-    EffectDetails.IsReversable = false;
-
-    EffectDetails.MaxSpeed = 0;
-    EffectDetails.MinSpeed = 0;
-
-    EffectDetails.MaxSlider2Val = 0;
-    EffectDetails.MinSlider2Val = 0;
-    EffectDetails.Slider2Name   = "";
-
-    EffectDetails.UserColors = 0;
-
-    EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
     ui->mode->addItems({
