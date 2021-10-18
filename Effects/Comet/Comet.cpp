@@ -25,6 +25,8 @@ Comet::Comet(QWidget *parent) :
     EffectDetails.HasCustomWidgets = true;
     EffectDetails.HasCustomSettings = true;
 
+    SetSpeed(25);
+    SetSlider2Val(50);
 }
 
 Comet::~Comet()
