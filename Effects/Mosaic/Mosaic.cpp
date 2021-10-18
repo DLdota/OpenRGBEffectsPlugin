@@ -13,7 +13,7 @@ Mosaic::Mosaic(QWidget *parent) :
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Mosaic effect";
     EffectDetails.IsReversable = true;
-    EffectDetails.MaxSpeed     = 20;
+    EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
     EffectDetails.MaxSlider2Val = 1000;
