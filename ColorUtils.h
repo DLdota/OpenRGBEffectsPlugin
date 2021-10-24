@@ -14,7 +14,8 @@ enum ColorBlendFn
     BURN = 4,
     MASK = 5,
     LIGHTEN = 6,
-    DARKEN = 7
+    DARKEN = 7,
+    EXCLUSIVE = 8
 };
 
 static std::vector<std::string> COLOR_BLEND_FN_NAMES = {
@@ -25,7 +26,8 @@ static std::vector<std::string> COLOR_BLEND_FN_NAMES = {
     "Burn",
     "Mask",
     "Lighten",
-    "Darken"
+    "Darken",
+    "Exclusive"
 };
 
 class ColorUtils {
@@ -148,6 +150,11 @@ public:
                     DarkenChanel(RGBGetGValue(color1), RGBGetGValue(color2)),
                     DarkenChanel(RGBGetBValue(color1), RGBGetBValue(color2))
                     );
+    };    
+
+    static RGBColor Exclusive(RGBColor color1, RGBColor color2)
+    {
+        return color2 > 0 ? color2 : color1;
     };
 
     static RGBColor ApplyColorBlendFn(RGBColor c1, RGBColor c2, ColorBlendFn fn)
@@ -162,6 +169,7 @@ public:
         case MASK:     return Mask(c1, c2);
         case LIGHTEN:  return Lighten(c1, c2);
         case DARKEN:   return Darken(c1, c2);
+        case EXCLUSIVE:   return Exclusive(c1, c2);
         default:       return OFF();
         }
     }
