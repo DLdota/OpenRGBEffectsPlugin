@@ -16,7 +16,7 @@ enum ColorBlendFn
     LIGHTEN = 6,
     DARKEN = 7,
     EXCLUSIVE = 8,
-    DIFFERENCE = 9
+    DIFF = 9
 };
 
 static std::vector<std::string> COLOR_BLEND_FN_NAMES = {
@@ -172,17 +172,17 @@ public:
     {
         switch (fn)
         {
-        case MULTIPLY: return Multiply(c1, c2);
-        case SCREEN:   return Screen(c1, c2);
-        case OVERLAY:  return Overlay(c1, c2);
-        case DODGE:    return Dodge(c1, c2);
-        case BURN:     return Burn(c1, c2);
-        case MASK:     return Mask(c1, c2);
-        case LIGHTEN:  return Lighten(c1, c2);
-        case DARKEN:   return Darken(c1, c2);
-        case EXCLUSIVE:   return Exclusive(c1, c2);
-        case DIFFERENCE:   return Difference(c1, c2);
-        default:       return OFF();
+        case MULTIPLY:  return Multiply(c1, c2);
+        case SCREEN:    return Screen(c1, c2);
+        case OVERLAY:   return Overlay(c1, c2);
+        case DODGE:     return Dodge(c1, c2);
+        case BURN:      return Burn(c1, c2);
+        case MASK:      return Mask(c1, c2);
+        case LIGHTEN:   return Lighten(c1, c2);
+        case DARKEN:    return Darken(c1, c2);
+        case EXCLUSIVE: return Exclusive(c1, c2);
+        case DIFF:      return Difference(c1, c2);
+        default:        return OFF();
         }
     }
 
