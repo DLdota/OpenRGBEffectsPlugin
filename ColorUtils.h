@@ -15,7 +15,8 @@ enum ColorBlendFn
     MASK = 5,
     LIGHTEN = 6,
     DARKEN = 7,
-    EXCLUSIVE = 8
+    EXCLUSIVE = 8,
+    DIFFERENCE = 9
 };
 
 static std::vector<std::string> COLOR_BLEND_FN_NAMES = {
@@ -27,7 +28,8 @@ static std::vector<std::string> COLOR_BLEND_FN_NAMES = {
     "Mask",
     "Lighten",
     "Darken",
-    "Exclusive"
+    "Exclusive",
+    "Difference"
 };
 
 class ColorUtils {
@@ -157,6 +159,15 @@ public:
         return color2 > 0 ? color2 : color1;
     };
 
+    static RGBColor Difference(RGBColor color1, RGBColor color2)
+    {
+        return ToRGBColor(
+                    DifferenceChanel(RGBGetRValue(color1), RGBGetRValue(color2)),
+                    DifferenceChanel(RGBGetGValue(color1), RGBGetGValue(color2)),
+                    DifferenceChanel(RGBGetBValue(color1), RGBGetBValue(color2))
+                    );
+    };
+
     static RGBColor ApplyColorBlendFn(RGBColor c1, RGBColor c2, ColorBlendFn fn)
     {
         switch (fn)
@@ -170,6 +181,7 @@ public:
         case LIGHTEN:  return Lighten(c1, c2);
         case DARKEN:   return Darken(c1, c2);
         case EXCLUSIVE:   return Exclusive(c1, c2);
+        case DIFFERENCE:   return Difference(c1, c2);
         default:       return OFF();
         }
     }
@@ -248,6 +260,11 @@ private:
     static unsigned char DarkenChanel(unsigned char a, unsigned char b)
     {
         return std::min<int>(a, b);
+    }
+
+    static unsigned char DifferenceChanel(unsigned char a, unsigned char b)
+    {
+        return std::max<int>(a - b, 0);
     }
 
 };
