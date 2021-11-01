@@ -291,6 +291,7 @@ SOURCES +=                                                                      
     Effects/Shaders/GLSLHighlighter.cpp                                                         \
     Effects/Shaders/GLSLCodeEditor.cpp                                                          \
     Effects/CustomGradientWave/CustomGradientWave.cpp                                           \
+    Effects/ZigZag/ZigZag.cpp                                                                   \
 
 
 HEADERS +=                                                                                      \
@@ -352,6 +353,7 @@ HEADERS +=                                                                      
     Effects/Shaders/GLSLHighlighter.h                                                           \
     Effects/Shaders/GLSLCodeEditor.h                                                            \
     Effects/CustomGradientWave/CustomGradientWave.h                                             \
+    Effects/ZigZag/ZigZag.h                                                                     \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -397,6 +399,7 @@ FORMS +=                                                                        
     Effects/Shaders/Shaders.ui                                                                  \
     Effects/Shaders/GLSLCodeEditor.ui                                                           \
     Effects/CustomGradientWave/CustomGradientWave.ui                                            \
+    Effects/ZigZag/ZigZag.ui                                                                    \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #
