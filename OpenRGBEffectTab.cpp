@@ -448,8 +448,12 @@ void OpenRGBEffectTab::LoadEffect(json effect_settings)
 
     json zones = effect_settings["ControllerZones"];
 
+    printf("[OpenRGBEffectsPlugin] Looking for corresponding controllers for auto assignement...\n");
+
     for(auto j : zones)
     {
+        bool found = false;
+
         for(ControllerZone* controller_zone: ui->device_list->GetControllerZones())
         {
             if(
@@ -464,8 +468,17 @@ void OpenRGBEffectTab::LoadEffect(json effect_settings)
             {
                 controller_zone->reverse = j["reverse"];
                 saved_zones.push_back(controller_zone);
+                found = true;
                 break;
             }
+        }
+
+        if(!found)
+        {
+            std::string dev_name = j["name"];
+            std::string dev_location = j["location"];
+
+            printf("[OpenRGBEffectsPlugin] Unable to find device: %s (%s)\n", dev_name.c_str(), dev_location.c_str());
         }
     }
 
