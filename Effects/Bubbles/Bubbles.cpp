@@ -13,7 +13,7 @@ Bubbles::Bubbles(QWidget *parent) :
     EffectDetails.EffectName = "Bubbles";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Bloop bloop";
-    EffectDetails.UserColors   = 1;
+    EffectDetails.UserColors   = 5;
     EffectDetails.HasCustomSettings = true;
 
     background = ColorUtils::OFF();
@@ -85,20 +85,18 @@ void Bubbles::InitBubble()
     double speed = 1 + 10 * (((double)rand() / RAND_MAX) - 1) *(-1);
     speeds.push_back(speed);
 
-    int hue;
+    RGBColor color;
 
     if(RandomColorsEnabled)
     {
-        hue = 360 * (((double)rand() / RAND_MAX) - 1) *(-1);
+        color = ColorUtils::RandomRGBColor();
     }
     else
     {
-        hsv_t hsv;
-        rgb2hsv(UserColors[0], &hsv);
-        hue = hsv.hue;
+        color = UserColors[rand() % UserColors.size()];
     }
 
-    colors.push_back(hue);
+    colors.push_back(color);
 
     double x = (((double)rand() / RAND_MAX) - 1) *(-1);
     double y = (((double)rand() / RAND_MAX) - 1) *(-1);
@@ -130,8 +128,7 @@ RGBColor Bubbles::GetColor(int x, int y, int w, int h)
         double shallow = fabs(distance - bubbles[i]) / ( 0.1 * bubbles_thickness);
 
         hsv_t hsv;
-        hsv.hue = colors[i];
-        hsv.saturation = 255;
+        rgb2hsv(colors[i], &hsv);
         hsv.value = std::min<double>(255, 255 * (1 / pow(shallow, 2)));
 
         hsvs.push_back(hsv);
@@ -141,6 +138,7 @@ RGBColor Bubbles::GetColor(int x, int y, int w, int h)
 
     int value = 0;
     int hue = 0;
+    int saturation = 0;
 
     for(hsv_t hsv: hsvs)
     {
@@ -148,13 +146,14 @@ RGBColor Bubbles::GetColor(int x, int y, int w, int h)
         {
             value = hsv.value;
             hue = hsv.hue;
+            saturation = hsv.saturation;
         }
     }
 
     hsv_t final;
     final.hue = hue;
     final.value = value;
-    final.saturation = 255;
+    final.saturation = saturation;
 
     return ColorUtils::Screen(RGBColor(hsv2rgb(&final)), background);
 }

@@ -32,7 +32,7 @@ private:
 
     std::vector<double>    speeds;
     std::vector<double>    bubbles;
-    std::vector<int>       colors;
+    std::vector<RGBColor>  colors;
     std::vector<QPointF>   centers;
 
     RGBColor background;
