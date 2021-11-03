@@ -368,39 +368,39 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
         switch (single_color_mode)
         {
         case VISUALIZER_SINGLE_COLOR_BLACK:
-            DrawSingleColorStatic(brightness, 0x00000000, pixels_render);
+            DrawSingleColorStatic(brightness, AV_COLOR_BLACK, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_WHITE:
-            DrawSingleColorStatic(brightness, 0x00FFFFFF, pixels_render);
+            DrawSingleColorStatic(brightness, AV_COLOR_WHITE, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_RED:
-            DrawSingleColorStatic(brightness, 0x000000FF, pixels_render);
+            DrawSingleColorStatic(brightness, AV_COLOR_RED, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_ORANGE:
-            DrawSingleColorStatic(brightness, 0x000080FF, pixels_render);
+            DrawSingleColorStatic(brightness, AV_COLOR_ORANGE, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_YELLOW:
-            DrawSingleColorStatic(brightness, 0x0000FFFF, pixels_render);
+            DrawSingleColorStatic(brightness, AV_COLOR_YELLOW, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_GREEN:
-            DrawSingleColorStatic(brightness, 0x0000FF00, pixels_render);
+            DrawSingleColorStatic(brightness, AV_COLOR_GREEN, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_CYAN:
-            DrawSingleColorStatic(brightness, 0x00FFFF00, pixels_render);
+            DrawSingleColorStatic(brightness, AV_COLOR_CYAN, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_BLUE:
-            DrawSingleColorStatic(brightness, 0x00FF0000, pixels_render);
+            DrawSingleColorStatic(brightness, AV_COLOR_BLUE, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_PURPLE:
-            DrawSingleColorStatic(brightness, 0x00FF00FF, pixels_render);
+            DrawSingleColorStatic(brightness, AV_COLOR_PURPLE, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_BACKGROUND:
