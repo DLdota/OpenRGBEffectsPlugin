@@ -1244,100 +1244,100 @@ void AudioVisualizer::DrawPattern(VISUALIZER_PATTERN pattern, int bright, vis_pi
     switch (pattern)
     {
     case VISUALIZER_PATTERN_SOLID_BLACK:
-        DrawSolidColor(bright, 0x00000000, pixels);
+        DrawSolidColor(bright, AV_COLOR_BLACK, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_WHITE:
-        DrawSolidColor(bright, 0x00FFFFFF, pixels);
+        DrawSolidColor(bright, AV_COLOR_WHITE, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_RED:
-        DrawSolidColor(bright, 0x000000FF, pixels);
+        DrawSolidColor(bright, AV_COLOR_RED, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_ORANGE:
-        DrawSolidColor(bright, 0x000040FF, pixels);
+        DrawSolidColor(bright, AV_COLOR_ORANGE, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_YELLOW:
-        DrawSolidColor(bright, 0x0000FFFF, pixels);
+        DrawSolidColor(bright, AV_COLOR_YELLOW, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_GREEN:
-        DrawSolidColor(bright, 0x0000FF00, pixels);
+        DrawSolidColor(bright, AV_COLOR_GREEN, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_CYAN:
-        DrawSolidColor(bright, 0x00FFFF00, pixels);
+        DrawSolidColor(bright, AV_COLOR_CYAN, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_BLUE:
-        DrawSolidColor(bright, 0x00FF0000, pixels);
+        DrawSolidColor(bright, AV_COLOR_BLUE, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_PURPLE:
-        DrawSolidColor(bright, 0x00FF0040, pixels);
+        DrawSolidColor(bright, AV_COLOR_PURPLE, pixels);
         break;
 
     case VISUALIZER_PATTERN_STATIC_RED_BLUE:
         {
-        RGBColor colors[] = { 0x000000FF, 0x00FF0000 };
+        RGBColor colors[] = { AV_COLOR_RED, AV_COLOR_BLUE };
         DrawHorizontalBars(bright, colors, 2, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_CYAN_ORANGE:
         {
-        RGBColor colors[] = { 0x00FFFF00, 0x00001EFF };
+        RGBColor colors[] = { AV_COLOR_CYAN, AV_COLOR_ORANGE };
         DrawHorizontalBars(bright, colors, 2, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_CYAN_PURPLE:
         {
-        RGBColor colors[] = { 0x00FFFF00, 0x00FF00FF };
+        RGBColor colors[] = { AV_COLOR_CYAN, AV_COLOR_PURPLE };
         DrawHorizontalBars(bright, colors, 2, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_GREEN_YELLOW_RED:
         {
-        RGBColor colors[] = { 0x0000FF00, 0x0000FFFF, 0x000000FF };
+        RGBColor colors[] = { AV_COLOR_GREEN, AV_COLOR_YELLOW, AV_COLOR_RED };
         DrawHorizontalBars(bright, colors, 3, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_GREEN_WHITE_RED:
         {
-        RGBColor colors[] = { 0x0000FF00, 0x00FFFFFF, 0x000000FF };
+        RGBColor colors[] = { AV_COLOR_GREEN, AV_COLOR_WHITE, AV_COLOR_RED };
         DrawHorizontalBars(bright, colors, 3, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_BLUE_CYAN_WHITE:
         {
-        RGBColor colors[] = { 0x00FF0000, 0x00FFFF00, 0x00FFFFFF };
+        RGBColor colors[] = { AV_COLOR_BLUE, AV_COLOR_CYAN, AV_COLOR_WHITE };
         DrawHorizontalBars(bright, colors, 3, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_RED_WHITE_BLUE:
         {
-        RGBColor colors[] = { 0x000000FF, 0x00FFFFFF, 0x00FF0000 };
+        RGBColor colors[] = { AV_COLOR_RED, AV_COLOR_WHITE, AV_COLOR_BLUE };
         DrawHorizontalBars(bright, colors, 3, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_RAINBOW:
         {
-        RGBColor colors[] = { 0x000000FF, 0x0000FFFF, 0x0000FF00, 0x00FFFF00, 0x00FF0000, 0x00FF00FF };
+        RGBColor colors[] = { AV_COLOR_RED, AV_COLOR_YELLOW, AV_COLOR_GREEN, AV_COLOR_CYAN, AV_COLOR_BLUE, AV_COLOR_PURPLE };
         DrawHorizontalBars(bright, colors, 6, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_RAINBOW_INVERSE:
         {
-        RGBColor colors[] = { 0x00FF00FF, 0x00FF0000, 0x00FFFF00, 0x0000FF00, 0x0000FFFF, 0x000000FF };
+        RGBColor colors[] = { AV_COLOR_PURPLE, AV_COLOR_BLUE, AV_COLOR_CYAN, AV_COLOR_GREEN, AV_COLOR_YELLOW, AV_COLOR_RED };
         DrawHorizontalBars(bright, colors, 6, pixels);
         }
         break;
