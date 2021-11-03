@@ -57,5 +57,6 @@
         <file>shaders/moving-ball.fs</file>
         <file>shaders/rotating-colors.fs</file>
         <file>shaders/rotating-spiral.fs</file>
+        <file>shaders/fill-and-drain.fs</file>
     </qresource>
 </RCC>
