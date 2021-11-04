@@ -52,12 +52,16 @@
         <file>shaders/color-alternalte.fs</file>
         <file>shaders/moving-bands.fs</file>
         <file>shaders/audio-example-5.fs</file>
-        <file>shaders/audio-exemple-6.fs</file>
+        <file>shaders/audio-example-6.fs</file>
         <file>shaders/beam.fs</file>
         <file>shaders/moving-ball.fs</file>
         <file>shaders/rotating-colors.fs</file>
         <file>shaders/rotating-spiral.fs</file>
         <file>shaders/fill-and-drain.fs</file>
         <file>shaders/audio-example-7.fs</file>
+        <file>shaders/audio-example-8.fs</file>
+        <file>shaders/audio-example-9.fs</file>
+        <file>shaders/audio-example-10.fs</file>
+        <file>shaders/audio-example-11.fs</file>
     </qresource>
 </RCC>
