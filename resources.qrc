@@ -58,5 +58,6 @@
         <file>shaders/rotating-colors.fs</file>
         <file>shaders/rotating-spiral.fs</file>
         <file>shaders/fill-and-drain.fs</file>
+        <file>shaders/audio-example-7.fs</file>
     </qresource>
 </RCC>

@@ -53,6 +53,7 @@ HEADERS +=                                                                      
     Effects/Shaders/ShaderPassData.h                                                            \
     Effects/Shaders/ShaderPassEditor.h                                                          \
     Effects/Shaders/ShaderProgram.h                                                             \
+    OpenRGB/Colors.h                                                                            \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
