@@ -14,10 +14,17 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <widget class="QLabel" name="label">
+   <item row="1" column="4">
+    <widget class="QCheckBox" name="reverse">
      <property name="text">
-      <string>Custom width</string>
+      <string>Reverse</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Brightness</string>
      </property>
     </widget>
    </item>
@@ -31,6 +38,13 @@
      </property>
     </widget>
    </item>
+   <item row="1" column="2">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Custom height</string>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="3">
     <widget class="QSpinBox" name="height">
      <property name="minimum">
@@ -41,7 +55,27 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="5">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Custom width</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+    <widget class="QCheckBox" name="scale">
+     <property name="text">
+      <string>Scale content</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="6">
+    <widget class="QComboBox" name="presets"/>
+   </item>
+   <item row="3" column="0" colspan="6">
     <widget class="PreviewWidget" name="preview_widget" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -54,37 +88,13 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Custom height</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="4">
-    <widget class="QCheckBox" name="reverse">
-     <property name="text">
-      <string>Reverse</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="5">
-    <widget class="QComboBox" name="presets"/>
-   </item>
-   <item row="2" column="1" colspan="4">
+   <item row="2" column="1" colspan="5">
     <widget class="QSlider" name="brightness">
      <property name="maximum">
       <number>100</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Brightness</string>
      </property>
     </widget>
    </item>

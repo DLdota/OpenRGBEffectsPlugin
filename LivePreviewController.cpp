@@ -41,6 +41,7 @@ LivePreviewController::LivePreviewController(QWidget *parent) :
     }
 
     ui->preview_widget->setScaledContents(true);
+
     ui->brightness->setValue(modes[0].brightness);
 }
 
@@ -189,6 +190,11 @@ void LivePreviewController::on_height_valueChanged(int value)
 void LivePreviewController::on_reverse_stateChanged(int value)
 {
     emit ReversedChanged(value);
+}
+
+void LivePreviewController::on_scale_stateChanged(int value)
+{
+    ui->preview_widget->setScaledContents(value);
 }
 
 void LivePreviewController::on_brightness_valueChanged(int value)

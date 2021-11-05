@@ -38,6 +38,7 @@ private slots:
     void on_width_valueChanged(int);
     void on_height_valueChanged(int);
     void on_reverse_stateChanged(int);
+    void on_scale_stateChanged(int);
     void Draw(QImage);
 
 private:
