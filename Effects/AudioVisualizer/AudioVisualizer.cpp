@@ -458,7 +458,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
             y_count     = controller_zone->matrix_map_height();
         }
 
-        if (ZoneMaps[i] == nullptr)
+        if (ZoneMaps[i] == nullptr || x_count != ZoneMaps[i]->x_count || y_count != ZoneMaps[i]->y_count)
         {
             ZoneIndexType *   new_index_map             = new ZoneIndexType();
             new_index_map->x_count                      = x_count;
@@ -491,7 +491,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
                 for (int x = 0; x < x_count; x++)
                 {
                     unsigned int map_idx = (y * x_count) + x;
-                    unsigned int color_idx = controller_zone->controller->zones[controller_zone->zone_idx].matrix_map->map[map_idx];
+                    unsigned int color_idx = controller_zone->map()[map_idx];
 
                     if( color_idx != 0xFFFFFFFF )
                     {
