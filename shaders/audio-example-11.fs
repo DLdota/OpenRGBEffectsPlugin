@@ -1,4 +1,5 @@
-#define c vec3(1,0,1)
+#define c1 vec3(0,0,1)
+#define c2 vec3(1,0,1)
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
@@ -7,5 +8,5 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float x = floor(uv.x * 16.);
     float y = floor(uv.y * 16.);
 
-    fragColor = iAudio[int(y*16. + x)]*vec4(c, 1.);
+    fragColor = iAudio[int(y*16. + x)]*vec4(mix(c1, c2, uv.y), 1.);
 }
