@@ -55,19 +55,12 @@
 #ifndef _WIN32
 #include <unistd.h>
 
-typedef unsigned int    COLORREF;
 typedef unsigned char   BYTE;
 typedef bool            boolean;
-#define RGB(r, g, b)    (((unsigned char)r) | ((unsigned char)g << 8) | ((unsigned char)b << 16))
-#define GetRValue(rgb)  ((unsigned char) (rgb))
-#define GetGValue(rgb)  ((unsigned char) ((rgb) >> 8))
-#define GetBValue(rgb)  ((unsigned char) ((rgb) >> 16))
 #define Sleep(ms)       (usleep(ms * 1000))
 #define LPSTR           char *
 #define strtok_s        strtok_r
 #endif
-
-#define RGB2BGR(a_ulColor) (a_ulColor & 0xFF000000) | ((a_ulColor & 0xFF0000) >> 16) | (a_ulColor & 0x00FF00) | ((a_ulColor & 0x0000FF) << 16)
 
 //Special purpose row indices
 #define ROW_IDX_BAR_GRAPH           0
@@ -77,17 +70,6 @@ typedef bool            boolean;
 #define SPECTROGRAPH_COLS           (256)
 #define SPECTROGRAPH_END            (SPECTROGRAPH_COLS - 1)
 #define SPECTROGRAPH_ROWS           (64 - ROW_IDX_SPECTROGRAPH_TOP)
-
-#define AV_COLOR_BLACK 0x00000000
-#define AV_COLOR_WHITE 0x00FFFFFF
-#define AV_COLOR_RED 0x000000FF
-#define AV_COLOR_ORANGE 0x000040FF
-#define AV_COLOR_YELLOW 0x0000FFFF
-#define AV_COLOR_GREEN 0x0000FF00
-#define AV_COLOR_CYAN 0x00FFFF00
-#define AV_COLOR_BLUE 0x00FF0000
-#define AV_COLOR_PURPLE 0x00FF00FF
-
 
 typedef unsigned int VISUALIZER_PATTERN;
 enum

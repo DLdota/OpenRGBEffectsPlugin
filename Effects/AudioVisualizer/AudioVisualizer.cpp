@@ -1,4 +1,5 @@
 #include "AudioVisualizer.h"
+#include "Colors.h"
 
 /*---------------------------------------------------------*\
 |  Processing Code for Keyboard Visualizer                  |
@@ -250,7 +251,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
                 if (shutdown_flag == true)
                 {
                     int in_color = pixels_fg.pixels[y][x];
-                    pixels_render->pixels[y][x] = RGB(((brightness * GetRValue(in_color))), ((brightness * GetGValue(in_color))), ((brightness * GetBValue(in_color))));
+                    pixels_render->pixels[y][x] = ToRGBColor((int(brightness * RGBGetBValue(in_color))), (int(brightness * RGBGetGValue(in_color))), (int(brightness * RGBGetRValue(in_color))));
                 }
                 else
                 {
@@ -264,11 +265,11 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
                     if (!silent_bkgd || ((background_timer >= background_timeout) && (background_timeout > 0)))
                     {
                         int in_color = pixels_bg.pixels[y][x];
-                        pixels_render->pixels[y][x] = RGB(((brightness * GetRValue(in_color))), ((brightness * GetGValue(in_color))), ((brightness * GetBValue(in_color))));
+                        pixels_render->pixels[y][x] = ToRGBColor((int(brightness * RGBGetBValue(in_color))), (int(brightness * RGBGetGValue(in_color))), (int(brightness * RGBGetRValue(in_color))));
                     }
                     else
                     {
-                        pixels_render->pixels[y][x] = RGB(0, 0, 0);
+                        pixels_render->pixels[y][x] = ToRGBColor(0, 0, 0);
                     }
                 }
                 else
@@ -290,7 +291,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
                         if (shutdown_flag == true)
                         {
                             int in_color = pixels_fg.pixels[y][x];
-                            pixels_render->pixels[y][x] = RGB(((brightness * GetRValue(in_color))), ((brightness * GetGValue(in_color))), ((brightness * GetBValue(in_color))));
+                            pixels_render->pixels[y][x] = ToRGBColor((int(brightness * RGBGetBValue(in_color))), (int(brightness * RGBGetGValue(in_color))), (int(brightness * RGBGetRValue(in_color))));
                         }
                         else
                         {
@@ -304,11 +305,11 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
                             if (!silent_bkgd || ((background_timer >= background_timeout) && (background_timeout > 0)))
                             {
                                 int in_color = pixels_bg.pixels[y][x];
-                                pixels_render->pixels[y][x] = RGB(((brightness * GetRValue(in_color))), ((brightness * GetGValue(in_color))), ((brightness * GetBValue(in_color))));
+                                pixels_render->pixels[y][x] = ToRGBColor((int(brightness * RGBGetBValue(in_color))), (int(brightness * RGBGetGValue(in_color))), (int(brightness * RGBGetRValue(in_color))));
                             }
                             else
                             {
-                                pixels_render->pixels[y][x] = RGB(0, 0, 0);
+                                pixels_render->pixels[y][x] = ToRGBColor(0, 0, 0);
                             }
                         }
                         else
@@ -324,7 +325,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
                         if (shutdown_flag == true)
                         {
                             int in_color = pixels_fg.pixels[y][x];
-                            pixels_render->pixels[y][x] = RGB(((brightness * GetRValue(in_color))), ((brightness * GetGValue(in_color))), ((brightness * GetBValue(in_color))));
+                            pixels_render->pixels[y][x] = ToRGBColor((int(brightness * RGBGetBValue(in_color))), (int(brightness * RGBGetGValue(in_color))), (int(brightness * RGBGetRValue(in_color))));
                         }
                         else
                         {
@@ -338,11 +339,11 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
                             if (!silent_bkgd || (background_timer >= background_timeout))
                             {
                                 int in_color = pixels_bg.pixels[y][x];
-                                pixels_render->pixels[y][x] = RGB(((brightness * GetRValue(in_color))), ((brightness * GetGValue(in_color))), ((brightness * GetBValue(in_color))));
+                                pixels_render->pixels[y][x] = ToRGBColor((int(brightness * RGBGetBValue(in_color))), (int(brightness * RGBGetGValue(in_color))), (int(brightness * RGBGetRValue(in_color))));
                             }
                             else
                             {
-                                pixels_render->pixels[y][x] = RGB(0, 0, 0);
+                                pixels_render->pixels[y][x] = ToRGBColor(0, 0, 0);
                             }
                         }
                         else
@@ -368,39 +369,39 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
         switch (single_color_mode)
         {
         case VISUALIZER_SINGLE_COLOR_BLACK:
-            DrawSingleColorStatic(brightness, AV_COLOR_BLACK, pixels_render);
+            DrawSingleColorStatic(brightness, COLOR_BLACK, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_WHITE:
-            DrawSingleColorStatic(brightness, AV_COLOR_WHITE, pixels_render);
+            DrawSingleColorStatic(brightness, COLOR_WHITE, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_RED:
-            DrawSingleColorStatic(brightness, AV_COLOR_RED, pixels_render);
+            DrawSingleColorStatic(brightness, COLOR_RED, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_ORANGE:
-            DrawSingleColorStatic(brightness, AV_COLOR_ORANGE, pixels_render);
+            DrawSingleColorStatic(brightness, COLOR_ORANGE, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_YELLOW:
-            DrawSingleColorStatic(brightness, AV_COLOR_YELLOW, pixels_render);
+            DrawSingleColorStatic(brightness, COLOR_YELLOW, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_GREEN:
-            DrawSingleColorStatic(brightness, AV_COLOR_GREEN, pixels_render);
+            DrawSingleColorStatic(brightness, COLOR_GREEN, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_CYAN:
-            DrawSingleColorStatic(brightness, AV_COLOR_CYAN, pixels_render);
+            DrawSingleColorStatic(brightness, COLOR_CYAN, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_BLUE:
-            DrawSingleColorStatic(brightness, AV_COLOR_BLUE, pixels_render);
+            DrawSingleColorStatic(brightness, COLOR_BLUE, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_PURPLE:
-            DrawSingleColorStatic(brightness, AV_COLOR_PURPLE, pixels_render);
+            DrawSingleColorStatic(brightness, COLOR_PURPLE, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_BACKGROUND:
@@ -446,6 +447,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
         int                 y_count                 = 0;
         zone_type           type                    = controller_zone->type();
         ZoneIndexType *     zone_index_map          = NULL;
+        int start_idx = controller_zone->start_idx();
 
         /*--------------------------------------------------------------*\
         | If matrix type and matrix mapping is valid, get X and Y count  |
@@ -493,7 +495,8 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
 
                     if( color_idx != 0xFFFFFFFF )
                     {
-                        controller_zone->controller->zones[controller_zone->zone_idx].colors[color_idx] = pixels_out->pixels[zone_index_map->y_index[y]][zone_index_map->x_index[x]];
+                        controller_zone->SetLED(start_idx + color_idx, pixels_out->pixels[zone_index_map->y_index[y]][zone_index_map->x_index[x]], Brightness);
+                        //controller_zone->controller->zones[controller_zone->zone_idx].colors[color_idx] = pixels_out->pixels[zone_index_map->y_index[y]][zone_index_map->x_index[x]];
                     }
                 }
             }
@@ -502,14 +505,16 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
         case ZONE_TYPE_SINGLE:
             for (int r = 0; r < x_count; r++)
             {
-                controller_zone->controller->zones[controller_zone->zone_idx].colors[r] = pixels_out->pixels[ROW_IDX_SINGLE_COLOR][0];
+                controller_zone->SetLED(start_idx + r, pixels_out->pixels[ROW_IDX_SINGLE_COLOR][0], Brightness);
+                //controller_zone->controller->zones[controller_zone->zone_idx].colors[r] = pixels_out->pixels[ROW_IDX_SINGLE_COLOR][0];
             }
             break;
 
         case ZONE_TYPE_LINEAR:
             for (int x = 0; x < x_count; x++)
             {
-                controller_zone->controller->zones[controller_zone->zone_idx].colors[x] = pixels_out->pixels[ROW_IDX_BAR_GRAPH][zone_index_map->x_index[x]];
+                controller_zone->SetLED(start_idx + x, pixels_out->pixels[ROW_IDX_BAR_GRAPH][zone_index_map->x_index[x]], Brightness);
+                //controller_zone->controller->zones[controller_zone->zone_idx].colors[x] = pixels_out->pixels[ROW_IDX_BAR_GRAPH][zone_index_map->x_index[x]];
             }
             break;
         }
@@ -658,9 +663,7 @@ void AudioVisualizer::update()
     {
         for(int y = 0; y < 64; y++)
         {
-            COLORREF input = pixels_out->pixels[y][x];
-            COLORREF bgr = RGB(GetBValue(input), GetGValue(input), GetRValue(input));
-            image->setPixel(x, y, bgr);
+            image->setPixelColor(x, y, ColorUtils::toQColor(pixels_out->pixels[y][x]));
         }
     }
 
@@ -1040,7 +1043,7 @@ void AudioVisualizer::DrawSolidColor(int bright, RGBColor color, vis_pixels *pix
     {
         for (int y = 0; y < 64; y++)
         {
-            pixels->pixels[y][x] = RGB(((bright * GetRValue(color)) / 256), ((bright * GetGValue(color)) / 256), ((bright * GetBValue(color)) / 256));
+            pixels->pixels[y][x] = ToRGBColor((int(bright * RGBGetBValue(color)) / 256), (int(bright * RGBGetGValue(color)) / 256), (int(bright * RGBGetRValue(color)) / 256));
         }
     }
 }
@@ -1056,7 +1059,7 @@ void AudioVisualizer::DrawSingleColorStatic(float amplitude, RGBColor in_color, 
         amplitude = 0.0f;
     }
 
-    int out_color = RGB(((amplitude * GetRValue(in_color))), ((amplitude * GetGValue(in_color))), ((amplitude * GetBValue(in_color))));
+    int out_color = ToRGBColor((int(amplitude * RGBGetBValue(in_color))), (int(amplitude * RGBGetGValue(in_color))), (int(amplitude * RGBGetRValue(in_color))));
     for (int x = 0; x < 256; x++)
     {
         out_pixels->pixels[ROW_IDX_SINGLE_COLOR][x] = out_color;
@@ -1076,13 +1079,13 @@ void AudioVisualizer::DrawSingleColorForeground(float amplitude, vis_pixels *fg_
 
     int idx = (int)(64.0f - (amplitude * 62.0f));
     int in_color = fg_pixels->pixels[idx][0];
-    int out_color = RGB(((amplitude * GetRValue(in_color))), ((amplitude * GetGValue(in_color))), ((amplitude * GetBValue(in_color))));
+    int out_color = ToRGBColor((int(amplitude * RGBGetBValue(in_color))), (int(amplitude * RGBGetGValue(in_color))), (int(amplitude * RGBGetRValue(in_color))));
     for (int x = 0; x < 256; x++)
     {
         if (frgd_mode >= VISUALIZER_PATTERN_ANIM_RAINBOW_SINUSOIDAL)
         {
             in_color = fg_pixels->pixels[ROW_IDX_SINGLE_COLOR][x];
-            out_color = RGB(((amplitude * GetRValue(in_color))), ((amplitude * GetGValue(in_color))), ((amplitude * GetBValue(in_color))));
+            out_color = ToRGBColor((int(amplitude * RGBGetBValue(in_color))), (int(amplitude * RGBGetGValue(in_color))), (int(amplitude * RGBGetRValue(in_color))));
         }
 
         out_pixels->pixels[ROW_IDX_SINGLE_COLOR][x] = out_color;
@@ -1103,7 +1106,7 @@ void AudioVisualizer::DrawSingleColorBackground(float amplitude, vis_pixels *bg_
     for (int x = 0; x < 256; x++)
     {
         int in_color = bg_pixels->pixels[ROW_IDX_SINGLE_COLOR][x];
-        int out_color = RGB(((amplitude * GetRValue(in_color))), ((amplitude * GetGValue(in_color))), ((amplitude * GetBValue(in_color))));
+        int out_color = ToRGBColor((int(amplitude * RGBGetBValue(in_color))), (int(amplitude * RGBGetGValue(in_color))), (int(amplitude * RGBGetRValue(in_color))));
         out_pixels->pixels[ROW_IDX_SINGLE_COLOR][x] = out_color;
     }
 }
@@ -1133,7 +1136,7 @@ void AudioVisualizer::DrawSinusoidalCycle(int bright, float bkgd_step, vis_pixel
     int red = (int)(127 * (sin(((((int)(((360 / 255.0f)) - bkgd_step) % 360) / 360.0f) * 2 * 3.14f)) + 1));
     int grn = (int)(127 * (sin(((((int)(((360 / 255.0f)) - bkgd_step) % 360) / 360.0f) * 2 * 3.14f) - (6.28f / 3)) + 1));
     int blu = (int)(127 * (sin(((((int)(((360 / 255.0f)) - bkgd_step) % 360) / 360.0f) * 2 * 3.14f) + (6.28f / 3)) + 1));
-    color = RGB(((bright * red) / 256), ((bright * grn) / 256), ((bright * blu) / 256));
+    color = ToRGBColor(((bright * red) / 256), ((bright * grn) / 256), ((bright * blu) / 256));
 
     for (int x = 0; x < 256; x++)
     {
@@ -1171,7 +1174,7 @@ void AudioVisualizer::DrawRainbowSinusoidal(int bright, float bkgd_step, vis_pix
             int red = (int)(127 * (sin(((((int)((x * (360 / 255.0f)) - bkgd_step) % 360) / 360.0f) * 2 * 3.14f)) + 1));
             int grn = (int)(127 * (sin(((((int)((x * (360 / 255.0f)) - bkgd_step) % 360) / 360.0f) * 2 * 3.14f) - (6.28f / 3)) + 1));
             int blu = (int)(127 * (sin(((((int)((x * (360 / 255.0f)) - bkgd_step) % 360) / 360.0f) * 2 * 3.14f) + (6.28f / 3)) + 1));
-            pixels->pixels[y][x] = RGB(((bright * red) / 256), ((bright * grn) / 256), ((bright * blu) / 256));
+            pixels->pixels[y][x] = ToRGBColor(((bright * red) / 256), ((bright * grn) / 256), ((bright * blu) / 256));
         }
     }
 }
@@ -1201,7 +1204,7 @@ void AudioVisualizer::DrawVerticalBars(int bright, RGBColor * colors, int num_co
         for (int y = 0; y < 64; y++)
         {
             int idx = (int)((float)x * ((float)num_colors / 255.0f));
-            pixels->pixels[y][x] = RGB(((bright * GetRValue(colors[idx])) / 256), ((bright * GetGValue(colors[idx])) / 256), ((bright * GetBValue(colors[idx])) / 256));
+            pixels->pixels[y][x] = ToRGBColor((int(bright * RGBGetBValue(colors[idx])) / 256), (int(bright * RGBGetGValue(colors[idx])) / 256), (int(bright * RGBGetRValue(colors[idx])) / 256));
         }
     }
 }
@@ -1222,18 +1225,18 @@ void AudioVisualizer::DrawHorizontalBars(int bright, RGBColor * colors, int num_
                     {
                         idx = num_colors - 1;
                     }
-                    pixels->pixels[y][x] = RGB(((bright * GetRValue(colors[idx])) / 256), ((bright * GetGValue(colors[idx])) / 256), ((bright * GetBValue(colors[idx])) / 256));
+                    pixels->pixels[y][x] = ToRGBColor(((bright * RGBGetBValue(colors[idx])) / 256), ((bright * RGBGetGValue(colors[idx])) / 256), ((bright * RGBGetRValue(colors[idx])) / 256));
                 }
                 else
                 {
                     int idx = (int)(((float)(x - 128) * ((float)num_colors / 128.0f)));
-                    pixels->pixels[y][x] = RGB(((bright * GetRValue(colors[idx])) / 256), ((bright * GetGValue(colors[idx])) / 256), ((bright * GetBValue(colors[idx])) / 256));
+                    pixels->pixels[y][x] = ToRGBColor(((bright * RGBGetBValue(colors[idx])) / 256), ((bright * RGBGetGValue(colors[idx])) / 256), ((bright * RGBGetRValue(colors[idx])) / 256));
                 }
             }
             else
             {
                 int idx = (int)(num_colors - ((float)y * ((float)num_colors / 63.0f)));
-                pixels->pixels[y][x] = RGB(((bright * GetRValue(colors[idx])) / 256), ((bright * GetGValue(colors[idx])) / 256), ((bright * GetBValue(colors[idx])) / 256));
+                pixels->pixels[y][x] = ToRGBColor(((bright * RGBGetBValue(colors[idx])) / 256), ((bright * RGBGetGValue(colors[idx])) / 256), ((bright * RGBGetRValue(colors[idx])) / 256));
             }
         }
     }
@@ -1244,100 +1247,100 @@ void AudioVisualizer::DrawPattern(VISUALIZER_PATTERN pattern, int bright, vis_pi
     switch (pattern)
     {
     case VISUALIZER_PATTERN_SOLID_BLACK:
-        DrawSolidColor(bright, AV_COLOR_BLACK, pixels);
+        DrawSolidColor(bright, COLOR_BLACK, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_WHITE:
-        DrawSolidColor(bright, AV_COLOR_WHITE, pixels);
+        DrawSolidColor(bright, COLOR_WHITE, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_RED:
-        DrawSolidColor(bright, AV_COLOR_RED, pixels);
+        DrawSolidColor(bright, COLOR_RED, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_ORANGE:
-        DrawSolidColor(bright, AV_COLOR_ORANGE, pixels);
+        DrawSolidColor(bright, COLOR_ORANGE, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_YELLOW:
-        DrawSolidColor(bright, AV_COLOR_YELLOW, pixels);
+        DrawSolidColor(bright, COLOR_YELLOW, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_GREEN:
-        DrawSolidColor(bright, AV_COLOR_GREEN, pixels);
+        DrawSolidColor(bright, COLOR_GREEN, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_CYAN:
-        DrawSolidColor(bright, AV_COLOR_CYAN, pixels);
+        DrawSolidColor(bright, COLOR_CYAN, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_BLUE:
-        DrawSolidColor(bright, AV_COLOR_BLUE, pixels);
+        DrawSolidColor(bright, COLOR_BLUE, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_PURPLE:
-        DrawSolidColor(bright, AV_COLOR_PURPLE, pixels);
+        DrawSolidColor(bright, COLOR_PURPLE, pixels);
         break;
 
     case VISUALIZER_PATTERN_STATIC_RED_BLUE:
         {
-        RGBColor colors[] = { AV_COLOR_RED, AV_COLOR_BLUE };
+        RGBColor colors[] = { COLOR_RED, COLOR_BLUE };
         DrawHorizontalBars(bright, colors, 2, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_CYAN_ORANGE:
         {
-        RGBColor colors[] = { AV_COLOR_CYAN, AV_COLOR_ORANGE };
+        RGBColor colors[] = { COLOR_CYAN, COLOR_ORANGE };
         DrawHorizontalBars(bright, colors, 2, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_CYAN_PURPLE:
         {
-        RGBColor colors[] = { AV_COLOR_CYAN, AV_COLOR_PURPLE };
+        RGBColor colors[] = { COLOR_CYAN, COLOR_PURPLE };
         DrawHorizontalBars(bright, colors, 2, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_GREEN_YELLOW_RED:
         {
-        RGBColor colors[] = { AV_COLOR_GREEN, AV_COLOR_YELLOW, AV_COLOR_RED };
+        RGBColor colors[] = { COLOR_GREEN, COLOR_YELLOW, COLOR_RED };
         DrawHorizontalBars(bright, colors, 3, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_GREEN_WHITE_RED:
         {
-        RGBColor colors[] = { AV_COLOR_GREEN, AV_COLOR_WHITE, AV_COLOR_RED };
+        RGBColor colors[] = { COLOR_GREEN, COLOR_WHITE, COLOR_RED };
         DrawHorizontalBars(bright, colors, 3, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_BLUE_CYAN_WHITE:
         {
-        RGBColor colors[] = { AV_COLOR_BLUE, AV_COLOR_CYAN, AV_COLOR_WHITE };
+        RGBColor colors[] = { COLOR_BLUE, COLOR_CYAN, COLOR_WHITE };
         DrawHorizontalBars(bright, colors, 3, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_RED_WHITE_BLUE:
         {
-        RGBColor colors[] = { AV_COLOR_RED, AV_COLOR_WHITE, AV_COLOR_BLUE };
+        RGBColor colors[] = { COLOR_RED, COLOR_WHITE, COLOR_BLUE };
         DrawHorizontalBars(bright, colors, 3, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_RAINBOW:
         {
-        RGBColor colors[] = { AV_COLOR_RED, AV_COLOR_YELLOW, AV_COLOR_GREEN, AV_COLOR_CYAN, AV_COLOR_BLUE, AV_COLOR_PURPLE };
+        RGBColor colors[] = { COLOR_RED, COLOR_YELLOW, COLOR_GREEN, COLOR_CYAN, COLOR_BLUE, COLOR_PURPLE };
         DrawHorizontalBars(bright, colors, 6, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_RAINBOW_INVERSE:
         {
-        RGBColor colors[] = { AV_COLOR_PURPLE, AV_COLOR_BLUE, AV_COLOR_CYAN, AV_COLOR_GREEN, AV_COLOR_YELLOW, AV_COLOR_RED };
+        RGBColor colors[] = { COLOR_PURPLE, COLOR_BLUE, COLOR_CYAN, COLOR_GREEN, COLOR_YELLOW, COLOR_RED };
         DrawHorizontalBars(bright, colors, 6, pixels);
         }
         break;
