@@ -63,5 +63,6 @@
         <file>shaders/audio-example-9.fs</file>
         <file>shaders/audio-example-10.fs</file>
         <file>shaders/audio-example-11.fs</file>
+        <file>shaders/audio-example-12.fs</file>
     </qresource>
 </RCC>
