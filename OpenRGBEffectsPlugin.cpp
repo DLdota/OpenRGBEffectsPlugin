@@ -57,17 +57,15 @@ QWidget* OpenRGBEffectsPlugin::GetWidget()
 
 QMenu* OpenRGBEffectsPlugin::GetTrayMenu()
 {
-    QMenu* pluginsMenu = new QMenu("Effects", nullptr);
+    QMenu* pluginsMenu = new QMenu("Effects", ui);
 
     QMenu* profilesMenu = new QMenu("Profiles", pluginsMenu);
 
     // START ALL EFFECTS
 
-    QAction* actionStartAll = new QAction("Start all effects", this);
+    QAction* actionStartAll = new QAction("Start all effects", ui);
 
-    OpenRGBEffectTab* ui = this->ui;
-
-    connect(actionStartAll, &QAction::triggered, [ui](){
+    connect(actionStartAll, &QAction::triggered, [=](){
         ui->StartAll();
     });
 
@@ -79,15 +77,14 @@ QMenu* OpenRGBEffectsPlugin::GetTrayMenu()
 
     // STOP ALL EFFECTS
 
-    QAction* actionStopAll = new QAction("Stop all effects", this);
+    QAction* actionStopAll = new QAction("Stop all effects", ui);
 
-    connect(actionStopAll, &QAction::triggered, [ui](){
+    connect(actionStopAll, &QAction::triggered, [=](){
         ui->StopAll();
     });
 
     actionStopAll->setObjectName("OpenRGBEffectsPlugin::Action::StopAll");
     actionStopAll->setProperty("OpenRGBEffectsPlugin::ActionTitle", actionStopAll->text());
-    actionStopAll->setParent(pluginsMenu);
 
     pluginsMenu->addAction(actionStopAll);
 
@@ -102,17 +99,14 @@ QMenu* OpenRGBEffectsPlugin::GetTrayMenu()
         {
             QString profile_name = QString::fromStdString(profile);
 
-            QAction* profileAction = new QAction(profile_name, this);
+            QAction* profileAction = new QAction(profile_name, ui);
 
-            connect(profileAction, &QAction::triggered, [ui, profile](){
+            connect(profileAction, &QAction::triggered, [=](){
                 ui->LoadProfile(profile);
             });
 
             profileAction->setObjectName("OpenRGBEffectsPlugin::Action::Profile::"+profile_name);
             profileAction->setProperty("OpenRGBEffectsPlugin::ActionTitle", "Load profile: " + profile_name);
-
-            profileAction->setParent(profilesMenu);
-
             profilesMenu->addAction(profileAction);
         }
     });
