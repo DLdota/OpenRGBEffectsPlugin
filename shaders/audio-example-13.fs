@@ -1,4 +1,6 @@
+#define col vec3(1,0,1)
 #define PI 3.14159
+#define double_bars true
 
 vec4 HSVToRGB(float h, float s, float v)
     {
@@ -63,7 +65,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec2 start = vec2(0.5,0.);
     vec2 end = vec2(min(amp,1.), 0.2);
 
-    float val = pow(1.-dist(end, start, uv), 10.);
+    float val = pow(1.-dist(end, start, double_bars?2.*abs(uv-start):uv), 10.);
 
     fragColor = val*HSVToRGB(mod(100.*iTime+uv.y*180.,360.), 1.,1.);
 }
