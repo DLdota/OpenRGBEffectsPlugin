@@ -81,8 +81,20 @@ RGBColor ZigZag::GetColor(float x, float y, float w, float h)
     if(current_led_percent < progress)
     {
         float distance = pow(current_led_percent / progress, 3);
+
         hsv_t hsv;
-        rgb2hsv(UserColors[0], &hsv);
+
+        if(RandomColorsEnabled)
+        {
+            hsv.hue = int(distance*360. -100.*time) % 360;
+            hsv.saturation = 255;
+            hsv.value = 255;
+        }
+        else
+        {
+            rgb2hsv(UserColors[0], &hsv);
+        }
+
         hsv.value *= distance;
         return RGBColor(hsv2rgb(&hsv));
     }
