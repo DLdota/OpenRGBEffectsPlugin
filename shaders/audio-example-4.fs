@@ -47,7 +47,7 @@ vec4 HSVToRGB(float h, float s, float v)
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     vec2 p = abs(fragCoord.xy / iResolution.xy - 0.5);
-    float v = clamp(gain*(0.5-p.y) * iAudio[int(floor((p.x)*256.))], 0.0, 1.0);
+    float v = clamp(gain*(0.5-p.y) * iAudio[int(floor((p.x)*512.))], 0.0, 1.0);
 
     float h = 360.0 * mod(p.x+iTime, PI) / PI;
     float s = 1.0;
