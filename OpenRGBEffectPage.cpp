@@ -202,7 +202,7 @@ void OpenRGBEffectPage::OpenPreview()
         dark_theme.close();
     }
 
-    preview_dialog->setMinimumSize(64,64);
+    preview_dialog->setMinimumSize(256,256);
 
     QVBoxLayout* dialog_layout = new QVBoxLayout(preview_dialog);
 

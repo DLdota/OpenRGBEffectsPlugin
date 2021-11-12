@@ -68,7 +68,7 @@
       <string>Scale content</string>
      </property>
      <property name="checked">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -84,7 +84,7 @@
       </sizepolicy>
      </property>
      <property name="styleSheet">
-      <string notr="true">background:black</string>
+      <string notr="true">background:transparent</string>
      </property>
     </widget>
    </item>

@@ -40,7 +40,7 @@ LivePreviewController::LivePreviewController(QWidget *parent) :
         ui->presets->addItem(QString::fromStdString(preset.name));
     }
 
-    ui->preview_widget->setScaledContents(true);
+    ui->preview_widget->setScaledContents(ui->scale->isChecked());
 
     ui->brightness->setValue(modes[0].brightness);
 }
