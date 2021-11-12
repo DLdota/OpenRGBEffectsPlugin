@@ -32,6 +32,19 @@ public:
         return controller->zones[zone_idx].start_idx;
     }
 
+    unsigned int size()
+    {
+        return type() == ZONE_TYPE_MATRIX ?
+                    controller->zones[zone_idx].matrix_map->width *
+                controller->zones[zone_idx].matrix_map->height : leds_count();
+    }
+
+    unsigned int matrix_size()
+    {
+        return controller->zones[zone_idx].matrix_map->width *
+                controller->zones[zone_idx].matrix_map->height;
+    }
+
     unsigned int leds_count()
     {
         return controller->zones[zone_idx].leds_count;

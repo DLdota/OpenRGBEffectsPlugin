@@ -33,7 +33,7 @@ void Bloom::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(unsigned int i = 0; i < controller_zones.size(); i++)
     {
-        if(flowers[i].size() != controller_zones[i]->leds_count())
+        if(flowers[i].size() != controller_zones[i]->size())
         {
             Reset(controller_zones);
         }
@@ -62,8 +62,9 @@ void Bloom::StepEffect(std::vector<ControllerZone*> controller_zones)
             {
                 for (int row_id = 0; row_id < rows; row_id++)
                 {
-                   int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                   RGBColor color = hsv2rgb(&flowers[i][LedID].hsv);
+                   int idx = (row_id * cols) + col_id;
+                   int LedID = controller_zones[i]->map()[idx];
+                   RGBColor color = hsv2rgb(&flowers[i][idx].hsv);
                    controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
                 }
             }
@@ -91,7 +92,7 @@ void Bloom::Reset(std::vector<ControllerZone*> controller_zones)
     {
         std::vector<Flower> zone_flowers;
 
-        for(unsigned int i = 0; i < controller_zone->leds_count(); i++)
+        for(unsigned int i = 0; i < controller_zone->size(); i++)
         {
             Flower flower;
             flower.hsv = ColorUtils::RandomHSVColor();
