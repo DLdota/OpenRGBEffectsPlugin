@@ -190,6 +190,13 @@
      </property>
     </widget>
    </item>
+   <item row="3" column="3">
+    <widget class="QCheckBox" name="invert_time">
+     <property name="text">
+      <string>Invert time</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

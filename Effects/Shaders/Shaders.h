@@ -50,6 +50,8 @@ private slots:
     void on_width_valueChanged(int);
     void on_height_valueChanged(int);
 
+    void on_invert_time_stateChanged(int);
+
     void on_amplitude_valueChanged(int);
     void on_decay_valueChanged(int);
     void on_average_valueChanged(int);
@@ -87,6 +89,8 @@ private:
     float fft_fltr[256] = { 0 };
 
     bool use_audio = false;
+
+    bool invert_time = false;
 
     void StartAudio();
     void StopAudio();

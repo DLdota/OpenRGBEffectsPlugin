@@ -156,7 +156,7 @@ void Shaders::StepEffect(std::vector<ControllerZone*> controller_zones)
         return;
     }
 
-    shader_renderer->uniforms.iTime = time;
+    shader_renderer->uniforms.iTime = invert_time ? - time : time;
     shader_renderer->uniforms.iAudio = fft_fltr;
 
     image_mutex.lock();
@@ -233,6 +233,9 @@ void Shaders::LoadCustomSettings(json Settings)
     if(Settings.contains("show_rendering"))
         ui->show_rendering->setChecked(Settings["show_rendering"]);
 
+    if(Settings.contains("invert_time"))
+        ui->invert_time->setChecked(Settings["invert_time"]);
+
     if(Settings.contains("use_audio"))
         ui->use_audio->setChecked(Settings["use_audio"]);
 
@@ -257,6 +260,7 @@ json Shaders::SaveCustomSettings(json Settings)
     Settings["width"]            = width;
     Settings["height"]           = height;
     Settings["show_rendering"]   = show_rendering;
+    Settings["invert_time"]      = invert_time;
 
     Settings["use_audio"]        = use_audio;
     Settings["audio_device_idx"] = audio_device_idx;
@@ -490,6 +494,11 @@ void Shaders::on_height_valueChanged(int value)
 {
     height = value;
     Resize();
+}
+
+void Shaders::on_invert_time_stateChanged(int value)
+{
+    invert_time = value;
 }
 
 void Shaders::on_edit_clicked()
