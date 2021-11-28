@@ -12,28 +12,24 @@ public:
     ~Visor() {};
 
     EFFECT_REGISTERER(ClassName(), [](){return new Visor;});
-
     static std::string const ClassName() {return "Visor";}
-
     void StepEffect(std::vector<ControllerZone*>) override;
-    void SetUserColors(std::vector<RGBColor>) override;
-    void SetSlider2Val(unsigned int) override;
-    unsigned int GetSlider2Val() override;
-    void SetRandomColorsEnabled(bool) override;
 
-private:
-    bool                    Dir = true;
-    int                     width = 10;
-    float                   Progress = 0;
-    hsv_t                   Head;
-    hsv_t                   Tail;
-    float                   current_head_hue;
-    float                   current_tail_hue;
+private:    
+    float  Progress = 0.f;
 
-    RGBColor GetColor(int i, int count);
+    float  p = 0.;
+    float  p_step =0.;
+    float  x_step =0.;
+    bool   step = false;
+    bool   last_step = false;
+    float  width = 0.;
+    float  h_width = 0.;
 
-    void GenerateRandomColors();
-    void SetWidth(int);
+    RGBColor C0;
+    RGBColor C1;
+
+    RGBColor GetColor(float i, float count);
 };
 
 #endif // Visor_H

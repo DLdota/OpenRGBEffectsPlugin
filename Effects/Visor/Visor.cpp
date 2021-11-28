@@ -11,17 +11,43 @@ Visor::Visor() : RGBEffect()
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-    EffectDetails.MinSlider2Val = 3;
-    EffectDetails.MaxSlider2Val = 50;
+    EffectDetails.MinSlider2Val = 1;
+    EffectDetails.MaxSlider2Val = 100;
     EffectDetails.Slider2Name   = "Width";
 
     SetSpeed(50);
+    SetSlider2Val(20);
+
+    C0 = ColorUtils::RandomRGBColor();
+    C1 = ColorUtils::RandomRGBColor();
 }
 
 void Visor::StepEffect(std::vector<ControllerZone*> controller_zones)
-{    
-    current_head_hue = Dir ? Head.hue: Tail.hue;
-    current_tail_hue = Dir ? Tail.hue: Head.hue;
+{
+    // Caculate a few things outside the loop
+    Progress += 0.01 * float(Speed) / float(FPS);
+
+    width = 0.01 * Slider2Val;          // [0-1] float, size of the visor
+    h_width = 0.5 * width;              // [0-0.5] float, half width
+    p = (Progress - (long) Progress);   // [0-1] float, 0 to 1 progress
+    step = p < 0.5;                     // p in [0-0.5] = fist step, p in [0.5-1] = second step
+    p_step =  step ? 2.*p : 2.*(1.- p); // [0-1] float, 0 to 1 progress within the step
+    x_step = p_step * (1.+ 4.*width) - 1.5*width;
+
+    bool flipping = (last_step != step);
+
+    if(flipping) last_step = step;
+
+    if(flipping && RandomColorsEnabled)
+    {
+        C0 = ColorUtils::RandomRGBColor();
+        C1 = ColorUtils::RandomRGBColor();
+    }
+    else if(!RandomColorsEnabled)
+    {
+        C0 = UserColors[0];
+        C1 = UserColors[1];
+    }
 
     for(ControllerZone* controller_zone: controller_zones)
     {
@@ -62,157 +88,39 @@ void Visor::StepEffect(std::vector<ControllerZone*> controller_zones)
         }
     }
 
-    bool flipping = false;
-
-    if(Dir)
-    {
-        if(Progress < 100)
-        {
-            Progress += float(float(Speed) / float(FPS));
-        }
-        if(Progress >= 100)
-        {
-            Dir = false;
-            Progress -= float(float(Speed) / float(FPS));
-            flipping = true;
-        }
-    }
-
-    else
-    {
-        if(Progress > 0)
-        {
-            Progress -= float(float(Speed) / float(FPS));
-        }
-        if(Progress <= 0)
-        {
-            Dir = true;
-            Progress += float(float(Speed) / float(FPS));
-            flipping = true;
-        }
-    }
-
-    if(flipping && RandomColorsEnabled)
-    {
-        GenerateRandomColors();
-    }
-
 }
 
-void Visor::GenerateRandomColors()
+RGBColor Visor::GetColor(float i, float count)
 {
-    RGBColor C1 = ColorUtils::RandomRGBColor();
-    RGBColor C2 = ColorUtils::Invert(C1);
-
-    rgb2hsv(C1, &Head);
-    rgb2hsv(C2, &Tail);
-}
-
-void Visor::SetRandomColorsEnabled(bool value)
-{
-    RandomColorsEnabled = value;
-
-    if(RandomColorsEnabled)
+    // dont divide by zero
+    if(count <= 1)
     {
-        GenerateRandomColors();
+        count = 2;
     }
-    else
+
+    float x = i / (count-1);
+    float dist = x_step - x;
+
+    // fade the head
+    if(dist < 0)
     {
-        SetUserColors(UserColors);
+        float l = std::max<float>(0.,std::min<float>((width+dist)/width, 1.));
+        return step ? ColorUtils::Enlight(C1, l) : ColorUtils::Enlight(C0, l) ;
     }
-}
 
-void Visor::SetUserColors(std::vector<RGBColor> NewUserColors)
-{
-    UserColors = NewUserColors;
-
-    if(!RandomColorsEnabled)
+    // fade the tail
+    if(dist > width)
     {
-        rgb2hsv(UserColors[0], &Head);
-        rgb2hsv(UserColors[1], &Tail);
-    }
-}
-
-void Visor::SetSlider2Val(unsigned int value)
-{
-    width = value * 2 ;
-}
-
-unsigned int Visor::GetSlider2Val()
-{
-    return width / 2;
-}
-
-RGBColor Visor::GetColor(int i, int count)
-{
-    float percent = (Progress/100)* (count+width+1);
-
-    float whole;
-    float linear_fractional = std::modf(percent, &whole);
-    float linear_neg_fractional = 1.0f - linear_fractional;
-    float fractional = pow(linear_fractional,  3.0);
-
-    int current_first_led = (int) whole;
-    int half_width = width/2;
-
-    float value = 0;
-    float hue = 0;
-    float sat = 0;
-
-    // black leds
-    if(i < current_first_led  - width || i > current_first_led  -1)
-    {        
-        return ColorUtils::OFF();
+        float l = std::max<float>(0.,std::min<float>(1.-((dist-width)/width), 1.));
+        return step ? ColorUtils::Enlight(C0, l) : ColorUtils::Enlight(C1, l) ;
     }
 
-    // tail led
-    if(current_first_led  - width== i)
-    {
-        value = linear_neg_fractional * Tail.value;
-        sat = Tail.saturation;
-        hue = current_tail_hue;
-    }
-    // other tail leds
-    else if(i <= current_first_led - half_width - 2)
-    {
-        value = Tail.value;
-        sat = Tail.saturation;
-        hue = current_tail_hue;
-    }
-    // first led of tail
-    else if(i == current_first_led - half_width - 1)
-    {
-        value = Tail.value;
-        sat = linear_fractional * Tail.saturation;
-        hue = current_tail_hue;
-    }
-    // last led of head
-    else if(i == current_first_led - width + half_width)
-    {
-        value = Head.value;
-        sat = linear_neg_fractional * Head.saturation;
-        hue = current_head_hue;
-    }
-    // head leds
-    else if (i < current_first_led  - 1)
-    {
-        value = Head.value;
-        sat = Head.saturation;
-        hue = current_head_hue;
-    }
-    // first led of head
-    else if(i == current_first_led - 1)
-    {
-        value = fractional * Head.value;
-        sat = Head.saturation;
-        hue = current_head_hue;
-    }
+    // interpolate colors
 
-    hsv_t HSVal;
+    float interp = std::min<float>(std::max<float>((width-dist)/width, 0.),1.);
 
-    HSVal.hue = hue;
-    HSVal.saturation = sat;
-    HSVal.value = value;
+    return step ?
+                ColorUtils::Interpolate(C0,C1,interp):
+                ColorUtils::Interpolate(C1,C0,interp);
 
-    return RGBColor(hsv2rgb(&HSVal));
 }
