@@ -92,6 +92,9 @@ void Visor::StepEffect(std::vector<ControllerZone*> controller_zones)
 
 RGBColor Visor::GetColor(float i, float count)
 {
+    // Constraint absolute minimum size
+    float w = std::max<float>(1.5/count, width);
+
     // dont divide by zero
     if(count <= 1)
     {
@@ -101,23 +104,24 @@ RGBColor Visor::GetColor(float i, float count)
     float x = i / (count-1);
     float dist = x_step - x;
 
+
     // fade the head
     if(dist < 0)
     {
-        float l = std::max<float>(0.,std::min<float>((width+dist)/width, 1.));
+        float l = std::max<float>(0.,std::min<float>((w+dist)/w, 1.));
         return step ? ColorUtils::Enlight(C1, l) : ColorUtils::Enlight(C0, l) ;
     }
 
     // fade the tail
-    if(dist > width)
+    if(dist > w)
     {
-        float l = std::max<float>(0.,std::min<float>(1.-((dist-width)/width), 1.));
+        float l = std::max<float>(0.,std::min<float>(1.-((dist-w)/w), 1.));
         return step ? ColorUtils::Enlight(C0, l) : ColorUtils::Enlight(C1, l) ;
     }
 
     // interpolate colors
 
-    float interp = std::min<float>(std::max<float>((width-dist)/width, 0.),1.);
+    float interp = std::min<float>(std::max<float>((w-dist)/w, 0.),1.);
 
     return step ?
                 ColorUtils::Interpolate(C0,C1,interp):
