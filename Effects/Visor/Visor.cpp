@@ -32,7 +32,7 @@ void Visor::StepEffect(std::vector<ControllerZone*> controller_zones)
     p = (Progress - (long) Progress);   // [0-1] float, 0 to 1 progress
     step = p < 0.5;                     // p in [0-0.5] = fist step, p in [0.5-1] = second step
     p_step =  step ? 2.*p : 2.*(1.- p); // [0-1] float, 0 to 1 progress within the step
-    x_step = p_step * (1.+ 4.*width) - 1.5*width;
+
 
     bool flipping = (last_step != step);
 
@@ -94,6 +94,7 @@ RGBColor Visor::GetColor(float i, float count)
 {
     // Constraint absolute minimum size
     float w = std::max<float>(1.5/count, width);
+    float x_step = p_step * (1.+ 4.*w) - 1.5*w;
 
     // dont divide by zero
     if(count <= 1)

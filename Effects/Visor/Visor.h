@@ -20,7 +20,6 @@ private:
 
     float  p = 0.;
     float  p_step =0.;
-    float  x_step =0.;
     bool   step = false;
     bool   last_step = false;
     float  width = 0.;
