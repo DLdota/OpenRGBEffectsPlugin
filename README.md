@@ -25,6 +25,14 @@ This is a plugin for [OpenRGB](https://gitlab.com/CalcProgrammer1/OpenRGB) that 
 
 You need `libopenal` installed.
 
+### OSX
+
+Install openal-soft
+
+```
+brew install openal-soft
+```
+
 
 ## What Effects do you have?
 
