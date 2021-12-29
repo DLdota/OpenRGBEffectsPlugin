@@ -29,6 +29,7 @@ public:
 
 private slots:
     void on_colors_count_spinBox_valueChanged(int);
+    void on_preset_currentTextChanged(const QString&);
 
 private:
     Ui::CustomGradientWave *ui;
@@ -36,11 +37,37 @@ private:
     RGBColor GetColor(float, float);
     void ResetColors();
     ColorPicker* CreatePicker(int);
+    void LoadPreset(const QString&);
 
     std::vector<RGBColor> colors;
     std::vector<ColorPicker*> color_pickers;
     QImage gradient;
     void GenerateGradient();
+
+    std::map<std::string,std::vector<RGBColor>> presets = {
+        {"Default", std::vector<RGBColor>{
+            262399,
+            15073535,
+            16711680,
+            16757504,
+            5373696,
+            65514,
+            46079,
+            255
+         }},
+
+        {"Pink/Blue", std::vector<RGBColor>{
+             16711680,
+             16711935,
+             16711680
+         }},
+
+        {"Pink/Gold", std::vector<RGBColor>{
+             57855,
+             16711935,
+             57855
+         }}
+    };
 };
 
 #endif // CUSTOMGRADIENTWAVE_H

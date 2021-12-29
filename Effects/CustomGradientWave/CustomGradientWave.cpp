@@ -14,7 +14,7 @@ CustomGradientWave::CustomGradientWave(QWidget *parent) :
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Custom gradient wave";
     EffectDetails.IsReversable = true;
-    EffectDetails.MaxSpeed     = 50;
+    EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;
 
@@ -27,7 +27,18 @@ CustomGradientWave::CustomGradientWave(QWidget *parent) :
 
     SetSpeed(25);
 
-    ResetColors();
+    std::map<std::string, std::vector<RGBColor>>::iterator it;
+
+    ui->preset->blockSignals(true);
+
+    for (it = presets.begin(); it != presets.end(); it++)
+    {
+        ui->preset->addItem(QString::fromStdString(it->first));
+    }
+
+    ui->preset->blockSignals(false);
+
+    LoadPreset("Default");
 }
 
 void CustomGradientWave::GenerateGradient()
@@ -160,6 +171,22 @@ void CustomGradientWave::ResetColors()
 
 void CustomGradientWave::on_colors_count_spinBox_valueChanged(int)
 {
+    ResetColors();
+}
+
+void CustomGradientWave::on_preset_currentTextChanged(const QString& text)
+{
+    LoadPreset(text);
+}
+
+void CustomGradientWave::LoadPreset(const QString& text)
+{
+    colors = presets[text.toStdString()];
+
+    ui->colors_count_spinBox->blockSignals(true);
+    ui->colors_count_spinBox->setValue(colors.size());
+    ui->colors_count_spinBox->blockSignals(false);
+
     ResetColors();
 }
 
