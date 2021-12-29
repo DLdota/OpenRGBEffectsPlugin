@@ -25,6 +25,7 @@ ColorPicker::~ColorPicker()
 
 void ColorPicker::SetQColor(QColor color)
 {
+    current_color = color;
     ui->button->setStyleSheet("QPushButton {background-color: "+ color.name() + "; border: 1px solid black;}");
 }
 
@@ -35,13 +36,14 @@ void ColorPicker::SetRGBColor(RGBColor color)
 
 void ColorPicker::on_button_clicked()
 {    
-    QColorDialog *colorPicker = new QColorDialog(this);
-    colorPicker->setAttribute(Qt::WA_DeleteOnClose);
+    QColorDialog *colorDialog = new QColorDialog(this);
+    colorDialog->setAttribute(Qt::WA_DeleteOnClose);
+    colorDialog->setCurrentColor(current_color);
 
-    connect(colorPicker, &QColorDialog::colorSelected,[=](const QColor &color){
+    connect(colorDialog, &QColorDialog::colorSelected,[=](const QColor &color){
                SetQColor(color);
                emit ColorSelected(color);
     });
 
-    colorPicker->open();
+    colorDialog->open();
 }

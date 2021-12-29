@@ -27,6 +27,7 @@ signals:
 
 private:
     Ui::ColorPicker *ui;
+    QColor current_color;
 };
 
 #endif // COLORPICKER_H
