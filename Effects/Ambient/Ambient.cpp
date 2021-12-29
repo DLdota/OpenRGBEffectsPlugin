@@ -172,18 +172,19 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
         for(ControllerZone* controller_zone : controller_zones)
         {
             unsigned int start_idx = controller_zone->start_idx();
+            unsigned int leds_count = controller_zone->leds_count();
+            bool reverse = controller_zone->reverse;
 
             if(controller_zone->type() == ZONE_TYPE_SINGLE || controller_zone->type() == ZONE_TYPE_LINEAR)
             {
                 unsigned int width = controller_zone->leds_count();
                 unsigned int height = 1;
 
-
                 QImage scaled = image.scaled(width, height);
 
                 for(unsigned int i = 0; i < width; i++)
-                {
-                    QColor color = scaled.pixelColor(i, 0);
+                {                   
+                    QColor color = scaled.pixelColor(reverse ? leds_count - i - 1 : i, 0);
                     controller_zone->SetLED(start_idx + i, ColorUtils::fromQColor(color), Brightness);
                 }
 
@@ -200,8 +201,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
                 {
                     for(unsigned int w = 0; w <  width; w++)
                     {
-                        QColor color = scaled.pixelColor(w, h);
-
+                        QColor color = scaled.pixelColor(reverse ? width - w - 1: w, h);
                         unsigned int led_num = map[h * width + w];
                         controller_zone->SetLED(start_idx + led_num, ColorUtils::fromQColor(color), Brightness);
                     }
