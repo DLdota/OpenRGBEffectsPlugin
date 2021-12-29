@@ -190,6 +190,11 @@ void OpenRGBEffectPage::OpenPreview()
     preview_dialog->setAttribute(Qt::WA_DeleteOnClose);
     preview_dialog->setModal(false);
     preview_dialog->setWindowTitle(QString::fromStdString(effect->EffectDetails.EffectName + " preview"));
+    preview_dialog->setWindowFlags(preview_dialog->windowFlags() |
+                                   Qt::CustomizeWindowHint       |
+                                   Qt::WindowMinimizeButtonHint  |
+                                   Qt::WindowMaximizeButtonHint  |
+                                   Qt::WindowCloseButtonHint     );
 
     if (OpenRGBEffectsPlugin::DarkTheme)
     {
