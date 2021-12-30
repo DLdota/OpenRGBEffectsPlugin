@@ -121,6 +121,9 @@ void OpenRGBEffectsPlugin::Unload()
     printf("[OpenRGBEffectsPlugin] Unloading\n");
 
     ui->StopAll();
+
+    RMPointer->UnregisterDeviceListChangeCallback(DeviceListChangedCallback, ui);
+    RMPointer->UnregisterDetectionProgressCallback(DeviceListChangedCallback, ui);
 }
 
 void OpenRGBEffectsPlugin::DeviceListChangedCallback(void* o)
