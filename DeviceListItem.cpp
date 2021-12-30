@@ -135,9 +135,10 @@ void DeviceListItem::on_reverse_clicked()
         controller_zones[0]->reverse = state;
     }
 
-    for(ZoneListItem* item:zone_items)
+    for(unsigned int i = 0; i < zone_items.size(); i++)
     {
-        item->SetReverseChecked(state);
+        zone_items[i]->SetReverseChecked(state);
+        controller_zones[i]->reverse = state;
     }
 
     emit SelectionChanged();
