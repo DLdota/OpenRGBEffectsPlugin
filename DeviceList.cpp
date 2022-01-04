@@ -86,13 +86,19 @@ void DeviceList::InitControllersList()
 
 void DeviceList::on_select_all_clicked()
 {
-    all_selected = !all_selected;
-
-    ui->select_all->setText(all_selected ? "Deselect all" : "Select all");
-
     for(DeviceListItem* item: device_items)
     {
-        item->SetEnabled(all_selected);
+        item->SetEnabled(true);
+    }
+
+    emit SelectionChanged();
+}
+
+void DeviceList::on_deselect_all_clicked()
+{
+    for(DeviceListItem* item: device_items)
+    {
+        item->SetEnabled(false);
     }
 
     emit SelectionChanged();
@@ -100,6 +106,8 @@ void DeviceList::on_select_all_clicked()
 
 void DeviceList::DisableControls()
 {
+    setEnabled(false);
+
     for(DeviceListItem* item: device_items)
     {
         item->DisableControls();
@@ -108,6 +116,8 @@ void DeviceList::DisableControls()
 
 void DeviceList::EnableControls()
 {
+   setEnabled(true);
+
     for(DeviceListItem* item: device_items)
     {
         item->EnableControls();

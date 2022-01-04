@@ -32,14 +32,13 @@ signals:
 
 private slots:
     void on_select_all_clicked();
+    void on_deselect_all_clicked();
 
 private:
     Ui::DeviceList *ui;
 
     std::vector<DeviceListItem*> device_items;
     std::vector<ControllerZone*> controller_zones;
-
-    bool all_selected = false;
 };
 
 #endif // DEVICELIST_H
