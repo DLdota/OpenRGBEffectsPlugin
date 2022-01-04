@@ -19,7 +19,7 @@ public:
     explicit CustomGradientWave(QWidget *parent = nullptr);
     ~CustomGradientWave();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new CustomGradientWave;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new CustomGradientWave;});
 
     static std::string const ClassName() {return "CustomGradientWave";}
     void DefineExtraOptions(QLayout*) override;

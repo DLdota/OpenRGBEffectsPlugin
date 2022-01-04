@@ -21,7 +21,7 @@ public:
     explicit NoiseMap(QWidget *parent = nullptr);
     ~NoiseMap();    
 
-    EFFECT_REGISTERER(ClassName(), [](){return new NoiseMap;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new NoiseMap;});
 
     static std::string const ClassName() {return "NoiseMap";}
     void DefineExtraOptions(QLayout*) override;

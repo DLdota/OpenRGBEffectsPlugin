@@ -197,7 +197,7 @@ public:
     explicit AudioVisualizer(QWidget* parent = nullptr);
     ~AudioVisualizer();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new AudioVisualizer;});
+    EFFECT_REGISTERER(ClassName(), CAT_AUDIO, [](){return new AudioVisualizer;});
 
     static std::string const ClassName() {return "AudioVisualizer";}
 

@@ -19,7 +19,7 @@ public:
     explicit DoubleRotatingRainbow(QWidget *parent = nullptr);
     ~DoubleRotatingRainbow();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new DoubleRotatingRainbow;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new DoubleRotatingRainbow;});
 
     static std::string const ClassName() {return "DoubleRotatingRainbow";}
     void DefineExtraOptions(QLayout*) override;

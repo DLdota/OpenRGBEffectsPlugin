@@ -6,6 +6,10 @@
 #include "ControllerZone.h"
 #include "json.hpp"
 
+#define CAT_AUDIO "Audio"
+#define CAT_BASIC "Basic"
+#define CAT_SPECIAL "Special"
+
 using json = nlohmann::json;
 
 struct EffectInfo

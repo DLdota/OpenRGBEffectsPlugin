@@ -19,7 +19,7 @@ public:
     explicit FractalMotion(QWidget *parent = nullptr);
     ~FractalMotion();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new FractalMotion;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new FractalMotion;});
 
     static std::string const ClassName() {return "FractalMotion";}
     void DefineExtraOptions(QLayout*) override;

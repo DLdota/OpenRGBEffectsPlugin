@@ -18,7 +18,7 @@ public:
     Rain();
     ~Rain(){}
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Rain;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Rain;});
 
     static std::string const ClassName() { return "Rain"; }
 

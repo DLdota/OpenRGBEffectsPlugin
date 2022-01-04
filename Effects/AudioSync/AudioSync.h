@@ -57,7 +57,7 @@ public:
     AudioSync();
     ~AudioSync();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new AudioSync;});
+    EFFECT_REGISTERER(ClassName(), CAT_AUDIO, [](){return new AudioSync;});
 
     static std::string const ClassName() {return "AudioSync";}
 

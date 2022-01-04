@@ -21,7 +21,7 @@ public:
     explicit AudioParty(QWidget *parent = nullptr);
     ~AudioParty();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new AudioParty;});
+    EFFECT_REGISTERER(ClassName(), CAT_AUDIO, [](){return new AudioParty;});
 
     static std::string const ClassName() {return "AudioParty";}
     void DefineExtraOptions(QLayout*) override;

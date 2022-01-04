@@ -10,7 +10,7 @@ public:
     GradientWave();
     ~GradientWave(){}
 
-    EFFECT_REGISTERER(ClassName(), [](){return new GradientWave;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new GradientWave;});
 
     static std::string const ClassName() { return "GradientWave"; }
 

@@ -20,7 +20,7 @@ public:
     explicit SwirlCircles(QWidget *parent = nullptr);
     ~SwirlCircles();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new SwirlCircles;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new SwirlCircles;});
 
     static std::string const ClassName() {return "SwirlCircles";}
     void DefineExtraOptions(QLayout*) override;

@@ -19,7 +19,7 @@ public:
     explicit RotatingBeam(QWidget *parent = nullptr);
     ~RotatingBeam();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new RotatingBeam;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new RotatingBeam;});
 
     static std::string const ClassName() {return "RotatingBeam";}
 

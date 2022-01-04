@@ -11,7 +11,7 @@ public:
     Visor();
     ~Visor() {};
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Visor;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Visor;});
     static std::string const ClassName() {return "Visor";}
     void StepEffect(std::vector<ControllerZone*>) override;
 

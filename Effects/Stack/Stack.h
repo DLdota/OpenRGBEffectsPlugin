@@ -18,7 +18,7 @@ public:
     explicit Stack(QWidget *parent = nullptr);
     ~Stack();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Stack;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Stack;});
 
     static std::string const ClassName() {return "Stack";}
     void DefineExtraOptions(QLayout*) override;

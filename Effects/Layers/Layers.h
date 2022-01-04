@@ -20,7 +20,7 @@ public:
     explicit Layers(QWidget *parent = nullptr);
     ~Layers();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Layers;});
+    EFFECT_REGISTERER(ClassName(), CAT_SPECIAL, [](){return new Layers;});
 
     static std::string const ClassName() {return "Layers";}
     void DefineExtraOptions(QLayout*) override;

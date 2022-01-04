@@ -22,7 +22,7 @@ public:
     explicit Wavy(QWidget *parent = nullptr);
     ~Wavy();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Wavy;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Wavy;});
 
     static std::string const ClassName() {return "Wavy";}
 

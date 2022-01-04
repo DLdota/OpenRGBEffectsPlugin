@@ -47,12 +47,6 @@ INCLUDEPATH +=                                                                  
     OpenRGB/qt                                                                                  \
 
 HEADERS +=                                                                                      \
-    Effects/Shaders/NewShaderPassTabHeader.h                                                    \
-    Effects/Shaders/ShaderFileTabHeader.h                                                       \
-    Effects/Shaders/ShaderPass.h                                                                \
-    Effects/Shaders/ShaderPassData.h                                                            \
-    Effects/Shaders/ShaderPassEditor.h                                                          \
-    Effects/Shaders/ShaderProgram.h                                                             \
     OpenRGB/Colors.h                                                                            \
     OpenRGB/NetworkClient.h                                                                     \
     OpenRGB/NetworkProtocol.h                                                                   \
@@ -68,19 +62,12 @@ HEADERS +=                                                                      
     OpenRGB/filesystem.h                                                                        \
     OpenRGB/dependencies/ColorWheel/ColorWheel.h                                                \
     OpenRGB/qt/hsv.h                                                                            \
-    SaveProfilePopup.h
+
 
 SOURCES +=                                                                                      \
-    Effects/Shaders/NewShaderPassTabHeader.cpp                                                  \
-    Effects/Shaders/ShaderFileTabHeader.cpp                                                     \
-    Effects/Shaders/ShaderPass.cpp                                                              \
-    Effects/Shaders/ShaderPassData.cpp                                                          \
-    Effects/Shaders/ShaderPassEditor.cpp                                                        \
-    Effects/Shaders/ShaderProgram.cpp                                                           \
     OpenRGB/RGBController/RGBController.cpp                                                     \
     OpenRGB/dependencies/ColorWheel/ColorWheel.cpp                                              \
     OpenRGB/qt/hsv.cpp                                                                          \
-    SaveProfilePopup.cpp
 
 #-----------------------------------------------------------------------------------------------#
 # QCodeEditor                                                                                   #
@@ -192,6 +179,8 @@ HEADERS +=                                                                      
     PreviewWidget.h                                                                             \
     ZoneListItem.h                                                                              \
     ScreenRecorder.h                                                                            \
+    SaveProfilePopup.h                                                                          \
+    EffectListDelegate.h                                                                        \
 
 SOURCES +=                                                                                      \
     ControllerZoneList.cpp                                                                      \
@@ -211,6 +200,8 @@ SOURCES +=                                                                      
     PreviewWidget.cpp                                                                           \
     AudioManager.cpp                                                                            \
     ScreenRecorder.cpp                                                                          \
+    SaveProfilePopup.cpp                                                                        \
+    EffectListDelegate.cpp                                                                      \
 
 FORMS +=                                                                                        \
     ControllerZoneList.ui                                                                       \
@@ -286,14 +277,19 @@ SOURCES +=                                                                      
     Effects/Mask/Mask.cpp                                                                       \
     Effects/MovingPanes/MovingPanes.cpp                                                         \
     Effects/BreathingCircle/BreathingCircle.cpp                                                 \
-    Effects/AudioParty/AudioParty.cpp                                                           \
+    Effects/AudioParty/AudioParty.cpp                                                           \    
+    Effects/CustomGradientWave/CustomGradientWave.cpp                                           \
+    Effects/ZigZag/ZigZag.cpp                                                                   \
+    Effects/Shaders/NewShaderPassTabHeader.cpp                                                  \
+    Effects/Shaders/ShaderFileTabHeader.cpp                                                     \
+    Effects/Shaders/ShaderPass.cpp                                                              \
+    Effects/Shaders/ShaderPassData.cpp                                                          \
+    Effects/Shaders/ShaderPassEditor.cpp                                                        \
+    Effects/Shaders/ShaderProgram.cpp                                                           \
     Effects/Shaders/Shaders.cpp                                                                 \
     Effects/Shaders/ShaderRenderer.cpp                                                          \
     Effects/Shaders/GLSLHighlighter.cpp                                                         \
     Effects/Shaders/GLSLCodeEditor.cpp                                                          \
-    Effects/CustomGradientWave/CustomGradientWave.cpp                                           \
-    Effects/ZigZag/ZigZag.cpp                                                                   \
-
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -348,13 +344,19 @@ HEADERS +=                                                                      
     Effects/Mask/Mask.h                                                                         \
     Effects/MovingPanes/MovingPanes.h                                                           \
     Effects/BreathingCircle/BreathingCircle.h                                                   \
-    Effects/AudioParty/AudioParty.h                                                             \
+    Effects/AudioParty/AudioParty.h                                                             \    
+    Effects/CustomGradientWave/CustomGradientWave.h                                             \
+    Effects/ZigZag/ZigZag.h                                                                     \
+    Effects/Shaders/NewShaderPassTabHeader.h                                                    \
+    Effects/Shaders/ShaderFileTabHeader.h                                                       \
+    Effects/Shaders/ShaderPass.h                                                                \
+    Effects/Shaders/ShaderPassData.h                                                            \
+    Effects/Shaders/ShaderPassEditor.h                                                          \
+    Effects/Shaders/ShaderProgram.h                                                             \
     Effects/Shaders/Shaders.h                                                                   \
     Effects/Shaders/ShaderRenderer.h                                                            \
     Effects/Shaders/GLSLHighlighter.h                                                           \
     Effects/Shaders/GLSLCodeEditor.h                                                            \
-    Effects/CustomGradientWave/CustomGradientWave.h                                             \
-    Effects/ZigZag/ZigZag.h                                                                     \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \

@@ -25,7 +25,7 @@ public:
     explicit Bloom(QWidget *parent = nullptr);
     ~Bloom();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Bloom;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Bloom;});
 
     static std::string const ClassName() {return "Bloom";}
     void DefineExtraOptions(QLayout*) override;

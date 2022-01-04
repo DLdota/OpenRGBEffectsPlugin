@@ -19,7 +19,7 @@ public:
     explicit Sequence(QWidget *parent = nullptr);
     ~Sequence();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Sequence;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Sequence;});
 
     static std::string const ClassName() {return "Sequence";}
     void DefineExtraOptions(QLayout*) override;

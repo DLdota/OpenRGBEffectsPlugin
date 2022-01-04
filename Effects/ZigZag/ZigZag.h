@@ -18,7 +18,7 @@ public:
     explicit ZigZag(QWidget *parent = nullptr);
     ~ZigZag();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new ZigZag;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new ZigZag;});
 
     static std::string const ClassName() {return "ZigZag";}
     void DefineExtraOptions(QLayout*) override;

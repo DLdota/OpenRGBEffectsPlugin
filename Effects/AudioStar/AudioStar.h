@@ -20,7 +20,7 @@ public:
     explicit AudioStar(QWidget *parent = nullptr);
     ~AudioStar();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new AudioStar;});
+    EFFECT_REGISTERER(ClassName(), CAT_AUDIO, [](){return new AudioStar;});
 
     static std::string const ClassName() {return "AudioStar";}
     void DefineExtraOptions(QLayout*) override;

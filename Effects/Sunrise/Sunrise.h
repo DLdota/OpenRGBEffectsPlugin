@@ -19,7 +19,7 @@ public:
     explicit Sunrise(QWidget *parent = nullptr);
     ~Sunrise();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Sunrise;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Sunrise;});
 
     static std::string const ClassName() {return "Sunrise";}
     void DefineExtraOptions(QLayout*) override;

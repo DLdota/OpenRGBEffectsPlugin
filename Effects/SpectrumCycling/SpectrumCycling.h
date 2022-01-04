@@ -11,7 +11,7 @@ public:
     SpectrumCycling();
     ~SpectrumCycling() {};
 
-    EFFECT_REGISTERER(ClassName(), [](){return new SpectrumCycling;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new SpectrumCycling;});
 
     static std::string const ClassName() {return "SpectrumCycling";}
 

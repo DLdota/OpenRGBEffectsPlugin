@@ -21,7 +21,7 @@ public:
     explicit SwirlCirclesAudio(QWidget *parent = nullptr);
     ~SwirlCirclesAudio();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new SwirlCirclesAudio;});
+    EFFECT_REGISTERER(ClassName(), CAT_AUDIO, [](){return new SwirlCirclesAudio;});
 
     static std::string const ClassName() {return "SwirlCirclesAudio";}
     void DefineExtraOptions(QLayout*) override;

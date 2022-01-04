@@ -20,7 +20,7 @@ public:
     explicit AudioSine(QWidget *parent = nullptr);
     ~AudioSine();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new AudioSine;});
+    EFFECT_REGISTERER(ClassName(), CAT_AUDIO, [](){return new AudioSine;});
 
     static std::string const ClassName() {return "AudioSine";}
     void DefineExtraOptions(QLayout*) override;

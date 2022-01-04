@@ -21,7 +21,7 @@ public:
     explicit GifPlayer(QWidget *parent = nullptr);
     ~GifPlayer();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new GifPlayer;});
+    EFFECT_REGISTERER(ClassName(), CAT_SPECIAL, [](){return new GifPlayer;});
 
     static std::string const ClassName() {return "GIFPlayer";}
 

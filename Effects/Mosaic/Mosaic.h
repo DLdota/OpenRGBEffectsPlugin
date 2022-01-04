@@ -25,7 +25,7 @@ public:
     explicit Mosaic(QWidget *parent = nullptr);
     ~Mosaic();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Mosaic;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Mosaic;});
 
     static std::string const ClassName() {return "Mosaic";}
     void DefineExtraOptions(QLayout*) override;

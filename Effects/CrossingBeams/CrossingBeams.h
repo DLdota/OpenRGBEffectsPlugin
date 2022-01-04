@@ -19,7 +19,7 @@ public:
     explicit CrossingBeams(QWidget *parent = nullptr);
     ~CrossingBeams();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new CrossingBeams;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new CrossingBeams;});
 
     static std::string const ClassName() {return "CrossingBeams";}
     void DefineExtraOptions(QLayout*) override;

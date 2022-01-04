@@ -18,7 +18,7 @@ public:
     explicit ColorWheelEffect(QWidget *parent = nullptr);
     ~ColorWheelEffect();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new ColorWheelEffect;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new ColorWheelEffect;});
 
     static std::string const ClassName() {return "ColorWheel";}
     void DefineExtraOptions(QLayout*) override;

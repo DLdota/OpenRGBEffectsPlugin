@@ -18,7 +18,7 @@ public:
     explicit Mask(QWidget *parent = nullptr);
     ~Mask();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Mask;});
+    EFFECT_REGISTERER(ClassName(), CAT_SPECIAL, [](){return new Mask;});
 
     static std::string const ClassName() {return "Mask";}
     void DefineExtraOptions(QLayout*) override;

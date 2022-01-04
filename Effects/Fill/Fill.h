@@ -18,7 +18,7 @@ public:
     explicit Fill(QWidget *parent = nullptr);
     ~Fill();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Fill;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Fill;});
 
     static std::string const ClassName() {return "Fill";}
     void DefineExtraOptions(QLayout*) override;

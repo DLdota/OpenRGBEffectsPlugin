@@ -111,7 +111,7 @@ public:
     explicit MotionPoints(QWidget *parent = nullptr);
     ~MotionPoints();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new MotionPoints;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new MotionPoints;});
 
     static std::string const ClassName() {return "MotionPoints";}
     void DefineExtraOptions(QLayout*) override;

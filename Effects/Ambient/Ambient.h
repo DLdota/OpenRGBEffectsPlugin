@@ -21,7 +21,7 @@ public:
     explicit Ambient(QWidget *parent = nullptr);
     ~Ambient();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Ambient;});
+    EFFECT_REGISTERER(ClassName(), CAT_SPECIAL, [](){return new Ambient;});
 
     static std::string const ClassName() {return "Ambient";}
 

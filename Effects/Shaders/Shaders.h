@@ -29,7 +29,7 @@ public:
     explicit Shaders(QWidget *parent = nullptr);
     ~Shaders();
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Shaders;});
+    EFFECT_REGISTERER(ClassName(), CAT_SPECIAL, [](){return new Shaders;});
 
     static std::string const ClassName() {return "Shaders";}
     void DefineExtraOptions(QLayout*) override;

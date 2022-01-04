@@ -16,7 +16,7 @@ public:
     explicit Lightning(QWidget *parent = nullptr);
     ~Lightning(){}
 
-    EFFECT_REGISTERER(ClassName(), [](){return new Lightning;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Lightning;});
 
     static std::string const ClassName() {return "Lightning";}
 

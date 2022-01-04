@@ -24,7 +24,7 @@ public:
     explicit BouncingBallEffect(QWidget *parent = nullptr);
     ~BouncingBallEffect();
 
-    EFFECT_REGISTERER(ClassName(), [](){ return new BouncingBallEffect; });
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){ return new BouncingBallEffect; });
 
     static std::string const ClassName() { return "BouncingBall"; }
 

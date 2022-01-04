@@ -10,7 +10,7 @@ public:
     RainbowWave();
     ~RainbowWave() {};
 
-    EFFECT_REGISTERER(ClassName(), [](){return new RainbowWave;});
+    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new RainbowWave;});
 
     static std::string const ClassName() { return "RainbowWave"; }
 
