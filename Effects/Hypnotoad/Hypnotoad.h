@@ -18,7 +18,7 @@ public:
     explicit Hypnotoad(QWidget *parent = nullptr);
     ~Hypnotoad();
 
-    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Hypnotoad;});
+    EFFECT_REGISTERER(ClassName(), CAT_RAINBOW, [](){return new Hypnotoad;});
 
     static std::string const ClassName() {return "Hypnotoad";}
     void DefineExtraOptions(QLayout*) override;

@@ -11,7 +11,7 @@ public:
     Breathing();
     ~Breathing(){}
 
-    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Breathing;});
+    EFFECT_REGISTERER(ClassName(), CAT_SIMPLE, [](){return new Breathing;});
 
     static std::string const ClassName() { return "Breathing"; }
 

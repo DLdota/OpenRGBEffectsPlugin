@@ -18,7 +18,7 @@ public:
     explicit Bubbles(QWidget *parent = nullptr);
     ~Bubbles();
 
-    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Bubbles;});
+    EFFECT_REGISTERER(ClassName(), CAT_ADVANCED, [](){return new Bubbles;});
 
     static std::string const ClassName() {return "Bubbles";}
 

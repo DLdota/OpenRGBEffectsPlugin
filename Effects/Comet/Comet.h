@@ -19,7 +19,7 @@ public:
     explicit Comet(QWidget *parent = nullptr);
     ~Comet();
 
-    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Comet;});
+    EFFECT_REGISTERER(ClassName(), CAT_SIMPLE, [](){return new Comet;});
 
     static std::string const ClassName() {return "Comet";}
     void DefineExtraOptions(QLayout*) override;

@@ -19,7 +19,7 @@ public:
     explicit BreathingCircle(QWidget *parent = nullptr);
     ~BreathingCircle();
 
-    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new BreathingCircle;});
+    EFFECT_REGISTERER(ClassName(), CAT_SIMPLE, [](){return new BreathingCircle;});
 
     static std::string const ClassName() {return "BreathingCircle";}
     void DefineExtraOptions(QLayout*) override;

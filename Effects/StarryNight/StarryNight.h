@@ -18,7 +18,7 @@ public:
     StarryNight();
     ~StarryNight() {};
 
-    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new StarryNight;});
+    EFFECT_REGISTERER(ClassName(), CAT_ADVANCED, [](){return new StarryNight;});
 
     static std::string const ClassName() {return "StarryNight";}
 

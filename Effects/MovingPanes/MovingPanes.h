@@ -18,7 +18,7 @@ public:
     explicit MovingPanes(QWidget *parent = nullptr);
     ~MovingPanes();
 
-    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new MovingPanes;});
+    EFFECT_REGISTERER(ClassName(), CAT_ADVANCED, [](){return new MovingPanes;});
 
     static std::string const ClassName() {return "MovingPanes";}
     void DefineExtraOptions(QLayout*) override;

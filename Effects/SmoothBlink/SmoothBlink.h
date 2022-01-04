@@ -19,7 +19,7 @@ public:
     explicit SmoothBlink(QWidget *parent = nullptr);
     ~SmoothBlink();
 
-    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new SmoothBlink;});
+    EFFECT_REGISTERER(ClassName(), CAT_ADVANCED, [](){return new SmoothBlink;});
 
     static std::string const ClassName() {return "SmoothBlink";}
     void DefineExtraOptions(QLayout*) override;

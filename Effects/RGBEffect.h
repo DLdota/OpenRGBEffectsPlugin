@@ -6,8 +6,12 @@
 #include "ControllerZone.h"
 #include "json.hpp"
 
+#define CAT_ADVANCED "Advanced"
 #define CAT_AUDIO "Audio"
-#define CAT_BASIC "Basic"
+#define CAT_BEAMS "Beams"
+#define CAT_RAINBOW "Rainbow"
+#define CAT_RANDOM "Random"
+#define CAT_SIMPLE "Simple"
 #define CAT_SPECIAL "Special"
 
 using json = nlohmann::json;

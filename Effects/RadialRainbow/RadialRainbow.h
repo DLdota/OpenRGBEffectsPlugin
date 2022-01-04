@@ -18,7 +18,7 @@ public:
     explicit RadialRainbow(QWidget *parent = nullptr);
     ~RadialRainbow();
 
-    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new RadialRainbow;});
+    EFFECT_REGISTERER(ClassName(), CAT_RAINBOW, [](){return new RadialRainbow;});
 
     static std::string const ClassName() {return "RadialRainbow";}
     void DefineExtraOptions(QLayout*) override;

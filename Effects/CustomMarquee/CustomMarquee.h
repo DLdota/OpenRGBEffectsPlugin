@@ -20,7 +20,7 @@ public:
     explicit CustomMarquee(QWidget *parent = nullptr);
     ~CustomMarquee();
 
-    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new CustomMarquee;});
+    EFFECT_REGISTERER(ClassName(), CAT_ADVANCED, [](){return new CustomMarquee;});
 
     static std::string const ClassName() {return "CustomMarquee";}
     void DefineExtraOptions(QLayout*) override;

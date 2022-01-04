@@ -18,7 +18,7 @@ public:
     explicit Swap(QWidget *parent = nullptr);
     ~Swap();
 
-    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Swap;});
+    EFFECT_REGISTERER(ClassName(), CAT_SIMPLE, [](){return new Swap;});
 
     static std::string const ClassName() {return "Swap";}
     void DefineExtraOptions(QLayout*) override;

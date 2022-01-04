@@ -19,7 +19,7 @@ public:
     explicit MotionPoint(QWidget *parent = nullptr);
     ~MotionPoint();
 
-    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new MotionPoint;});
+    EFFECT_REGISTERER(ClassName(), CAT_SIMPLE, [](){return new MotionPoint;});
 
     static std::string const ClassName() {return "MotionPoint";}
     void DefineExtraOptions(QLayout*) override;

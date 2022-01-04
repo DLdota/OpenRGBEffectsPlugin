@@ -18,7 +18,7 @@ public:
     explicit Spiral(QWidget *parent = nullptr);
     ~Spiral();
 
-    EFFECT_REGISTERER(ClassName(), CAT_BASIC, [](){return new Spiral;});
+    EFFECT_REGISTERER(ClassName(), CAT_ADVANCED, [](){return new Spiral;});
 
     static std::string const ClassName() {return "Spiral";}
     void DefineExtraOptions(QLayout*) override;
