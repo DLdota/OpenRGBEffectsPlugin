@@ -121,6 +121,7 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
 
     device_label->setToolTip(device_tooltip);
     device_list_selector->setToolTip(device_tooltip);
+    device_list_selector->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
     connect(device_list_selector, SIGNAL(currentIndexChanged(int)), this, SLOT(SelectDeviceChanged(int)));
 

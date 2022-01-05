@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>182</width>
+    <height>188</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,7 +22,17 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QComboBox" name="devices"/>
+    <widget class="QComboBox" name="devices">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QComboBox::AdjustToContents</enum>
+     </property>
+    </widget>
    </item>
    <item row="2" column="1">
     <widget class="QSpinBox" name="amplitude">
