@@ -119,43 +119,36 @@ void Bubbles::Cleanup()
 
 RGBColor Bubbles::GetColor(int x, int y, int w, int h)
 {
-    std::vector<hsv_t> hsvs;
+    int color_idx = -1;
+    int val = 0;
 
     for(unsigned int i = 0; i < bubbles.size(); i++)
     {
         double distance = sqrt(pow(w * centers[i].x() - x, 2) + pow(h * centers[i].y() - y, 2));
-
         double shallow = fabs(distance - bubbles[i]) / ( 0.1 * bubbles_thickness);
+        double value = std::min<double>(255, 255 * (1 / pow(shallow, 2)));
 
-        hsv_t hsv;
-        rgb2hsv(colors[i], &hsv);
-        hsv.value = std::min<double>(255, 255 * (1 / pow(shallow, 2)));
-
-        hsvs.push_back(hsv);
-    }
-
-    // todo interpolate colors
-
-    int value = 0;
-    int hue = 0;
-    int saturation = 0;
-
-    for(hsv_t hsv: hsvs)
-    {
-        if(hsv.value > value)
+        if(value > val)
         {
-            value = hsv.value;
-            hue = hsv.hue;
-            saturation = hsv.saturation;
+            color_idx = i;
+            val = value;
         }
     }
 
-    hsv_t final;
-    final.hue = hue;
-    final.value = value;
-    final.saturation = saturation;
+    if(color_idx >= 0)
+    {
+        hsv_t final;
 
-    return ColorUtils::Screen(RGBColor(hsv2rgb(&final)), background);
+        rgb2hsv(colors[color_idx], &final);
+
+        final.value = val;
+        return ColorUtils::Screen(hsv2rgb(&final), background);
+    }
+    else
+    {
+        return background;
+    }
+
 }
 
 void Bubbles::LoadCustomSettings(json Settings)
