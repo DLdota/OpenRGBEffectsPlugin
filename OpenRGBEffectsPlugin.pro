@@ -290,6 +290,7 @@ SOURCES +=                                                                      
     Effects/Shaders/ShaderRenderer.cpp                                                          \
     Effects/Shaders/GLSLHighlighter.cpp                                                         \
     Effects/Shaders/GLSLCodeEditor.cpp                                                          \
+    Effects/Clock/Clock.cpp                                                                     \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -357,6 +358,7 @@ HEADERS +=                                                                      
     Effects/Shaders/ShaderRenderer.h                                                            \
     Effects/Shaders/GLSLHighlighter.h                                                           \
     Effects/Shaders/GLSLCodeEditor.h                                                            \
+    Effects/Clock/Clock.h                                                                       \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -403,6 +405,7 @@ FORMS +=                                                                        
     Effects/Shaders/GLSLCodeEditor.ui                                                           \
     Effects/CustomGradientWave/CustomGradientWave.ui                                            \
     Effects/ZigZag/ZigZag.ui                                                                    \
+    Effects/Clock/Clock.ui                                                                      \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #
