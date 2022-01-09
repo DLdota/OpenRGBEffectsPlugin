@@ -41,7 +41,6 @@ void Clock::StepEffect(std::vector<ControllerZone*> controller_zones)
     m = localTime.tm_min + localTime.tm_sec / 60.;
     h = (localTime.tm_hour % 12) + localTime.tm_min / 60.;
 
-    printf("%d %f\n", localTime.tm_hour, h);
     for(ControllerZone* controller_zone : controller_zones)
     {
         unsigned int start_idx = controller_zone->start_idx();
