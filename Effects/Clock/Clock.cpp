@@ -88,7 +88,7 @@ RGBColor Clock::GetColor(float x, float w)
     RGBColor minutes_coulor = 0;
     RGBColor seconds_coulor = 0;
 
-    if(abs(x - step_h) <= 1)
+    if(fabs(x - step_h) <= 1)
     {
         if(x < step_h)
         {
@@ -100,7 +100,7 @@ RGBColor Clock::GetColor(float x, float w)
         }
     }
 
-    if(abs(x - step_m) <= 1)
+    if(fabs(x - step_m) <= 1)
     {
         if(x < step_m)
         {
@@ -112,7 +112,7 @@ RGBColor Clock::GetColor(float x, float w)
         }
     }
 
-    if(abs(x - step_s) <= 1)
+    if(fabs(x - step_s) <= 1)
     {
         if(x < step_s)
         {
