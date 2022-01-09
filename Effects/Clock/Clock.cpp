@@ -38,9 +38,10 @@ void Clock::StepEffect(std::vector<ControllerZone*> controller_zones)
     std::chrono::seconds::rep milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(tse).count() % 1000;
 
     s = localTime.tm_sec + milliseconds * 0.001;
-    m = localTime.tm_min + s / 60.;
-    h = localTime.tm_hour + m / 60.;
+    m = localTime.tm_min + localTime.tm_sec / 60.;
+    h = (localTime.tm_hour % 12) + localTime.tm_min / 60.;
 
+    printf("%d %f\n", localTime.tm_hour, h);
     for(ControllerZone* controller_zone : controller_zones)
     {
         unsigned int start_idx = controller_zone->start_idx();
@@ -79,9 +80,9 @@ void Clock::StepEffect(std::vector<ControllerZone*> controller_zones)
 
 RGBColor Clock::GetColor(float x, float w)
 {
-    float step_h = w * h / 24.0; // [0-w]
-    float step_m = w * m / 60.0; // [0-w]
-    float step_s = w * s / 60.0; // [0-w]
+    float step_h = (w-1) * h / 12.0; // [0-w]
+    float step_m = (w-1) * m / 60.0; // [0-w]
+    float step_s = (w-1) * s / 60.0; // [0-w]
 
     RGBColor hours_coulor = 0;
     RGBColor minutes_coulor = 0;
