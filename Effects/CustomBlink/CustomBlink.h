@@ -57,6 +57,8 @@ signals:
 private:
     Ui::CustomBlink *ui;
 
+    std::vector<RGBColor> colors;
+
     double time = 0.;
     double time_sine = 0.;
     double time_2sine = 0.;
@@ -75,6 +77,7 @@ private:
     QString current_pattern = "";
 
     void InitPatterns();
+    void GenerateRandomColors();
 };
 
 #endif // CUSTOMBLINK_H

@@ -17,6 +17,8 @@ CustomBlink::CustomBlink(QWidget *parent) :
     EffectDetails.UserColors = 4;
     EffectDetails.HasCustomSettings = true;
 
+    colors.resize(EffectDetails.UserColors);
+
     SetSpeed(10);
 
     InitPatterns();
@@ -63,6 +65,15 @@ void CustomBlink::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     if(pattern != current_pattern)
     {
+        if(RandomColorsEnabled)
+        {
+            GenerateRandomColors();
+        }
+        else
+        {
+            colors = UserColors;
+        }
+
         emit CurrentPatternChanged();
     }
 
@@ -118,9 +129,9 @@ void CustomBlink::InitPatterns()
             return ColorUtils::OFF();
 
         if(int(x+1) % 4 == 0)
-            return UserColors[even?0:1];
+            return colors[even?0:1];
 
-        return UserColors[even?1:0];
+        return colors[even?1:0];
     };
 
     patterns["Blink 2"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
@@ -128,9 +139,9 @@ void CustomBlink::InitPatterns()
             return ColorUtils::OFF();
 
         if(int(x+1) % 4 == 0)
-            return UserColors[even?2:3];
+            return colors[even?2:3];
 
-        return UserColors[even?3:2];
+        return colors[even?3:2];
     };
 
     patterns["Marquee 1"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
@@ -138,9 +149,9 @@ void CustomBlink::InitPatterns()
             return ColorUtils::OFF();
 
         if(int(time+x+1) % 4 == 0)
-            return UserColors[even?0:1];
+            return colors[even?0:1];
 
-        return UserColors[even?1:0];
+        return colors[even?1:0];
     };
 
     patterns["Marquee 2"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
@@ -148,9 +159,9 @@ void CustomBlink::InitPatterns()
             return ColorUtils::OFF();
 
         if(int(-time+x+1) % 4 == 0)
-            return UserColors[even?2:3];
+            return colors[even?2:3];
 
-        return UserColors[even?3:2];
+        return colors[even?3:2];
     };
 
     patterns["Marquee 3"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
@@ -158,9 +169,9 @@ void CustomBlink::InitPatterns()
             return ColorUtils::OFF();
 
         if(int(2*time+x+1) % 4 == 0)
-            return UserColors[even?0:1];
+            return colors[even?0:1];
 
-        return UserColors[even?1:0];
+        return colors[even?1:0];
     };
 
     patterns["Marquee 4"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
@@ -168,9 +179,9 @@ void CustomBlink::InitPatterns()
             return ColorUtils::OFF();
 
         if(int(-2*time+x+1) % 4 == 0)
-            return UserColors[even?2:3];
+            return colors[even?2:3];
 
-        return UserColors[even?3:2];
+        return colors[even?3:2];
     };
 
     patterns["Breath 1"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
@@ -178,9 +189,9 @@ void CustomBlink::InitPatterns()
             return ColorUtils::OFF();
 
         if(int(x+1) % 4 == 0)
-            return ColorUtils::apply_brightness(UserColors[0], time_sine);
+            return ColorUtils::apply_brightness(colors[0], time_sine);
 
-        return ColorUtils::apply_brightness(UserColors[1], time_2sine);
+        return ColorUtils::apply_brightness(colors[1], time_2sine);
     };
 
     patterns["Breath 2"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
@@ -188,9 +199,9 @@ void CustomBlink::InitPatterns()
             return ColorUtils::OFF();
 
         if(int(time+x+1) % 4 == 0)
-            return ColorUtils::apply_brightness(UserColors[0], time_sine);
+            return ColorUtils::apply_brightness(colors[0], time_sine);
 
-        return ColorUtils::apply_brightness(UserColors[1], time_2sine);
+        return ColorUtils::apply_brightness(colors[1], time_2sine);
     };
 
     patterns["Breath 3"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
@@ -198,9 +209,9 @@ void CustomBlink::InitPatterns()
             return ColorUtils::OFF();
 
         if(int(x+1) % 4 == 0)
-            return ColorUtils::apply_brightness(UserColors[2], time_sine);
+            return ColorUtils::apply_brightness(colors[2], time_sine);
 
-        return ColorUtils::apply_brightness(UserColors[3], time_2sine);
+        return ColorUtils::apply_brightness(colors[3], time_2sine);
     };
 
     patterns["Breath 4"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
@@ -208,31 +219,31 @@ void CustomBlink::InitPatterns()
             return ColorUtils::OFF();
 
         if(int(-time+x+1) % 4 == 0)
-            return ColorUtils::apply_brightness(UserColors[2], time_sine);
+            return ColorUtils::apply_brightness(colors[2], time_sine);
 
-        return ColorUtils::apply_brightness(UserColors[3], time_2sine);
+        return ColorUtils::apply_brightness(colors[3], time_2sine);
     };
 
     patterns["Moving band 1"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
-        return UserColors[int(time+x) % 4];
+        return colors[int(time+x) % 4];
     };
 
     patterns["Moving band 2"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
-        return UserColors[abs(int(-time+x) % 4)];
+        return colors[abs(int(-time+x) % 4)];
     };
 
     patterns["Moving band 3"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
-        return UserColors[int(2*time+x) % 4];
+        return colors[int(2*time+x) % 4];
     };
 
     patterns["Moving band 4"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
-        return UserColors[abs(int(-2*time+x) % 4)];
+        return colors[abs(int(-2*time+x) % 4)];
     };
 
     patterns["Flash 1"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
         if (time_2sine > 0.5)
         {
-            return UserColors[x % 4];
+            return colors[x % 4];
         }
         else
         {
@@ -243,7 +254,7 @@ void CustomBlink::InitPatterns()
     patterns["Flash 2"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
         if (time_4sine > 0.5)
         {
-            return UserColors[x % 4];
+            return colors[x % 4];
         }
         else
         {
@@ -254,7 +265,7 @@ void CustomBlink::InitPatterns()
     patterns["Flash 3"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
         if (time_8sine > 0.5)
         {
-            return UserColors[x % 4];
+            return colors[x % 4];
         }
         else
         {
@@ -265,7 +276,7 @@ void CustomBlink::InitPatterns()
     patterns["Flash 4"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
         if (time_16sine > 0.5)
         {
-            return UserColors[x % 4];
+            return colors[x % 4];
         }
         else
         {
@@ -276,22 +287,22 @@ void CustomBlink::InitPatterns()
     patterns["Alternate 1"] = [=](unsigned int x, unsigned int, unsigned int w, unsigned int){
         if (x >= w/2.)
         {
-            return UserColors[even?0:1];
+            return colors[even?0:1];
         }
         else
         {
-            return UserColors[even?1:0];
+            return colors[even?1:0];
         }
     };
 
     patterns["Alternate 2"] = [=](unsigned int x, unsigned int, unsigned int w, unsigned int){
         if (x >= w/2.)
         {
-            return UserColors[even?2:3];
+            return colors[even?2:3];
         }
         else
         {
-            return UserColors[even?3:2];
+            return colors[even?3:2];
         }
     };
 }
@@ -375,4 +386,12 @@ json CustomBlink::SaveCustomSettings(json j)
     j["pattern_list"] = pattern_list;
 
     return j;
+}
+
+void CustomBlink::GenerateRandomColors()
+{
+    for(unsigned int i = 0; i < EffectDetails.UserColors; i++)
+    {
+        colors[i] = ColorUtils::RandomRGBColor();
+    }
 }
