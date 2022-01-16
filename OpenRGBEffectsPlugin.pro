@@ -292,6 +292,7 @@ SOURCES +=                                                                      
     Effects/Shaders/GLSLCodeEditor.cpp                                                          \
     Effects/Clock/Clock.cpp                                                                     \
     Effects/CustomBlink/CustomBlink.cpp                                                         \
+    Effects/AudioVUMeter/AudioVUMeter.cpp                                                       \
 
 HEADERS +=                                                                                      \
     Effects/RGBEffect.h                                                                         \
@@ -361,6 +362,7 @@ HEADERS +=                                                                      
     Effects/Shaders/GLSLCodeEditor.h                                                            \
     Effects/Clock/Clock.h                                                                       \
     Effects/CustomBlink/CustomBlink.h                                                           \
+    Effects/AudioVUMeter/AudioVUMeter.h                                                         \
 
 FORMS +=                                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
@@ -409,6 +411,7 @@ FORMS +=                                                                        
     Effects/ZigZag/ZigZag.ui                                                                    \
     Effects/Clock/Clock.ui                                                                      \
     Effects/CustomBlink/CustomBlink.ui                                                          \
+    Effects/AudioVUMeter/AudioVUMeter.ui                                                        \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #
