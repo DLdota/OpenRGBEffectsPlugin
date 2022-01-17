@@ -404,6 +404,10 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
             DrawSingleColorStatic(brightness, COLOR_PURPLE, pixels_render);
             break;
 
+        case VISUALIZER_SINGLE_COLOR_ELECTRIC_AQUAMARINE:
+            DrawSingleColorStatic(brightness, COLOR_ELECTRIC_ULTRAMARINE, pixels_render);
+            break;
+
         case VISUALIZER_SINGLE_COLOR_BACKGROUND:
             /*----------------------------------------------------------*\
             | Intentionally do nothing, leave the background unmodified  |
@@ -1282,6 +1286,10 @@ void AudioVisualizer::DrawPattern(VISUALIZER_PATTERN pattern, int bright, vis_pi
         DrawSolidColor(bright, COLOR_PURPLE, pixels);
         break;
 
+    case VISUALIZER_PATTERN_SOLID_ELECTRIC_AQUAMARINE:
+        DrawSolidColor(bright, COLOR_ELECTRIC_ULTRAMARINE, pixels);
+        break;
+
     case VISUALIZER_PATTERN_STATIC_RED_BLUE:
         {
         RGBColor colors[] = { COLOR_RED, COLOR_BLUE };
@@ -1299,6 +1307,13 @@ void AudioVisualizer::DrawPattern(VISUALIZER_PATTERN pattern, int bright, vis_pi
     case VISUALIZER_PATTERN_STATIC_CYAN_PURPLE:
         {
         RGBColor colors[] = { COLOR_CYAN, COLOR_PURPLE };
+        DrawHorizontalBars(bright, colors, 2, pixels);
+        }
+        break;
+
+    case VISUALIZER_PATTERN_STATIC_CYAN_ELECTRIC_AQUAMARINE:
+        {
+        RGBColor colors[] = { COLOR_CYAN, COLOR_ELECTRIC_ULTRAMARINE };
         DrawHorizontalBars(bright, colors, 2, pixels);
         }
         break;
