@@ -89,7 +89,6 @@ HEADERS +=                                                                      
     Dependencies/QCodeEditor/include/internal/QLuaCompleter.hpp                                 \
     Dependencies/QCodeEditor/include/internal/QPythonHighlighter.hpp                            \
     Dependencies/QCodeEditor/include/internal/QXMLHighlighter.hpp                               \
-    Dependencies/QCodeEditor/include/internal/QFramedTextAttribute.hpp                          \
     Dependencies/QCodeEditor/include/internal/QHighlightBlockRule.hpp                           \
     Dependencies/QCodeEditor/include/internal/QLanguage.hpp                                     \
     Dependencies/QCodeEditor/include/internal/QLuaHighlighter.hpp                               \
@@ -108,7 +107,6 @@ SOURCES +=                                                                      
     Dependencies/QCodeEditor/src/internal/QLineNumberArea.cpp                                   \
     Dependencies/QCodeEditor/src/internal/QPythonCompleter.cpp                                  \
     Dependencies/QCodeEditor/src/internal/QSyntaxStyle.cpp                                      \
-    Dependencies/QCodeEditor/src/internal/QFramedTextAttribute.cpp                              \
     Dependencies/QCodeEditor/src/internal/QJSONHighlighter.cpp                                  \
     Dependencies/QCodeEditor/src/internal/QLuaCompleter.cpp                                     \
     Dependencies/QCodeEditor/src/internal/QPythonHighlighter.cpp                                \
@@ -149,13 +147,13 @@ HEADERS +=                                                                      
 # SimplexNoise                                                                                  #
 #-----------------------------------------------------------------------------------------------#
 INCLUDEPATH +=                                                                                  \
-    Dependencies/SimplexNoise                                                                   \
+    Dependencies/SimplexNoise/src                                                               \
 
 SOURCES +=                                                                                      \
-    Dependencies/SimplexNoise/SimplexNoise.cpp                                                  \
+    Dependencies/SimplexNoise/src/SimplexNoise.cpp                                              \
 
 HEADERS +=                                                                                      \
-    Dependencies/SimplexNoise/SimplexNoise.h                                                    \
+    Dependencies/SimplexNoise/src/SimplexNoise.h                                                \
 
 #-----------------------------------------------------------------------------------------------#
 # GUI and misc                                                                                  #

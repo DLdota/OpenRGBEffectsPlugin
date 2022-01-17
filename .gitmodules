@@ -1,3 +1,9 @@
 [submodule "OpenRGB"]
 	path = OpenRGB
 	url = https://gitlab.com/CalcProgrammer1/OpenRGB
+[submodule "Dependencies/QCodeEditor"]
+	path = Dependencies/QCodeEditor
+	url = https://github.com/justxi/QCodeEditor.git
+[submodule "Dependencies/SimplexNoise"]
+	path = Dependencies/SimplexNoise
+	url = https://github.com/SRombauts/SimplexNoise.git
