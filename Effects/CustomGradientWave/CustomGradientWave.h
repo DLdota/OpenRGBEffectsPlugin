@@ -30,6 +30,7 @@ public:
 private slots:
     void on_colors_count_spinBox_valueChanged(int);
     void on_preset_currentTextChanged(const QString&);
+    void on_spread_valueChanged(int);
 
 private:
     Ui::CustomGradientWave *ui;
@@ -43,6 +44,8 @@ private:
     std::vector<ColorPicker*> color_pickers;
     QImage gradient;
     void GenerateGradient();
+
+    int spread = 0;
 
     std::map<std::string,std::vector<RGBColor>> presets = {
         {"Default", std::vector<RGBColor>{

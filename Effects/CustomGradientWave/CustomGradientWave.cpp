@@ -126,7 +126,7 @@ void CustomGradientWave::StepEffect(std::vector<ControllerZone*> controller_zone
 
 RGBColor CustomGradientWave::GetColor(float x, float w)
 {
-    float i = x / w + progress;
+    float i = (spread/100.f) * x / w + progress;
     i -= (long) i;
 
     return ColorUtils::fromQColor(gradient.pixelColor(100.0 * i, 0));
@@ -173,6 +173,10 @@ void CustomGradientWave::on_colors_count_spinBox_valueChanged(int)
 {
     ResetColors();
 }
+void CustomGradientWave::on_spread_valueChanged(int value)
+{
+    spread = value;
+}
 
 void CustomGradientWave::on_preset_currentTextChanged(const QString& text)
 {
@@ -204,11 +208,17 @@ void CustomGradientWave::LoadCustomSettings(json settings)
         ui->colors_count_spinBox->setValue(colors.size());
     }
 
+    if (settings.contains("spread"))
+    {
+        ui->spread->setValue(settings["spread"]);
+    }
+
     ResetColors();
 }
 
 json CustomGradientWave::SaveCustomSettings(json settings)
 {
     settings["colors"] = colors;
+    settings["spread"] = spread;
     return settings;
 }
