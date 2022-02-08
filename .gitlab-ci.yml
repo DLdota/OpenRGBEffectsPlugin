@@ -26,7 +26,7 @@ before_script:
 # Linux (AppImage) 32-bit Build Target                                  #
 #-----------------------------------------------------------------------#
 "Linux 32":
-  image: registry.gitlab.com/openrgbdevelopers/openrgb-linux-ci-deb-builder:stretch-32
+  image: registry.gitlab.com/openrgbdevelopers/openrgb-linux-ci-deb-builder:buster-32
   stage: build
   script:
   - apt install -y libopenal-dev
@@ -44,7 +44,7 @@ before_script:
 # Linux 64-bit Build Target                                             #
 #-----------------------------------------------------------------------#
 "Linux 64":
-  image: registry.gitlab.com/openrgbdevelopers/openrgb-linux-ci-deb-builder:stretch-64
+  image: registry.gitlab.com/openrgbdevelopers/openrgb-linux-ci-deb-builder:buster-64
   stage: build
   script:
   - apt install -y libopenal-dev
