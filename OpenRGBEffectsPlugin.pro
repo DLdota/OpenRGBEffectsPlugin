@@ -59,7 +59,6 @@ HEADERS +=                                                                      
     OpenRGB/i2c_smbus/i2c_smbus.h                                                               \
     OpenRGB/net_port/net_port.h                                                                 \
     OpenRGB/RGBController/RGBController.h                                                       \
-    OpenRGB/filesystem.h                                                                        \
     OpenRGB/dependencies/ColorWheel/ColorWheel.h                                                \
     OpenRGB/qt/hsv.h                                                                            \
 
@@ -454,7 +453,7 @@ win32:DEFINES +=                                                        \
 # Linux-specific Configuration                                          #
 #-----------------------------------------------------------------------#
 unix:!macx {
-    LIBS += -lopenal -lstdc++fs
+    LIBS += -lopenal
     QMAKE_CXXFLAGS += -std=c++17
 }
 
