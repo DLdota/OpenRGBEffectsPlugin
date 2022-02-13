@@ -373,8 +373,8 @@ void AudioVUMeter::LoadCustomSettings(json Settings)
     if (Settings.contains("decay"))
         ui->decay->setValue(Settings["decay"]);
 
-    if (Settings.contains("color_spread"))
-        ui->color_spread->setValue(Settings["color_spread"]);
+    if (Settings.contains("color_offset"))
+        ui->color_offset->setValue(Settings["color_offset"]);
 
     if (Settings.contains("color_spread"))
         ui->color_spread->setValue(Settings["color_spread"]);
