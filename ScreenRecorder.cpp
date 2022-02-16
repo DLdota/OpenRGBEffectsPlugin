@@ -70,7 +70,9 @@ void ScreenRecorder::CaptureThreadFunction()
 
         auto start = std::chrono::steady_clock::now();
 
+        mut.lock();
         capture = screen->grabWindow(0, rect.left(), rect.top(), rect.width(), rect.height()).toImage();
+        mut.unlock();
 
         int took = (int) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
         int delta = delay - took;
@@ -82,7 +84,11 @@ void ScreenRecorder::CaptureThreadFunction()
     printf("[OpenRGBEffectsPlugin] SCREENRECORDER: Thread stopped\n");
 }
 
-QImage ScreenRecorder::Capture()
+const QImage ScreenRecorder::Capture()
 {
-    return capture;
+    mut.lock();
+    const QImage copy = capture.copy();
+    mut.unlock();
+
+    return copy;
 }

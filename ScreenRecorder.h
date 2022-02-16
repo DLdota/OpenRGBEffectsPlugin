@@ -8,6 +8,7 @@
 #include <thread>
 #include <map>
 #include <set>
+#include <mutex>
 
 class ScreenRecorder
 {
@@ -15,7 +16,7 @@ public:
     ScreenRecorder();
     ~ScreenRecorder();
 
-    QImage Capture();
+    const QImage Capture();
 
     void Start();
     void Stop();
@@ -32,6 +33,8 @@ private:
     QScreen* screen = nullptr;
     QRect rect;
     QImage capture;
+
+    std::mutex mut;
 };
 
 #endif // SCREENRECORDER_H

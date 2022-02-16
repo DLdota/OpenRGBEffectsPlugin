@@ -74,7 +74,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
         return;
     }
 
-    QImage image = screen_recorder->Capture();
+    const QImage& image = screen_recorder->Capture();
 
     switch (mode) {
 
