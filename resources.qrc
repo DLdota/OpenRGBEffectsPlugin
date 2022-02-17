@@ -66,5 +66,7 @@
         <file>shaders/audio-example-12.fs</file>
         <file>shaders/audio-example-13.fs</file>
         <file>shaders/neon.fs</file>
+        <file>shaders/audio-idle-bubbles.fs</file>
+        <file>shaders/audio-idle-crazylines.fs</file>
     </qresource>
 </RCC>
