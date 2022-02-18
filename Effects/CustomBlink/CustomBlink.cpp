@@ -224,6 +224,11 @@ void CustomBlink::InitPatterns()
         return ColorUtils::apply_brightness(colors[3], time_2sine);
     };
 
+    patterns["Breath 5"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
+        float s = int(x) % 2 == 0 ? time_sine : 1 - time_sine;
+        return ColorUtils::apply_brightness(colors[int(x) % 4], s);
+    };
+
     patterns["Moving band 1"] = [=](unsigned int x, unsigned int, unsigned int, unsigned int){
         return colors[int(time+x) % 4];
     };
