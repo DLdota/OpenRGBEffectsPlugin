@@ -68,5 +68,6 @@
         <file>shaders/neon.fs</file>
         <file>shaders/audio-idle-bubbles.fs</file>
         <file>shaders/audio-idle-crazylines.fs</file>
+        <file>shaders/fire.fs</file>
     </qresource>
 </RCC>
