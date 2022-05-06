@@ -33,6 +33,11 @@
 #include <OpenAL/alc.h>
 #endif
 
+#ifdef __FreeBSD__
+#include <AL/al.h>
+#include <AL/alc.h>
+#endif
+
 class AudioManager
 {
 
