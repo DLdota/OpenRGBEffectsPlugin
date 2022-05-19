@@ -407,6 +407,9 @@ json AudioSine::SaveCustomSettings(json Settings)
     Settings["thickness"] = thickness;
     Settings["oscillation"] = oscillation;
     Settings["color_change_speed"] = color_change_speed;
+    Settings["background"] = background;
+    Settings["wave_color"] = wave_color;
+    
     return Settings;
 }
 
@@ -440,8 +443,14 @@ void AudioSine::LoadCustomSettings(json Settings)
         ui->color_change_speed->setValue(Settings["color_change_speed"]);
 
     if (Settings.contains("background"))
+    {
+        background = Settings["background"];
         ui->background->SetRGBColor(Settings["background"]);
+    }
 
     if (Settings.contains("wave_color"))
+    {
+        wave_color = Settings["wave_color"];
         ui->wave_color->SetRGBColor(Settings["wave_color"]);
+    }
 }
