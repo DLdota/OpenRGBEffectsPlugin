@@ -96,8 +96,11 @@ void Lightning::StepEffect(std::vector<ControllerZone*> controller_zones)
     {
         for(ControllerZone* controller_zone : controller_zones)
         {
-            RGBColor color = TriggerLightning(controller_zone, 0);
-            controller_zone->SetAllZoneLEDs(color, Brightness);
+            if(controller_zone->leds_count() > 0)
+            {
+                RGBColor color = TriggerLightning(controller_zone, 0);
+                controller_zone->SetAllZoneLEDs(color, Brightness);
+            }
         }
     }
     else if(lightning_mode == PER_LED)
