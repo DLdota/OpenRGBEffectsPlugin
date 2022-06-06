@@ -11,7 +11,7 @@ Lightning::Lightning(QWidget *parent) :
     EffectDetails.EffectName = "Lightning";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Lightning effect";
-    EffectDetails.MaxSpeed     = 50;
+    EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;
     EffectDetails.MaxSlider2Val = 60;
@@ -41,7 +41,9 @@ RGBColor Lightning::TriggerLightning(ControllerZone* z, int n)
 
     float decrease = 1 + Decay/(float) FPS;
 
-    Lightnings[z][n].value = ((unsigned int)(rand() % 1000)) > (1000 - Speed) ?
+    unsigned int mod = lightning_mode == WHOLE_ZONE ? 1000 : 1000 * z->leds_count();
+
+    Lightnings[z][n].value = ((unsigned int)(rand() % mod)) < Speed ?
                 std::min<unsigned char>(255, RandomColorsEnabled ? 255: UserHSV.value) :
                 Lightnings[z][n].value > 0 ?  Lightnings[z][n].value / decrease : 0;
 
