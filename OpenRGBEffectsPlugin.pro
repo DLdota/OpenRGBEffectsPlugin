@@ -409,6 +409,7 @@ FORMS +=                                                                        
     Effects/Clock/Clock.ui                                                                      \
     Effects/CustomBlink/CustomBlink.ui                                                          \
     Effects/AudioVUMeter/AudioVUMeter.ui                                                        \
+    Effects/Lightning/Lightning.ui                                                              \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #

@@ -3,8 +3,11 @@
 REGISTER_EFFECT(Lightning);
 
 Lightning::Lightning(QWidget *parent) :
-    RGBEffect(parent)
+    RGBEffect(parent),
+    ui(new Ui::Lightning)
 {
+    ui->setupUi(this);
+
     EffectDetails.EffectName = "Lightning";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Lightning effect";
@@ -14,49 +17,70 @@ Lightning::Lightning(QWidget *parent) :
     EffectDetails.MaxSlider2Val = 60;
     EffectDetails.MinSlider2Val = 2;
     EffectDetails.Slider2Name   = "Decay";
+    EffectDetails.HasCustomSettings = true;
 
     SetSpeed(20);
     SetSlider2Val(10);
+
+    ui->lightning_mode->addItems({"Whole strip","Per LED"});
 }
 
-RGBColor Lightning::TriggerLightning(int n)
+Lightning::~Lightning()
+{
+    delete ui;
+}
+
+void Lightning::DefineExtraOptions(QLayout* layout)
+{
+    layout->addWidget(this);
+}
+
+RGBColor Lightning::TriggerLightning(ControllerZone* z, int n)
 {
     int Decay = Slider2Val;
 
     float decrease = 1 + Decay/(float) FPS;
 
-    Lightnings[n].value = ((unsigned int)(rand() % 1000)) > (1000 - Speed) ? std::min<unsigned char>(255, RandomColorsEnabled ? 255: UserHSV.value) :  Lightnings[n].value > 0 ?  Lightnings[n].value / decrease : 0;
+    Lightnings[z][n].value = ((unsigned int)(rand() % 1000)) > (1000 - Speed) ?
+                std::min<unsigned char>(255, RandomColorsEnabled ? 255: UserHSV.value) :
+                Lightnings[z][n].value > 0 ?  Lightnings[z][n].value / decrease : 0;
 
     if(RandomColorsEnabled)
     {
-        if(Lightnings[n].value == 0)
+        if(Lightnings[z][n].value == 0)
         {
-            Lightnings[n].hue = rand() % 360;
-            Lightnings[n].saturation = rand() % 255;
+            Lightnings[z][n].hue = rand() % 360;
+            Lightnings[z][n].saturation = rand() % 255;
         }
     }
     else
     {
-        Lightnings[n].hue = UserHSV.hue;
-        Lightnings[n].saturation = UserHSV.saturation;
+        Lightnings[z][n].hue = UserHSV.hue;
+        Lightnings[z][n].saturation = UserHSV.saturation;
     }
 
-    return RGBColor(hsv2rgb(&Lightnings[n]));
+    return RGBColor(hsv2rgb(&Lightnings[z][n]));
 }
 
-void  Lightning::OnControllerZonesListChanged(std::vector<ControllerZone*> controller_zones)
+void Lightning::OnControllerZonesListChanged(std::vector<ControllerZone*> controller_zones)
 {
     Lightnings.clear();
 
-    for(unsigned int i = 0; i < controller_zones.size(); i++)
+    for(ControllerZone* controller_zone: controller_zones)
     {
-        hsv_t lightning;
+        std::vector<hsv_t> leds;
 
-        lightning.value = 0;
-        lightning.hue = UserHSV.hue;
-        lightning.saturation = UserHSV.saturation;
+        for(unsigned int i = 0; i < controller_zone->leds_count(); i++)
+        {
+            hsv_t lightning;
 
-        Lightnings.push_back(lightning);
+            lightning.value = 0;
+            lightning.hue = UserHSV.hue;
+            lightning.saturation = UserHSV.saturation;
+            leds.push_back(lightning);
+        }
+
+        Lightnings[controller_zone] = leds;
     }
 }
 
@@ -68,16 +92,46 @@ void Lightning::StepEffect(std::vector<ControllerZone*> controller_zones)
         OnControllerZonesListChanged(controller_zones);
     }
 
-    int n = 0;
-
-    for(ControllerZone* controller_zone : controller_zones)
+    if(lightning_mode == WHOLE_ZONE)
     {
-        RGBColor color = TriggerLightning(n++);
-        controller_zone->SetAllZoneLEDs(color, Brightness);
+        for(ControllerZone* controller_zone : controller_zones)
+        {
+            RGBColor color = TriggerLightning(controller_zone, 0);
+            controller_zone->SetAllZoneLEDs(color, Brightness);
+        }
+    }
+    else if(lightning_mode == PER_LED)
+    {
+        for(ControllerZone* controller_zone : controller_zones)
+        {
+            for(unsigned int i = 0; i < controller_zone->leds_count(); i++)
+            {
+                RGBColor color = TriggerLightning(controller_zone, i);
+                controller_zone->SetLED(controller_zone->start_idx() + i, color, Brightness);
+            }
+        }
     }
 }
 
 void Lightning::SetUserColors(std::vector<RGBColor> colors) {
     UserColors = colors;
     rgb2hsv(UserColors[0], &UserHSV);
+}
+
+void Lightning::on_lightning_mode_currentIndexChanged(int value)
+{
+    lightning_mode = static_cast<lightning_mode_value>(value);
+}
+
+void Lightning::LoadCustomSettings(json j)
+{
+    if (j.contains("lightning_mode"))
+        ui->lightning_mode->setCurrentIndex(j["lightning_mode"]);
+}
+
+json Lightning::SaveCustomSettings(json j)
+{
+    j["lightning_mode"] = lightning_mode;
+
+    return j;
 }
