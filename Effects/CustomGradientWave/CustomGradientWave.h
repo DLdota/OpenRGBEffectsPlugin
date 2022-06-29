@@ -6,6 +6,7 @@
 #include <QWidget>
 #include "ColorPicker.h"
 #include "ui_CustomGradientWave.h"
+#include "ColorUtils.h"
 
 namespace Ui {
 class CustomGradientWave;
@@ -48,27 +49,72 @@ private:
     int spread = 0;
 
     std::map<std::string,std::vector<RGBColor>> presets = {
-        {"Default", std::vector<RGBColor>{
-            262399,
-            15073535,
-            16711680,
-            16757504,
-            5373696,
-            65514,
-            46079,
-            255
+        {"UnicornVomit", std::vector<RGBColor>{
+             HEXCOLOR(0xff0004),
+             HEXCOLOR(0xff00e6),
+             HEXCOLOR(0x0000ff),
+             HEXCOLOR(0x00b3ff),
+             HEXCOLOR(0x00ff51),
+             HEXCOLOR(0xeaff00),
+             HEXCOLOR(0xffb300),
+             HEXCOLOR(0xff0000)
          }},
 
         {"Pink/Blue", std::vector<RGBColor>{
-             16711680,
-             16711935,
-             16711680
+             HEXCOLOR(0xfe00c5),
+             HEXCOLOR(0x00c5ff),
+             HEXCOLOR(0x00c5ff),
+             HEXCOLOR(0xfe00c5)
          }},
 
         {"Pink/Gold", std::vector<RGBColor>{
-             57855,
-             16711935,
-             57855
+             HEXCOLOR(0xfee000),
+             HEXCOLOR(0xfe00fe),
+             HEXCOLOR(0xfe00fe),
+             HEXCOLOR(0xfee000),
+         }},
+
+        {"Purple/Orange", std::vector<RGBColor>{
+             HEXCOLOR(0xff2100),
+             HEXCOLOR(0xaa00ff),
+             HEXCOLOR(0xaa00ff),
+             HEXCOLOR(0xff2100),
+             HEXCOLOR(0xff2100),
+             HEXCOLOR(0xff2100)
+         }},
+
+        {"LightBlue/Purple", std::vector<RGBColor>{
+             HEXCOLOR(0x03fffa),
+             HEXCOLOR(0x55007f),
+             HEXCOLOR(0x55007f),
+             HEXCOLOR(0x03fffa)
+         }},
+
+        {"PoliceBeacon", std::vector<RGBColor>{
+             HEXCOLOR(0xff0000),
+             HEXCOLOR(0x0000ff),
+             HEXCOLOR(0x0000ff),
+             HEXCOLOR(0xff0000),
+             HEXCOLOR(0xff0000)
+         }},
+
+        {"Seabed", std::vector<RGBColor>{
+             HEXCOLOR(0x00ff00),
+             HEXCOLOR(0x0032ff),
+             HEXCOLOR(0x0032ff),
+             HEXCOLOR(0x00ff00),
+             HEXCOLOR(0x00ff00)
+         }},
+
+        {"Sunset", std::vector<RGBColor>{
+             HEXCOLOR(0xff2100),
+             HEXCOLOR(0xab006d),
+             HEXCOLOR(0xc01c52),
+             HEXCOLOR(0xd53737),
+             HEXCOLOR(0xea531b),
+             HEXCOLOR(0xff6e00),
+             HEXCOLOR(0xff0000),
+             HEXCOLOR(0xff2100)
          }}
     };
 };

@@ -1,5 +1,6 @@
 #ifndef COLORUTILS_H
 #define COLORUTILS_H
+#define HEXCOLOR(rgb) (ToRGBColor(RGBGetBValue(rgb), RGBGetGValue(rgb), RGBGetRValue(rgb)))
 
 #include "RGBController.h"
 #include "hsv.h"
