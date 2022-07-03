@@ -8,6 +8,13 @@
 #include "ui_CustomGradientWave.h"
 #include "ColorUtils.h"
 
+typedef struct
+{
+    std::string name;
+    std::vector<RGBColor> colors;
+
+} CustomGradientWavePreset;
+
 namespace Ui {
 class CustomGradientWave;
 }
@@ -48,7 +55,8 @@ private:
 
     int spread = 0;
 
-    std::map<std::string,std::vector<RGBColor>> presets = {
+    std::vector<CustomGradientWavePreset> presets =
+    {
         {"UnicornVomit", std::vector<RGBColor>{
              HEXCOLOR(0xff0004),
              HEXCOLOR(0xff00e6),

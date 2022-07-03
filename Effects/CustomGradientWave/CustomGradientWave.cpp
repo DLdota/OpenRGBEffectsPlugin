@@ -27,13 +27,9 @@ CustomGradientWave::CustomGradientWave(QWidget *parent) :
 
     SetSpeed(25);
 
-    std::map<std::string, std::vector<RGBColor>>::iterator it;
-
-    ui->preset->blockSignals(true);
-
-    for (it = presets.begin(); it != presets.end(); it++)
+    for(const CustomGradientWavePreset& preset: presets)
     {
-        ui->preset->addItem(QString::fromStdString(it->first));
+        ui->preset->addItem(QString::fromStdString(preset.name));
     }
 
     ui->preset->blockSignals(false);
@@ -185,7 +181,15 @@ void CustomGradientWave::on_preset_currentTextChanged(const QString& text)
 
 void CustomGradientWave::LoadPreset(const QString& text)
 {
-    colors = presets[text.toStdString()];
+    std::string preset_name = text.toStdString();
+
+    for(const CustomGradientWavePreset& preset: presets)
+    {
+        if(preset_name == preset.name){
+            colors = preset.colors;
+            break;
+        }
+    }
 
     ui->colors_count_spinBox->blockSignals(true);
     ui->colors_count_spinBox->setValue(colors.size());
