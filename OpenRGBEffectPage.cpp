@@ -11,6 +11,7 @@
 #include <QInputDialog>
 #include <QTextEdit>
 #include <QClipboard>
+#include <QListWidget>
 
 OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
     QWidget(parent),
@@ -287,13 +288,85 @@ void OpenRGBEffectPage::on_OnlyFirst_clicked()
 
 void OpenRGBEffectPage::on_save_pattern_clicked()
 {
-    QString filename = QInputDialog::getText(
-                nullptr, "Save pattern to file...", "Choose a filename",
-                QLineEdit::Normal, QString("my-pattern")).trimmed();
+    std::vector<std::string> filenames = OpenRGBEffectSettings::ListPattern(effect->EffectDetails.EffectClassName);
 
-    json effect_settings = ToJson();
+    QString filename;
 
-    OpenRGBEffectSettings::SaveEffectPattern(effect_settings, effect->EffectDetails.EffectClassName, filename.toStdString());
+    if(filenames.empty())
+    {
+        filename = QInputDialog::getText(
+                    nullptr, "Save pattern to file...", "Choose a filename",
+                    QLineEdit::Normal, QString("my-pattern")).trimmed();
+    }
+    else
+    {
+        QDialog* dialog = new QDialog();
+
+        if (OpenRGBEffectsPlugin::DarkTheme)
+        {
+            QPalette pal;
+            pal.setColor(QPalette::WindowText, Qt::white);
+            dialog->setPalette(pal);
+            QFile dark_theme(":/windows_dark.qss");
+            dark_theme.open(QFile::ReadOnly);
+            dialog->setStyleSheet(dark_theme.readAll());
+            dark_theme.close();
+        }
+
+        dialog->setMinimumSize(300,320);
+        dialog->setModal(true);
+        dialog->setWindowTitle("Save pattern to file...");
+
+        QLabel* text1 = new QLabel("Choose an existing pattern from this list:",dialog);
+        QLabel* text2 = new QLabel("Or create a new one:",dialog);
+
+        QVBoxLayout* dialog_layout = new QVBoxLayout(dialog);
+        QListWidget* list_widget = new QListWidget(dialog);
+
+        for(const std::string& f: filenames)
+        {
+            list_widget->addItem(QString::fromStdString(f));
+        }
+
+        QLineEdit* filename_input = new QLineEdit(dialog);
+
+        filename_input->setText(QString("my-pattern"));
+
+        dialog_layout->addWidget(text1);
+        dialog_layout->addWidget(list_widget);
+        dialog_layout->addWidget(text2);
+        dialog_layout->addWidget(filename_input);
+
+        QHBoxLayout* buttons_layout = new QHBoxLayout();
+
+        QPushButton* cancel_button = new QPushButton();
+        cancel_button->setText("Cancel");
+        dialog->connect(cancel_button,SIGNAL(clicked()),dialog,SLOT(reject()));
+        buttons_layout->addWidget(cancel_button);
+
+        QPushButton* ok_button = new QPushButton();
+        ok_button->setText("OK");
+
+        buttons_layout->addWidget(ok_button);
+
+        dialog->connect(ok_button,SIGNAL(clicked()),dialog,SLOT(accept()));
+
+        dialog_layout->addLayout(buttons_layout);
+
+        connect(list_widget, &QListWidget::currentItemChanged, [=](){
+            filename_input->setText(list_widget->currentItem()->text());
+        });
+
+        if (dialog->exec())
+        {
+            filename = filename_input->text();
+        }
+    }
+
+    if(!filename.isEmpty())
+    {
+        OpenRGBEffectSettings::SaveEffectPattern(ToJson(), effect->EffectDetails.EffectClassName, filename.toStdString());
+    }
 }
 
 void OpenRGBEffectPage::on_load_pattern_clicked()
