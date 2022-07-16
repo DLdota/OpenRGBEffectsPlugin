@@ -339,15 +339,14 @@ void OpenRGBEffectPage::on_save_pattern_clicked()
 
         QHBoxLayout* buttons_layout = new QHBoxLayout();
 
+        QPushButton* ok_button = new QPushButton();
+        ok_button->setText("OK");
+        buttons_layout->addWidget(ok_button);
+
         QPushButton* cancel_button = new QPushButton();
         cancel_button->setText("Cancel");
         dialog->connect(cancel_button,SIGNAL(clicked()),dialog,SLOT(reject()));
         buttons_layout->addWidget(cancel_button);
-
-        QPushButton* ok_button = new QPushButton();
-        ok_button->setText("OK");
-
-        buttons_layout->addWidget(ok_button);
 
         dialog->connect(ok_button,SIGNAL(clicked()),dialog,SLOT(accept()));
 
