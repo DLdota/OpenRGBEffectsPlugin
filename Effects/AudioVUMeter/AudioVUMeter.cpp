@@ -94,6 +94,11 @@ void AudioVUMeter::on_color_spread_valueChanged(int value)
     color_spread = value;
 }
 
+void AudioVUMeter::on_saturation_valueChanged(int value)
+{
+    saturation = value;
+}
+
 void AudioVUMeter::on_devices_currentIndexChanged(int value)
 {
     bool was_running = EffectEnabled;
@@ -322,7 +327,7 @@ RGBColor AudioVUMeter::GetColor(float a, float y, float h)
 
     hsv_t hsv;
     hsv.hue = int(color_offset + y/h*360*color_spread*0.01)%360;
-    hsv.saturation = 255;
+    hsv.saturation = saturation;
 
     if(y <= r_amp)
     {
@@ -355,6 +360,7 @@ json AudioVUMeter::SaveCustomSettings(json Settings)
     Settings["decay"] = decay;
     Settings["color_offset"] = color_offset;
     Settings["color_spread"] = color_spread;
+    Settings["saturation"] = saturation;
 
     return Settings;
 }
@@ -378,5 +384,8 @@ void AudioVUMeter::LoadCustomSettings(json Settings)
 
     if (Settings.contains("color_spread"))
         ui->color_spread->setValue(Settings["color_spread"]);
+
+    if (Settings.contains("saturation"))
+        ui->saturation->setValue(Settings["saturation"]);
 
 }

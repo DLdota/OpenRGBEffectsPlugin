@@ -37,6 +37,7 @@ private slots:
     void on_decay_valueChanged(int);
     void on_color_offset_valueChanged(int);
     void on_color_spread_valueChanged(int);
+    void on_saturation_valueChanged(int);
 
 private:
     Ui::AudioVUMeter *ui;
@@ -53,6 +54,7 @@ private:
 
     float color_offset = 0.f;
     float color_spread = 0.f;
+    int   saturation   = 255;
 
     void Start();
     void Stop();
