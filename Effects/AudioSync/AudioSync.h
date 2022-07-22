@@ -7,13 +7,13 @@
 #include "ctkrangeslider.h"
 #include "AudioManager.h"
 #include "EffectRegisterer.h"
+#include "QTooltipedSlider.h"
 
 #include <QLayout>
 #include <QComboBox>
 #include <QWidget>
 
 #include <QSpinBox>
-#include <QSlider>
 #include <QLabel>
 #include <QPushButton>
 #include <QSpacerItem>
@@ -101,21 +101,21 @@ private:
 
     QLabel*         preview;
     ctkRangeSlider* bypass_slider;
-    QSlider*        rainbow_shift_slider;
-    QSlider*        fade_step_slider;
-    QSlider*        decay_slider;
-    QSlider*        avg_size_slider;
+    QTooltipedSlider*        rainbow_shift_slider;
+    QTooltipedSlider*        fade_step_slider;
+    QTooltipedSlider*        decay_slider;
+    QTooltipedSlider*        avg_size_slider;
     QComboBox*      avg_mode_selector;
     QComboBox*      saturation_mode_selector;
     QComboBox*      roll_mode_selector;
-    QSlider*        filter_constant_slider;
-    QSlider*        amplitude_slider;
+    QTooltipedSlider*        filter_constant_slider;
+    QTooltipedSlider*        amplitude_slider;
     QPushButton*    change_amplitude_button;
     QSpinBox*       amplitude_slider_min;
     QSpinBox*       amplitude_slider_max;
-    QSlider*        low_slider;
-    QSlider*        middle_slider;
-    QSlider*        high_slider;
+    QTooltipedSlider*        low_slider;
+    QTooltipedSlider*        middle_slider;
+    QTooltipedSlider*        high_slider;
     QComboBox*      preset_selector;
     QComboBox*      device_list_selector;
 

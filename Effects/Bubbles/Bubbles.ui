@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="3" column="1">
-    <widget class="QSlider" name="rarity">
+    <widget class="QTooltipedSlider" name="rarity">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -38,7 +38,7 @@
     </widget>
    </item>
    <item row="5" column="1">
-    <widget class="QSlider" name="bubbles_thickness">
+    <widget class="QTooltipedSlider" name="bubbles_thickness">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -54,7 +54,7 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QSlider" name="max_bubbles">
+    <widget class="QTooltipedSlider" name="max_bubbles">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -90,7 +90,7 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="QSlider" name="max_expansion">
+    <widget class="QTooltipedSlider" name="max_expansion">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -127,7 +127,7 @@
     </widget>
    </item>
    <item row="6" column="1">
-    <widget class="QSlider" name="speed_mult">
+    <widget class="QTooltipedSlider" name="speed_mult">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -153,9 +153,14 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QTooltipedSlider</class>
+   <extends>QSlider</extends>
+   <header location="global">QTooltipedSlider.h</header>
+  </customwidget>
+  <customwidget>
    <class>ColorPicker</class>
    <extends>QWidget</extends>
-   <header location="global">ColorPicker.h</header>
+   <header>ColorPicker.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

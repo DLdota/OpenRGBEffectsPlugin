@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BouncingBall</class>
+ <class>BouncingBallEffect</class>
  <widget class="QWidget" name="BouncingBallEffect">
   <property name="geometry">
    <rect>
@@ -35,7 +35,7 @@
     </spacer>
    </item>
    <item row="2" column="2">
-    <widget class="QSlider" name="ball_radius_slider">
+    <widget class="QTooltipedSlider" name="ball_radius_slider">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -57,7 +57,7 @@
     </widget>
    </item>
    <item row="4" column="2">
-    <widget class="QSlider" name="horizontal_velocity_slider">
+    <widget class="QTooltipedSlider" name="horizontal_velocity_slider">
      <property name="toolTip">
       <string>How fast the ball moves side to side</string>
      </property>
@@ -88,7 +88,7 @@
     </widget>
    </item>
    <item row="5" column="2">
-    <widget class="QSlider" name="spectrum_velocity_slider">
+    <widget class="QTooltipedSlider" name="spectrum_velocity_slider">
      <property name="minimum">
       <number>0</number>
      </property>
@@ -145,7 +145,7 @@
     </widget>
    </item>
    <item row="6" column="2">
-    <widget class="QSlider" name="drop_height_percent_slider">
+    <widget class="QTooltipedSlider" name="drop_height_percent_slider">
      <property name="minimum">
       <number>0</number>
      </property>
@@ -214,7 +214,7 @@
     </widget>
    </item>
    <item row="3" column="2">
-    <widget class="QSlider" name="gravity_slider">
+    <widget class="QTooltipedSlider" name="gravity_slider">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -237,6 +237,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QTooltipedSlider</class>
+   <extends>QSlider</extends>
+   <header location="global">QTooltipedSlider.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

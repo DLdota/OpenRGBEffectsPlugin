@@ -42,7 +42,7 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QSlider" name="decay">
+    <widget class="QTooltipedSlider" name="decay">
      <property name="maximum">
       <number>100</number>
      </property>
@@ -55,7 +55,7 @@
     </widget>
    </item>
    <item row="5" column="1">
-    <widget class="QSlider" name="color_spread">
+    <widget class="QTooltipedSlider" name="color_spread">
      <property name="maximum">
       <number>100</number>
      </property>
@@ -89,7 +89,7 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="QSlider" name="color_offset">
+    <widget class="QTooltipedSlider" name="color_offset">
      <property name="maximum">
       <number>360</number>
      </property>
@@ -116,7 +116,7 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QSlider" name="average">
+    <widget class="QTooltipedSlider" name="average">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -139,7 +139,7 @@
     </widget>
    </item>
    <item row="6" column="1">
-    <widget class="QSlider" name="saturation">
+    <widget class="QTooltipedSlider" name="saturation">
      <property name="maximum">
       <number>255</number>
      </property>
@@ -153,6 +153,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QTooltipedSlider</class>
+   <extends>QSlider</extends>
+   <header location="global">QTooltipedSlider.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

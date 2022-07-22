@@ -28,18 +28,18 @@ void AudioSync::Init()
     \*-------------------------------------------------*/
     device_list_selector = new QComboBox();
     bypass_slider = new ctkRangeSlider(Qt::Horizontal);
-    rainbow_shift_slider = new QSlider();
-    high_slider = new QSlider();
-    middle_slider = new QSlider();
-    low_slider = new QSlider();
-    amplitude_slider = new QSlider();
-    fade_step_slider = new QSlider();
-    decay_slider = new QSlider();
-    avg_size_slider = new QSlider();
+    rainbow_shift_slider = new QTooltipedSlider();
+    high_slider = new QTooltipedSlider();
+    middle_slider = new QTooltipedSlider();
+    low_slider = new QTooltipedSlider();
+    amplitude_slider = new QTooltipedSlider();
+    fade_step_slider = new QTooltipedSlider();
+    decay_slider = new QTooltipedSlider();
+    avg_size_slider = new QTooltipedSlider();
     saturation_mode_selector = new QComboBox();
     roll_mode_selector = new QComboBox();
     avg_mode_selector = new QComboBox();
-    filter_constant_slider = new QSlider();
+    filter_constant_slider = new QTooltipedSlider();
     preset_selector = new QComboBox();
     amplitude_slider_min = new QSpinBox();
     amplitude_slider_max = new QSpinBox();

@@ -25,7 +25,7 @@
         <x>0</x>
         <y>0</y>
         <width>380</width>
-        <height>73</height>
+        <height>69</height>
        </rect>
       </property>
      </widget>
@@ -100,7 +100,7 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="QSlider" name="spread">
+    <widget class="QTooltipedSlider" name="spread">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -115,6 +115,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QTooltipedSlider</class>
+   <extends>QSlider</extends>
+   <header location="global">QTooltipedSlider.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

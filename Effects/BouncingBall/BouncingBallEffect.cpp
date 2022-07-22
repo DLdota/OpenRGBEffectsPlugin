@@ -4,7 +4,7 @@ REGISTER_EFFECT(BouncingBallEffect);
 
 BouncingBallEffect::BouncingBallEffect(QWidget *parent) :
     RGBEffect(parent),
-    ui(new Ui::BouncingBall)
+    ui(new Ui::BouncingBallEffect)
 {
     ui->setupUi(this);
 

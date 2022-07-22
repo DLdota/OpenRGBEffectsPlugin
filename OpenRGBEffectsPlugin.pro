@@ -68,6 +68,7 @@ SOURCES +=                                                                      
     OpenRGB/dependencies/ColorWheel/ColorWheel.cpp                                              \
     OpenRGB/qt/hsv.cpp                                                                          \
 
+
 #-----------------------------------------------------------------------------------------------#
 # QCodeEditor                                                                                   #
 #-----------------------------------------------------------------------------------------------#
@@ -178,6 +179,7 @@ HEADERS +=                                                                      
     ScreenRecorder.h                                                                            \
     SaveProfilePopup.h                                                                          \
     EffectListDelegate.h                                                                        \
+    QTooltipedSlider.h                                                                          \
 
 SOURCES +=                                                                                      \
     ControllerZoneList.cpp                                                                      \
@@ -199,6 +201,7 @@ SOURCES +=                                                                      
     ScreenRecorder.cpp                                                                          \
     SaveProfilePopup.cpp                                                                        \
     EffectListDelegate.cpp                                                                      \
+    QTooltipedSlider.cpp                                                                        \
 
 FORMS +=                                                                                        \
     ControllerZoneList.ui                                                                       \

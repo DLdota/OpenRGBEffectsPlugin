@@ -66,7 +66,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QSlider" name="wave_freq_slider">
+        <widget class="QTooltipedSlider" name="wave_freq_slider">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -99,7 +99,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QSlider" name="wave_speed_slider">
+        <widget class="QTooltipedSlider" name="wave_speed_slider">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -135,7 +135,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QSlider" name="oscillation_speed_slider">
+        <widget class="QTooltipedSlider" name="oscillation_speed_slider">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -147,6 +147,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QTooltipedSlider</class>
+   <extends>QSlider</extends>
+   <header location="global">QTooltipedSlider.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

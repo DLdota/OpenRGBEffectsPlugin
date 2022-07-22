@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="3" column="1">
-    <widget class="QSlider" name="glow">
+    <widget class="QTooltipedSlider" name="glow">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -28,7 +28,7 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QSlider" name="v_speed">
+    <widget class="QTooltipedSlider" name="v_speed">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -61,7 +61,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QSlider" name="h_speed">
+    <widget class="QTooltipedSlider" name="h_speed">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -88,7 +88,7 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="QSlider" name="thickness">
+    <widget class="QTooltipedSlider" name="thickness">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -103,6 +103,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QTooltipedSlider</class>
+   <extends>QSlider</extends>
+   <header location="global">QTooltipedSlider.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

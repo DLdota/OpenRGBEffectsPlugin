@@ -29,7 +29,7 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="QSlider" name="amplitude">
+    <widget class="QTooltipedSlider" name="amplitude">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -42,7 +42,7 @@
     </widget>
    </item>
    <item row="5" column="1">
-    <widget class="QSlider" name="frequency">
+    <widget class="QTooltipedSlider" name="frequency">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -55,7 +55,7 @@
     </widget>
    </item>
    <item row="8" column="1">
-    <widget class="QSlider" name="octaves">
+    <widget class="QTooltipedSlider" name="octaves">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -85,7 +85,7 @@
     <widget class="QComboBox" name="colors_choice"/>
    </item>
    <item row="6" column="1">
-    <widget class="QSlider" name="lacunarity">
+    <widget class="QTooltipedSlider" name="lacunarity">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -123,8 +123,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>647</width>
-           <height>16</height>
+           <width>661</width>
+           <height>68</height>
           </rect>
          </property>
         </widget>
@@ -141,7 +141,7 @@
     </widget>
    </item>
    <item row="7" column="1">
-    <widget class="QSlider" name="persistence">
+    <widget class="QTooltipedSlider" name="persistence">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -189,7 +189,7 @@
     </widget>
    </item>
    <item row="10" column="1">
-    <widget class="QSlider" name="motion_speed">
+    <widget class="QTooltipedSlider" name="motion_speed">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -200,6 +200,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QTooltipedSlider</class>
+   <extends>QSlider</extends>
+   <header location="global">QTooltipedSlider.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

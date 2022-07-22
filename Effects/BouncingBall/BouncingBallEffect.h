@@ -5,11 +5,11 @@
 #include <unordered_set>
 
 #include <QWidget>
+#include "RGBEffect.h"
 #include "ColorUtils.h"
 #include "BouncingBallSimulation.h"
 #include "EffectRegisterer.h"
 #include "hsv.h"
-#include "RGBEffect.h"
 #include "ui_BouncingBallEffect.h"
 
 namespace Ui {
@@ -37,7 +37,7 @@ public:
     void OnControllerZonesListChanged(std::vector<ControllerZone*>) override;
 
 private:
-    Ui::BouncingBall *ui;
+    Ui::BouncingBallEffect *ui;
 
     void checkForDimensionChange(ControllerZone*, BouncingBallSimulation*);
 
