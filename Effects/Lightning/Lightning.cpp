@@ -10,7 +10,7 @@ Lightning::Lightning(QWidget *parent) :
 
     EffectDetails.EffectName = "Lightning";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Lightning effect";
+    EffectDetails.EffectDescription = "Prepare yourself for thunderstorm";
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;

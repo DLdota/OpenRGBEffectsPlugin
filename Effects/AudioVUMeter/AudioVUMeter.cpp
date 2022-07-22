@@ -13,7 +13,7 @@ AudioVUMeter::AudioVUMeter(QWidget *parent) :
 
     EffectDetails.EffectName = "AudioVUMeter";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "VU Meter enhanced";
+    EffectDetails.EffectDescription = "Fill your led strip based on audio load";
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;

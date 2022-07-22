@@ -7,7 +7,7 @@ SpectrumCycling::SpectrumCycling() : RGBEffect()
 {
     EffectDetails.EffectName = "Spectrum Cycling";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Goes through every solid color";
+    EffectDetails.EffectDescription = "Goes through every solid color of the rainbow";
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
 

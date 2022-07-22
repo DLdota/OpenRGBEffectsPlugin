@@ -11,7 +11,7 @@ MovingPanes::MovingPanes(QWidget *parent) :
 
     EffectDetails.EffectName = "MovingPanes";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Moving panes effect";
+    EffectDetails.EffectDescription = "Parts of your devices in symmetrical motion";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;

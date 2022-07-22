@@ -12,7 +12,7 @@ RotatingRainbow::RotatingRainbow(QWidget *parent) :
 
     EffectDetails.EffectName = "RotatingRainbow";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Rotating rainbow effect";
+    EffectDetails.EffectDescription = "A rainbow that rotates arround the center of your devices";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;

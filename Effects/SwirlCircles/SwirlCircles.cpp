@@ -11,7 +11,7 @@ SwirlCircles::SwirlCircles(QWidget *parent) :
 
     EffectDetails.EffectName = "SwirlCircles";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Rotating circles";
+    EffectDetails.EffectDescription = "Rotating circles around the center of your devices";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;

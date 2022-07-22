@@ -20,7 +20,7 @@ SmoothBlink::SmoothBlink(QWidget *parent) :
 
     EffectDetails.EffectName = "SmoothBlink";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Whoop whoop";    
+    EffectDetails.EffectDescription = "Create your own breathing sequences";
     EffectDetails.UserColors   = 2;
     EffectDetails.HasCustomSettings = true;
 

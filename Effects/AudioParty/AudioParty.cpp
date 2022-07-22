@@ -12,7 +12,7 @@ AudioParty::AudioParty(QWidget *parent) :
 
     EffectDetails.EffectName = "AudioParty";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Movement, color change, effects according to audio zones. <br/> - Blue zone: motion<br/>- Green zone: colors<br/>- Red zone effects";
+    EffectDetails.EffectDescription = "Movement, color change, effects according to audio zones.<br/>Blue zone: motion<br/>Green zone: colors<br/>Red zone: effects";
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.MaxSlider2Val = 50;

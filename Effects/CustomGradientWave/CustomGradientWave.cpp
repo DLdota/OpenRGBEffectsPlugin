@@ -12,7 +12,7 @@ CustomGradientWave::CustomGradientWave(QWidget *parent) :
 
     EffectDetails.EffectName = "CustomGradientWave";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Custom gradient wave";
+    EffectDetails.EffectDescription = "Create your own gradient wave or use predefined color set";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 1;

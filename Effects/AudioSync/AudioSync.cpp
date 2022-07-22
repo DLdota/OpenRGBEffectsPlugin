@@ -8,7 +8,7 @@ AudioSync::AudioSync(): RGBEffect()
 {
     EffectDetails.EffectName = "Audio Sync";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Synchronize to master audio";
+    EffectDetails.EffectDescription = "Display frequency based colors with different modes";
     EffectDetails.HasCustomSettings = true;
 
     Init();

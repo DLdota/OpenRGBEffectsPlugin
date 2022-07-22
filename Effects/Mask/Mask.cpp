@@ -11,7 +11,7 @@ Mask::Mask(QWidget *parent) :
 
     EffectDetails.EffectName = "Mask";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "A simple mask for using in layers.";    
+    EffectDetails.EffectDescription = "A simple mask for using in layers";
     EffectDetails.UserColors   = 2;
     EffectDetails.HasCustomSettings = true;
 }

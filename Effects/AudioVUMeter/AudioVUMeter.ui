@@ -30,7 +30,7 @@
    <item row="4" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>Color offset</string>
+      <string>Hue offset</string>
      </property>
     </widget>
    </item>
@@ -134,7 +134,7 @@
    <item row="5" column="0">
     <widget class="QLabel" name="label_6">
      <property name="text">
-      <string>Color spread</string>
+      <string>Hue spread</string>
      </property>
     </widget>
    </item>

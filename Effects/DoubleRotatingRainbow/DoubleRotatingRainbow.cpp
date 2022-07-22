@@ -12,7 +12,7 @@ DoubleRotatingRainbow::DoubleRotatingRainbow(QWidget *parent) :
 
     EffectDetails.EffectName = "DoubleRotatingRainbow";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Double rotating rainbow effect";
+    EffectDetails.EffectDescription = "Two rainbows that rotate synchronously";
 
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;

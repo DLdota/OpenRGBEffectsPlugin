@@ -11,7 +11,7 @@ Marquee::Marquee(QWidget *parent) :
 
     EffectDetails.EffectName = "Marquee";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Marquee effect";
+    EffectDetails.EffectDescription = "A simple marquee for your devices";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 1;

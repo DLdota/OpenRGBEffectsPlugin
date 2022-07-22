@@ -11,7 +11,7 @@ Spiral::Spiral(QWidget *parent) :
 
     EffectDetails.EffectName = "Spiral";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Spiral effect";
+    EffectDetails.EffectDescription = "Draws a hypnotic spiral on your devices";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 500;
     EffectDetails.MinSpeed     = 1;

@@ -12,7 +12,7 @@ Stack::Stack(QWidget *parent) :
 
     EffectDetails.EffectName = "Stack";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Fills and stack the zones";
+    EffectDetails.EffectDescription = "Fills and stack your devices with a solid color";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;

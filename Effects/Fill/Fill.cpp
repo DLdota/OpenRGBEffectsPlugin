@@ -11,7 +11,7 @@ Fill::Fill(QWidget *parent) :
 
     EffectDetails.EffectName = "Fill";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Fills the zones";
+    EffectDetails.EffectDescription = "Progressivly fills your devices with a defined color";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 10;

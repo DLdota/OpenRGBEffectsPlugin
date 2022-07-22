@@ -11,7 +11,7 @@ ZigZag::ZigZag(QWidget *parent) :
 
     EffectDetails.EffectName = "ZigZag";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "ZigZag effect";
+    EffectDetails.EffectDescription = "A snake moving on your matrix typed devices";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;

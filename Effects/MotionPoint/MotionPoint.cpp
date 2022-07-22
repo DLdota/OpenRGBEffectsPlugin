@@ -10,7 +10,7 @@ MotionPoint::MotionPoint(QWidget *parent) :
 
     EffectDetails.EffectName = "MotionPoint";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Single moving point";
+    EffectDetails.EffectDescription = "A point that moves forth and back on your devices";
     EffectDetails.MaxSpeed     = 50;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 1;

@@ -11,7 +11,7 @@ MotionPoints::MotionPoints(QWidget *parent) :
 
     EffectDetails.EffectName = "MotionPoints";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Multiple points moving effect";
+    EffectDetails.EffectDescription = "Multiple points that moves in all directions on your devices";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 1;

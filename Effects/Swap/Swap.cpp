@@ -11,7 +11,7 @@ Swap::Swap(QWidget *parent) :
 
     EffectDetails.EffectName = "Swap";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Swap effect";
+    EffectDetails.EffectDescription = "Alternate two colors on your devices from left to right";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;

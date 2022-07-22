@@ -22,7 +22,7 @@ Shaders::Shaders(QWidget *parent) :
 
     EffectDetails.EffectName = "Shaders";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Shaders effect";
+    EffectDetails.EffectDescription = "Unleash the power of OpenRGB with GL shaders";
     EffectDetails.MaxSpeed     = 2000;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;

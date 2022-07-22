@@ -11,7 +11,7 @@ CustomBlink::CustomBlink(QWidget *parent) :
 
     EffectDetails.EffectName = ClassName();
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Make your blinking sequence";
+    EffectDetails.EffectDescription = "Make your own blinking sequence";
     EffectDetails.MaxSpeed     = 50;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors = 4;

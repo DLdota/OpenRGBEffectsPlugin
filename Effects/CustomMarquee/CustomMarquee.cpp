@@ -11,7 +11,7 @@ CustomMarquee::CustomMarquee(QWidget *parent) :
 
     EffectDetails.EffectName = "CustomMarquee";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Custom marquee effect";
+    EffectDetails.EffectDescription = "Create your own marquee effect";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 50;
     EffectDetails.MinSpeed     = 1;

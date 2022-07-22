@@ -11,7 +11,7 @@ Comet::Comet(QWidget *parent) :
 
     EffectDetails.EffectName = "Comet";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Comet effect";
+    EffectDetails.EffectDescription = "A comet that travels trough your devices";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 50;
     EffectDetails.MinSpeed     = 1;

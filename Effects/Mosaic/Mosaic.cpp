@@ -11,7 +11,7 @@ Mosaic::Mosaic(QWidget *parent) :
 
     EffectDetails.EffectName = "Mosaic";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Mosaic effect";
+    EffectDetails.EffectDescription = "Tiles randomly spawning across your devices";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 1;

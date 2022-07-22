@@ -10,7 +10,7 @@ FractalMotion::FractalMotion(QWidget *parent) :
 
     EffectDetails.EffectName = "FractalMotion";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Psychedelic wave";
+    EffectDetails.EffectDescription = "Psychedelic sinusoid";
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 20;
     EffectDetails.UserColors   = 1;

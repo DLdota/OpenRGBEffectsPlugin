@@ -12,7 +12,7 @@ RadialRainbow::RadialRainbow(QWidget *parent) :
 
     EffectDetails.EffectName = "Radial Rainbow";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Radial rainbow wave";
+    EffectDetails.EffectDescription = "Dive into the RGB tunnel";
     EffectDetails.IsReversable = true;
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 1;

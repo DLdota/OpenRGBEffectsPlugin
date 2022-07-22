@@ -39,7 +39,7 @@ AudioVisualizer::AudioVisualizer(QWidget* parent):
 
     EffectDetails.EffectName = "Audio Visualizer";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "A ported version of <a href=\"https://gitlab.com/CalcProgrammer1/KeyboardVisualizer\">KeyboardVisualizer</a>";
+    EffectDetails.EffectDescription = "Display audio equalizer on your devices. A ported version of <a href=\"https://gitlab.com/CalcProgrammer1/KeyboardVisualizer\">KeyboardVisualizer</a>";
     EffectDetails.HasCustomSettings = true;
 
     /*---------------------*\

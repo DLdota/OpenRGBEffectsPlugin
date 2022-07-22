@@ -12,7 +12,7 @@ CrossingBeams::CrossingBeams(QWidget *parent) :
 
     EffectDetails.EffectName = "CrossingBeams";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Moving beams";
+    EffectDetails.EffectDescription = "Two beams that move horizontally and vertically";
     EffectDetails.MaxSpeed     = 10;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;

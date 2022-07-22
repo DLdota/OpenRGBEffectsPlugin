@@ -12,7 +12,7 @@ AudioStar::AudioStar(QWidget *parent) :
 
     EffectDetails.EffectName = "AudioStar";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Star audio visualizer";
+    EffectDetails.EffectDescription = "Star audio visualizer (frequency based) with an edge beat";
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;
