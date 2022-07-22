@@ -34,6 +34,9 @@ private slots:
     void on_amplitude_valueChanged(int);
     void on_decay_valueChanged(int);
     void on_edge_beat_stateChanged(int);
+    void on_edge_beat_sensivity_valueChanged(int);
+    void on_edge_beat_hue_valueChanged(int);
+    void on_edge_beat_saturation_valueChanged(int);
 
 private:
     Ui::AudioStar *ui;
@@ -45,6 +48,9 @@ private:
     float fft_fltr[256] = { 0 };
     float decay = 90.f;
     float filter_constant = 1.f;
+    int   edge_beat_sensivity  = 100;
+    int   edge_beat_saturation  = 0;
+    int   edge_beat_hue  = 0;
 
     void Start();
     void Stop();

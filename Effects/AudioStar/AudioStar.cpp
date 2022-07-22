@@ -305,15 +305,30 @@ RGBColor AudioStar::GetColor(float x, float y, float w, float h)
         {
             hsv_t edge;
 
-            edge.hue = 0;
-            edge.saturation = 0;
-            edge.value = std::min<float>(255, (fft_fltr[0] + fft_fltr[8]) * 255);
+            edge.hue = edge_beat_hue;
+            edge.saturation = edge_beat_saturation;
+            edge.value = 255 * std::min<float>(1., 0.01 * edge_beat_sensivity * (fft_fltr[0] + fft_fltr[8]));
 
             return ColorUtils::Screen(color, RGBColor(hsv2rgb(&edge)));
         }
     }
 
     return color;
+}
+
+void AudioStar::on_edge_beat_hue_valueChanged(int value)
+{
+    edge_beat_hue = value;
+}
+
+void AudioStar::on_edge_beat_saturation_valueChanged(int value)
+{
+    edge_beat_saturation = value;
+}
+
+void AudioStar::on_edge_beat_sensivity_valueChanged(int value)
+{
+    edge_beat_sensivity = value;
 }
 
 
@@ -329,6 +344,13 @@ void AudioStar::on_decay_valueChanged(int value)
 
 void AudioStar::on_edge_beat_stateChanged(int value)
 {
+    ui->edge_beat_sensivity->setVisible(value);
+    ui->edge_beat_saturation->setVisible(value);
+    ui->edge_beat_hue->setVisible(value);
+    ui->edge_beat_sensivity_label->setVisible(value);
+    ui->edge_beat_saturation_label->setVisible(value);
+    ui->edge_beat_hue_label->setVisible(value);
+
     edge_beat = value;
 }
 
@@ -338,6 +360,10 @@ json AudioStar::SaveCustomSettings(json Settings)
     Settings["amplitude"] = amplitude;
     Settings["decay"] = decay;
     Settings["edge_beat"] = edge_beat;
+    Settings["edge_beat_sensivity"] = edge_beat_sensivity;
+    Settings["edge_beat_saturation"] = edge_beat_saturation;
+    Settings["edge_beat_hue"] = edge_beat_hue;
+
     return Settings;
 }
 
@@ -354,4 +380,13 @@ void AudioStar::LoadCustomSettings(json Settings)
 
     if (Settings.contains("edge_beat"))
         ui->edge_beat->setChecked(Settings["edge_beat"]);
+
+    if (Settings.contains("edge_beat_sensivity"))
+        ui->edge_beat_sensivity->setValue(Settings["edge_beat_sensivity"]);
+
+    if (Settings.contains("edge_beat_saturation"))
+        ui->edge_beat_saturation->setValue(Settings["edge_beat_saturation"]);
+
+    if (Settings.contains("edge_beat_hue"))
+        ui->edge_beat_hue->setValue(Settings["edge_beat_hue"]);
 }
