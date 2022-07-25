@@ -69,5 +69,6 @@
         <file>shaders/audio-idle-bubbles.fs</file>
         <file>shaders/audio-idle-crazylines.fs</file>
         <file>shaders/fire.fs</file>
+        <file>shaders/shine.fs</file>
     </qresource>
 </RCC>
