@@ -8,6 +8,14 @@
 #include "ui_CustomGradientWave.h"
 #include "ColorUtils.h"
 
+enum
+{
+    HORIZONTAL = 0,
+    VERTICAL   = 1,
+    RADIAL_OUT = 2,
+    RADIAL_IN  = 3
+};
+
 typedef struct
 {
     std::string name;
@@ -39,11 +47,12 @@ private slots:
     void on_colors_count_spinBox_valueChanged(int);
     void on_preset_currentTextChanged(const QString&);
     void on_spread_valueChanged(int);
+    void on_direction_currentIndexChanged(int);
 
 private:
     Ui::CustomGradientWave *ui;
     double progress = 0.0;
-    RGBColor GetColor(float, float);
+    RGBColor GetColor(float, float, float, float);
     void ResetColors();
     ColorPicker* CreatePicker(int);
     void LoadPreset(const QString&);
@@ -53,7 +62,8 @@ private:
     QImage gradient;
     void GenerateGradient();
 
-    int spread = 0;
+    int spread    = 0;
+    int direction = HORIZONTAL;
 
     std::vector<CustomGradientWavePreset> presets =
     {
