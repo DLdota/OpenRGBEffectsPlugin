@@ -124,8 +124,8 @@ void CustomGradientWave::StepEffect(std::vector<ControllerZone*> controller_zone
 RGBColor CustomGradientWave::GetColor(float x, float y, float w, float h)
 {
     float i = 0;
-    float cy = (h-1)/2.0;
-    float cx = (w-1)/2.0;
+    float cy = (h-1)*(0.01*height);
+    float cx = (w-1)*(0.01*width);
     float distance = 0;
 
     switch(direction)
@@ -215,6 +215,16 @@ void CustomGradientWave::on_direction_currentIndexChanged(int value)
     direction = value;
 }
 
+void CustomGradientWave::on_height_valueChanged(int value)
+{
+    height = value;
+}
+
+void CustomGradientWave::on_width_valueChanged(int value)
+{
+    width = value;
+}
+
 void CustomGradientWave::LoadPreset(const QString& text)
 {
     std::string preset_name = text.toStdString();
@@ -258,6 +268,16 @@ void CustomGradientWave::LoadCustomSettings(json settings)
         ui->direction->setCurrentIndex(settings["direction"]);
     }
 
+    if (settings.contains("height"))
+    {
+        ui->height->setValue(settings["height"]);
+    }
+
+    if (settings.contains("width"))
+    {
+        ui->width->setValue(settings["width"]);
+    }
+
     ResetColors();
 }
 
@@ -266,5 +286,8 @@ json CustomGradientWave::SaveCustomSettings(json settings)
     settings["colors"]    = colors;
     settings["spread"]    = spread;
     settings["direction"] = direction;
+    settings["height"]    = height;
+    settings["width"]     = width;
+
     return settings;
 }

@@ -48,6 +48,8 @@ private slots:
     void on_preset_currentTextChanged(const QString&);
     void on_spread_valueChanged(int);
     void on_direction_currentIndexChanged(int);
+    void on_height_valueChanged(int);
+    void on_width_valueChanged(int);
 
 private:
     Ui::CustomGradientWave *ui;
@@ -64,6 +66,8 @@ private:
 
     int spread    = 0;
     int direction = HORIZONTAL;
+    int height    = 50;
+    int width     = 50;
 
     std::vector<CustomGradientWavePreset> presets =
     {
