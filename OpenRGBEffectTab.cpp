@@ -24,7 +24,7 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
 
     ui->device_list->DisableControls();
 
-    effect_list = new EffectList;
+    effect_list = new EffectList(this);
 
     InitEffectTabs();
 
@@ -96,8 +96,8 @@ void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
 {
     int tab_position = ui->EffectTabs->count();
 
-    EffectTabHeader* effect_header = new EffectTabHeader(nullptr, effect);
-    OpenRGBEffectPage* effect_page = new OpenRGBEffectPage(nullptr, effect);
+    EffectTabHeader* effect_header = new EffectTabHeader(ui->EffectTabs->tabBar(), effect);
+    OpenRGBEffectPage* effect_page = new OpenRGBEffectPage(this, effect);
 
     ui->EffectTabs->insertTab(tab_position, effect_page , "");
     ui->EffectTabs->tabBar()->setTabButton(tab_position, QTabBar::RightSide, effect_header);
@@ -122,6 +122,10 @@ void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
 
     connect(effect_header, &EffectTabHeader::Renamed, [=](std::string new_name){
         effect->EffectDetails.CustomName = new_name;
+        // stupid hack to trigger resizes
+        int tab_idx = ui->EffectTabs->indexOf(effect_page);
+        ui->EffectTabs->tabBar()->setTabButton(tab_idx, QTabBar::RightSide, nullptr);
+        ui->EffectTabs->tabBar()->setTabButton(tab_idx, QTabBar::RightSide, effect_header);
     });
 
     effect_header->ToogleRunningIndicator(effect->IsAutoStart());
