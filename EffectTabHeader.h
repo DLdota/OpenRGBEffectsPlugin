@@ -20,6 +20,7 @@ public:
 
 signals:
     void CloseRequest();
+    void Renamed(std::string);
 
 private slots:
     void on_close_clicked();

@@ -10,11 +10,15 @@ EffectTabHeader::EffectTabHeader(QWidget *parent,  RGBEffect* effect) :
     ui->setupUi(this);
     ui->effect_name->setText(QString::fromStdString(effect->EffectDetails.EffectName));
     ToogleRunningIndicator(false);
+
+    if(!effect->EffectDetails.CustomName.empty())
+    {
+        ui->effect_name->setText(QString::fromStdString(effect->EffectDetails.CustomName));
+    }
 }
 
 void EffectTabHeader::ToogleRunningIndicator(bool state)
 {
-   //ui->running->setVisible(state);
    ui->running->setText(state?"◉":"○");
 }
 
@@ -36,5 +40,8 @@ void EffectTabHeader::on_rename_clicked()
                                          "New name:", QLineEdit::Normal,
                                          ui->effect_name->text(), &ok);
     if (ok && !text.isEmpty())
+    {
         ui->effect_name->setText(text);
+        emit Renamed(text.toStdString());
+    }
 }

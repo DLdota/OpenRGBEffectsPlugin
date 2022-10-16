@@ -120,6 +120,10 @@ void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
         //delete effect;
     });
 
+    connect(effect_header, &EffectTabHeader::Renamed, [=](std::string new_name){
+        effect->EffectDetails.CustomName = new_name;
+    });
+
     effect_header->ToogleRunningIndicator(effect->IsAutoStart());
 
     ui->EffectTabs->setCurrentIndex(tab_position);
@@ -339,6 +343,7 @@ void OpenRGBEffectTab::on_save_settings_clicked()
                 json effect_settings;
 
                 effect_settings["EffectClassName"] = effect->EffectDetails.EffectClassName;
+                effect_settings["CustomName"] = effect->EffectDetails.CustomName;
                 effect_settings["FPS"] = effect->GetFPS();
                 effect_settings["Speed"] = effect->GetSpeed();
                 effect_settings["Slider2Val"] = effect->GetSlider2Val();
@@ -495,6 +500,11 @@ void OpenRGBEffectTab::LoadEffect(json effect_settings)
     effect->SetSlider2Val(effect_settings["Slider2Val"]);
     effect->SetRandomColorsEnabled(effect_settings["RandomColors"]);
     effect->SetOnlyFirstColorEnabled(effect_settings["AllowOnlyFirst"]);
+
+    if(effect_settings.contains("CustomName"))
+    {
+        effect->EffectDetails.CustomName = effect_settings["CustomName"];
+    }
 
     if(effect_settings.contains("Brightness"))
     {

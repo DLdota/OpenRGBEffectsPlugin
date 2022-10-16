@@ -21,6 +21,7 @@ struct EffectInfo
     std::string EffectName = "";
     std::string EffectClassName = "";
     std::string EffectDescription = "";
+    std::string CustomName = "";
 
     bool IsReversable = false;
     int  MaxSpeed = 0;
