@@ -23,6 +23,7 @@ signals:
 
 private slots:
     void on_close_clicked();
+    void on_rename_clicked();
 
 private:
     Ui::EffectTabHeader *ui;
