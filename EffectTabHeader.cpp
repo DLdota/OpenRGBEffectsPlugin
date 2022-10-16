@@ -13,7 +13,8 @@ EffectTabHeader::EffectTabHeader(QWidget *parent,  RGBEffect* effect) :
 
 void EffectTabHeader::ToogleRunningIndicator(bool state)
 {
-   ui->running->setVisible(state);
+   //ui->running->setVisible(state);
+   ui->running->setText(state?"◉":"○");
 }
 
 EffectTabHeader::~EffectTabHeader()
