@@ -83,12 +83,16 @@ void Fill::StepEffect(std::vector<ControllerZone*> controller_zones)
 }
 
 RGBColor Fill::GetColor(unsigned int idx, unsigned int width)
-{
+{    
+    RGBColor color = RandomColorsEnabled ? random : UserColors[0];
+    if(((long) floorf(time)) % 2 == 1)
+    {
+        return ColorUtils::Enlight(color, 1 - progress);
+    }
+
     double position = progress * width;
 
     double distance = position - idx;
-
-    RGBColor color = RandomColorsEnabled ? random : UserColors[0];
 
     if(distance > 1)
     {
