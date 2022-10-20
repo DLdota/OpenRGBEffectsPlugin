@@ -53,9 +53,11 @@ void OpenRGBEffectPage::InitUi()
     colors_layout = new QHBoxLayout();
     ui->Colors->setLayout(colors_layout);
 
-    ui->SpeedFrame->hide();
+    ui->SpeedLabel->hide();
+    ui->SpeedSlider->hide();
     ui->UserColorFrame->hide();
-    ui->Slider2Frame->hide();
+    ui->Slider2Label->hide();
+    ui->Slider2->hide();
 
     ui->StopButton->setDisabled(true);
 
@@ -79,7 +81,8 @@ void OpenRGBEffectPage::InitUi()
     {
         ui->SpeedSlider->setMaximum(effect->EffectDetails.MaxSpeed);
         ui->SpeedSlider->setMinimum(effect->EffectDetails.MinSpeed);
-        ui->SpeedFrame->show();
+        ui->SpeedLabel->show();
+        ui->SpeedSlider->show();
     }
 
     ui->SpeedSlider->setValue(speed);
@@ -89,7 +92,8 @@ void OpenRGBEffectPage::InitUi()
         ui->Slider2->setMaximum(effect->EffectDetails.MaxSlider2Val);
         ui->Slider2->setMinimum(effect->EffectDetails.MinSlider2Val);
         ui->Slider2Label->setText(QString().fromStdString(effect->EffectDetails.Slider2Name));
-        ui->Slider2Frame->show();
+        ui->Slider2Label->show();
+        ui->Slider2->show();
     }
 
     ui->Slider2->setValue(slider2Val);
