@@ -178,7 +178,6 @@ HEADERS +=                                                                      
     ZoneListItem.h                                                                              \
     ScreenRecorder.h                                                                            \
     SaveProfilePopup.h                                                                          \
-    EffectListDelegate.h                                                                        \
     QTooltipedSlider.h                                                                          \
 
 SOURCES +=                                                                                      \
@@ -200,7 +199,6 @@ SOURCES +=                                                                      
     AudioManager.cpp                                                                            \
     ScreenRecorder.cpp                                                                          \
     SaveProfilePopup.cpp                                                                        \
-    EffectListDelegate.cpp                                                                      \
     QTooltipedSlider.cpp                                                                        \
 
 FORMS +=                                                                                        \

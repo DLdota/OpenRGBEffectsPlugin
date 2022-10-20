@@ -50,8 +50,6 @@ private:
     void LoadEffectsFromCurrentProfile();
     void LoadEffect(json);
 
-    void SetFirstTabStyle();
-
     void ClearAll();
 };
 

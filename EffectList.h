@@ -4,7 +4,6 @@
 #include <set>
 
 #include <QWidget>
-#include <QStandardItemModel>
 #include "RGBEffect.h"
 
 namespace Ui {
@@ -30,11 +29,7 @@ signals:
     void ToggleAllEffectsState();
 
 private slots:
-    void on_add_effect_clicked();
     void on_start_stop_all_button_clicked();
-
-    void addParentItem(QStandardItemModel*, const QString&);
-    void addChildItem( QStandardItemModel*, const QString&, const QVariant&);
 
 private:
     Ui::EffectList *ui;

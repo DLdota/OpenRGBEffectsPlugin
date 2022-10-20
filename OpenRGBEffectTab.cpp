@@ -61,15 +61,13 @@ void OpenRGBEffectTab::LoadProfile(std::string profile)
 
 void OpenRGBEffectTab::InitEffectTabs()
 {
-    QLabel* label = new QLabel("No effects added. Please select one from the list to get started.");
+    QLabel* label = new QLabel("No effects added yet.\n Please select one from the list to get started.");
     label->setAlignment(Qt::AlignCenter);
 
     ui->EffectTabs->insertTab(0, label , "");
     ui->EffectTabs->setTabEnabled(0, false);
     ui->EffectTabs->setCurrentIndex(0);
     ui->EffectTabs->tabBar()->setTabButton(0, QTabBar::RightSide, effect_list);
-
-    SetFirstTabStyle();
 
     connect(effect_list, &EffectList::EffectAdded, [=](RGBEffect* effect){
         CreateEffectTab(effect);
@@ -85,11 +83,6 @@ void OpenRGBEffectTab::InitEffectTabs()
             StartAll();
         }
     });
-}
-
-void OpenRGBEffectTab::SetFirstTabStyle()
-{
-    ui->EffectTabs->setStyleSheet("QTabBar::tab:only-one, QTabBar::tab:first { border-left: 0; border-right : 1; background: transparent; }");
 }
 
 void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
@@ -218,8 +211,6 @@ void OpenRGBEffectTab::on_EffectTabs_currentChanged(int current)
         ui->device_list->DisableControls();
         ui->device_list->ApplySelection({});
     }
-
-    SetFirstTabStyle();
 }
 
 void OpenRGBEffectTab::on_device_list_SelectionChanged()
