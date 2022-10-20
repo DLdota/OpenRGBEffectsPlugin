@@ -78,16 +78,16 @@ AudioVisualizer::AudioVisualizer(QWidget* parent):
 
     SetNormalization(nrml_ofst, nrml_scl);
 
-    ui->lineEdit_Normalization_Offset->setText(QString::number(nrml_ofst));
-    ui->lineEdit_Normalization_Scale->setText(QString::number(nrml_scl));
-    ui->lineEdit_Animation_Speed->setText(QString::number(anim_speed));
-    ui->lineEdit_Filter_Constant->setText(QString::number(filter_constant));
+    ui->doubleSpinBox_Normalization_Offset->setValue(nrml_ofst);
+    ui->doubleSpinBox_Normalization_Scale->setValue(nrml_scl);
+    ui->doubleSpinBox_Animation_Speed->setValue(anim_speed);
+    ui->doubleSpinBox_Filter_Constant->setValue(filter_constant);
 
-    ui->lineEdit_Amplitude->setText(QString::number(amplitude));
-    ui->lineEdit_Background_Brightness->setText(QString::number(bkgd_bright));
-    ui->lineEdit_Average_Size->setText(QString::number(avg_size));
-    ui->lineEdit_Decay->setText(QString::number(decay));
-    ui->lineEdit_Background_Timeout->setText(QString::number(background_timeout));
+    ui->spinBox_Amplitude->setValue(amplitude);
+    ui->spinBox_Background_Brightness->setValue(bkgd_bright);
+    ui->spinBox_Average_Size->setValue(avg_size);
+    ui->spinBox_Decay->setValue(decay);
+    ui->doubleSpinBox_Background_Timeout->setValue(background_timeout);
 
     ui->comboBox_FFT_Window_Mode->blockSignals(true);
     ui->comboBox_FFT_Window_Mode->addItem("None");
@@ -552,16 +552,16 @@ void AudioVisualizer::LoadCustomSettings(json Settings)
     /*-----------------*\
     | Set GUI elements  |
     \*-----------------*/
-    ui->lineEdit_Normalization_Offset->setText(QString::number(nrml_ofst));
-    ui->lineEdit_Normalization_Scale->setText(QString::number(nrml_scl));
-    ui->lineEdit_Animation_Speed->setText(QString::number(anim_speed));
-    ui->lineEdit_Filter_Constant->setText(QString::number(filter_constant));
+    ui->doubleSpinBox_Normalization_Offset->setValue(nrml_ofst);
+    ui->doubleSpinBox_Normalization_Scale->setValue(nrml_scl);
+    ui->doubleSpinBox_Animation_Speed->setValue(anim_speed);
+    ui->doubleSpinBox_Filter_Constant->setValue(filter_constant);
 
-    ui->lineEdit_Amplitude->setText(QString::number(amplitude));
-    ui->lineEdit_Background_Brightness->setText(QString::number(bkgd_bright));
-    ui->lineEdit_Average_Size->setText(QString::number(avg_size));
-    ui->lineEdit_Decay->setText(QString::number(decay));
-    ui->lineEdit_Background_Timeout->setText(QString::number(background_timeout));
+    ui->spinBox_Amplitude->setValue(amplitude);
+    ui->spinBox_Background_Brightness->setValue(bkgd_bright);
+    ui->spinBox_Average_Size->setValue(avg_size);
+    ui->spinBox_Decay->setValue(decay);
+    ui->doubleSpinBox_Background_Timeout->setValue(background_timeout);
 
     ui->comboBox_Average_Mode->blockSignals(true);
     ui->comboBox_Average_Mode->setCurrentIndex(avg_mode);
@@ -679,16 +679,16 @@ void AudioVisualizer::update()
     {
         update_ui = false;
 
-        ui->lineEdit_Normalization_Offset->setText(QString::number(nrml_ofst));
-        ui->lineEdit_Normalization_Scale->setText(QString::number(nrml_scl));
-        ui->lineEdit_Animation_Speed->setText(QString::number(anim_speed));
-        ui->lineEdit_Filter_Constant->setText(QString::number(filter_constant));
+        ui->doubleSpinBox_Normalization_Offset->setValue(nrml_ofst);
+        ui->doubleSpinBox_Normalization_Scale->setValue(nrml_scl);
+        ui->doubleSpinBox_Animation_Speed->setValue(anim_speed);
+        ui->doubleSpinBox_Filter_Constant->setValue(filter_constant);
 
-        ui->lineEdit_Amplitude->setText(QString::number(amplitude));
-        ui->lineEdit_Background_Brightness->setText(QString::number(bkgd_bright));
-        ui->lineEdit_Average_Size->setText(QString::number(avg_size));
-        ui->lineEdit_Decay->setText(QString::number(decay));
-        ui->lineEdit_Background_Timeout->setText(QString::number(background_timeout));
+        ui->spinBox_Amplitude->setValue(amplitude);
+        ui->spinBox_Background_Brightness->setValue(bkgd_bright);
+        ui->spinBox_Average_Size->setValue(avg_size);
+        ui->spinBox_Decay->setValue(decay);
+        ui->doubleSpinBox_Background_Timeout->setValue(background_timeout);
 
         ui->comboBox_Average_Mode->blockSignals(true);
         ui->comboBox_Average_Mode->setCurrentIndex(avg_mode);
@@ -715,48 +715,48 @@ void AudioVisualizer::update()
     }
 }
 
-void AudioVisualizer::on_lineEdit_Background_Brightness_textChanged(const QString &arg1)
+void AudioVisualizer::on_spinBox_Background_Brightness_valueChanged(int value)
 {
-    bkgd_bright = arg1.toInt();
+    bkgd_bright = value;
 }
 
-void AudioVisualizer::on_lineEdit_Animation_Speed_textChanged(const QString &arg1)
+void AudioVisualizer::on_doubleSpinBox_Animation_Speed_valueChanged(float value)
 {
-    anim_speed = arg1.toFloat();
+    anim_speed = value;
 }
 
 
 /*---------------------*\
 | Amp, Size, and Decay  |
 \*---------------------*/
-void AudioVisualizer::on_lineEdit_Amplitude_textChanged(const QString &arg1)
+void AudioVisualizer::on_spinBox_Amplitude_valueChanged(int value)
 {
-    amplitude = arg1.toInt();
+    amplitude = value;
 }
 
-void AudioVisualizer::on_lineEdit_Average_Size_textChanged(const QString &arg1)
+void AudioVisualizer::on_spinBox_Average_Size_valueChanged(int value)
 {
-    avg_size = arg1.toInt();
+    avg_size = value;
 }
 
-void AudioVisualizer::on_lineEdit_Decay_textChanged(const QString &arg1)
+void AudioVisualizer::on_spinBox_Decay_valueChanged(int value)
 {
-    decay = arg1.toInt();
+    decay = value;
 }
 
 
 /*-------------*\
 | Normalization |
 \*-------------*/
-void AudioVisualizer::on_lineEdit_Normalization_Offset_textChanged(const QString &arg1)
+void AudioVisualizer::on_doubleSpinBox_Normalization_Offset_valueChanged(float value)
 {
-    nrml_ofst = arg1.toFloat();
+    nrml_ofst = value;
     SetNormalization(nrml_ofst, nrml_scl);
 }
 
-void AudioVisualizer::on_lineEdit_Normalization_Scale_textChanged(const QString &arg1)
+void AudioVisualizer::on_doubleSpinBox_Normalization_Scale_valueChanged(float value)
 {
-    nrml_scl = arg1.toFloat();
+    nrml_scl = value;
     SetNormalization(nrml_ofst, nrml_scl);
 }
 
@@ -807,9 +807,9 @@ void AudioVisualizer::on_comboBox_Audio_Device_currentIndexChanged(int index)
     SetDevice();
 }
 
-void AudioVisualizer::on_lineEdit_Filter_Constant_textChanged(const QString &arg1)
+void AudioVisualizer::on_doubleSpinBox_Filter_Constant_valueChanged(float value)
 {
-    filter_constant = arg1.toFloat();
+    filter_constant = value;
     if(filter_constant > 1.0f)
     {
         filter_constant = 1.0f;
@@ -831,9 +831,9 @@ void AudioVisualizer::on_checkBox_Silent_Background_clicked(bool checked)
     }
 }
 
-void AudioVisualizer::on_lineEdit_Background_Timeout_textChanged(const QString &arg1)
+void AudioVisualizer::on_doubleSpinBox_Background_Timeout_valueChanged(float value)
 {
-    background_timeout = arg1.toInt();
+    background_timeout = value;
 
     if (update_ui == false)
     {
