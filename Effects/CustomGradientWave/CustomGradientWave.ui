@@ -6,78 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>276</width>
+    <height>282</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0" colspan="2">
-    <widget class="QScrollArea" name="scrollArea">
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="colors">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>380</width>
-        <height>68</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QComboBox" name="preset"/>
-   </item>
-   <item row="9" column="0" colspan="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="directionLabel">
-     <property name="text">
-      <string>Direction</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1">
-    <widget class="QTooltipedSlider" name="spread">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="presetlabel">
-     <property name="text">
-      <string>Preset</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QSpinBox" name="colors_count_spinBox">
-     <property name="minimum">
-      <number>2</number>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-    </widget>
-   </item>
    <item row="8" column="0" colspan="2">
     <widget class="QLabel" name="gradient">
      <property name="sizePolicy">
@@ -106,6 +42,53 @@
      </property>
     </widget>
    </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="directionLabel">
+     <property name="text">
+      <string>Direction</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="colors">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>256</width>
+        <height>68</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QTooltipedSlider" name="width">
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>50</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QTooltipedSlider" name="spread">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -113,27 +96,13 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Height</string>
+   <item row="1" column="0" colspan="2">
+    <widget class="QSpinBox" name="colors_count_spinBox">
+     <property name="minimum">
+      <number>2</number>
      </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QComboBox" name="direction"/>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Spread</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>Width</string>
+     <property name="maximum">
+      <number>100</number>
      </property>
     </widget>
    </item>
@@ -153,19 +122,37 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
-    <widget class="QTooltipedSlider" name="width">
-     <property name="minimum">
-      <number>0</number>
+   <item row="3" column="1">
+    <widget class="QComboBox" name="preset"/>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Height</string>
      </property>
-     <property name="maximum">
-      <number>100</number>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QComboBox" name="direction"/>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Width</string>
      </property>
-     <property name="value">
-      <number>50</number>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="presetlabel">
+     <property name="text">
+      <string>Preset</string>
      </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Spread</string>
      </property>
     </widget>
    </item>

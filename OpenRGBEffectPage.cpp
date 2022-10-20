@@ -12,6 +12,11 @@
 #include <QTextEdit>
 #include <QClipboard>
 #include <QListWidget>
+#include <QMenu>
+#include <QAction>
+#include <QMessageBox>
+#include <QDesktopServices>
+#include <QUrl>
 
 OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
     QWidget(parent),
@@ -21,10 +26,20 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
 {
     ui->setupUi(this);
 
+    ui->EffectDesciption->setVisible(false);
+    ui->time_measure->setVisible(false);
+
     /*-----------------------------------------------*\
     | Extra options and custom widgets                |
     \*-----------------------------------------------*/
     effect->DefineExtraOptions(ui->ExtraOptions);
+
+    QLayout* effect_layout = effect->layout();
+
+    if(effect_layout != nullptr)
+    {
+        effect_layout->setMargin(0);
+    }
 
     InitUi();
 
@@ -34,13 +49,34 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
         int second = duration % 60;
 
         std::stringstream stream;
-        stream << std::fixed << std::setprecision(1) << time << "ms \n"
-                  << (hour   < 10 ? "0" : "") << hour    << ":"
-                  << (minute < 10 ? "0" : "") << minute  << ":"
-                  << (second < 10 ? "0" : "") << second;
+        stream << "Uptime: "
+               << (hour   < 10 ? "0" : "") << hour    << ":"
+               << (minute < 10 ? "0" : "") << minute  << ":"
+               << (second < 10 ? "0" : "") << second  << " - "
+               << "Draw time: " << std::fixed << std::setprecision(1) << time << "ms \n";
 
         ui->time_measure->setText(QString::fromStdString(stream.str()));
     });
+
+    QMenu* main_menu = new QMenu(this);
+    ui->main_menu->setMenu(main_menu);
+
+    QAction* save_pattern = new QAction("Save pattern", this);
+    connect(save_pattern, &QAction::triggered, this, &OpenRGBEffectPage::SavePatternAction);
+    main_menu->addAction(save_pattern);
+
+    QAction* load_pattern = new QAction("Load pattern", this);
+    connect(load_pattern, &QAction::triggered, this, &OpenRGBEffectPage::LoadPatternAction);
+    main_menu->addAction(load_pattern);
+
+    QAction* edit_pattern = new QAction("Edit pattern", this);
+    connect(edit_pattern, &QAction::triggered, this, &OpenRGBEffectPage::EditPatternAction);
+    main_menu->addAction(edit_pattern);
+
+
+    QAction* open_pattern_folder = new QAction("Open patterns folder", this);
+    connect(open_pattern_folder, &QAction::triggered, this, &OpenRGBEffectPage::OpenPatternsFolder);
+    main_menu->addAction(open_pattern_folder);
 }
 
 OpenRGBEffectPage::~OpenRGBEffectPage()
@@ -55,11 +91,15 @@ void OpenRGBEffectPage::InitUi()
 
     ui->SpeedLabel->hide();
     ui->SpeedSlider->hide();
-    ui->UserColorFrame->hide();
+
+    ui->Colors->hide();
+    ui->ColorsLabel->hide();
+    ui->ColorsSettingsLabel->hide();
+    ui->RandomCheckbox->hide();
+    ui->OnlyFirst->hide();
+
     ui->Slider2Label->hide();
     ui->Slider2->hide();
-
-    ui->StopButton->setDisabled(true);
 
     /*---------------------------------*\
     | Fill in top description and name  |
@@ -67,7 +107,6 @@ void OpenRGBEffectPage::InitUi()
     ui->EffectName->setText(QString().fromStdString(effect->EffectDetails.EffectName));
     ui->EffectDesciption->setText(QString().fromStdString(effect->EffectDetails.EffectDescription));
 
-    ui->AutoStart->setCheckState(effect->IsAutoStart()? Qt::Checked : Qt::Unchecked);
     ui->RandomCheckbox->setCheckState(effect->IsRandomColorsEnabled()? Qt::Checked : Qt::Unchecked);
     ui->OnlyFirst->setCheckState(effect->IsOnlyFirstColorEnabled()? Qt::Checked : Qt::Unchecked);
 
@@ -103,9 +142,13 @@ void OpenRGBEffectPage::InitUi()
     /*-----------------------------------------------*\
     | Colors                                          |
     \*-----------------------------------------------*/
-    ui->UserColorFrame->setVisible(effect->EffectDetails.UserColors > 0);
-    ui->OnlyFirst->setVisible(effect->EffectDetails.AllowOnlyFirst);
+    bool show_colors = effect->EffectDetails.UserColors > 0;
+    ui->Colors->setVisible(show_colors);
+    ui->ColorsLabel->setVisible(show_colors);
+    ui->ColorsSettingsLabel->setVisible(show_colors);
+    ui->RandomCheckbox->setVisible(show_colors);
 
+    ui->OnlyFirst->setVisible(effect->EffectDetails.AllowOnlyFirst);
 
     if (effect->EffectDetails.UserColors > 0)
     {
@@ -140,6 +183,8 @@ void OpenRGBEffectPage::InitUi()
             colors_layout->addWidget(color_picker);
         }
 
+        colors_layout->addStretch();
+
         effect->SetUserColors(UserColors);
     }
 
@@ -171,20 +216,12 @@ void OpenRGBEffectPage::StartEffect()
 {
     EffectManager::Get()->SetEffectActive(effect);
 
-    ui->StartButton->setDisabled(true);
-    ui->StopButton->setDisabled(false);
-    ui->RunningStatus->setText("Running");
-
     emit EffectState(true);
 }
 
 void OpenRGBEffectPage::StopEffect()
 {
     EffectManager::Get()->SetEffectUnActive(effect);
-
-    ui->StartButton->setDisabled(false);
-    ui->StopButton->setDisabled(true);
-    ui->RunningStatus->setText("Stopped");
 
     emit EffectState(false);
 }
@@ -224,29 +261,19 @@ void OpenRGBEffectPage::OpenPreview()
 
     preview_dialog->show();
 
-    ui->PreviewButton->setDisabled(true);
+    ui->preview->setDisabled(true);
 
     connect(preview, &LivePreviewController::ReversedChanged, [=](bool state){
         preview_zone->reverse = state;
     });
 
     connect(preview_dialog, &QDialog::finished, [=](){
-        ui->PreviewButton->setDisabled(false);
+        ui->preview->setDisabled(false);
         EffectManager::Get()->RemovePreview(effect);
     });
 }
 
-void OpenRGBEffectPage::on_StartButton_clicked()
-{
-    StartEffect();
-}
-
-void OpenRGBEffectPage::on_StopButton_clicked()
-{
-    StopEffect();
-}
-
-void OpenRGBEffectPage::on_PreviewButton_clicked()
+void OpenRGBEffectPage::on_preview_clicked()
 {
     OpenPreview();
 }
@@ -263,21 +290,12 @@ void OpenRGBEffectPage::on_Slider2_valueChanged(int value)
 
 void OpenRGBEffectPage::on_FPS_slider_valueChanged(int value)
 {
-    int FPS = speeds[value];
-
-    effect->SetFPS(FPS);
-    ui->FPS_value->setText(QString::number(FPS));
+    effect->SetFPS(speeds[value]);
 }
 
 void OpenRGBEffectPage::on_Brightness_slider_valueChanged(int value)
 {
     effect->SetBrightness(value);
-}
-
-void OpenRGBEffectPage::on_AutoStart_clicked()
-{
-    AutoStart = ui->AutoStart->isChecked();
-    effect->SetAutoStart(AutoStart);
 }
 
 void OpenRGBEffectPage::on_RandomCheckbox_clicked()
@@ -290,7 +308,7 @@ void OpenRGBEffectPage::on_OnlyFirst_clicked()
     effect->SetOnlyFirstColorEnabled(ui->OnlyFirst->isChecked());
 }
 
-void OpenRGBEffectPage::on_save_pattern_clicked()
+void OpenRGBEffectPage::SavePatternAction()
 {
     std::vector<std::string> filenames = OpenRGBEffectSettings::ListPattern(effect->EffectDetails.EffectClassName);
 
@@ -372,7 +390,7 @@ void OpenRGBEffectPage::on_save_pattern_clicked()
     }
 }
 
-void OpenRGBEffectPage::on_load_pattern_clicked()
+void OpenRGBEffectPage::LoadPatternAction()
 {
     std::vector<std::string> filenames = OpenRGBEffectSettings::ListPattern(effect->EffectDetails.EffectClassName);
 
@@ -385,6 +403,9 @@ void OpenRGBEffectPage::on_load_pattern_clicked()
 
     if(file_list.empty())
     {
+        QMessageBox empty_msg_box(this);
+        empty_msg_box.setText("You currently have no patterns for this effect.\nUse the save pattern action first.");
+        empty_msg_box.exec();
         return;
     }
 
@@ -478,7 +499,28 @@ void OpenRGBEffectPage::ApplyJson(json effect_settings)
     }
 }
 
-void OpenRGBEffectPage::on_edit_pattern_clicked()
+void OpenRGBEffectPage::ToggleInfo()
+{
+    info_visible = !info_visible;
+
+    ui->toggle_info->setText(info_visible?"▲":"▼");
+    ui->EffectDesciption->setVisible(info_visible);
+    ui->time_measure->setVisible(info_visible);
+}
+
+void OpenRGBEffectPage::on_toggle_info_clicked()
+{
+    ToggleInfo();
+}
+
+
+void OpenRGBEffectPage::OpenPatternsFolder()
+{
+    QUrl url = QUrl::fromLocalFile(QString::fromStdString(OpenRGBEffectSettings::PatternsFolder()));
+    QDesktopServices::openUrl(url);
+}
+
+void OpenRGBEffectPage::EditPatternAction()
 {
     QDialog* dialog = new QDialog();
 

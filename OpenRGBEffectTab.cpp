@@ -121,6 +121,17 @@ void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
         ui->EffectTabs->tabBar()->setTabButton(tab_idx, QTabBar::RightSide, effect_header);
     });
 
+    connect(effect_header, &EffectTabHeader::StartStopRequest, [=](){
+        if(EffectManager::Get()->IsActive(effect))
+        {
+            effect_page->StopEffect();
+        }
+        else
+        {
+            effect_page->StartEffect();
+        }
+    });
+
     effect_header->ToogleRunningIndicator(effect->IsAutoStart());
 
     ui->EffectTabs->setCurrentIndex(tab_position);
@@ -316,6 +327,7 @@ void OpenRGBEffectTab::on_save_settings_clicked()
 
         QString profile_name = save_profile_popup->Filename();
         bool should_load_at_startup = save_profile_popup->ShouldLoadAtStartup();
+        bool save_effects_state = save_profile_popup->ShouldSaveEffectsState();
 
         if (!profile_name.isEmpty())
         {
@@ -342,7 +354,7 @@ void OpenRGBEffectTab::on_save_settings_clicked()
                 effect_settings["FPS"] = effect->GetFPS();
                 effect_settings["Speed"] = effect->GetSpeed();
                 effect_settings["Slider2Val"] = effect->GetSlider2Val();
-                effect_settings["AutoStart"] = effect->IsAutoStart();
+                effect_settings["AutoStart"] = save_effects_state ? EffectManager::Get()->IsActive(effect) : false;
                 effect_settings["RandomColors"] = effect->IsRandomColorsEnabled();
                 effect_settings["AllowOnlyFirst"] = effect->IsOnlyFirstColorEnabled();
                 effect_settings["Brightness"] = effect->GetBrightness();

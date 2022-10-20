@@ -20,8 +20,8 @@ EffectTabHeader::EffectTabHeader(QWidget *parent,  RGBEffect* effect) :
 
 void EffectTabHeader::ToogleRunningIndicator(bool state)
 {
-   ui->running->setText(state?"◉":"○");
-   ui->running->setToolTip(state?"Started":"Stopped");
+   ui->start_stop->setText(state?"◉":"○");
+   ui->start_stop->setToolTip(state?"Started":"Stopped");
 }
 
 EffectTabHeader::~EffectTabHeader()
@@ -32,6 +32,11 @@ EffectTabHeader::~EffectTabHeader()
 void EffectTabHeader::on_close_clicked()
 {
     emit CloseRequest();
+}
+
+void EffectTabHeader::on_start_stop_clicked()
+{
+    emit StartStopRequest();
 }
 
 void EffectTabHeader::on_rename_clicked()

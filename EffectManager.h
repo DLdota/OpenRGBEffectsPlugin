@@ -15,7 +15,8 @@ public:
     static EffectManager* Get();
 
     void SetEffectActive(RGBEffect*);
-    void SetEffectUnActive(RGBEffect*);    
+    void SetEffectUnActive(RGBEffect*);
+    bool IsActive(RGBEffect*);
     void RemoveMapping(RGBEffect*);
 
     void ClearAssignments();

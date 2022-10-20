@@ -21,10 +21,12 @@ public:
 signals:
     void CloseRequest();
     void Renamed(std::string);
+    void StartStopRequest();
 
 private slots:
     void on_close_clicked();
     void on_rename_clicked();
+    void on_start_stop_clicked();
 
 private:
     Ui::EffectTabHeader *ui;

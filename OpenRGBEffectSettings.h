@@ -26,6 +26,8 @@ public:
     static std::vector<std::string> ListPattern(std::string);
     static json LoadPattern(std::string, std::string);
 
+    static std::string PatternsFolder();
+
 private:
     static bool CreateSettingsDirectory();
     static bool CreateEffectProfilesDirectory();
@@ -34,7 +36,6 @@ private:
     static std::string folder_separator();
     static std::string SettingsFolder();
     static std::string ProfilesFolder();
-    static std::string PatternsFolder();
 
     static bool create_dir(std::string);
     static std::vector<std::string> list_files(std::string);

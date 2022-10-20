@@ -31,6 +31,11 @@ bool SaveProfilePopup::ShouldLoadAtStartup()
     return ui->load_at_startup->isChecked();
 }
 
+bool SaveProfilePopup::ShouldSaveEffectsState()
+{
+    return ui->save_effects_state->isChecked();
+}
+
 void SaveProfilePopup::SetFileName(QString text)
 {
     ui->filename->setText(text);

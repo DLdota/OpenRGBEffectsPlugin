@@ -43,6 +43,11 @@ void EffectManager::SetEffectUnActive(RGBEffect* Effect)
     }
 }
 
+bool EffectManager::IsActive(RGBEffect* effect)
+{
+    return EffectThreads.find(effect) != EffectThreads.end();
+}
+
 void EffectManager::RemoveMapping(RGBEffect* effect)
 {
     effect_zones.erase(effect);

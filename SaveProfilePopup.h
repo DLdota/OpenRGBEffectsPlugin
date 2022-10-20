@@ -17,6 +17,7 @@ public:
 
     QString Filename();
     bool ShouldLoadAtStartup();
+    bool ShouldSaveEffectsState();
 
     void SetFileName(QString);
 

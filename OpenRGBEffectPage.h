@@ -29,19 +29,19 @@ signals:
     void EffectState(bool);
 
 private slots:
-    void on_StartButton_clicked();
-    void on_StopButton_clicked();
-    void on_PreviewButton_clicked();
+    void on_preview_clicked();
     void on_SpeedSlider_valueChanged(int value);
     void on_Slider2_valueChanged(int value);
     void on_FPS_slider_valueChanged(int value);
     void on_Brightness_slider_valueChanged(int value);
-    void on_AutoStart_clicked();
     void on_RandomCheckbox_clicked();
-    void on_OnlyFirst_clicked();
-    void on_save_pattern_clicked();
-    void on_load_pattern_clicked();
-    void on_edit_pattern_clicked();
+    void on_OnlyFirst_clicked();    
+    void on_toggle_info_clicked();
+
+    void SavePatternAction();
+    void LoadPatternAction();
+    void EditPatternAction();
+    void OpenPatternsFolder();
 
 private:
     Ui::OpenRGBEffectPage *ui;
@@ -52,7 +52,6 @@ private:
     std::vector<RGBColor> UserColors;
     std::vector<ColorPicker*> ColorPickers;
 
-    bool AutoStart = false;
     bool RandomColors = false;
 
     void InitUi();
@@ -68,6 +67,10 @@ private:
 
     json ToJson();
     void ApplyJson(json);
+
+    bool info_visible = false;
+
+    void ToggleInfo();
 };
 
 #endif // OPENRGBEFFECTPAGE_H
