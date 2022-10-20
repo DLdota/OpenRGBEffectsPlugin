@@ -179,6 +179,7 @@ HEADERS +=                                                                      
     ScreenRecorder.h                                                                            \
     SaveProfilePopup.h                                                                          \
     QTooltipedSlider.h                                                                          \
+    EffectSearch.h                                                                              \
 
 SOURCES +=                                                                                      \
     ControllerZoneList.cpp                                                                      \
@@ -200,12 +201,14 @@ SOURCES +=                                                                      
     ScreenRecorder.cpp                                                                          \
     SaveProfilePopup.cpp                                                                        \
     QTooltipedSlider.cpp                                                                        \
+    EffectSearch.cpp                                                                            \
 
 FORMS +=                                                                                        \
     ControllerZoneList.ui                                                                       \
     DeviceList.ui                                                                               \
     DeviceListItem.ui                                                                           \
     EffectList.ui                                                                               \
+    EffectSearch.ui                                                                             \
     EffectTabHeader.ui                                                                          \
     Effects/Shaders/NewShaderPassTabHeader.ui                                                   \
     Effects/Shaders/ShaderFileTabHeader.ui                                                      \

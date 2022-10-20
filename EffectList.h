@@ -30,6 +30,7 @@ signals:
 
 private slots:
     void on_start_stop_all_button_clicked();
+    void AddEffect(std::string);
 
 private:
     Ui::EffectList *ui;

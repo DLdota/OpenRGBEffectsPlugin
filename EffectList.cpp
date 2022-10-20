@@ -1,9 +1,11 @@
 #include "EffectList.h"
 #include "ui_EffectList.h"
 #include "ColorUtils.h"
+#include "EffectSearch.h"
 
 #include <QMenu>
 #include <QAction>
+#include <QWidgetAction>
 
 std::map<std::string, std::function<RGBEffect*()>> EffectList::effects_construtors = {};
 std::map<std::string, std::vector<std::string>> EffectList::categorized_effects;
@@ -18,6 +20,19 @@ EffectList::EffectList(QWidget *parent) :
 
     QMenu* new_effect_menu = new QMenu(this);
     ui->new_effect->setMenu(new_effect_menu);
+
+    EffectSearch* effect_search = new EffectSearch(this);
+    QWidgetAction* search_action = new QWidgetAction(this);
+
+    search_action->setDefaultWidget(effect_search);
+    new_effect_menu->addAction(search_action);
+
+    std::vector<QMenu*> category_menus;
+
+    connect(effect_search, &EffectSearch::EffectClicked, [=](std::string effect_name){
+        new_effect_menu->close();
+        AddEffect(effect_name);
+    });
 
     for(auto const& entry: categorized_effects)
     {
@@ -36,23 +51,38 @@ EffectList::EffectList(QWidget *parent) :
             category_menu->addAction(effect_action);
 
             connect(effect_action, &QAction::triggered, [=](){
-
-                RGBEffect* effect = effects_construtors[effect_name]();
-
-                // Add some random colors, so we already see something fancy
-                std::vector<RGBColor> random_colors;
-
-                for(unsigned int i = 0; i < effect->EffectDetails.UserColors; i ++)
-                {
-                    random_colors.push_back(ColorUtils::RandomRGBColor());
-                }
-
-                effect->SetUserColors(random_colors);
-
-                emit EffectAdded(effect);
+                AddEffect(effect_name);
             });
+
+            effect_search->add(effect_name);
         }
+
+        category_menus.push_back(category_menu);
     }
+
+    connect(effect_search, &EffectSearch::Searching, [=](bool has_text){
+        for(const QMenu* menu: category_menus)
+        {
+            menu->menuAction()->setVisible(!has_text);
+        }
+    });
+}
+
+void EffectList::AddEffect(std::string effect_name)
+{
+    RGBEffect* effect = effects_construtors[effect_name]();
+
+    // Add some random colors, so we already see something fancy
+    std::vector<RGBColor> random_colors;
+
+    for(unsigned int i = 0; i < effect->EffectDetails.UserColors; i ++)
+    {
+        random_colors.push_back(ColorUtils::RandomRGBColor());
+    }
+
+    effect->SetUserColors(random_colors);
+
+    emit EffectAdded(effect);
 }
 
 EffectList::~EffectList()
