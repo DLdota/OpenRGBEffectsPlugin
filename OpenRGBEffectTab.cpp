@@ -46,24 +46,14 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     // So we make sure all virtual devices are ready
     QTimer::singleShot(2000, [=](){
         LoadProfileList();
-    });
 
-    QMenu* manageProfileButton = new QMenu(this);
-    ui->manageProfileButton->setMenu(manageProfileButton);
+        std::string default_profile = OpenRGBEffectSettings::DefaultProfile();
 
-    QAction* save_profile = new QAction("Save", this);
-    connect(save_profile, &QAction::triggered, this, &OpenRGBEffectTab::SaveProfileAction);
-    manageProfileButton->addAction(save_profile);
-
-//    I'm not sure how to add a menu inside a menu
-
-//    QAction* load_profile = new QAction("Load", this);
-//    connect(load_profile, &QAction::triggered, this, &OpenRGBEffectTab::);
-//    manageProfileButton->addAction(load_profile);
-
-    QAction* delete_profile = new QAction("Delete", this);
-    connect(delete_profile, &QAction::triggered, this, &OpenRGBEffectTab::DeleteProfileAction);
-    manageProfileButton->addAction(delete_profile);
+        if(!default_profile.empty())
+        {
+            LoadProfile(default_profile);
+        }
+    });   
 }
 
 OpenRGBEffectTab::~OpenRGBEffectTab()
@@ -71,13 +61,28 @@ OpenRGBEffectTab::~OpenRGBEffectTab()
     delete ui;
 }
 
-void OpenRGBEffectTab::LoadProfile(std::string profile)
-{
-    ui->profiles->setCurrentText(QString::fromStdString(profile));
-}
-
 void OpenRGBEffectTab::InitEffectTabs()
 {
+    QMenu* manage_profile_menu = new QMenu("Profiles", this);
+
+    QAction* save_profile = new QAction("Save", this);
+    connect(save_profile, &QAction::triggered, this, &OpenRGBEffectTab::SaveProfileAction);
+    manage_profile_menu->addAction(save_profile);
+
+    load_profile_menu = new QMenu("Load profile", this);
+    manage_profile_menu->addMenu(load_profile_menu);
+
+    QAction* delete_profile = new QAction("Delete", this);
+    connect(delete_profile, &QAction::triggered, this, &OpenRGBEffectTab::DeleteProfileAction);
+    manage_profile_menu->addAction(delete_profile);
+
+    QAction* plugin_info = new QAction("About", this);
+    connect(plugin_info, &QAction::triggered, this, &OpenRGBEffectTab::PluginInfoAction);
+
+    effect_list->AddMenu(manage_profile_menu);    
+    effect_list->AddEffectsMenus();
+    effect_list->AddAction(plugin_info);
+
     QLabel* label = new QLabel("No effects added yet.\n Please select one from the list to get started.");
     label->setAlignment(Qt::AlignCenter);
 
@@ -173,41 +178,22 @@ void OpenRGBEffectTab::DeviceListChanged()
 void OpenRGBEffectTab::LoadProfileList()
 {
     std::vector<std::string> profiles = OpenRGBEffectSettings::ListProfiles();
-    std::string default_profile = OpenRGBEffectSettings::DefaultProfile();
 
-    ui->profiles->blockSignals(true);
-
-    ui->profiles->clear();
+    load_profile_menu->clear();
 
     for (const std::string& file_name: profiles)
     {
-        ui->profiles->addItem(QString::fromStdString(file_name));
-    }
+        QAction* profile_action = new QAction(QString::fromStdString(file_name), this);
 
-    if(!default_profile.empty())
-    {
-        ui->profiles->setCurrentText(QString::fromStdString(default_profile));
-    }
-    else if(!profiles.empty())
-    {
-        ui->profiles->setCurrentIndex(0);
-    }
+        connect(profile_action, &QAction::triggered,[=](){
+            LoadProfile(file_name);
+        });
 
-    ui->profiles->blockSignals(false);
+        load_profile_menu->addAction(profile_action);
 
-    LoadEffectsFromCurrentProfile();
+    } 
 
     emit ProfileListUpdated();
-}
-
-void OpenRGBEffectTab::on_profiles_currentIndexChanged(int)
-{
-    printf("[OpenRGBEffectsPlugin] Selecting profile: %s\n", ui->profiles->currentText().toStdString().c_str());
-
-    StopAll();
-    ClearAll();
-
-    LoadEffectsFromCurrentProfile();
 }
 
 void OpenRGBEffectTab::ClearAll()
@@ -255,7 +241,7 @@ void OpenRGBEffectTab::on_device_list_SelectionChanged()
     EffectManager::Get()->Assign(ui->device_list->GetSelection(), effect);
 }
 
-void OpenRGBEffectTab::on_plugin_infos_clicked()
+void OpenRGBEffectTab::PluginInfoAction()
 {
     QDialog* dialog = new QDialog();
     dialog->setWindowTitle("Effects");
@@ -293,7 +279,7 @@ void OpenRGBEffectTab::on_plugin_infos_clicked()
 
 void OpenRGBEffectTab::DeleteProfileAction()
 {
-    QString current_profile = ui->profiles->currentText();
+    QString current_profile = QString::fromStdString(latest_loaded_profile);
 
     if(!current_profile.isEmpty())
     {
@@ -308,7 +294,7 @@ void OpenRGBEffectTab::DeleteProfileAction()
         case QMessageBox::Ok:
             if(OpenRGBEffectSettings::DeleteProfile(current_profile.toStdString()))
             {
-                ui->profiles->removeItem(ui->profiles->currentIndex());
+                LoadProfileList();
             }
             break;
         default:
@@ -319,12 +305,7 @@ void OpenRGBEffectTab::DeleteProfileAction()
 
 void OpenRGBEffectTab::SaveProfileAction()
 {
-    QString current_text = ui->profiles->currentText();
-
-    if(current_text.isEmpty())
-    {
-        current_text = "my-profile";
-    }
+    QString current_text = latest_loaded_profile.empty() ? "my-profile" : QString::fromStdString(latest_loaded_profile);
 
     QDialog* dialog = new QDialog(this);
 
@@ -405,11 +386,7 @@ void OpenRGBEffectTab::SaveProfileAction()
 
             OpenRGBEffectSettings::SaveUserProfile(settings, profile_name.toStdString());
 
-            if(ui->profiles->findText(profile_name) == -1){
-                ui->profiles->addItem(profile_name);
-                ui->profiles->setCurrentText(profile_name);
-                emit ProfileListUpdated();
-            }
+            LoadProfileList();
 
             if(should_load_at_startup)
             {
@@ -427,15 +404,16 @@ void OpenRGBEffectTab::SaveProfileAction()
     dialog->exec();
 }
 
-void OpenRGBEffectTab::LoadEffectsFromCurrentProfile()
+void OpenRGBEffectTab::LoadProfile(std::string profile)
 {
-    QString profile = ui->profiles->currentText();
+    StopAll();
+    ClearAll();
 
-    printf("[OpenRGBEffectsPlugin] Loading effects settings if any.\n");
+    printf("[OpenRGBEffectsPlugin] LoadProfile '%s'.\n", profile.c_str());
 
-    if(!profile.isEmpty())
+    if(!profile.empty())
     {
-        json settings = OpenRGBEffectSettings::LoadUserProfile(profile.toStdString());
+        json settings = OpenRGBEffectSettings::LoadUserProfile(profile);
 
         if(!settings.contains("version") || settings["version"] != OpenRGBEffectSettings::version)
         {
@@ -459,6 +437,8 @@ void OpenRGBEffectTab::LoadEffectsFromCurrentProfile()
                 printf("[OpenRGBEffectsPlugin] Unknown error while loading effect.\n");
             }
         }
+
+        latest_loaded_profile = profile;
     }
 }
 

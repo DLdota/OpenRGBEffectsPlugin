@@ -4,7 +4,9 @@
 #include <set>
 
 #include <QWidget>
+#include <QMenu>
 #include "RGBEffect.h"
+#include "EffectSearch.h"
 
 namespace Ui {
 class EffectList;
@@ -24,6 +26,10 @@ public:
     static void RegisterEffect(std::string, std::string, std::function<RGBEffect*()>);
     void ShowStartStopButton(bool);
 
+    void AddMenu(QMenu*);
+    void AddAction(QAction*);
+    void AddEffectsMenus();
+
 signals:
     void EffectAdded(RGBEffect*);
     void ToggleAllEffectsState();
@@ -34,7 +40,10 @@ private slots:
 
 private:
     Ui::EffectList *ui;
-
+    QMenu* main_menu;
+    EffectSearch* effect_search;
+    std::vector<QMenu*> sub_menus;
+    std::vector<QAction*> sub_actions;
 };
 
 #endif // EFFECTLIST_H

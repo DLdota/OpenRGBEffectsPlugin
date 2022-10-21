@@ -31,25 +31,24 @@ public slots:
 
 private slots:
     void on_device_list_SelectionChanged();
-    void on_EffectTabs_currentChanged(int);
-    void SaveProfileAction();
-    void DeleteProfileAction();
-    void on_plugin_infos_clicked();
-    void on_profiles_currentIndexChanged(int);
+    void on_EffectTabs_currentChanged(int);    
 
     void OnStopEffects();
+    void SaveProfileAction();
+    void DeleteProfileAction();
+    void PluginInfoAction();
 
 private:
     Ui::OpenRGBEffectTab *ui;
     EffectList* effect_list = nullptr;
+    QMenu* load_profile_menu;
+
+    std::string latest_loaded_profile = "";
 
     void InitEffectTabs();
     void CreateEffectTab(RGBEffect*);
-    void InitDeviceList();    
-
-    void LoadEffectsFromCurrentProfile();
+    void InitDeviceList();
     void LoadEffect(json);
-
     void ClearAll();
 };
 

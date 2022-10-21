@@ -1,7 +1,6 @@
 #include "EffectList.h"
 #include "ui_EffectList.h"
 #include "ColorUtils.h"
-#include "EffectSearch.h"
 
 #include <QMenu>
 #include <QAction>
@@ -18,28 +17,44 @@ EffectList::EffectList(QWidget *parent) :
 
     ShowStartStopButton(false);
 
-    QMenu* new_effect_menu = new QMenu(this);
-    ui->new_effect->setMenu(new_effect_menu);
+    main_menu = new QMenu(this);
+    ui->new_effect->setMenu(main_menu);
 
-    EffectSearch* effect_search = new EffectSearch(this);
+    effect_search = new EffectSearch(this);
     QWidgetAction* search_action = new QWidgetAction(this);
 
     search_action->setDefaultWidget(effect_search);
-    new_effect_menu->addAction(search_action);
-
-    std::vector<QMenu*> category_menus;
+    main_menu->addAction(search_action);
 
     connect(effect_search, &EffectSearch::EffectClicked, [=](std::string effect_name){
-        new_effect_menu->close();
+        main_menu->close();
         AddEffect(effect_name);
     });
 
+    connect(effect_search, &EffectSearch::Searching, [=](bool has_text){
+        for(QMenu* menu: sub_menus)
+        {
+            menu->menuAction()->setVisible(!has_text);
+        }
+        for(QAction* action: sub_actions)
+        {
+            action->setVisible(!has_text);
+        }
+    });
+
+    connect(main_menu, &QMenu::aboutToShow, [=](){
+        effect_search->FocusSearch();
+    });
+}
+
+void EffectList::AddEffectsMenus()
+{
     for(auto const& entry: categorized_effects)
     {
         std::string category = entry.first;
 
         QMenu* category_menu = new QMenu(QString::fromStdString(category), this);
-        new_effect_menu->addMenu(category_menu);
+        main_menu->addMenu(category_menu);
 
         std::vector<std::string> effect_names = entry.second;
 
@@ -57,15 +72,8 @@ EffectList::EffectList(QWidget *parent) :
             effect_search->add(effect_name);
         }
 
-        category_menus.push_back(category_menu);
+        sub_menus.push_back(category_menu);
     }
-
-    connect(effect_search, &EffectSearch::Searching, [=](bool has_text){
-        for(const QMenu* menu: category_menus)
-        {
-            menu->menuAction()->setVisible(!has_text);
-        }
-    });
 }
 
 void EffectList::AddEffect(std::string effect_name)
@@ -111,4 +119,16 @@ void EffectList::on_start_stop_all_button_clicked()
 void EffectList::ShowStartStopButton(bool visible)
 {
     ui->start_stop_all_button->setVisible(visible);
+}
+
+void EffectList::AddMenu(QMenu* menu)
+{
+    main_menu->addMenu(menu);
+    sub_menus.push_back(menu);
+}
+
+void EffectList::AddAction(QAction* action)
+{
+    main_menu->addAction(action);
+    sub_actions.push_back(action);
 }

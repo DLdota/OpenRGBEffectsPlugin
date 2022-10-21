@@ -50,6 +50,11 @@ void EffectSearch::add(std::string s)
     strings.push_back(s);
 }
 
+void EffectSearch::FocusSearch()
+{
+    ui->search->setFocus();
+}
+
 void EffectSearch::on_results_itemClicked(QListWidgetItem* item)
 {
     std::string effect_name = item->text().toStdString();

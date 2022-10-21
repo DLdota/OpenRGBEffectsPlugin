@@ -17,6 +17,7 @@ public:
     ~EffectSearch();
 
     void add(std::string);
+    void FocusSearch();
 
 private slots:
     void on_search_textChanged(const QString&);
