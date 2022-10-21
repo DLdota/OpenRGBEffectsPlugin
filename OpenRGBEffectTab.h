@@ -32,8 +32,8 @@ public slots:
 private slots:
     void on_device_list_SelectionChanged();
     void on_EffectTabs_currentChanged(int);
-    void on_save_settings_clicked();
-    void on_delete_profile_clicked();
+    void SaveProfileAction();
+    void DeleteProfileAction();
     void on_plugin_infos_clicked();
     void on_profiles_currentIndexChanged(int);
 

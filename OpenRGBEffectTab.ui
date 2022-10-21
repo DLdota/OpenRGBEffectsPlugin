@@ -53,16 +53,16 @@
      <item row="1" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QToolButton" name="plugin_infos">
+        <widget class="QPushButton" name="manageProfileButton">
          <property name="text">
-          <string>?</string>
+          <string>PushButton</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="save_settings">
+        <widget class="QToolButton" name="plugin_infos">
          <property name="text">
-          <string>Save as profile</string>
+          <string>?</string>
          </property>
         </widget>
        </item>
@@ -78,13 +78,6 @@
        </item>
        <item>
         <widget class="QComboBox" name="profiles"/>
-       </item>
-       <item>
-        <widget class="QPushButton" name="delete_profile">
-         <property name="text">
-          <string>Delete profile</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </item>

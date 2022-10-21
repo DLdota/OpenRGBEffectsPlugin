@@ -47,6 +47,23 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     QTimer::singleShot(2000, [=](){
         LoadProfileList();
     });
+
+    QMenu* manageProfileButton = new QMenu(this);
+    ui->manageProfileButton->setMenu(manageProfileButton);
+
+    QAction* save_profile = new QAction("Save", this);
+    connect(save_profile, &QAction::triggered, this, &OpenRGBEffectTab::SaveProfileAction);
+    manageProfileButton->addAction(save_profile);
+
+//    I'm not sure how to add a menu inside a menu
+
+//    QAction* load_profile = new QAction("Load", this);
+//    connect(load_profile, &QAction::triggered, this, &OpenRGBEffectTab::);
+//    manageProfileButton->addAction(load_profile);
+
+    QAction* delete_profile = new QAction("Delete", this);
+    connect(delete_profile, &QAction::triggered, this, &OpenRGBEffectTab::DeleteProfileAction);
+    manageProfileButton->addAction(delete_profile);
 }
 
 OpenRGBEffectTab::~OpenRGBEffectTab()
@@ -274,7 +291,7 @@ void OpenRGBEffectTab::on_plugin_infos_clicked()
     dialog->exec();
 }
 
-void OpenRGBEffectTab::on_delete_profile_clicked()
+void OpenRGBEffectTab::DeleteProfileAction()
 {
     QString current_profile = ui->profiles->currentText();
 
@@ -300,7 +317,7 @@ void OpenRGBEffectTab::on_delete_profile_clicked()
     }
 }
 
-void OpenRGBEffectTab::on_save_settings_clicked()
+void OpenRGBEffectTab::SaveProfileAction()
 {
     QString current_text = ui->profiles->currentText();
 
