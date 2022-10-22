@@ -201,6 +201,7 @@ void OpenRGBEffectPage::InitUi()
         ui->FPS_slider->setValue(index);
     }
 
+    ui->extra_settings->setVisible(effect->EffectDetails.HasCustomSettings);
     if(effect->IsAutoStart())
     {
         StartEffect();

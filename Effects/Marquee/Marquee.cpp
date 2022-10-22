@@ -19,7 +19,6 @@ Marquee::Marquee(QWidget *parent) :
     EffectDetails.MaxSlider2Val = 20;
     EffectDetails.MinSlider2Val = 2;
     EffectDetails.Slider2Name   = "Spacing";
-    EffectDetails.HasCustomSettings = true;
 
     random.saturation = 255;
     random.value = 255;

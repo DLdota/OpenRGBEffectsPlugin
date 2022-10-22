@@ -16,7 +16,6 @@ Swap::Swap(QWidget *parent) :
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 2;
-    EffectDetails.HasCustomSettings = true;
 
     random1 = ColorUtils::RandomRGBColor();
     random2 = ColorUtils::RandomRGBColor();

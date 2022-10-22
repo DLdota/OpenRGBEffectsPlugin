@@ -19,7 +19,6 @@ BreathingCircle::BreathingCircle(QWidget *parent) :
     EffectDetails.MaxSlider2Val = 20;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Thickness";
-    EffectDetails.HasCustomSettings = true;
 }
 
 BreathingCircle::~BreathingCircle()

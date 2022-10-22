@@ -19,7 +19,6 @@ Comet::Comet(QWidget *parent) :
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Comet size";
-    EffectDetails.HasCustomSettings = true;
 
     SetSpeed(25);
     SetSlider2Val(50);

@@ -19,7 +19,6 @@ Mosaic::Mosaic(QWidget *parent) :
     EffectDetails.MaxSlider2Val = 1000;
     EffectDetails.MinSlider2Val = 10;
     EffectDetails.Slider2Name   = "Rarity";
-    EffectDetails.HasCustomSettings = true;
 
     SetSpeed(10);
 }

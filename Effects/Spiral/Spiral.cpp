@@ -19,7 +19,6 @@ Spiral::Spiral(QWidget *parent) :
     EffectDetails.MaxSlider2Val = 100;
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Spiral shape";
-    EffectDetails.HasCustomSettings = true;
 
     SetSpeed(200);
     SetSlider2Val(10);
