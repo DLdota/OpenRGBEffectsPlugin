@@ -8,10 +8,8 @@ ColorsPicker::ColorsPicker(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->colors->setLayout(new QHBoxLayout());
-    ui->colors->layout()->setSizeConstraint(QLayout::SetFixedSize);
-    ui->scrollArea->setWidgetResizable(true);
+    ui->colors->layout()->setAlignment(Qt::AlignLeft );
 
     ResetColors();
 }
