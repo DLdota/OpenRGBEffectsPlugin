@@ -165,6 +165,7 @@ HEADERS +=                                                                      
     OpenRGBEffectSettings.h                                                                     \
     EffectManager.h                                                                             \
     ColorPicker.h                                                                               \
+    ColorsPicker.h                                                                              \
     ColorUtils.h                                                                                \
     ControllerZone.h                                                                            \
     ControllerZoneList.h                                                                        \
@@ -194,6 +195,7 @@ SOURCES +=                                                                      
     OpenRGBEffectSettings.cpp                                                                   \
     EffectManager.cpp                                                                           \
     ColorPicker.cpp                                                                             \
+    ColorsPicker.cpp                                                                            \
     PluginInfo.cpp                                                                              \
     ZoneListItem.cpp                                                                            \
     PreviewWidget.cpp                                                                           \
@@ -217,6 +219,7 @@ FORMS +=                                                                        
     OpenRGBEffectPage.ui                                                                        \
     OpenRGBEffectTab.ui                                                                         \
     ColorPicker.ui                                                                              \
+    ColorsPicker.ui                                                                             \
     PluginInfo.ui                                                                               \
     SaveProfilePopup.ui                                                                         \
     ZoneListItem.ui

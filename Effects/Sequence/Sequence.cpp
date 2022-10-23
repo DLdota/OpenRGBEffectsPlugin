@@ -19,13 +19,6 @@ Sequence::Sequence(QWidget *parent) :
     EffectDetails.Slider2Name   = "Fade time";
     EffectDetails.HasCustomSettings = true;
 
-    ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->colors->setLayout(new QHBoxLayout());
-    ui->colors->layout()->setSizeConstraint(QLayout::SetFixedSize);
-    ui->scrollArea->setWidgetResizable(true);
-
-    ResetColors();
-
     SetSpeed(10);
 }
 
@@ -41,7 +34,8 @@ void Sequence::DefineExtraOptions(QLayout* layout)
 
 void Sequence::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
-    unsigned int colors_count = ui->colors_count_spinBox->value();
+    std::vector<RGBColor> colors = ui->colorsPicker->Colors();
+    unsigned int colors_count = colors.size();
     unsigned int current_color_index = ((int)ceil(progress)) % colors_count;
 
     float whole;
@@ -59,7 +53,7 @@ void Sequence::StepEffect(std::vector<ControllerZone*> controller_zones)
     }
     else
     {
-        color = colors[current_color_index];
+        color = ui->colorsPicker->Colors()[current_color_index];
         fade_mult = 1.f;
     }
 
@@ -71,65 +65,17 @@ void Sequence::StepEffect(std::vector<ControllerZone*> controller_zones)
     progress += fade_mult * 0.1 * (float) Speed / (float) FPS;
 }
 
-ColorPicker* Sequence::CreatePicker(int i)
-{
-    ColorPicker* picker = new ColorPicker();
-    picker->SetRGBColor(colors[i]);
-
-    color_pickers[i] = picker;
-
-    connect(picker, &ColorPicker::ColorSelected, [=](QColor c){
-        colors[i] = ColorUtils::fromQColor(c);
-    });
-
-    return picker;
-}
-
-void Sequence::ResetColors()
-{
-    QLayoutItem *child;
-
-    while ((child = ui->colors->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-    }
-
-    unsigned int colors_count = ui->colors_count_spinBox->value();
-
-    color_pickers.resize(colors_count);
-    colors.resize(colors_count);
-
-    for(unsigned int i = 0; i < colors_count; i++)
-    {
-        ColorPicker* picker = CreatePicker(i);
-        ui->colors->layout()->addWidget(picker);
-    }
-
-}
 
 void Sequence::LoadCustomSettings(json Settings)
 {
     if (Settings.contains("colors"))
     {
-        colors.clear();
-
-        for(unsigned int color : Settings["colors"])
-        {
-            colors.push_back(color);
-        }
-
-        ui->colors_count_spinBox->setValue(colors.size());
+        ui->colorsPicker->SetColors(Settings["colors"]);
     }
-
-    ResetColors();
 }
 
 json Sequence::SaveCustomSettings(json Settings)
 {
-    Settings["colors"] = colors;
+    Settings["colors"] = ui->colorsPicker->Colors();
     return Settings;
-}
-
-void Sequence::on_colors_count_spinBox_valueChanged(int)
-{
-    ResetColors();
 }

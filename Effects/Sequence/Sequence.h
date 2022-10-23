@@ -5,7 +5,6 @@
 #include "ui_Sequence.h"
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
-#include "ColorPicker.h"
 
 namespace Ui {
 class Sequence;
@@ -27,17 +26,8 @@ public:
     void LoadCustomSettings(json) override;
     json SaveCustomSettings(json) override;
 
-private slots:
-    void on_colors_count_spinBox_valueChanged(int);
-
 private:
     Ui::Sequence *ui;
-
-    void ResetColors();
-    ColorPicker* CreatePicker(int);
-
-    std::vector<RGBColor> colors;
-    std::vector<ColorPicker*> color_pickers;
 
     double progress = 0.f;
 };
