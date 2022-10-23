@@ -65,12 +65,12 @@ void OpenRGBEffectTab::InitEffectTabs()
 {
     QMenu* manage_profile_menu = new QMenu("Profiles", this);
 
+    load_profile_menu = new QMenu("Load profile", this);
+    manage_profile_menu->addMenu(load_profile_menu);
+
     QAction* save_profile = new QAction("Save", this);
     connect(save_profile, &QAction::triggered, this, &OpenRGBEffectTab::SaveProfileAction);
     manage_profile_menu->addAction(save_profile);
-
-    load_profile_menu = new QMenu("Load profile", this);
-    manage_profile_menu->addMenu(load_profile_menu);
 
     QAction* delete_profile = new QAction("Delete", this);
     connect(delete_profile, &QAction::triggered, this, &OpenRGBEffectTab::DeleteProfileAction);
