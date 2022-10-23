@@ -19,6 +19,9 @@ public:
     std::vector<RGBColor> Colors();
     void SetColors(std::vector<RGBColor>);
 
+signals:
+    void ColorsChanged();
+
 private slots:
     void on_colors_count_spinBox_valueChanged(int);
 

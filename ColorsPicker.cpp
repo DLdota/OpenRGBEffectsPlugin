@@ -28,6 +28,7 @@ ColorPicker* ColorsPicker::CreatePicker(int i)
 
     connect(picker, &ColorPicker::ColorSelected, [=](QColor c){
         colors[i] = ColorUtils::fromQColor(c);
+        emit ColorsChanged();
     });
 
     return picker;
@@ -51,6 +52,8 @@ void ColorsPicker::ResetColors()
         ColorPicker* picker = CreatePicker(i);
         ui->colors->layout()->addWidget(picker);
     }
+
+    emit ColorsChanged();
 }
 void ColorsPicker::SetColors(std::vector<RGBColor> value)
 {

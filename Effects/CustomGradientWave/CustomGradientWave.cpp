@@ -18,11 +18,6 @@ CustomGradientWave::CustomGradientWave(QWidget *parent) :
     EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;
 
-    ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->colors->setLayout(new QHBoxLayout());
-    ui->colors->layout()->setSizeConstraint(QLayout::SetFixedSize);
-    ui->scrollArea->setWidgetResizable(true);
-
     gradient = QImage(100, 1, QImage::Format_RGB32);
 
     SetSpeed(25);
@@ -47,6 +42,7 @@ void CustomGradientWave::GenerateGradient()
 
     grad.setSpread(QGradient::Spread::PadSpread);
 
+    std::vector<RGBColor> colors = ui->colorsPicker->Colors();
     float step = 1.f / (colors.size() -1);
     float start = 0.f;
 
@@ -158,46 +154,9 @@ RGBColor CustomGradientWave::GetColor(float x, float y, float w, float h)
     return ColorUtils::fromQColor(gradient.pixelColor(100.0 * i, 0));
 }
 
-ColorPicker* CustomGradientWave::CreatePicker(int i)
+void CustomGradientWave::on_colorsPicker_ColorsChanged()
 {
-    ColorPicker* picker = new ColorPicker();
-    picker->SetRGBColor(colors[i]);
-
-    color_pickers[i] = picker;
-
-    connect(picker, &ColorPicker::ColorSelected, [=](QColor c){
-        colors[i] = ColorUtils::fromQColor(c);
-        GenerateGradient();
-    });
-
-    return picker;
-}
-
-void CustomGradientWave::ResetColors()
-{
-    QLayoutItem *child;
-
-    while ((child = ui->colors->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-    }
-
-    unsigned int colors_count = ui->colors_count_spinBox->value();
-
-    color_pickers.resize(colors_count);
-    colors.resize(colors_count);
-
-    for(unsigned int i = 0; i < colors_count; i++)
-    {
-        ColorPicker* picker = CreatePicker(i);
-        ui->colors->layout()->addWidget(picker);
-    }
-
     GenerateGradient();
-}
-
-void CustomGradientWave::on_colors_count_spinBox_valueChanged(int)
-{
-    ResetColors();
 }
 
 void CustomGradientWave::on_spread_valueChanged(int value)
@@ -232,30 +191,17 @@ void CustomGradientWave::LoadPreset(const QString& text)
     for(const CustomGradientWavePreset& preset: presets)
     {
         if(preset_name == preset.name){
-            colors = preset.colors;
+            ui->colorsPicker->SetColors(preset.colors);
             break;
         }
     }
-
-    ui->colors_count_spinBox->blockSignals(true);
-    ui->colors_count_spinBox->setValue(colors.size());
-    ui->colors_count_spinBox->blockSignals(false);
-
-    ResetColors();
 }
 
 void CustomGradientWave::LoadCustomSettings(json settings)
 {
     if (settings.contains("colors"))
     {
-        colors.clear();
-
-        for(unsigned int color : settings["colors"])
-        {
-            colors.push_back(color);
-        }
-
-        ui->colors_count_spinBox->setValue(colors.size());
+        ui->colorsPicker->SetColors(settings["colors"]);
     }
 
     if (settings.contains("spread"))
@@ -278,12 +224,11 @@ void CustomGradientWave::LoadCustomSettings(json settings)
         ui->width->setValue(settings["width"]);
     }
 
-    ResetColors();
 }
 
 json CustomGradientWave::SaveCustomSettings(json settings)
 {
-    settings["colors"]    = colors;
+    settings["colors"]    = ui->colorsPicker->Colors();
     settings["spread"]    = spread;
     settings["direction"] = direction;
     settings["height"]    = height;

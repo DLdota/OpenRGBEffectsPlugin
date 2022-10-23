@@ -7,7 +7,6 @@
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
 #include "SimplexNoise.h"
-#include "ColorPicker.h"
 
 namespace Ui {
 class NoiseMap;
@@ -40,8 +39,8 @@ private slots:
 
     void on_defaults_clicked();
 
-    void on_colors_count_spinBox_valueChanged(int);
     void on_colors_choice_currentIndexChanged(int);
+    void on_colorsPicker_ColorsChanged();
 
 private:
     Ui::NoiseMap *ui;
@@ -73,11 +72,7 @@ private:
 
     double progress = 0.f;
 
-    void ResetColors();
     void GenerateGradient();
-    ColorPicker* CreatePicker(int);
-    std::vector<RGBColor> colors;
-    std::vector<ColorPicker*> color_pickers;
     QImage image = QImage(100, 1, QImage::Format_RGB32);
 };
 

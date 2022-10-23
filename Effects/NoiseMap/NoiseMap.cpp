@@ -20,19 +20,13 @@ NoiseMap::NoiseMap(QWidget *parent) :
     EffectDetails.HasCustomSettings = true;
 
     ui->colors_choice->addItems({"Rainbow", "Inverse rainbow", "Custom"});
-    ui->colors_frame->hide();
+    ui->colorsPicker->hide();
 
     ui->motion->addItems({"Up", "Down", "Left", "Right"});
-
-    ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->colors->setLayout(new QHBoxLayout());
-    ui->colors->layout()->setSizeConstraint(QLayout::SetFixedSize);
-    ui->scrollArea->setWidgetResizable(true);
 
     SetSpeed(50);
     Defaults();
     ResetNoise();
-    ResetColors();
 }
 
 NoiseMap::~NoiseMap()
@@ -41,31 +35,10 @@ NoiseMap::~NoiseMap()
     delete ui;
 }
 
-void NoiseMap::ResetColors()
-{
-    QLayoutItem *child;
-
-    while ((child = ui->colors->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-    }
-
-    unsigned int colors_count = ui->colors_count_spinBox->value();
-
-    color_pickers.resize(colors_count);
-    colors.resize(colors_count);
-
-    for(unsigned int i = 0; i < colors_count; i++)
-    {
-        ColorPicker* picker = CreatePicker(i);
-        ui->colors->layout()->addWidget(picker);
-    }
-
-    GenerateGradient();
-}
-
 void NoiseMap::GenerateGradient()
 {
     QGradientStops stops;
+    std::vector<RGBColor> colors = ui->colorsPicker->Colors();
 
     unsigned int colors_count = colors.size();
 
@@ -93,19 +66,9 @@ void NoiseMap::GenerateGradient()
     painter.fillRect(rect, brush);
 }
 
-ColorPicker* NoiseMap::CreatePicker(int i)
+void NoiseMap::on_colorsPicker_ColorsChanged()
 {
-    ColorPicker* picker = new ColorPicker();
-    picker->SetRGBColor(colors[i]);
-
-    color_pickers[i] = picker;
-
-    connect(picker, &ColorPicker::ColorSelected, [=](QColor c){
-        colors[i] = ColorUtils::fromQColor(c);
-        GenerateGradient();
-    });
-
-    return picker;
+    GenerateGradient();
 }
 
 void NoiseMap::Defaults()
@@ -221,7 +184,16 @@ void NoiseMap::LoadCustomSettings(json settings)
 
     ui->amplitude->setValue(amplitude * val_mult);
     ui->frequency->setValue(frequency * val_mult);
-    ui->lacunarity->setValue(lacunarity * val_mult);
+    ui->lacunarity->setValue(lacunarity * val_mult);{
+
+
+
+
+
+
+
+
+    }
     ui->persistence->setValue(persistence * val_mult);
     ui->octaves->setValue(octaves);
     ui->motion_speed->setValue(motion_speed);
@@ -236,17 +208,8 @@ void NoiseMap::LoadCustomSettings(json settings)
 
     if (settings.contains("colors"))
     {
-        colors.clear();
-
-        for(unsigned int color : settings["colors"])
-        {
-            colors.push_back(color);
-        }
-
-        ui->colors_count_spinBox->setValue(colors.size());
+        ui->colorsPicker->SetColors(settings["colors"]);
     }
-
-    ResetColors();
 }
 
 json NoiseMap::SaveCustomSettings(json settings)
@@ -257,7 +220,7 @@ json NoiseMap::SaveCustomSettings(json settings)
     settings["persistence"] = persistence;
     settings["octaves"] = octaves;
 
-    settings["colors"] = colors;
+    settings["colors"] = ui->colorsPicker->Colors();
     settings["colors_choice"] = ui->colors_choice->currentIndex();
 
     settings["motion"] = motion;
@@ -313,10 +276,5 @@ void NoiseMap::on_defaults_clicked()
 
 void NoiseMap::on_colors_choice_currentIndexChanged(int value)
 {
-    ui->colors_frame->setVisible(value==2);
-}
-
-void NoiseMap::on_colors_count_spinBox_valueChanged(int)
-{
-    ResetColors();
+    ui->colorsPicker->setVisible(value==2);
 }

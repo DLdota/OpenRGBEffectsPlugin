@@ -14,51 +14,29 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="7" column="1">
-    <widget class="QTooltipedSlider" name="octaves">
-     <property name="minimum">
-      <number>1</number>
+   <item row="0" column="0">
+    <widget class="QLabel" name="colors_choice_label">
+     <property name="text">
+      <string>Mode</string>
      </property>
-     <property name="maximum">
-      <number>20</number>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="amplitude_label">
+     <property name="text">
+      <string>Amplitude</string>
      </property>
+    </widget>
+   </item>
+   <item row="9" column="1">
+    <widget class="QTooltipedSlider" name="motion_speed">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
-    <widget class="QComboBox" name="motion"/>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="octaves_label">
-     <property name="text">
-      <string>Octaves</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QTooltipedSlider" name="frequency">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>5000</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Motion</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QTooltipedSlider" name="lacunarity">
+   <item row="6" column="1">
+    <widget class="QTooltipedSlider" name="persistence">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -67,13 +45,6 @@
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="lacunarity_label">
-     <property name="text">
-      <string>Lacunarity</string>
      </property>
     </widget>
    </item>
@@ -93,6 +64,27 @@
      </property>
     </widget>
    </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="frequency_label">
+     <property name="text">
+      <string>Frequency</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Motion</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="2">
+    <widget class="QPushButton" name="defaults">
+     <property name="text">
+      <string>Defaults</string>
+     </property>
+    </widget>
+   </item>
    <item row="9" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
@@ -100,8 +92,55 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
-    <widget class="QTooltipedSlider" name="persistence">
+   <item row="6" column="0">
+    <widget class="QLabel" name="persistence_label">
+     <property name="text">
+      <string>Persistence</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="lacunarity_label">
+     <property name="text">
+      <string>Lacunarity</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QTooltipedSlider" name="frequency">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>5000</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QTooltipedSlider" name="octaves">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>20</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="octaves_label">
+     <property name="text">
+      <string>Octaves</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QTooltipedSlider" name="lacunarity">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -113,77 +152,11 @@
      </property>
     </widget>
    </item>
+   <item row="8" column="1">
+    <widget class="QComboBox" name="motion"/>
+   </item>
    <item row="1" column="0" colspan="2">
-    <widget class="QFrame" name="colors_frame">
-     <layout class="QGridLayout" name="colors_zone">
-      <item row="1" column="0">
-       <widget class="QScrollArea" name="scrollArea">
-        <property name="widgetResizable">
-         <bool>true</bool>
-        </property>
-        <widget class="QWidget" name="colors">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>352</width>
-           <height>68</height>
-          </rect>
-         </property>
-        </widget>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QSpinBox" name="colors_count_spinBox">
-        <property name="minimum">
-         <number>2</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="amplitude_label">
-     <property name="text">
-      <string>Amplitude</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0" colspan="2">
-    <widget class="QPushButton" name="defaults">
-     <property name="text">
-      <string>Defaults</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="frequency_label">
-     <property name="text">
-      <string>Frequency</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="1">
-    <widget class="QTooltipedSlider" name="motion_speed">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="persistence_label">
-     <property name="text">
-      <string>Persistence</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="colors_choice_label">
-     <property name="text">
-      <string>Colors</string>
-     </property>
-    </widget>
+    <widget class="ColorsPicker" name="colorsPicker" native="true"/>
    </item>
   </layout>
  </widget>
@@ -192,6 +165,12 @@
    <class>QTooltipedSlider</class>
    <extends>QSlider</extends>
    <header location="global">QTooltipedSlider.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ColorsPicker</class>
+   <extends>QWidget</extends>
+   <header location="global">ColorsPicker.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -4,7 +4,6 @@
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
 #include <QWidget>
-#include "ColorPicker.h"
 #include "ui_CustomGradientWave.h"
 #include "ColorUtils.h"
 
@@ -44,23 +43,19 @@ public:
     json SaveCustomSettings(json) override;
 
 private slots:
-    void on_colors_count_spinBox_valueChanged(int);
     void on_preset_currentTextChanged(const QString&);
     void on_spread_valueChanged(int);
     void on_direction_currentIndexChanged(int);
     void on_height_valueChanged(int);
     void on_width_valueChanged(int);
+    void on_colorsPicker_ColorsChanged();
 
 private:
     Ui::CustomGradientWave *ui;
     double progress = 0.0;
     RGBColor GetColor(float, float, float, float);
-    void ResetColors();
-    ColorPicker* CreatePicker(int);
     void LoadPreset(const QString&);
 
-    std::vector<RGBColor> colors;
-    std::vector<ColorPicker*> color_pickers;
     QImage gradient;
     void GenerateGradient();
 

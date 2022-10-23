@@ -1,5 +1,4 @@
 #include "CustomMarquee.h"
-#include "ColorUtils.h"
 
 REGISTER_EFFECT(CustomMarquee);
 
@@ -17,14 +16,8 @@ CustomMarquee::CustomMarquee(QWidget *parent) :
     EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;
 
-    ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->colors->setLayout(new QHBoxLayout());
-    ui->colors->layout()->setSizeConstraint(QLayout::SetFixedSize);
-    ui->scrollArea->setWidgetResizable(true);
-
     SetSpeed(25);
 
-    ResetColors();
 }
 
 CustomMarquee::~CustomMarquee()
@@ -70,7 +63,6 @@ void CustomMarquee::StepEffect(std::vector<ControllerZone*> controller_zones)
                     controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
                 }
             }
-
         }
     }
 
@@ -79,69 +71,21 @@ void CustomMarquee::StepEffect(std::vector<ControllerZone*> controller_zones)
 
 RGBColor CustomMarquee::GetColor(unsigned int i)
 {
+    std::vector<RGBColor> colors = ui->colorsPicker->Colors();
     int index = (i + (int) progress) % colors.size();
     return colors[index];
-}
-
-ColorPicker* CustomMarquee::CreatePicker(int i)
-{
-    ColorPicker* picker = new ColorPicker();
-    picker->SetRGBColor(colors[i]);
-
-    color_pickers[i] = picker;
-
-    connect(picker, &ColorPicker::ColorSelected, [=](QColor c){
-        colors[i] = ColorUtils::fromQColor(c);
-    });
-
-    return picker;
-}
-
-void CustomMarquee::ResetColors()
-{
-    QLayoutItem *child;
-
-    while ((child = ui->colors->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-    }
-
-    unsigned int colors_count = ui->colors_count_spinBox->value();
-
-    color_pickers.resize(colors_count);
-    colors.resize(colors_count);
-
-    for(unsigned int i = 0; i < colors_count; i++)
-    {
-        ColorPicker* picker = CreatePicker(i);
-        ui->colors->layout()->addWidget(picker);
-    }
-
-}
-
-void CustomMarquee::on_colors_count_spinBox_valueChanged(int)
-{
-    ResetColors();
 }
 
 void CustomMarquee::LoadCustomSettings(json settings)
 {
     if (settings.contains("colors"))
     {
-        colors.clear();
-
-        for(unsigned int color : settings["colors"])
-        {
-            colors.push_back(color);
-        }
-
-        ui->colors_count_spinBox->setValue(colors.size());
+        ui->colorsPicker->SetColors(settings["colors"]);
     }
-
-    ResetColors();
 }
 
 json CustomMarquee::SaveCustomSettings(json settings)
 {
-    settings["colors"] = colors;
+    settings["colors"] = ui->colorsPicker->Colors();
     return settings;
 }

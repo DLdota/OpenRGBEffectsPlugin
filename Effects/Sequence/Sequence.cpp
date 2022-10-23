@@ -66,16 +66,16 @@ void Sequence::StepEffect(std::vector<ControllerZone*> controller_zones)
 }
 
 
-void Sequence::LoadCustomSettings(json Settings)
+void Sequence::LoadCustomSettings(json settings)
 {
-    if (Settings.contains("colors"))
+    if (settings.contains("colors"))
     {
-        ui->colorsPicker->SetColors(Settings["colors"]);
+        ui->colorsPicker->SetColors(settings["colors"]);
     }
 }
 
-json Sequence::SaveCustomSettings(json Settings)
+json Sequence::SaveCustomSettings(json settings)
 {
-    Settings["colors"] = ui->colorsPicker->Colors();
-    return Settings;
+    settings["colors"] = ui->colorsPicker->Colors();
+    return settings;
 }
