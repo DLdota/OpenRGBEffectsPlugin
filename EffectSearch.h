@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QListWidgetItem>
+#include <QKeyEvent>
 
 namespace Ui {
 class EffectSearch;
@@ -26,6 +27,10 @@ private slots:
 signals:
     void EffectClicked(std::string);
     void Searching(bool);
+
+
+protected:
+    void keyPressEvent(QKeyEvent*);
 
 private:
     Ui::EffectSearch *ui;

@@ -63,5 +63,41 @@ void EffectSearch::on_results_itemClicked(QListWidgetItem* item)
     ui->results->hide();
     ui->no_results->hide();
     ui->search->clear();
+
     emit EffectClicked(effect_name);
+}
+
+void EffectSearch::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Return)
+    {
+        if(ui->results->selectedItems().size() == 1)
+        {
+            emit EffectClicked(ui->results->currentItem()->text().toStdString());
+        }
+    }
+    else if(event->key() == Qt::Key_Down)
+    {
+        if(!ui->results->hasFocus())
+        {
+            ui->results->setFocus();
+            ui->results->setCurrentRow(0);
+        }
+    }
+    else if(event->key() == Qt::Key_Up)
+    {
+        if(ui->results->hasFocus() && ui->results->currentRow() == 0)
+        {
+            ui->search->setFocus();
+        }
+    }
+    else
+    {
+        if(!ui->search->hasFocus())
+        {
+            ui->search->setFocus();
+        }
+
+        QWidget::keyPressEvent(event);
+    }
 }
