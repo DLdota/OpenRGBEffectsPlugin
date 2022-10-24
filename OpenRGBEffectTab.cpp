@@ -245,18 +245,6 @@ void OpenRGBEffectTab::PluginInfoAction()
 {
     QDialog* dialog = new QDialog();
     dialog->setWindowTitle("Effects");
-
-    if (OpenRGBEffectsPlugin::DarkTheme)
-    {
-        QPalette pal;
-        pal.setColor(QPalette::WindowText, Qt::white);
-        dialog->setPalette(pal);
-        QFile dark_theme(":/windows_dark.qss");
-        dark_theme.open(QFile::ReadOnly);
-        dialog->setStyleSheet(dark_theme.readAll());
-        dark_theme.close();
-    }
-
     dialog->setMinimumSize(300,320);
     dialog->setModal(true);
 

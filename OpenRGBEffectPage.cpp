@@ -239,17 +239,6 @@ void OpenRGBEffectPage::OpenPreview()
                                    Qt::WindowMaximizeButtonHint  |
                                    Qt::WindowCloseButtonHint     );
 
-    if (OpenRGBEffectsPlugin::DarkTheme)
-    {
-        QPalette pal;
-        pal.setColor(QPalette::WindowText, Qt::white);
-        preview_dialog->setPalette(pal);
-        QFile dark_theme(":/windows_dark.qss");
-        dark_theme.open(QFile::ReadOnly);
-        preview_dialog->setStyleSheet(dark_theme.readAll());
-        dark_theme.close();
-    }
-
     preview_dialog->setMinimumSize(256,256);
 
     QVBoxLayout* dialog_layout = new QVBoxLayout(preview_dialog);
@@ -324,17 +313,6 @@ void OpenRGBEffectPage::SavePatternAction()
     else
     {
         QDialog* dialog = new QDialog();
-
-        if (OpenRGBEffectsPlugin::DarkTheme)
-        {
-            QPalette pal;
-            pal.setColor(QPalette::WindowText, Qt::white);
-            dialog->setPalette(pal);
-            QFile dark_theme(":/windows_dark.qss");
-            dark_theme.open(QFile::ReadOnly);
-            dialog->setStyleSheet(dark_theme.readAll());
-            dark_theme.close();
-        }
 
         dialog->setMinimumSize(300,320);
         dialog->setModal(true);
@@ -524,17 +502,6 @@ void OpenRGBEffectPage::OpenPatternsFolder()
 void OpenRGBEffectPage::EditPatternAction()
 {
     QDialog* dialog = new QDialog();
-
-    if (OpenRGBEffectsPlugin::DarkTheme)
-    {
-        QPalette pal;
-        pal.setColor(QPalette::WindowText, Qt::white);
-        dialog->setPalette(pal);
-        QFile dark_theme(":/windows_dark.qss");
-        dark_theme.open(QFile::ReadOnly);
-        dialog->setStyleSheet(dark_theme.readAll());
-        dark_theme.close();
-    }
 
     dialog->setMinimumSize(300,320);
     dialog->setModal(true);
