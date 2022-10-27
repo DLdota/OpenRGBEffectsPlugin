@@ -369,6 +369,7 @@ HEADERS +=                                                                      
     Effects/AudioVUMeter/AudioVUMeter.h                                                         \
 
 FORMS +=                                                                                        \
+    Effects/Rain/Rain.ui                                                                        \
     Effects/Wavy/Wavy.ui                                                                        \
     Effects/AudioVisualizer/AudioVisualizer.ui                                                  \
     Effects/Bubbles/Bubbles.ui                                                                  \

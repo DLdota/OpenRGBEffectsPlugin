@@ -1,25 +1,29 @@
 #include "Rain.h"
-#include "hsv.h"
 #include "ColorUtils.h"
 
 REGISTER_EFFECT(Rain);
 
-Rain::Rain() : RGBEffect()
+Rain::Rain(QWidget *parent) :
+    RGBEffect(parent),
+    ui(new Ui::Rain)
 {
+    ui->setupUi(this);
+
     EffectDetails.EffectName = "Rain";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Droplet effect";
     EffectDetails.IsReversable = true;
-    EffectDetails.MaxSpeed = 200;
     EffectDetails.MinSpeed = 1;
-    EffectDetails.AllowOnlyFirst = true;
-    EffectDetails.UserColors = 5;
-    EffectDetails.MaxSlider2Val = 50;
-    EffectDetails.MinSlider2Val = 1;
+    EffectDetails.MaxSpeed = 200;
     EffectDetails.Slider2Name   = "Drops";
+    EffectDetails.MinSlider2Val = 1;
+    EffectDetails.MaxSlider2Val = 50;
+    EffectDetails.UserColors = 5;
+    EffectDetails.AllowOnlyFirst = true;
+    EffectDetails.HasCustomSettings = true;
 
-    SetSpeed(100);
-    SetSlider2Val(10);
+    SetSpeed(25);
+    SetSlider2Val(20);
 }
 
 void Rain::StepEffect(std::vector<ControllerZone*> controller_zones)
@@ -98,8 +102,8 @@ void Rain::TriggerDrop(unsigned int controller_zone_index, unsigned int w)
         }
 
         unsigned int col = rand() % w;
-        float speed_mult = 1 + static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-        Drop drop = {0.f, color, col, speed_mult};
+        float speed_mult = rand() % 3 + 1 + static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        Drop drop = {0.f, color, col, speed_mult, static_cast<unsigned int>(size)};
         drops[controller_zone_index].push_back(drop);
 
     }
@@ -109,7 +113,7 @@ void Rain::RunDrops(unsigned int controller_zone_index)
 {
     for(Drop& drop: drops[controller_zone_index])
     {
-        drop.progress += 0.1 * drop.speed_mult * Speed / (float) FPS;
+        drop.progress += 0.5 * drop.speed_mult * Speed / (float) FPS;
     }
 }
 
@@ -118,7 +122,7 @@ void Rain::CleanDrops(unsigned int controller_zone_index, unsigned int h)
     for( std::vector<Drop>::iterator iter = drops[controller_zone_index].begin();
          iter != drops[controller_zone_index].end();)
     {
-        if(iter->progress > h + 3)
+        if(iter->progress > h + 3 * iter->size)
         {
             drops[controller_zone_index].erase(iter);
         }
@@ -133,26 +137,29 @@ RGBColor Rain::GetColor(unsigned int controller_zone_index, unsigned int x, unsi
 {
     for(Drop drop: drops[controller_zone_index])
     {
-        if(drop.col == x)
+        if(drop.col >= x && drop.col <= (x + drop.size - 1))
         {
             float distance = drop.progress - y;
 
-            if(distance >= 0 && distance < 3)
+            // Vary trail length based on random speed_mult value
+            int trailLength = (drop.speed_mult - 1) * ((drop.size / 2) + 1);
+
+            if(distance >= 0 && distance <= drop.size + 1 + trailLength)
             {
                 float whole;
                 float frac = std::modf(distance, &whole);
 
-                if (whole == 2) // tail
+                if (whole == 0) // head
                 {
-                    return ColorUtils::Enlight(drop.color, 1 - frac);
+                    return ColorUtils::Enlight(drop.color, frac);
                 }
-                else if(whole == 1) // middle
+                else if (whole > 0 && whole <= (drop.size)) // middle
                 {
                     return drop.color;
                 }
-                else // head
+                else // tail
                 {
-                    return ColorUtils::Enlight(drop.color, frac);
+                    return ColorUtils::Interpolate(0, drop.color, 0.75 / (whole - drop.size)); // fade to black
                 }
             }
         }
@@ -172,4 +179,34 @@ void Rain::OnControllerZonesListChanged(std::vector<ControllerZone*> controller_
         std::vector<Drop> zone_drops;
         drops[i] = zone_drops;
     }
+}
+
+void Rain::on_size_valueChanged(int value)
+{
+    size = value;
+}
+
+Rain::~Rain()
+{
+    delete ui;
+}
+
+void Rain::DefineExtraOptions(QLayout* layout)
+{
+    layout->addWidget(this);
+}
+
+void Rain::LoadCustomSettings(json settings)
+{
+    if (settings.contains("size"))
+    {
+        ui->size->setValue(settings["size"]);
+    }
+}
+
+json Rain::SaveCustomSettings(json settings)
+{
+    settings["size"]   = size;
+
+    return settings;
 }
