@@ -57,8 +57,6 @@ private:
     void InitUi();
     void OpenPreview();
 
-    std::vector<unsigned int> speeds;
-
     QDialog* preview_dialog;
 
     ControllerZone* preview_zone;

@@ -1,6 +1,5 @@
 #include "OpenRGBEffectPage.h"
 #include "OpenRGBEffectSettings.h"
-#include "OpenRGBEffectsPlugin.h"
 #include "EffectManager.h"
 #include "ColorUtils.h"
 #include "LivePreviewController.h"
@@ -21,8 +20,7 @@
 OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
     QWidget(parent),
     ui(new Ui::OpenRGBEffectPage),
-    effect(effect),
-    speeds({1,2,3,4,5,6,7,8,10,15,20,25,30,40,50,60})
+    effect(effect)
 {
     ui->setupUi(this);
 
@@ -190,18 +188,10 @@ void OpenRGBEffectPage::InitUi()
 
     effect->SetRandomColorsEnabled(effect->IsRandomColorsEnabled());
 
-    ui->FPS_slider->setMinimum(0);
-    ui->FPS_slider->setMaximum(speeds.size() - 1);
-
-    std::vector<unsigned int>::iterator it = std::find(speeds.begin(), speeds.end(), effect->GetFPS());
-
-    if( it != speeds.end() )
-    {
-        int index = std::distance(speeds.begin(), it);
-        ui->FPS_slider->setValue(index);
-    }
+    ui->FPS_slider->setValue(effect->GetFPS());
 
     ui->extra_settings->setVisible(effect->EffectDetails.HasCustomSettings);
+
     if(effect->IsAutoStart())
     {
         StartEffect();
@@ -280,7 +270,7 @@ void OpenRGBEffectPage::on_Slider2_valueChanged(int value)
 
 void OpenRGBEffectPage::on_FPS_slider_valueChanged(int value)
 {
-    effect->SetFPS(speeds[value]);
+    effect->SetFPS(value);
 }
 
 void OpenRGBEffectPage::on_Brightness_slider_valueChanged(int value)
