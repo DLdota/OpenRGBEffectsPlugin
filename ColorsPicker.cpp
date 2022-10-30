@@ -58,7 +58,12 @@ void ColorsPicker::ResetColors()
 void ColorsPicker::SetColors(std::vector<RGBColor> value)
 {
     colors = value;
+
+    ui->colors_count_spinBox->blockSignals(true);
     ui->colors_count_spinBox->setValue(colors.size());
+    ui->colors_count_spinBox->blockSignals(false);
+
+    ResetColors();
 }
 
 void ColorsPicker::on_colors_count_spinBox_valueChanged(int)
