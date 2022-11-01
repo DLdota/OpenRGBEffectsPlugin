@@ -64,7 +64,7 @@ void DeviceList::InitControllersList()
 
         for(unsigned int i = 0; i < controller->zones.size(); i++)
         {
-            ControllerZone* controller_zone = new ControllerZone(controller, i, false);
+            ControllerZone* controller_zone = new ControllerZone(controller, i, false, 100);
             controller_zones.push_back(controller_zone);
             iteration_zones.push_back(controller_zone);
         }

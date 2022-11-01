@@ -463,7 +463,17 @@ void OpenRGBEffectTab::LoadEffect(json effect_settings)
                     controller_zone->zone_idx                == j["zone_idx"]
                     )
             {
+                if(j.contains("self_brightness"))
+                {
+                    controller_zone->self_brightness = j["self_brightness"];
+                }
+                else
+                {
+                    controller_zone->self_brightness = 100;
+                }
+
                 controller_zone->reverse = j["reverse"];
+
                 saved_zones.push_back(controller_zone);
                 found = true;
                 break;

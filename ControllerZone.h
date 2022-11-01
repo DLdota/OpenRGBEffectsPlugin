@@ -12,10 +12,11 @@ class ControllerZone
 
 public:
 
-    ControllerZone(RGBController* controller, unsigned int zone_idx, bool reverse):
+    ControllerZone(RGBController* controller, unsigned int zone_idx, bool reverse, int self_brightness):
         controller(controller),
         zone_idx(zone_idx),
-        reverse(reverse)
+        reverse(reverse),
+        self_brightness(self_brightness)
     {};
 
     RGBController* controller;
@@ -87,6 +88,7 @@ public:
         json j;
         j["zone_idx"] = zone_idx;
         j["reverse"] = reverse;
+        j["self_brightness"] = self_brightness;
         j["name"] = controller->name;
         j["location"] = controller->location;
         j["serial"] = controller->serial;
