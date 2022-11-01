@@ -27,6 +27,11 @@ void ZoneListItem::EnableControls()
     ui->reverse->setDisabled(false);
 }
 
+void ZoneListItem::ToggleBrightnessSlider()
+{
+    ui->brightness->setVisible(!ui->brightness->isVisible());
+}
+
 void ZoneListItem::SetEnableChecked(bool state)
 {
     ui->enable->setCheckState(state ? Qt::Checked : Qt::Unchecked);

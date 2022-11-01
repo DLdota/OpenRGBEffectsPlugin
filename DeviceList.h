@@ -33,6 +33,7 @@ signals:
 private slots:
     void on_select_all_clicked();
     void on_deselect_all_clicked();
+    void on_toggle_brightness_clicked();
 
 private:
     Ui::DeviceList *ui;

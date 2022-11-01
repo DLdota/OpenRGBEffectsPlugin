@@ -20,6 +20,7 @@ public:
 
     void DisableControls();
     void EnableControls();
+    void ToggleBrightnessSlider();
 
     bool IsEnabled();
     bool IsReversed();

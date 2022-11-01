@@ -104,6 +104,14 @@ void DeviceList::on_deselect_all_clicked()
     emit SelectionChanged();
 }
 
+void DeviceList::on_toggle_brightness_clicked()
+{
+    for(DeviceListItem* item: device_items)
+    {
+        item->ToggleBrightnessSlider();
+    }
+}
+
 void DeviceList::DisableControls()
 {
     setEnabled(false);

@@ -21,6 +21,7 @@ public:
 
     void DisableControls();
     void EnableControls();
+    void ToggleBrightnessSlider();
 
     std::vector<ControllerZone*> GetSelection();
 

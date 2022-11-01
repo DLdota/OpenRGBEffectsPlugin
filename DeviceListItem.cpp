@@ -199,6 +199,16 @@ void DeviceListItem::EnableControls()
     }
 }
 
+void DeviceListItem::ToggleBrightnessSlider()
+{
+    ui->brightness->setVisible(!ui->brightness->isVisible());
+
+    for(ZoneListItem* item: zone_items)
+    {
+        item->ToggleBrightnessSlider();
+    }
+}
+
 std::vector<ControllerZone*> DeviceListItem::GetSelection()
 {
     std::vector<ControllerZone*> selection;
