@@ -6,7 +6,7 @@ ZoneListItem::ZoneListItem(QString name) :
     ui(new Ui::ZoneListItem)
 {
     ui->setupUi(this);
-
+    ui->brightness->setVisible(false);
     ui->zone_name->setText(name);
 }
 
@@ -34,12 +34,12 @@ void ZoneListItem::ToggleBrightnessSlider()
 
 void ZoneListItem::SetEnableChecked(bool state)
 {
-    ui->enable->setCheckState(state ? Qt::Checked : Qt::Unchecked);
+    ui->enable->setChecked(state);
 }
 
 void ZoneListItem::SetReverseChecked(bool state)
 {
-    ui->reverse->setCheckState(state ? Qt::Checked : Qt::Unchecked);
+    ui->reverse->setChecked(state);
 }
 
 void ZoneListItem::on_enable_clicked()
@@ -65,5 +65,10 @@ bool ZoneListItem::IsEnabled()
 bool ZoneListItem::IsReversed()
 {
     return ui->reverse->isChecked();
+}
+
+void ZoneListItem::SetBrightness(int value)
+{
+    ui->brightness->setValue(value);
 }
 

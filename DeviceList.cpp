@@ -2,21 +2,16 @@
 #include "ui_DeviceList.h"
 
 #include "OpenRGBEffectsPlugin.h"
+#include <QVBoxLayout>
+
 
 DeviceList::DeviceList(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DeviceList)
 {
     ui->setupUi(this);
-
+    ui->devices->setLayout(new QVBoxLayout(this));
     InitControllersList();
-
-    QFont f(ui->enable_label->font());
-    f.setPointSize(f.pointSize() * 1.5);
-    f.setBold(true);
-
-    ui->enable_label->setFont(f);
-    ui->reverse_label->setFont(f);
 }
 
 DeviceList::~DeviceList()
@@ -27,8 +22,13 @@ DeviceList::~DeviceList()
 void DeviceList::Clear()
 {
     device_items.clear();
-    ui->devices->setRowCount(0);
-    ui->devices->clear();
+
+    QLayoutItem *child;
+
+    while ((child = ui->devices->layout()->takeAt(0)) != 0)
+    {
+        delete child->widget();
+    }   
 }
 
 void DeviceList::InitControllersList()
@@ -36,27 +36,6 @@ void DeviceList::InitControllersList()
     std::vector<RGBController*> controllers = OpenRGBEffectsPlugin::RMPointer->GetRGBControllers();
 
     controller_zones.clear();
-
-    // Hide headers
-    ui->devices->horizontalHeader()->hide();
-    ui->devices->verticalHeader()->hide();
-    ui->devices->setColumnCount(1);
-    ui->devices->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    ui->devices->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->devices->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-
-    // Set selection options
-    ui->devices->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->devices->setFocusPolicy(Qt::NoFocus);
-    ui->devices->setSelectionMode(QAbstractItemView::NoSelection);
-
-    // Set stretch modes
-    ui->devices->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->devices->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
-    ui->devices->setRowCount(controllers.size());
-
-    int row = 0;
 
     for(RGBController* controller : controllers)
     {
@@ -75,7 +54,7 @@ void DeviceList::InitControllersList()
         }
 
         DeviceListItem* item = new DeviceListItem(iteration_zones);
-        ui->devices->setCellWidget(row++, 0, item);
+        ui->devices->layout()->addWidget(item);
         device_items.push_back(item);
 
         connect(item, &DeviceListItem::SelectionChanged, [=](){

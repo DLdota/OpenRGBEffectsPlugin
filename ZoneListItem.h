@@ -25,6 +25,8 @@ public:
     bool IsEnabled();
     bool IsReversed();
 
+    void SetBrightness(int);
+
 private slots:
     void on_enable_clicked();
     void on_reverse_clicked();

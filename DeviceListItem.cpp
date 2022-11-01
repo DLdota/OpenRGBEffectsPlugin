@@ -1,5 +1,6 @@
 #include "DeviceListItem.h"
 #include "ui_DeviceListItem.h"
+#include <QVBoxLayout>
 
 DeviceListItem::DeviceListItem(std::vector<ControllerZone*> controller_zones) :
     QWidget(nullptr),
@@ -8,6 +9,7 @@ DeviceListItem::DeviceListItem(std::vector<ControllerZone*> controller_zones) :
     controller(controller_zones.front()->controller)
 {
     ui->setupUi(this);
+    ui->brightness->setVisible(false);
 
     bool has_direct = false;
 
@@ -22,33 +24,15 @@ DeviceListItem::DeviceListItem(std::vector<ControllerZone*> controller_zones) :
 
     ui->danger_not_direct->setVisible(!has_direct);
 
-    QFont f = ui->danger_not_direct->font();
-    f.setBold(true);
-    f.setPointSize(f.pointSize() * 1.5);
-    ui->danger_not_direct->setFont(f);
+    QString display_name = QString::fromStdString(controller->name);
 
-    QString display_name = "";
-
-    if(controller->name.length() > 25)
-    {
-        display_name = QString::fromStdString(controller->name.substr(0,25) + "...");
-        ui->device_name->setToolTip(QString::fromStdString(controller->name));
-    }
-    else
-    {
-        display_name = QString::fromStdString(controller->name);
-    }
-
+    ui->device_name->setToolTip(display_name);
     ui->device_name->setText(display_name);
 
     single_zone = controller_zones.size() == 1;
 
-    if(single_zone)
+    if(!single_zone)
     {
-        ui->zones->hide();
-    }
-    else
-    {        
         SetupZonesListItems();
     }
 }
@@ -60,37 +44,12 @@ DeviceListItem::~DeviceListItem()
 
 void DeviceListItem::SetupZonesListItems()
 {
-    ui->zones->setRowCount(controller_zones.size());
-    ui->zones->setColumnCount(1);
-
-    // Hide headers
-    ui->zones->horizontalHeader()->hide();
-    ui->zones->verticalHeader()->hide();
-    ui->zones->setColumnCount(1);
-    ui->zones->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->zones->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->zones->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-
-    // Set selection options
-    ui->zones->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->zones->setFocusPolicy(Qt::NoFocus);
-    ui->zones->setSelectionMode(QAbstractItemView::NoSelection);
-
-    // Set resize modes
-    ui->zones->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->zones->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
-    ui->zones->setFrameStyle(QFrame::NoFrame);
-    ui->zones->setShowGrid(false);
-
-    int final_height = 0;
-
     for(unsigned int i = 0; i < controller_zones.size(); i++)
     {
         ZoneListItem* item = new ZoneListItem(QString::fromStdString(controller->zones[i].name));
-        ui->zones->setCellWidget(i,0, item);
-        final_height += item->sizeHint().height() + 2; // include borders
+        ui->zones->addWidget(item);
         zone_items.push_back(item);
+        item->SetBrightness(controller_zones[i]->self_brightness);
 
         connect(item, SIGNAL(Enabled(bool)), this, SLOT(OnZoneListItemEnabled(bool)));
 
@@ -102,15 +61,11 @@ void DeviceListItem::SetupZonesListItems()
             OnZoneListItemBrightnessChanged(brightness, i);
         });
     }
-
-    ui->zones->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    ui->zones->setMaximumHeight(final_height);
-    ui->zones->setFixedHeight(final_height);
 }
 
 void DeviceListItem::SetEnabled(bool state)
 {
-    ui->enable->setCheckState(state ? Qt::Checked : Qt::Unchecked);
+    ui->enable->setChecked(state);
 
     for(ZoneListItem* item:zone_items)
     {
@@ -153,6 +108,13 @@ void DeviceListItem::on_brightness_valueChanged(int value)
     if(single_zone)
     {
         controller_zones[0]->self_brightness = value;
+    }
+    else
+    {
+        for(ZoneListItem* item: zone_items)
+        {
+            item->SetBrightness(value);
+        }
     }
 }
 
@@ -237,8 +199,8 @@ std::vector<ControllerZone*> DeviceListItem::GetSelection()
 void DeviceListItem::ApplySelection(std::vector<ControllerZone*> selection)
 {
     // Reset checkboxes
-    ui->enable->setCheckState(Qt::Unchecked);
-    ui->reverse->setCheckState(Qt::Unchecked);
+    ui->enable->setChecked(false);
+    ui->reverse->setChecked(false);
 
     for(ZoneListItem* item: zone_items)
     {
@@ -253,13 +215,15 @@ void DeviceListItem::ApplySelection(std::vector<ControllerZone*> selection)
         {
             if(single_zone)
             {
-                ui->enable->setCheckState(Qt::Checked);
-                ui->reverse->setCheckState(controller_zone->reverse ? Qt::Checked : Qt::Unchecked);
+                ui->enable->setChecked(true);
+                ui->reverse->setChecked(controller_zone->reverse);
+                ui->brightness->setValue(controller_zone->self_brightness);
             }
             else
             {
                 zone_items[controller_zone->zone_idx]->SetEnableChecked(true);
                 zone_items[controller_zone->zone_idx]->SetReverseChecked(controller_zone->reverse);
+                zone_items[controller_zone->zone_idx]->SetBrightness(controller_zone->self_brightness);
             }
         }
     }
@@ -292,7 +256,6 @@ void DeviceListItem::RunGlobalCheckVerification()
         }
     }
 
-    ui->enable->setCheckState(enabled_count == controller->zones.size() ? Qt::Checked : Qt::Unchecked);
-    ui->reverse->setCheckState(reversed_count == controller->zones.size() ? Qt::Checked : Qt::Unchecked);
-
+    ui->enable->setChecked(enabled_count == controller->zones.size());
+    ui->reverse->setChecked(reversed_count == controller->zones.size());
 }

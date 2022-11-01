@@ -168,7 +168,6 @@ HEADERS +=                                                                      
     ColorsPicker.h                                                                              \
     ColorUtils.h                                                                                \
     ControllerZone.h                                                                            \
-    ControllerZoneList.h                                                                        \
     DeviceList.h                                                                                \
     DeviceListItem.h                                                                            \
     EffectList.h                                                                                \
@@ -183,7 +182,6 @@ HEADERS +=                                                                      
     EffectSearch.h                                                                              \
 
 SOURCES +=                                                                                      \
-    ControllerZoneList.cpp                                                                      \
     DeviceList.cpp                                                                              \
     DeviceListItem.cpp                                                                          \
     EffectList.cpp                                                                              \
@@ -206,7 +204,6 @@ SOURCES +=                                                                      
     EffectSearch.cpp                                                                            \
 
 FORMS +=                                                                                        \
-    ControllerZoneList.ui                                                                       \
     DeviceList.ui                                                                               \
     DeviceListItem.ui                                                                           \
     EffectList.ui                                                                               \
