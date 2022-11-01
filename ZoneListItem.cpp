@@ -47,6 +47,11 @@ void ZoneListItem::on_reverse_clicked()
     emit Reversed(ui->reverse->isChecked());
 }
 
+void ZoneListItem::on_brightness_valueChanged(int value)
+{
+    emit BrightnessChanged(value);
+}
+
 bool ZoneListItem::IsEnabled()
 {
     return ui->enable->isChecked();

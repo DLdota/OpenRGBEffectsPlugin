@@ -27,10 +27,12 @@ public:
 private slots:
     void on_enable_clicked();
     void on_reverse_clicked();
+    void on_brightness_valueChanged(int);
 
 signals:
     void Enabled(bool);
     void Reversed(bool);
+    void BrightnessChanged(int);
 
 private:
     Ui::ZoneListItem *ui;

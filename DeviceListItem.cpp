@@ -97,6 +97,10 @@ void DeviceListItem::SetupZonesListItems()
         connect(item, &ZoneListItem::Reversed, [=](bool state){
             OnZoneListItemReversed(state, i);
         });
+
+        connect(item, &ZoneListItem::BrightnessChanged, [=](int brightness){
+            OnZoneListItemBrightnessChanged(brightness, i);
+        });
     }
 
     ui->zones->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
@@ -144,6 +148,14 @@ void DeviceListItem::on_reverse_clicked()
     emit SelectionChanged();
 }
 
+void DeviceListItem::on_brightness_valueChanged(int value)
+{
+    if(single_zone)
+    {
+        controller_zones[0]->self_brightness = value;
+    }
+}
+
 void DeviceListItem::OnZoneListItemEnabled(bool)
 {
     RunGlobalCheckVerification();
@@ -158,6 +170,11 @@ void DeviceListItem::OnZoneListItemReversed(bool state, int index)
     RunGlobalCheckVerification();    
 
     emit SelectionChanged();
+}
+
+void DeviceListItem::OnZoneListItemBrightnessChanged(int brightness, int index)
+{
+    controller_zones[index]->self_brightness = brightness;
 }
 
 void DeviceListItem::DisableControls()

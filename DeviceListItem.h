@@ -32,9 +32,11 @@ signals:
 private slots:
     void on_enable_clicked();
     void on_reverse_clicked();
+    void on_brightness_valueChanged(int);
 
     void OnZoneListItemEnabled(bool);
     void OnZoneListItemReversed(bool, int);
+    void OnZoneListItemBrightnessChanged(int, int);
 
 private:
     Ui::DeviceListItem *ui;

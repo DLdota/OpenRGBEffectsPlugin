@@ -21,6 +21,7 @@ public:
     RGBController* controller;
     unsigned int zone_idx;
     bool reverse;
+    unsigned int self_brightness;
 
     zone_type type()
     {
@@ -97,12 +98,12 @@ public:
 
     void SetAllZoneLEDs(RGBColor color, int brightness)
     {
-        controller->SetAllZoneLEDs(zone_idx, ColorUtils::apply_brightness(color, brightness / 100.f));
+        controller->SetAllZoneLEDs(zone_idx, ColorUtils::apply_brightness(color, (self_brightness / 100.f) * (brightness / 100.f)));
     }
 
     void SetLED(int idx, RGBColor color, int brightness)
     {
-         controller->SetLED(idx, ColorUtils::apply_brightness(color, brightness / 100.f));
+         controller->SetLED(idx, ColorUtils::apply_brightness(color,  (self_brightness / 100.f) * (brightness / 100.f)));
     }
 
 };
