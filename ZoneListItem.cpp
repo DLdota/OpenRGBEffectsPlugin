@@ -7,7 +7,7 @@ ZoneListItem::ZoneListItem(QString name) :
 {
     ui->setupUi(this);
     ui->brightness->setVisible(false);
-    ui->zone_name->setText(name);
+    ui->zone_name->setText("• " + name);
 }
 
 ZoneListItem::~ZoneListItem()
