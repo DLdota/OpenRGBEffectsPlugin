@@ -34,12 +34,16 @@ void ZoneListItem::ToggleBrightnessSlider()
 
 void ZoneListItem::SetEnableChecked(bool state)
 {
+    ui->enable->blockSignals(true);
     ui->enable->setChecked(state);
+    ui->enable->blockSignals(false);
 }
 
 void ZoneListItem::SetReverseChecked(bool state)
 {
+    ui->reverse->blockSignals(true);
     ui->reverse->setChecked(state);
+    ui->reverse->blockSignals(false);
 }
 
 void ZoneListItem::on_enable_toggled(bool state)
@@ -69,6 +73,8 @@ bool ZoneListItem::IsReversed()
 
 void ZoneListItem::SetBrightness(int value)
 {
+    ui->brightness->blockSignals(true);
     ui->brightness->setValue(value);
+    ui->brightness->blockSignals(false);
 }
 

@@ -205,6 +205,10 @@ std::vector<ControllerZone*> DeviceListItem::GetSelection()
 void DeviceListItem::ApplySelection(std::vector<ControllerZone*> selection)
 {
     // Reset checkboxes
+    ui->enable->blockSignals(true);
+    ui->reverse->blockSignals(true);
+    ui->brightness->blockSignals(true);
+
     ui->enable->setChecked(false);
     ui->reverse->setChecked(false);
 
@@ -234,6 +238,10 @@ void DeviceListItem::ApplySelection(std::vector<ControllerZone*> selection)
         }
     }
 
+    ui->enable->blockSignals(false);
+    ui->reverse->blockSignals(false);
+    ui->brightness->blockSignals(false);
+
     // Reflect sub zone states
     if(!single_zone)
     {
@@ -262,6 +270,10 @@ void DeviceListItem::RunGlobalCheckVerification()
         }
     }
 
+    ui->enable->blockSignals(true);
+    ui->reverse->blockSignals(true);
     ui->enable->setChecked(enabled_count == controller->zones.size());
     ui->reverse->setChecked(reversed_count == controller->zones.size());
+    ui->enable->blockSignals(false);
+    ui->reverse->blockSignals(false);
 }
