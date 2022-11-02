@@ -10,7 +10,7 @@ DeviceList::DeviceList(QWidget *parent) :
     ui(new Ui::DeviceList)
 {
     ui->setupUi(this);
-    ui->devices->setLayout(new QVBoxLayout(this));
+    ui->devices->setLayout(new QVBoxLayout(ui->devices));
     InitControllersList();
 }
 
