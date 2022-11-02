@@ -7,28 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>237</width>
-    <height>140</height>
+    <height>236</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="4" column="1">
-    <widget class="QPushButton" name="save">
-     <property name="text">
-      <string>Save</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Profile name:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
+   <item row="6" column="1" colspan="2">
     <widget class="QCheckBox" name="save_effects_state">
      <property name="text">
       <string>Save effects state</string>
@@ -38,14 +24,49 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="7" column="2">
+    <widget class="QPushButton" name="save">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Save</string>
+     </property>
+     <property name="default">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="2">
+    <widget class="QListWidget" name="profile_list"/>
+   </item>
+   <item row="7" column="1">
     <widget class="QPushButton" name="cancel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
       <string>Cancel</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2">
+   <item row="4" column="1" colspan="2">
+    <widget class="QLineEdit" name="filename"/>
+   </item>
+   <item row="2" column="1" colspan="2">
+    <widget class="QLabel" name="create_new_profile">
+     <property name="text">
+      <string>Or create a new one:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" colspan="2">
     <widget class="QCheckBox" name="load_at_startup">
      <property name="text">
       <string>Load profile at startup</string>
@@ -55,11 +76,30 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QLineEdit" name="filename"/>
+   <item row="0" column="1" colspan="2">
+    <widget class="QLabel" name="choose_existing_profile">
+     <property name="text">
+      <string>Choose an existing profile:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="2">
+    <widget class="QLabel" name="enter_profile_name">
+     <property name="text">
+      <string>Enter a profile name:</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>profile_list</tabstop>
+  <tabstop>filename</tabstop>
+  <tabstop>load_at_startup</tabstop>
+  <tabstop>save_effects_state</tabstop>
+  <tabstop>cancel</tabstop>
+  <tabstop>save</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

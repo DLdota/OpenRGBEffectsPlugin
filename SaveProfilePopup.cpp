@@ -1,5 +1,6 @@
 #include "SaveProfilePopup.h"
 #include "ui_SaveProfilePopup.h"
+#include "OpenRGBEffectSettings.h"
 
 #include <QRegExp>
 #include <QRegExpValidator>
@@ -14,6 +15,28 @@ SaveProfilePopup::SaveProfilePopup(QWidget *parent) :
     QRegExp re("^[\\w\\-_.]+$");
     QRegExpValidator *validator = new QRegExpValidator(re, this);
     ui->filename->setValidator(validator);
+
+    std::vector<std::string> filenames = OpenRGBEffectSettings::ListProfiles();
+
+    if(filenames.empty())
+    {
+        ui->choose_existing_profile->setVisible(false);
+        ui->profile_list->setVisible(false);
+        ui->create_new_profile->setVisible(false);
+    }
+    else
+    {
+        ui->enter_profile_name->setVisible(false);
+
+        for(const std::string& f: filenames)
+        {
+            ui->profile_list->addItem(QString::fromStdString(f));
+        }
+
+        connect(ui->profile_list, &QListWidget::currentItemChanged, [=](){
+            ui->filename->setText(ui->profile_list->currentItem()->text());
+        });
+    }
 }
 
 SaveProfilePopup::~SaveProfilePopup()
