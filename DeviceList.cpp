@@ -63,21 +63,21 @@ void DeviceList::InitControllersList()
     }
 }
 
-void DeviceList::on_select_all_clicked()
+void DeviceList::on_toggle_select_all_clicked()
 {
     for(DeviceListItem* item: device_items)
     {
-        item->SetEnabled(true);
+        item->SetEnabled(ui->toggle_select_all->isChecked());
     }
 
     emit SelectionChanged();
 }
 
-void DeviceList::on_deselect_all_clicked()
+void DeviceList::on_toggle_reverse_clicked()
 {
     for(DeviceListItem* item: device_items)
     {
-        item->SetEnabled(false);
+        item->SetReverse(ui->toggle_reverse->isChecked());
     }
 
     emit SelectionChanged();

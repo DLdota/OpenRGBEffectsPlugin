@@ -73,10 +73,18 @@ void DeviceListItem::SetEnabled(bool state)
     }
 }
 
-void DeviceListItem::on_enable_clicked()
+void DeviceListItem::SetReverse(bool state)
 {
-    bool state = ui->enable->isChecked();
+    ui->reverse->setChecked(state);
 
+    for(ZoneListItem* item:zone_items)
+    {
+        item->SetReverseChecked(state);
+    }
+}
+
+void DeviceListItem::on_enable_toggled(bool state)
+{
     for(ZoneListItem* item:zone_items)
     {
         item->SetEnableChecked(state);
@@ -85,10 +93,8 @@ void DeviceListItem::on_enable_clicked()
     emit SelectionChanged();
 }
 
-void DeviceListItem::on_reverse_clicked()
+void DeviceListItem::on_reverse_toggled(bool state)
 {
-    bool state = ui->reverse->isChecked();
-
     if(single_zone)
     {
         controller_zones[0]->reverse = state;

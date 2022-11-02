@@ -28,8 +28,8 @@ public:
     void SetBrightness(int);
 
 private slots:
-    void on_enable_clicked();
-    void on_reverse_clicked();
+    void on_enable_toggled(bool);
+    void on_reverse_toggled(bool);
     void on_brightness_valueChanged(int);
 
 signals:

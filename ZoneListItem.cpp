@@ -42,14 +42,14 @@ void ZoneListItem::SetReverseChecked(bool state)
     ui->reverse->setChecked(state);
 }
 
-void ZoneListItem::on_enable_clicked()
+void ZoneListItem::on_enable_toggled(bool state)
 {
-    emit Enabled(ui->enable->isChecked());
+    emit Enabled(state);
 }
 
-void ZoneListItem::on_reverse_clicked()
+void ZoneListItem::on_reverse_toggled(bool state)
 {
-    emit Reversed(ui->reverse->isChecked());
+    emit Reversed(state);
 }
 
 void ZoneListItem::on_brightness_valueChanged(int value)
