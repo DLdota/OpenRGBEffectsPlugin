@@ -73,8 +73,6 @@ bool ZoneListItem::IsReversed()
 
 void ZoneListItem::SetBrightness(int value)
 {
-    ui->brightness->blockSignals(true);
     ui->brightness->setValue(value);
-    ui->brightness->blockSignals(false);
 }
 
