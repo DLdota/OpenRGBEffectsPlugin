@@ -6,23 +6,79 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>194</height>
+    <width>326</width>
+    <height>287</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="color_rotation_speed_label">
-     <property name="text">
-      <string>Color rotation speed</string>
+   <item row="8" column="1">
+    <widget class="QTooltipedSlider" name="thickness">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>10</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QTooltipedSlider" name="animation_speed">
+   <item row="6" column="1">
+    <widget class="QComboBox" name="animation_direction"/>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="color_rotation_direction_label">
+     <property name="text">
+      <string>Color rotation direction</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="ColorsPicker" name="colors_picker" native="true"/>
+   </item>
+   <item row="9" column="1">
+    <widget class="QTooltipedSlider" name="cx">
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>50</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="cx_label">
+     <property name="text">
+      <string>X position</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QComboBox" name="color_rotation_direction"/>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="animation_speed_label">
+     <property name="text">
+      <string>Animation speed</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="color_mode_label">
+     <property name="text">
+      <string>Color mode</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QTooltipedSlider" name="color_rotation_speed">
      <property name="minimum">
       <number>10</number>
      </property>
@@ -31,21 +87,21 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="8" column="0">
+    <widget class="QLabel" name="thickness_label">
+     <property name="text">
+      <string>Thickness</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
     <widget class="QLabel" name="spacing_label">
      <property name="text">
       <string>Spacing</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="color_rotation_direction_label">
-     <property name="text">
-      <string>Color rotation direction</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
+   <item row="7" column="1">
     <widget class="QTooltipedSlider" name="spacing">
      <property name="minimum">
       <number>1</number>
@@ -58,8 +114,32 @@
      </property>
     </widget>
    </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="animation_direction_label">
+     <property name="text">
+      <string>Animation direction</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="cy_label">
+     <property name="text">
+      <string>Y position</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="color_rotation_speed_label">
+     <property name="text">
+      <string>Color rotation speed</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="1">
-    <widget class="QTooltipedSlider" name="color_rotation_speed">
+    <widget class="QComboBox" name="color_mode"/>
+   </item>
+   <item row="5" column="1">
+    <widget class="QTooltipedSlider" name="animation_speed">
      <property name="minimum">
       <number>10</number>
      </property>
@@ -68,7 +148,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="10" column="1">
     <widget class="QTooltipedSlider" name="cy">
      <property name="maximum">
       <number>100</number>
@@ -87,72 +167,33 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QComboBox" name="color_rotation_direction"/>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="cy_label">
+   <item row="2" column="0" colspan="2">
+    <widget class="QLabel" name="gradient">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>20</height>
+      </size>
+     </property>
      <property name="text">
-      <string>Y position</string>
+      <string>TextLabel</string>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
      </property>
     </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="animation_direction_label">
-     <property name="text">
-      <string>Animation direction</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QTooltipedSlider" name="thickness">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>10</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="animation_speed_label">
-     <property name="text">
-      <string>Animation speed</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="thickness_label">
-     <property name="text">
-      <string>Thickness</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="cx_label">
-     <property name="text">
-      <string>X position</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QTooltipedSlider" name="cx">
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="value">
-      <number>50</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QComboBox" name="animation_direction"/>
    </item>
   </layout>
  </widget>
@@ -161,6 +202,12 @@
    <class>QTooltipedSlider</class>
    <extends>QSlider</extends>
    <header location="global">QTooltipedSlider.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ColorsPicker</class>
+   <extends>QWidget</extends>
+   <header location="global">ColorsPicker.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

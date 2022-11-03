@@ -6,6 +6,12 @@
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
 
+enum
+{
+    COLOR_MODE_RAINBOW  = 0,
+    COLOR_MODE_CUSTOM   = 1
+};
+
 namespace Ui {
 class Hypnotoad;
 }
@@ -27,6 +33,7 @@ public:
     json SaveCustomSettings(json) override;
 
 private slots:
+    void on_color_mode_currentIndexChanged(int);
     void on_animation_speed_valueChanged(int);
     void on_color_rotation_speed_valueChanged(int);
     void on_animation_direction_currentIndexChanged(int);
@@ -35,12 +42,16 @@ private slots:
     void on_thickness_valueChanged(int);
     void on_cx_valueChanged(int);
     void on_cy_valueChanged(int);
+    void on_colors_picker_ColorsChanged();
 
 private:
     Ui::Hypnotoad *ui;
     double progress = 1000.0;
     RGBColor GetColor(unsigned int, unsigned int, float, float, bool);
+    void GenerateGradient();
+    QImage gradient;
 
+    unsigned int color_mode = COLOR_MODE_RAINBOW;
     float animation_speed = 10.f;
     float color_rotation_speed = 10.f;
     unsigned int animation_direction = 0;
