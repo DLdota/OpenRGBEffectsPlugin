@@ -389,7 +389,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
             break;
 
         case VISUALIZER_SINGLE_COLOR_GREEN:
-            DrawSingleColorStatic(brightness, COLOR_GREEN, pixels_render);
+            DrawSingleColorStatic(brightness, COLOR_LIME, pixels_render);
             break;
 
         case VISUALIZER_SINGLE_COLOR_CYAN:
@@ -1271,7 +1271,7 @@ void AudioVisualizer::DrawPattern(VISUALIZER_PATTERN pattern, int bright, vis_pi
         break;
 
     case VISUALIZER_PATTERN_SOLID_GREEN:
-        DrawSolidColor(bright, COLOR_GREEN, pixels);
+        DrawSolidColor(bright, COLOR_LIME, pixels);
         break;
 
     case VISUALIZER_PATTERN_SOLID_CYAN:
@@ -1320,14 +1320,14 @@ void AudioVisualizer::DrawPattern(VISUALIZER_PATTERN pattern, int bright, vis_pi
 
     case VISUALIZER_PATTERN_STATIC_GREEN_YELLOW_RED:
         {
-        RGBColor colors[] = { COLOR_GREEN, COLOR_YELLOW, COLOR_RED };
+        RGBColor colors[] = { COLOR_LIME, COLOR_YELLOW, COLOR_RED };
         DrawHorizontalBars(bright, colors, 3, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_GREEN_WHITE_RED:
         {
-        RGBColor colors[] = { COLOR_GREEN, COLOR_WHITE, COLOR_RED };
+        RGBColor colors[] = { COLOR_LIME, COLOR_WHITE, COLOR_RED };
         DrawHorizontalBars(bright, colors, 3, pixels);
         }
         break;
@@ -1348,14 +1348,14 @@ void AudioVisualizer::DrawPattern(VISUALIZER_PATTERN pattern, int bright, vis_pi
 
     case VISUALIZER_PATTERN_STATIC_RAINBOW:
         {
-        RGBColor colors[] = { COLOR_RED, COLOR_YELLOW, COLOR_GREEN, COLOR_CYAN, COLOR_BLUE, COLOR_PURPLE };
+        RGBColor colors[] = { COLOR_RED, COLOR_YELLOW, COLOR_LIME, COLOR_CYAN, COLOR_BLUE, COLOR_PURPLE };
         DrawHorizontalBars(bright, colors, 6, pixels);
         }
         break;
 
     case VISUALIZER_PATTERN_STATIC_RAINBOW_INVERSE:
         {
-        RGBColor colors[] = { COLOR_PURPLE, COLOR_BLUE, COLOR_CYAN, COLOR_GREEN, COLOR_YELLOW, COLOR_RED };
+        RGBColor colors[] = { COLOR_PURPLE, COLOR_BLUE, COLOR_CYAN, COLOR_LIME, COLOR_YELLOW, COLOR_RED };
         DrawHorizontalBars(bright, colors, 6, pixels);
         }
         break;
