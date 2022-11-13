@@ -54,7 +54,7 @@ public:
     virtual void EffectState(bool Enabled) { EffectEnabled = Enabled; }
 
     virtual void LoadCustomSettings(json) {}
-    virtual json SaveCustomSettings(json) { return json(); }
+    virtual json SaveCustomSettings() { return json(); }
 
     virtual void SetAutoStart(bool value) { AutoStart = value;}
     virtual bool IsAutoStart() { return AutoStart;}
@@ -83,6 +83,34 @@ public:
     EffectInfo EffectDetails;
 
     void EmitMeasure(float t, int d){ emit TimeMeasured(t, d); }
+
+    json ToJson()
+    {
+        json j;
+
+        j["EffectClassName"]  = EffectDetails.EffectClassName;
+        j["CustomName"]       = EffectDetails.CustomName;
+        j["FPS"]              = GetFPS();
+        j["Speed"]            = GetSpeed();
+        j["Slider2Val"]       = GetSlider2Val();
+        j["RandomColors"]     = IsRandomColorsEnabled();
+        j["AllowOnlyFirst"]   = IsOnlyFirstColorEnabled();
+        j["Brightness"]       = GetBrightness();
+
+        std::vector<RGBColor> colors = GetUserColors();
+
+        for (unsigned int c = 0; c < colors.size(); c++)
+        {
+            j["UserColors"][c] = colors[c];
+        }
+
+        if (EffectDetails.HasCustomSettings)
+        {
+            j["CustomSettings"] = SaveCustomSettings();
+        }
+
+        return j;
+    }
 
 signals:
     void TimeMeasured(float, int);

@@ -30,7 +30,7 @@ public:
     void SetUserColors(std::vector<RGBColor>) override;
     void OnControllerZonesListChanged(std::vector<ControllerZone*>) override;
     void LoadCustomSettings(json) override;
-    json SaveCustomSettings(json) override;
+    json SaveCustomSettings() override;
 
 private slots:
     void on_lightning_mode_currentIndexChanged(int);

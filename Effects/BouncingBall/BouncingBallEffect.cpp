@@ -123,15 +123,17 @@ void BouncingBallEffect::LoadCustomSettings(json Settings)
     ui->drop_height_percent_slider->setValue(dropHeightPercent);
 }
 
-json BouncingBallEffect::SaveCustomSettings(json Settings)
+json BouncingBallEffect::SaveCustomSettings()
 {
-    Settings["radius"] = radius;
-    Settings["gravity"] = gravity;
-    Settings["horizontalVelocity"] = horizontalVelocity;
-    Settings["spectrumVelocity"] = spectrumVelocity;
-    Settings["dropHeightPercent"] = dropHeightPercent;
+    json settings;
 
-    return Settings;
+    settings["radius"] = radius;
+    settings["gravity"] = gravity;
+    settings["horizontalVelocity"] = horizontalVelocity;
+    settings["spectrumVelocity"] = spectrumVelocity;
+    settings["dropHeightPercent"] = dropHeightPercent;
+
+    return settings;
 }
 
 void BouncingBallEffect::OnControllerZonesListChanged(std::vector<ControllerZone*> newControllerZones)

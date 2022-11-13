@@ -352,17 +352,19 @@ RGBColor AudioVUMeter::GetColor(float a, float y, float h)
 }
 
 
-json AudioVUMeter::SaveCustomSettings(json Settings)
+json AudioVUMeter::SaveCustomSettings()
 {
-    Settings["audio_device_idx"] = audio_device_idx;
-    Settings["amplitude"] = amplitude;
-    Settings["avg_size"] = avg_size;
-    Settings["decay"] = decay;
-    Settings["color_offset"] = color_offset;
-    Settings["color_spread"] = color_spread;
-    Settings["saturation"] = saturation;
+    json settings;
 
-    return Settings;
+    settings["audio_device_idx"] = audio_device_idx;
+    settings["amplitude"] = amplitude;
+    settings["avg_size"] = avg_size;
+    settings["decay"] = decay;
+    settings["color_offset"] = color_offset;
+    settings["color_spread"] = color_spread;
+    settings["saturation"] = saturation;
+
+    return settings;
 }
 
 void AudioVUMeter::LoadCustomSettings(json Settings)

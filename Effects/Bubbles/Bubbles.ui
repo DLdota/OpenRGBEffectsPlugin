@@ -6,18 +6,53 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>189</width>
-    <height>138</height>
+    <width>342</width>
+    <height>230</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="5" column="0">
-    <widget class="QLabel" name="speed_mult_label">
+   <item row="1" column="1">
+    <widget class="QTooltipedSlider" name="max_bubbles">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>20</number>
+     </property>
+     <property name="value">
+      <number>10</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="ColorPicker" name="background" native="true"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="rarity_label">
      <property name="text">
-      <string>Speed</string>
+      <string>Rarity</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QTooltipedSlider" name="rarity">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>1000</number>
+     </property>
+     <property name="value">
+      <number>50</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
@@ -37,17 +72,31 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="max_bubbles_label">
-     <property name="text">
-      <string>Max bubbles</string>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="0">
     <widget class="QLabel" name="max_expansion_label">
      <property name="text">
       <string>Max expansion</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Background</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="bubbles_thickness_label">
+     <property name="text">
+      <string>Bubbles thickness</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="max_bubbles_label">
+     <property name="text">
+      <string>Max bubbles</string>
      </property>
     </widget>
    </item>
@@ -58,32 +107,6 @@
      </property>
      <property name="maximum">
       <number>100</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="ColorPicker" name="background" native="true"/>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="bubbles_thickness_label">
-     <property name="text">
-      <string>Bubbles thickness</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QTooltipedSlider" name="rarity">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>1000</number>
-     </property>
-     <property name="value">
-      <number>50</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -106,35 +129,25 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
+   <item row="5" column="0">
+    <widget class="QLabel" name="speed_mult_label">
      <property name="text">
-      <string>Background</string>
+      <string>Speed</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QTooltipedSlider" name="max_bubbles">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>20</number>
-     </property>
-     <property name="value">
-      <number>10</number>
-     </property>
+   <item row="6" column="0" colspan="2">
+    <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Vertical</enum>
      </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="rarity_label">
-     <property name="text">
-      <string>Rarity</string>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
      </property>
-    </widget>
+    </spacer>
    </item>
   </layout>
  </widget>

@@ -119,11 +119,14 @@ void ColorWheelEffect::LoadCustomSettings(json settings)
     ui->direction->setCurrentIndex(direction);
 }
 
-json ColorWheelEffect::SaveCustomSettings(json settings)
+json ColorWheelEffect::SaveCustomSettings()
 {
+    json settings;
+
     settings["cx"] = cx_shift;
     settings["cy"] = cy_shift;
     settings["direction"] = direction;
+
     return settings;
 }
 

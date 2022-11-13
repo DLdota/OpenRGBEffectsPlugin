@@ -807,27 +807,29 @@ void AudioSync::LoadCustomSettings(json Settings)
     return;
 }
 
-json AudioSync::SaveCustomSettings(json Settings)
+json AudioSync::SaveCustomSettings()
 {
-    Settings["audio_device_idx"]    = audio_device_idx;
-    Settings["fade_step"]           = current_settings.fade_step;
-    Settings["rainbow_shift"]       = current_settings.rainbow_shift;
-    Settings["bypass_min"]          = current_settings.bypass_min;
-    Settings["bypass_max"]          = current_settings.bypass_max;
-    Settings["avg_size"]            = current_settings.avg_size;
-    Settings["avg_mode"]            = current_settings.avg_mode;
-    Settings["roll_mode"]           = current_settings.roll_mode;
-    Settings["saturation_mode"]     = current_settings.saturation_mode;
-    Settings["decay"]               = current_settings.decay;
-    Settings["filter_constant"]     = current_settings.filter_constant;
-    Settings["high"]                = current_settings.high;
-    Settings["middle"]              = current_settings.middle;
-    Settings["low"]                 = current_settings.low;
-    Settings["amplitude_min_value"] = amplitude_min_value;
-    Settings["amplitude_max_value"] = amplitude_max_value;
-    Settings["amplitude"]           = current_settings.amplitude;
+    json settings;
 
-    return Settings;
+    settings["audio_device_idx"]    = audio_device_idx;
+    settings["fade_step"]           = current_settings.fade_step;
+    settings["rainbow_shift"]       = current_settings.rainbow_shift;
+    settings["bypass_min"]          = current_settings.bypass_min;
+    settings["bypass_max"]          = current_settings.bypass_max;
+    settings["avg_size"]            = current_settings.avg_size;
+    settings["avg_mode"]            = current_settings.avg_mode;
+    settings["roll_mode"]           = current_settings.roll_mode;
+    settings["saturation_mode"]     = current_settings.saturation_mode;
+    settings["decay"]               = current_settings.decay;
+    settings["filter_constant"]     = current_settings.filter_constant;
+    settings["high"]                = current_settings.high;
+    settings["middle"]              = current_settings.middle;
+    settings["low"]                 = current_settings.low;
+    settings["amplitude_min_value"] = amplitude_min_value;
+    settings["amplitude_max_value"] = amplitude_max_value;
+    settings["amplitude"]           = current_settings.amplitude;
+
+    return settings;
 }
 
 void AudioSync::EffectState(const bool State)

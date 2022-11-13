@@ -354,17 +354,19 @@ void AudioStar::on_edge_beat_stateChanged(int value)
     edge_beat = value;
 }
 
-json AudioStar::SaveCustomSettings(json Settings)
+json AudioStar::SaveCustomSettings()
 {
-    Settings["audio_device_idx"] = audio_device_idx;
-    Settings["amplitude"] = amplitude;
-    Settings["decay"] = decay;
-    Settings["edge_beat"] = edge_beat;
-    Settings["edge_beat_sensivity"] = edge_beat_sensivity;
-    Settings["edge_beat_saturation"] = edge_beat_saturation;
-    Settings["edge_beat_hue"] = edge_beat_hue;
+    json settings;
 
-    return Settings;
+    settings["audio_device_idx"] = audio_device_idx;
+    settings["amplitude"] = amplitude;
+    settings["decay"] = decay;
+    settings["edge_beat"] = edge_beat;
+    settings["edge_beat_sensivity"] = edge_beat_sensivity;
+    settings["edge_beat_saturation"] = edge_beat_saturation;
+    settings["edge_beat_hue"] = edge_beat_hue;
+
+    return settings;
 }
 
 void AudioStar::LoadCustomSettings(json Settings)

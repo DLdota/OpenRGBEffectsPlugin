@@ -25,7 +25,7 @@ public:
     void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void LoadCustomSettings(json) override;
-    json SaveCustomSettings(json) override;
+    json SaveCustomSettings() override;
     void SetUserColors(std::vector<RGBColor> colors) override;
     void SetRandomColorsEnabled(bool value) override;
 

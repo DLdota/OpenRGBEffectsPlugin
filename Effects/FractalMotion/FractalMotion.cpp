@@ -160,12 +160,14 @@ void FractalMotion::LoadCustomSettings(json settings)
 
 }
 
-json FractalMotion::SaveCustomSettings(json settings)
+json FractalMotion::SaveCustomSettings()
 {
+    json settings;
+
     settings["background"]  = background;
-    settings["thickness"]     = thickness;
-    settings["amplitude"]     = amplitude;
-    settings["frequency"]     = frequency;
+    settings["thickness"]   = thickness;
+    settings["amplitude"]   = amplitude;
+    settings["frequency"]   = frequency;
     settings["freq_m1"]     = freq_m1;
     settings["freq_m2"]     = freq_m2;
     settings["freq_m3"]     = freq_m3;

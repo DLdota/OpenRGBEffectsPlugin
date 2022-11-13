@@ -386,26 +386,22 @@ void SwirlCirclesAudio::on_radius_valueChanged(int value)
     radius = value;
 }
 
-json SwirlCirclesAudio::SaveCustomSettings(json Settings)
+json SwirlCirclesAudio::SaveCustomSettings()
 {
-    Settings["audio_device_idx"] = audio_device_idx;
-    Settings["amplitude"] = amplitude;
-    Settings["decay"] = decay;
-    Settings["radius"] = radius;
-    return Settings;
+    json settings;
+
+    settings["audio_device_idx"]    = audio_device_idx;
+    settings["amplitude"]           = amplitude;
+    settings["decay"]               = decay;
+    settings["radius"]              = radius;
+
+    return settings;
 }
 
-void SwirlCirclesAudio::LoadCustomSettings(json Settings)
+void SwirlCirclesAudio::LoadCustomSettings(json settings)
 {
-    if (Settings.contains("audio_device_idx"))
-        ui->devices->setCurrentIndex(Settings["audio_device_idx"]);
-
-    if (Settings.contains("amplitude"))
-        ui->amplitude->setValue(Settings["amplitude"]);
-
-    if (Settings.contains("decay"))
-        ui->decay->setValue(Settings["decay"]);
-
-    if (Settings.contains("radius"))
-        ui->radius->setValue(Settings["radius"]);
+    if (settings.contains("audio_device_idx"))  ui->devices->setCurrentIndex(settings["audio_device_idx"]);
+    if (settings.contains("amplitude"))         ui->amplitude->setValue(settings["amplitude"]);
+    if (settings.contains("decay"))             ui->decay->setValue(settings["decay"]);
+    if (settings.contains("radius"))            ui->radius->setValue(settings["radius"]);
 }

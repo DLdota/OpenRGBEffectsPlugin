@@ -6,23 +6,197 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>293</height>
+    <width>632</width>
+    <height>371</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_freq_m1">
+   <item row="10" column="3">
+    <widget class="QTooltipedSlider" name="freq_m8">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>10000</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QLabel" name="label_freq_m2">
      <property name="text">
-      <string>Freq m1</string>
+      <string>Freq m2</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QTooltipedSlider" name="freq_m1">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>10000</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <widget class="QTooltipedSlider" name="freq_m5">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>10000</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
     <widget class="ColorPicker" name="background" native="true"/>
+   </item>
+   <item row="8" column="2">
+    <widget class="QLabel" name="label_freq_m6">
+     <property name="text">
+      <string>Freq m6</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="3">
+    <widget class="QTooltipedSlider" name="thickness">
+     <property name="minimum">
+      <number>2</number>
+     </property>
+     <property name="maximum">
+      <number>20</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="1" colspan="3">
+    <widget class="QPushButton" name="defaults">
+     <property name="text">
+      <string>Defaults</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_freq_m3">
+     <property name="text">
+      <string>Freq m3</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="label_freq_m7">
+     <property name="text">
+      <string>Freq m7</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="2">
+    <widget class="QLabel" name="label_freq_m12">
+     <property name="text">
+      <string>Freq m12</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="1">
+    <widget class="QTooltipedSlider" name="freq_m11">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>10000</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1">
+    <widget class="QTooltipedSlider" name="freq_m7">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="3">
+    <widget class="QTooltipedSlider" name="frequency">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>10000</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_thickness">
+     <property name="text">
+      <string>Thickness</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="3">
+    <widget class="QTooltipedSlider" name="freq_m10">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>10000</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_frequency">
+     <property name="text">
+      <string>Frequency</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="background_label">
+     <property name="text">
+      <string>Background color:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_amplitude">
+     <property name="text">
+      <string>Amplitude</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QLabel" name="label_freq_m4">
+     <property name="text">
+      <string>Freq m4</string>
+     </property>
+    </widget>
    </item>
    <item row="6" column="1">
     <widget class="QTooltipedSlider" name="freq_m3">
@@ -44,57 +218,24 @@
      </property>
     </widget>
    </item>
+   <item row="10" column="2">
+    <widget class="QLabel" name="label_freq_m8">
+     <property name="text">
+      <string>Freq m8</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="label_freq_m5">
+     <property name="text">
+      <string>Freq m5</string>
+     </property>
+    </widget>
+   </item>
    <item row="14" column="0">
     <widget class="QLabel" name="label_freq_m11">
      <property name="text">
       <string>Freq m11</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_frequency">
-     <property name="text">
-      <string>Frequency</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="1">
-    <widget class="QTooltipedSlider" name="freq_m5">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>10000</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="background_label">
-     <property name="text">
-      <string>Background color:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="1">
-    <widget class="QTooltipedSlider" name="freq_m11">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>10000</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_amplitude">
-     <property name="text">
-      <string>Amplitude</string>
      </property>
     </widget>
    </item>
@@ -111,107 +252,6 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_freq_m3">
-     <property name="text">
-      <string>Freq m3</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
-    <widget class="QLabel" name="label_freq_m2">
-     <property name="text">
-      <string>Freq m2</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="1">
-    <widget class="QTooltipedSlider" name="freq_m7">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0">
-    <widget class="QLabel" name="label_freq_m7">
-     <property name="text">
-      <string>Freq m7</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_thickness">
-     <property name="text">
-      <string>Thickness</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QTooltipedSlider" name="freq_m1">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>10000</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label_freq_m5">
-     <property name="text">
-      <string>Freq m5</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="3">
-    <widget class="QTooltipedSlider" name="freq_m2">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>10000</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="2">
-    <widget class="QLabel" name="label_freq_m4">
-     <property name="text">
-      <string>Freq m4</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="3">
-    <widget class="QTooltipedSlider" name="freq_m4">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>1000</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="2">
-    <widget class="QLabel" name="label_freq_m6">
-     <property name="text">
-      <string>Freq m6</string>
-     </property>
-    </widget>
-   </item>
    <item row="8" column="3">
     <widget class="QTooltipedSlider" name="freq_m6">
      <property name="minimum">
@@ -219,79 +259,6 @@
      </property>
      <property name="maximum">
       <number>10000</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="2">
-    <widget class="QLabel" name="label_freq_m8">
-     <property name="text">
-      <string>Freq m8</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="3">
-    <widget class="QTooltipedSlider" name="freq_m8">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>10000</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="2">
-    <widget class="QLabel" name="label_freq_m10">
-     <property name="text">
-      <string>Freq m10</string>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="3">
-    <widget class="QTooltipedSlider" name="freq_m10">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>10000</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="2">
-    <widget class="QLabel" name="label_freq_m12">
-     <property name="text">
-      <string>Freq m12</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="3">
-    <widget class="QTooltipedSlider" name="freq_m12">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" colspan="3">
-    <widget class="QTooltipedSlider" name="thickness">
-     <property name="minimum">
-      <number>2</number>
-     </property>
-     <property name="maximum">
-      <number>20</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -311,8 +278,35 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1" colspan="3">
-    <widget class="QTooltipedSlider" name="frequency">
+   <item row="12" column="2">
+    <widget class="QLabel" name="label_freq_m10">
+     <property name="text">
+      <string>Freq m10</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="3">
+    <widget class="QTooltipedSlider" name="freq_m12">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_freq_m1">
+     <property name="text">
+      <string>Freq m1</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3">
+    <widget class="QTooltipedSlider" name="freq_m2">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -324,12 +318,31 @@
      </property>
     </widget>
    </item>
-   <item row="15" column="1" colspan="3">
-    <widget class="QPushButton" name="defaults">
-     <property name="text">
-      <string>Defaults</string>
+   <item row="6" column="3">
+    <widget class="QTooltipedSlider" name="freq_m4">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>1000</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
+   </item>
+   <item row="16" column="0" colspan="4">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

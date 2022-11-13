@@ -110,9 +110,12 @@ void MotionPoint::LoadCustomSettings(json settings)
     }
 }
 
-json MotionPoint::SaveCustomSettings(json settings)
+json MotionPoint::SaveCustomSettings()
 {
+    json settings;
+
     settings["background"] = background;
+
     return settings;
 }
 

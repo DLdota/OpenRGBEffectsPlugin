@@ -32,19 +32,20 @@ signals:
     void Remove();
 
 private slots:
-    void on_add_layer_clicked();
     void on_clear_clicked();
     void on_composer_fn_currentIndexChanged(int);
     void on_remove_clicked();
+    void on_effect_list_EffectAdded(RGBEffect*);
 
 private:
     Ui::LayerGroupEntry *ui;
     std::vector<LayerEntry*> layer_entries;
-    LayerEntry* AddLayerEntry();
+    void AddLayerEntry(LayerEntry*);
     void ClearLayers();
 
     std::vector<ControllerZone*> assigned_zones;
     bool state = false;
+    QVBoxLayout* layers_layout;
 };
 
 #endif // LAYERGROUPENTRY_H

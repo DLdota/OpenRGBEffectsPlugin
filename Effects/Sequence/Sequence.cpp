@@ -74,8 +74,11 @@ void Sequence::LoadCustomSettings(json settings)
     }
 }
 
-json Sequence::SaveCustomSettings(json settings)
+json Sequence::SaveCustomSettings()
 {
+    json settings;
+
     settings["colors"] = ui->colorsPicker->Colors();
+
     return settings;
 }

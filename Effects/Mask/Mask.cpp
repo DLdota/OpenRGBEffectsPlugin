@@ -98,22 +98,24 @@ void Mask::on_invert_colors_stateChanged(int state)
     invert_colors = state;
 }
 
-void Mask::LoadCustomSettings(json j)
+void Mask::LoadCustomSettings(json settings)
 {
-    if (j.contains("x")) ui->x->setValue(j["x"]);
-    if (j.contains("y")) ui->y->setValue(j["y"]);
-    if (j.contains("w")) ui->w->setValue(j["w"]);
-    if (j.contains("h")) ui->h->setValue(j["h"]);
-    if (j.contains("invert_colors")) ui->invert_colors->setChecked(j["invert_colors"]);
+    if (settings.contains("x"))             ui->x->setValue(settings["x"]);
+    if (settings.contains("y"))             ui->y->setValue(settings["y"]);
+    if (settings.contains("w"))             ui->w->setValue(settings["w"]);
+    if (settings.contains("h"))             ui->h->setValue(settings["h"]);
+    if (settings.contains("invert_colors")) ui->invert_colors->setChecked(settings["invert_colors"]);
 }
 
-json Mask::SaveCustomSettings(json j)
+json Mask::SaveCustomSettings()
 {
-    j["x"] = restrict.left();
-    j["y"] = restrict.top();
-    j["w"] = restrict.width();
-    j["h"] = restrict.height();
-    j["invert_colors"] =  ui->invert_colors->isChecked();
+    json settings;
 
-    return j;
+    settings["x"]               = restrict.left();
+    settings["y"]               = restrict.top();
+    settings["w"]               = restrict.width();
+    settings["h"]               = restrict.height();
+    settings["invert_colors"]   =  ui->invert_colors->isChecked();
+
+    return settings;
 }

@@ -6,37 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>390</width>
-    <height>345</height>
+    <width>287</width>
+    <height>341</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="colors_choice_label">
-     <property name="text">
-      <string>Mode</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="amplitude_label">
-     <property name="text">
-      <string>Amplitude</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="1">
-    <widget class="QTooltipedSlider" name="motion_speed">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QTooltipedSlider" name="persistence">
+   <item row="5" column="1">
+    <widget class="QTooltipedSlider" name="lacunarity">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -48,8 +27,32 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="colors_choice"/>
+   <item row="0" column="0">
+    <widget class="QLabel" name="colors_choice_label">
+     <property name="text">
+      <string>Mode</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Motion</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QTooltipedSlider" name="frequency">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>5000</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </item>
    <item row="3" column="1">
     <widget class="QTooltipedSlider" name="amplitude">
@@ -64,40 +67,8 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="frequency_label">
-     <property name="text">
-      <string>Frequency</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Motion</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0" colspan="2">
-    <widget class="QPushButton" name="defaults">
-     <property name="text">
-      <string>Defaults</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Motion speed</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="persistence_label">
-     <property name="text">
-      <string>Persistence</string>
-     </property>
-    </widget>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="colors_choice"/>
    </item>
    <item row="5" column="0">
     <widget class="QLabel" name="lacunarity_label">
@@ -106,13 +77,13 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QTooltipedSlider" name="frequency">
+   <item row="6" column="1">
+    <widget class="QTooltipedSlider" name="persistence">
      <property name="minimum">
       <number>1</number>
      </property>
      <property name="maximum">
-      <number>5000</number>
+      <number>50000</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -132,6 +103,20 @@
      </property>
     </widget>
    </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="frequency_label">
+     <property name="text">
+      <string>Frequency</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1">
+    <widget class="QTooltipedSlider" name="motion_speed">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
    <item row="7" column="0">
     <widget class="QLabel" name="octaves_label">
      <property name="text">
@@ -139,24 +124,52 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QTooltipedSlider" name="lacunarity">
-     <property name="minimum">
-      <number>1</number>
+   <item row="1" column="0" colspan="2">
+    <widget class="ColorsPicker" name="colorsPicker" native="true"/>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Motion speed</string>
      </property>
-     <property name="maximum">
-      <number>50000</number>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="2">
+    <widget class="QPushButton" name="defaults">
+     <property name="text">
+      <string>Defaults</string>
      </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="amplitude_label">
+     <property name="text">
+      <string>Amplitude</string>
      </property>
     </widget>
    </item>
    <item row="8" column="1">
     <widget class="QComboBox" name="motion"/>
    </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="ColorsPicker" name="colorsPicker" native="true"/>
+   <item row="6" column="0">
+    <widget class="QLabel" name="persistence_label">
+     <property name="text">
+      <string>Persistence</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

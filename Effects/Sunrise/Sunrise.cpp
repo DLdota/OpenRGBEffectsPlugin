@@ -160,33 +160,24 @@ void Sunrise::on_run_once_stateChanged(int value)
 
 void Sunrise::LoadCustomSettings(json settings)
 {
-    if(settings.contains("max_intensity"))
-        ui->max_intensity->setValue(settings["max_intensity"]);
-
-    if(settings.contains("intensity_speed"))
-        ui->intensity_speed->setValue(settings["intensity_speed"]);
-
-    if(settings.contains("motion"))
-        ui->motion->setCheckState(settings["motion"] ? Qt::Checked:Qt::Unchecked);
-
-    if(settings.contains("radius"))
-        ui->radius->setValue(settings["radius"]);
-
-    if(settings.contains("grow_speed"))
-        ui->grow_speed->setValue(settings["grow_speed"]);
-
-    if(settings.contains("run_once"))
-        ui->run_once->setCheckState(settings["run_once"] ? Qt::Checked:Qt::Unchecked);
+    if(settings.contains("max_intensity"))      ui->max_intensity->setValue(settings["max_intensity"]);
+    if(settings.contains("intensity_speed"))    ui->intensity_speed->setValue(settings["intensity_speed"]);
+    if(settings.contains("motion"))             ui->motion->setCheckState(settings["motion"] ? Qt::Checked:Qt::Unchecked);
+    if(settings.contains("radius"))             ui->radius->setValue(settings["radius"]);
+    if(settings.contains("grow_speed"))         ui->grow_speed->setValue(settings["grow_speed"]);
+    if(settings.contains("run_once"))           ui->run_once->setCheckState(settings["run_once"] ? Qt::Checked:Qt::Unchecked);
 }
 
-json Sunrise::SaveCustomSettings(json settings)
+json Sunrise::SaveCustomSettings()
 {
-    settings["max_intensity"] = max_intensity;
+    json settings;
+
+    settings["max_intensity"]   = max_intensity;
     settings["intensity_speed"] = intensity_speed;
-    settings["motion"] = motion;
-    settings["radius"] = radius;
-    settings["grow_speed"] = grow_speed;
-    settings["run_once"] = run_once;
+    settings["motion"]          = motion;
+    settings["radius"]          = radius;
+    settings["grow_speed"]      = grow_speed;
+    settings["run_once"]        = run_once;
 
     return settings;
 }

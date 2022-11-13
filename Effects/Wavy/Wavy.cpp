@@ -151,36 +151,35 @@ RGBColor Wavy::GetColor(int i, int count)
     }
 }
 
-void Wavy::LoadCustomSettings(json Settings)
+void Wavy::on_wave_freq_slider_valueChanged(int value)
 {
-    if (Settings.contains("WaveFrequency"))    WaveFrequency    = Settings["WaveFrequency"];
-    if (Settings.contains("WaveSpeed"))        WaveSpeed        = Settings["WaveSpeed"];
-    if (Settings.contains("OscillationSpeed")) OscillationSpeed = Settings["OscillationSpeed"];
-
-    ui->wave_freq_slider->setValue(WaveFrequency);
-    ui->wave_speed_slider->setValue(WaveSpeed);
-    ui->oscillation_speed_slider->setValue(OscillationSpeed);
+    WaveFrequency = value;
 }
 
-json Wavy::SaveCustomSettings(json Settings)
+void Wavy::on_wave_speed_slider_valueChanged(int value)
 {
-    Settings["WaveFrequency"]    = WaveFrequency;
-    Settings["WaveSpeed"]        = WaveSpeed;
-    Settings["OscillationSpeed"] = OscillationSpeed;
-    return Settings;
-}
-
-void Wavy::on_wave_freq_slider_valueChanged(int NewVal)
-{
-    WaveFrequency = NewVal;
-}
-
-void Wavy::on_wave_speed_slider_valueChanged(int NewVal)
-{
-    WaveSpeed = NewVal;
+    WaveSpeed = value;
 }
 
 void Wavy::on_oscillation_speed_slider_valueChanged(int value)
 {
     OscillationSpeed = value;
+}
+
+void Wavy::LoadCustomSettings(json settings)
+{
+    if (settings.contains("WaveFrequency"))    ui->wave_freq_slider->setValue(settings["WaveFrequency"]);
+    if (settings.contains("WaveSpeed"))        ui->wave_speed_slider->setValue(settings["WaveSpeed"]);
+    if (settings.contains("OscillationSpeed")) ui->oscillation_speed_slider->setValue(settings["OscillationSpeed"]);
+}
+
+json Wavy::SaveCustomSettings()
+{
+    json settings;
+
+    settings["WaveFrequency"]    = WaveFrequency;
+    settings["WaveSpeed"]        = WaveSpeed;
+    settings["OscillationSpeed"] = OscillationSpeed;
+
+    return settings;
 }

@@ -110,8 +110,11 @@ void GifPlayer::LoadCustomSettings(json Settings)
     }
 }
 
-json GifPlayer::SaveCustomSettings(json Settings)
+json GifPlayer::SaveCustomSettings()
 {
-    Settings["fileName"] = fileName.toStdString();
-    return Settings;
+    json settings;
+
+    settings["fileName"] = fileName.toStdString();
+
+    return settings;
 }

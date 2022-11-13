@@ -6,44 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>270</width>
-    <height>174</height>
+    <width>478</width>
+    <height>317</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>Decay</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Amplitude</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QTooltipedSlider" name="average">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>256</number>
-     </property>
-     <property name="value">
-      <number>4</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
    <item row="6" column="0">
     <widget class="QLabel" name="label_7">
      <property name="text">
@@ -55,6 +25,13 @@
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>Hue offset</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Average size</string>
      </property>
     </widget>
    </item>
@@ -71,24 +48,23 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
+   <item row="0" column="1">
+    <widget class="QComboBox" name="devices"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Audio device</string>
+      <string>Amplitude</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Average size</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QTooltipedSlider" name="color_offset">
+   <item row="6" column="1">
+    <widget class="QTooltipedSlider" name="saturation">
      <property name="maximum">
-      <number>360</number>
+      <number>255</number>
+     </property>
+     <property name="sliderPosition">
+      <number>255</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -99,6 +75,16 @@
     <widget class="QLabel" name="label_6">
      <property name="text">
       <string>Hue spread</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QTooltipedSlider" name="color_offset">
+     <property name="maximum">
+      <number>360</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
@@ -122,21 +108,48 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="devices"/>
-   </item>
-   <item row="6" column="1">
-    <widget class="QTooltipedSlider" name="saturation">
-     <property name="maximum">
-      <number>255</number>
+   <item row="3" column="1">
+    <widget class="QTooltipedSlider" name="average">
+     <property name="minimum">
+      <number>1</number>
      </property>
-     <property name="sliderPosition">
-      <number>255</number>
+     <property name="maximum">
+      <number>256</number>
+     </property>
+     <property name="value">
+      <number>4</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Audio device</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Decay</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

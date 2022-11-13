@@ -8,10 +8,20 @@ LayerGroupEntry::LayerGroupEntry(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QVBoxLayout* outer_layout = new QVBoxLayout(ui->layers);
+    layers_layout = new QVBoxLayout(ui->layers);
+
+    outer_layout->addLayout(layers_layout);
+    outer_layout->addStretch();
+
+    ui->layers->setLayout(outer_layout);
+
     for(std::string fn: COLOR_BLEND_FN_NAMES)
     {
         ui->composer_fn->addItem(QString::fromStdString(fn));
     }
+
+    ui->effect_list->AddEffectsMenus();
 }
 
 LayerGroupEntry::~LayerGroupEntry()
@@ -22,6 +32,21 @@ LayerGroupEntry::~LayerGroupEntry()
     }
 
     delete ui;
+}
+
+void LayerGroupEntry::AddLayerEntry(LayerEntry* layer_entry)
+{
+    connect(layer_entry, &LayerEntry::Remove, [=](){
+        layer_entries.erase(std::remove(layer_entries.begin(), layer_entries.end(), layer_entry), layer_entries.end());
+        layers_layout->removeWidget(layer_entry);
+        delete layer_entry;
+    });
+
+    layer_entries.push_back(layer_entry);
+    layers_layout->addWidget(layer_entry);
+
+    layer_entry->OnControllerZonesListChanged(assigned_zones);
+    layer_entry->EffectState(state);
 }
 
 void LayerGroupEntry::StepEffect(std::vector<ControllerZone*> controller_zones, int Brightness)
@@ -64,7 +89,7 @@ void LayerGroupEntry::StepEffect(std::vector<ControllerZone*> controller_zones, 
 
                 for(unsigned int i = 0; i < controller_zones[z]->leds_count(); i ++)
                 {
-                    current[i] = ColorUtils::ApplyColorBlendFn(previous_states[z][i], current[i], layer_entries[l]->composer_fn);
+                    current[i] = ColorUtils::ApplyColorBlendFn(previous_states[z][i], current[i], layer_entries[l]->GetComposerFn());
                 }
             }
         }
@@ -102,36 +127,15 @@ void LayerGroupEntry::EffectState(bool state)
     }
 }
 
-LayerEntry* LayerGroupEntry::AddLayerEntry()
-{
-    LayerEntry* layer_entry = new LayerEntry(this);
-
-    connect(layer_entry, &LayerEntry::Remove, [=](){
-        layer_entries.erase(std::remove(layer_entries.begin(), layer_entries.end(), layer_entry), layer_entries.end());
-        ui->layers->layout()->removeWidget(layer_entry);
-        delete layer_entry;
-    });
-
-    layer_entries.push_back(layer_entry);
-    ui->layers->layout()->addWidget(layer_entry);
-
-    layer_entry->OnControllerZonesListChanged(assigned_zones);
-    layer_entry->EffectState(state);
-
-    return layer_entry;
-}
-
 void LayerGroupEntry::ClearLayers()
 {
     QLayoutItem *child;
 
-    while ((child = ui->layers->layout()->takeAt(0)) != 0) {
+    while ((child = layers_layout->takeAt(0)) != 0) {
         delete child->widget();
     }
 
     layer_entries.clear();
-
-    ui->layers->layout()->invalidate();
 }
 
 json LayerGroupEntry::ToJson()
@@ -159,8 +163,12 @@ void LayerGroupEntry::FromJson(json j)
     {
         for(json layer_json : j["layers"])
         {
-            LayerEntry* layer_entry = AddLayerEntry();
-            layer_entry->FromJson(layer_json);
+            LayerEntry* layer_entry = LayerEntry::FromJson(layer_json);
+
+            if(layer_entry != nullptr)
+            {
+                AddLayerEntry(layer_entry);
+            }
         }
     }
 
@@ -168,9 +176,10 @@ void LayerGroupEntry::FromJson(json j)
         ui->composer_fn->setCurrentIndex(j["composer_fn"]);
 }
 
-void LayerGroupEntry::on_add_layer_clicked()
+void LayerGroupEntry::on_effect_list_EffectAdded(RGBEffect* effect)
 {
-    AddLayerEntry();
+    LayerEntry* layer_entry = new LayerEntry(this, effect);
+    AddLayerEntry(layer_entry);
 }
 
 void LayerGroupEntry::on_clear_clicked()

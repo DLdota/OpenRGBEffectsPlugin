@@ -396,21 +396,23 @@ void AudioSine::on_wave_color_ColorSelected(QColor color)
     wave_color = ColorUtils::fromQColor(color);
 }
 
-json AudioSine::SaveCustomSettings(json Settings)
+json AudioSine::SaveCustomSettings()
 {
-    Settings["audio_device_idx"] = audio_device_idx;
-    Settings["color_mode"] = color_mode;
-    Settings["amplitude"] = amplitude;
-    Settings["avg_size"] = avg_size;
-    Settings["repeat"] = repeat;
-    Settings["glow"] = glow;
-    Settings["thickness"] = thickness;
-    Settings["oscillation"] = oscillation;
-    Settings["color_change_speed"] = color_change_speed;
-    Settings["background"] = background;
-    Settings["wave_color"] = wave_color;
+    json settings;
+
+    settings["audio_device_idx"] = audio_device_idx;
+    settings["color_mode"] = color_mode;
+    settings["amplitude"] = amplitude;
+    settings["avg_size"] = avg_size;
+    settings["repeat"] = repeat;
+    settings["glow"] = glow;
+    settings["thickness"] = thickness;
+    settings["oscillation"] = oscillation;
+    settings["color_change_speed"] = color_change_speed;
+    settings["background"] = background;
+    settings["wave_color"] = wave_color;
     
-    return Settings;
+    return settings;
 }
 
 void AudioSine::LoadCustomSettings(json Settings)

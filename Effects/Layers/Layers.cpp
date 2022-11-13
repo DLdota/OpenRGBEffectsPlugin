@@ -1,7 +1,9 @@
 #include "Layers.h"
-#include "EffectList.h"
 #include "OpenRGBEffectSettings.h"
 #include "ColorUtils.h"
+
+#include <QToolButton>
+#include <QLabel>
 
 REGISTER_EFFECT(Layers);
 
@@ -13,13 +15,13 @@ Layers::Layers(QWidget *parent) :
 
     EffectDetails.EffectName = "Layers";
     EffectDetails.EffectClassName = ClassName();
-    EffectDetails.EffectDescription = "Combine effects together. <br />Only effects that have saved patterns will appear here.<br /> <a href=\"https://en.wikipedia.org/wiki/Blend_modes\">Help about blend modes</a>";
+    EffectDetails.EffectDescription = "Combine effects together.<br /> <a href=\"https://en.wikipedia.org/wiki/Blend_modes\">Help about blend modes</a>";
     EffectDetails.HasCustomSettings = true;
 
-    ui->layer_groups->setLayout(new QVBoxLayout());
-    ui->layer_groups->layout()->setSizeConstraint(QLayout::SetFixedSize);
-    ui->scrollArea->setWidgetResizable(true);
+    // remove intial dummy tabs
+    ui->groups->clear();
 
+    ClearLayerGroups();
 }
 
 Layers::~Layers()
@@ -38,11 +40,10 @@ LayerGroupEntry* Layers::AddLayerGroup()
 
     connect(layer_group_entry, &LayerGroupEntry::Remove, [=](){
         layer_groups_entries.erase(std::remove(layer_groups_entries.begin(), layer_groups_entries.end(), layer_group_entry), layer_groups_entries.end());
-        ui->layer_groups->layout()->removeWidget(layer_group_entry);
         delete layer_group_entry;
     });
 
-    ui->layer_groups->layout()->addWidget(layer_group_entry);
+    ui->groups->addTab(layer_group_entry, QString::fromStdString("Group " + std::to_string(ui->groups->count())));
     layer_groups_entries.push_back(layer_group_entry);
 
     layer_group_entry->OnControllerZonesListChanged(assigned_zones);
@@ -53,13 +54,21 @@ LayerGroupEntry* Layers::AddLayerGroup()
 
 void Layers::ClearLayerGroups()
 {
-    QLayoutItem *child;
-
-    while ((child = ui->layer_groups->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-    }
-
+    ui->groups->clear();
     layer_groups_entries.clear();
+
+    // First tab: add button
+    QToolButton *new_group_button = new QToolButton();
+    new_group_button->setText("New group");
+
+    QLabel* help = new QLabel("Combine multiple effects within a group, and combine groups together");
+    help->setWordWrap(true);
+    help->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
+
+    ui->groups->addTab(help, QString(""));
+    ui->groups->tabBar()->setTabButton(0, QTabBar::RightSide, new_group_button);
+
+    connect(new_group_button, SIGNAL(clicked()), this, SLOT(OnAddGroupClicked()));
 }
 
 void Layers::StepEffect(std::vector<ControllerZone*> controller_zones)
@@ -105,14 +114,9 @@ void Layers::StepEffect(std::vector<ControllerZone*> controller_zones)
     }
 }
 
-void Layers::on_add_layer_group_clicked()
+void Layers::OnAddGroupClicked()
 {
     AddLayerGroup();
-}
-
-void Layers::on_clear_clicked()
-{
-    ClearLayerGroups();
 }
 
 void Layers::OnControllerZonesListChanged(std::vector<ControllerZone*> controller_zones)
@@ -149,8 +153,10 @@ void Layers::LoadCustomSettings(json j)
     }
 }
 
-json Layers::SaveCustomSettings(json j)
+json Layers::SaveCustomSettings()
 {
+    json settings;
+
     std::vector<json> groups;
 
     for(LayerGroupEntry* layer_group_entry: layer_groups_entries)
@@ -158,7 +164,7 @@ json Layers::SaveCustomSettings(json j)
         groups.push_back(layer_group_entry->ToJson());
     }
 
-    j["groups"] = groups;
+    settings["groups"] = groups;
 
-    return j;
+    return settings;
 }

@@ -36,7 +36,7 @@ public:
 
     void DefineExtraOptions(QLayout*) override;
     void LoadCustomSettings(json) override;
-    json SaveCustomSettings(json) override;
+    json SaveCustomSettings() override;
 
 private slots:
     void on_size_valueChanged(int);

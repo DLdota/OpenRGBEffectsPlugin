@@ -6,18 +6,58 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>207</width>
-    <height>179</height>
+    <width>363</width>
+    <height>293</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="3" column="0">
-    <widget class="QLabel" name="decay_label">
+   <item row="5" column="0">
+    <widget class="QLabel" name="edge_beat_sensivity_label">
      <property name="text">
-      <string>Decay</string>
+      <string>Beat Sensivity</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QComboBox" name="devices">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QComboBox::AdjustToContents</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QCheckBox" name="edge_beat">
+     <property name="text">
+      <string>Edge beat</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="edge_beat_hue_label">
+     <property name="text">
+      <string>Hue</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QTooltipedSlider" name="edge_beat_saturation">
+     <property name="maximum">
+      <number>255</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
@@ -41,26 +81,6 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QComboBox" name="devices">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToContents</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="edge_beat_sensivity_label">
-     <property name="text">
-      <string>Beat Sensivity</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="devices_label">
      <property name="text">
@@ -68,37 +88,17 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="edge_beat_hue_label">
-     <property name="text">
-      <string>Hue</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QTooltipedSlider" name="edge_beat_hue">
-     <property name="maximum">
-      <number>359</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1">
-    <widget class="QTooltipedSlider" name="edge_beat_saturation">
-     <property name="maximum">
-      <number>255</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="0">
     <widget class="QLabel" name="amplitude_label">
      <property name="text">
       <string>Amplitude</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="decay_label">
+     <property name="text">
+      <string>Decay</string>
      </property>
     </widget>
    </item>
@@ -128,15 +128,28 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QCheckBox" name="edge_beat">
-     <property name="text">
-      <string>Edge beat</string>
+   <item row="6" column="1">
+    <widget class="QTooltipedSlider" name="edge_beat_hue">
+     <property name="maximum">
+      <number>359</number>
      </property>
-     <property name="checked">
-      <bool>false</bool>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

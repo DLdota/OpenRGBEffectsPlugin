@@ -128,15 +128,16 @@ void Lightning::on_lightning_mode_currentIndexChanged(int value)
     lightning_mode = static_cast<lightning_mode_value>(value);
 }
 
-void Lightning::LoadCustomSettings(json j)
+void Lightning::LoadCustomSettings(json settings)
 {
-    if (j.contains("lightning_mode"))
-        ui->lightning_mode->setCurrentIndex(j["lightning_mode"]);
+    if (settings.contains("lightning_mode")) ui->lightning_mode->setCurrentIndex(settings["lightning_mode"]);
 }
 
-json Lightning::SaveCustomSettings(json j)
+json Lightning::SaveCustomSettings()
 {
-    j["lightning_mode"] = lightning_mode;
+    json settings;
 
-    return j;
+    settings["lightning_mode"] = lightning_mode;
+
+    return settings;
 }

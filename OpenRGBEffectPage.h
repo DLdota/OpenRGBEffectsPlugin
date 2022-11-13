@@ -24,6 +24,8 @@ public:
 
     void StartEffect();
     void StopEffect();
+    void SetPreviewButtonVisible(bool);
+    void SetFPSSliderVisible(bool);
 
 signals:
     void EffectState(bool);
@@ -64,9 +66,10 @@ private:
     QHBoxLayout* colors_layout = nullptr;    
 
     json ToJson();
-    void ApplyJson(json);
 
     bool info_visible = false;
+
+    void ApplyJson(json);
 
     void ToggleInfo();
 };

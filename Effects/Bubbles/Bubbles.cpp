@@ -168,15 +168,18 @@ void Bubbles::LoadCustomSettings(json Settings)
     ui->background->SetRGBColor(background);
 }
 
-json Bubbles::SaveCustomSettings(json Settings)
+json Bubbles::SaveCustomSettings()
 {
-    Settings["max_bubbles"]       = max_bubbles;
-    Settings["rarity"]            = rarity;
-    Settings["speed_mult"]        = speed_mult;
-    Settings["max_expansion"]     = max_expansion;
-    Settings["bubbles_thickness"] = bubbles_thickness;
-    Settings["background"]        = background;
-    return Settings;
+    json settings;
+
+    settings["max_bubbles"]       = max_bubbles;
+    settings["rarity"]            = rarity;
+    settings["speed_mult"]        = speed_mult;
+    settings["max_expansion"]     = max_expansion;
+    settings["bubbles_thickness"] = bubbles_thickness;
+    settings["background"]        = background;
+
+    return settings;
 }
 
 void Bubbles::on_max_bubbles_valueChanged(int value)

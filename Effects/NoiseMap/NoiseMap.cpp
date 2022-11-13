@@ -212,19 +212,19 @@ void NoiseMap::LoadCustomSettings(json settings)
     }
 }
 
-json NoiseMap::SaveCustomSettings(json settings)
+json NoiseMap::SaveCustomSettings()
 {
-    settings["frequency"] = frequency;
-    settings["amplitude"] = amplitude;
-    settings["lacunarity"] = lacunarity;
-    settings["persistence"] = persistence;
-    settings["octaves"] = octaves;
+    json settings;
 
-    settings["colors"] = ui->colorsPicker->Colors();
-    settings["colors_choice"] = ui->colors_choice->currentIndex();
-
-    settings["motion"] = motion;
-    settings["motion_speed"] = motion_speed;
+    settings["frequency"]       = frequency;
+    settings["amplitude"]       = amplitude;
+    settings["lacunarity"]      = lacunarity;
+    settings["persistence"]     = persistence;
+    settings["octaves"]         = octaves;
+    settings["colors"]          = ui->colorsPicker->Colors();
+    settings["colors_choice"]   = ui->colors_choice->currentIndex();
+    settings["motion"]          = motion;
+    settings["motion_speed"]    = motion_speed;
 
     return settings;
 }

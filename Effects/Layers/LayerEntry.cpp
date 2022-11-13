@@ -1,154 +1,75 @@
 #include "LayerEntry.h"
 #include "ui_LayerEntry.h"
-#include "EffectList.h"
 #include "OpenRGBEffectSettings.h"
-#include "Layers.h"
+#include <QDialog>
+#include "EffectList.h"
 
-LayerEntry::LayerEntry(QWidget *parent) :
+LayerEntry::LayerEntry(QWidget *parent, RGBEffect* effect) :
     QWidget(parent),
-    ui(new Ui::LayerEntry)
+    ui(new Ui::LayerEntry),
+    effect(effect)
 {
     ui->setupUi(this);
 
-    std::map<std::string, std::function<RGBEffect*()>>::iterator it;
+    PopulateCombos();
 
-    for (it =  EffectList::effects_construtors.begin(); it !=  EffectList::effects_construtors.end(); it++)
-    {
-        std::string effect_name = it->first;
+    effect_page_dialog = new QDialog(this);
+    effect_page = new OpenRGBEffectPage(effect_page_dialog, effect);
 
-        if(effect_name == Layers::ClassName())
-        {
-            continue;
-        }
+    effect_page->SetPreviewButtonVisible(false);
+    effect_page->SetFPSSliderVisible(false);
 
-        std::vector<std::string> patterns = OpenRGBEffectSettings::ListPattern(effect_name);
+    QVBoxLayout* dialog_layout = new QVBoxLayout(effect_page_dialog);
 
-        if(!patterns.empty())
-        {
-            ui->effect->addItem(QString::fromStdString(effect_name));
+    dialog_layout->addWidget(effect_page);
 
-            effects_and_presets[effect_name] = patterns;
+    ui->effect_name->setText(QString::fromStdString(effect->EffectDetails.EffectClassName));
+}
 
-            for(std::string preset: patterns)
-            {
-                ui->preset->addItem(QString::fromStdString(preset));
-            }
-        }
-    }
+LayerEntry::~LayerEntry()
+{
+    effect->EffectState(false);
+
+    effect_page_dialog->hide();
+
+    delete effect;
+    delete effect_page;
+    delete effect_page_dialog;
+    delete ui;
+}
+
+void LayerEntry::PopulateCombos()
+{
+    ui->composer_fn->blockSignals(true);
 
     for(std::string fn: COLOR_BLEND_FN_NAMES)
     {
         ui->composer_fn->addItem(QString::fromStdString(fn));
     }
-}
 
-LayerEntry::~LayerEntry()
-{
-    if(effect)
-    {
-        effect->EffectState(false);
-        delete effect;
-    }
-
-    delete ui;
+    ui->composer_fn->blockSignals(false);
 }
 
 void LayerEntry::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
-    if(effect != nullptr)
-    {
-        mut.lock();
-        effect->StepEffect(controller_zones);
-        mut.unlock();
-    }
+    effect->StepEffect(controller_zones);
 }
 
-void LayerEntry::on_effect_currentIndexChanged(int)
+ColorBlendFn LayerEntry::GetComposerFn()
 {
-    std::string effect_name = ui->effect->currentText().toStdString();
-
-    ui->preset->clear();
-
-    for(std::string preset: effects_and_presets[effect_name])
-    {
-        ui->preset->addItem(QString::fromStdString(preset));
-    }
+    return composer_fn;
 }
-
-void LayerEntry::on_preset_currentIndexChanged(int)
-{
-    std::string name = ui->effect->currentText().toStdString();
-    std::string preset = ui->preset->currentText().toStdString();
-
-    if(name.empty() || preset.empty()){
-        return;
-    }
-
-    // Re-create effect
-    mut.lock();
-
-    if(effect)
-    {
-        effect->EffectState(false);
-        delete effect;
-    }
-
-    effect = EffectList::effects_construtors[name]();
-
-    json effect_settings = OpenRGBEffectSettings::LoadPattern(name, preset);
-
-    if(!effect_settings.is_null())
-    {
-        std::vector<RGBColor> colors;
-
-        for(unsigned int color : effect_settings["UserColors"])
-        {
-            colors.push_back(color);
-        }
-
-        effect->SetUserColors(colors);
-        effect->SetSpeed(effect_settings["Speed"]);
-        effect->SetSlider2Val(effect_settings["Slider2Val"]);
-        effect->SetRandomColorsEnabled(effect_settings["RandomColors"]);
-        effect->SetOnlyFirstColorEnabled(effect_settings["AllowOnlyFirst"]);
-
-        if(effect_settings.contains("Brightness"))
-        {
-             effect->SetBrightness(effect_settings["Brightness"]);
-        }
-
-        if(effect_settings.contains("CustomSettings"))
-        {
-            effect->LoadCustomSettings(effect_settings["CustomSettings"]);
-        }
-
-        effect->DefineExtraOptions(new QHBoxLayout);
-        effect->EffectState(state);
-        effect->OnControllerZonesListChanged(assigned_zones);
-    }
-
-    mut.unlock();
-}
-
 
 void LayerEntry::OnControllerZonesListChanged(std::vector<ControllerZone*> controller_zones)
 {
     assigned_zones = controller_zones;
-
-    if(effect)
-    {
-        effect->OnControllerZonesListChanged(controller_zones);
-    }
+    effect->OnControllerZonesListChanged(controller_zones);
 }
 
-void LayerEntry::EffectState(bool state)
+void LayerEntry::EffectState(bool value)
 {
-    this->state = state;
-
-    if(effect)
-    {
-        effect->EffectState(state);
-    }
+    state = value;
+    effect->EffectState(state);
 }
 
 void LayerEntry::on_composer_fn_currentIndexChanged(int fn)
@@ -161,25 +82,68 @@ void LayerEntry::on_remove_clicked()
     emit Remove();
 }
 
+void LayerEntry::on_edit_clicked()
+{
+    effect_page_dialog->setWindowTitle(QString::fromStdString(effect->EffectDetails.EffectName));
+    effect_page_dialog->show();
+}
+
 json LayerEntry::ToJson()
 {
     json j;
 
-    j["effect"] = ui->effect->currentText().toStdString();
-    j["preset"] = ui->preset->currentText().toStdString();
-    j["composer_fn"] = ui->composer_fn->currentIndex();
+    j["effect_settings"]    = effect->ToJson();
+    j["composer_fn"]        = ui->composer_fn->currentIndex();
 
     return j;
 }
 
-void LayerEntry::FromJson(json j)
+LayerEntry* LayerEntry::FromJson(json j)
 {
-    if(j.contains("effect"))
-        ui->effect->setCurrentText(QString::fromStdString(j["effect"]));
+    RGBEffect* effect = nullptr;
 
-    if(j.contains("preset"))
-        ui->preset->setCurrentText(QString::fromStdString(j["preset"]));
+    if(j.contains("effect_settings"))
+    {
+        json effect_settings = j["effect_settings"];
+        std::string effect_name = effect_settings["EffectClassName"];
 
-    if(j.contains("composer_fn"))
-        ui->composer_fn->setCurrentIndex(j["composer_fn"]);
+        effect = EffectList::effects_construtors[effect_name]();
+
+        if(effect_settings.contains("UserColors"))
+        {
+            std::vector<RGBColor> colors;
+
+            for(unsigned int color : effect_settings["UserColors"])
+            {
+                colors.push_back(color);
+            }
+
+            effect->SetUserColors(colors);
+        }
+
+        effect->SetFPS(effect_settings["FPS"]);
+        effect->SetSpeed(effect_settings["Speed"]);
+        effect->SetSlider2Val(effect_settings["Slider2Val"]);
+        effect->SetRandomColorsEnabled(effect_settings["RandomColors"]);
+        effect->SetOnlyFirstColorEnabled(effect_settings["AllowOnlyFirst"]);
+
+        if(effect_settings.contains("Brightness"))
+        {
+            effect->SetBrightness(effect_settings["Brightness"]);
+        }
+
+        if(effect_settings.contains("CustomSettings"))
+        {
+            effect->LoadCustomSettings(effect_settings["CustomSettings"]);
+        }
+
+        LayerEntry* layer_entry = new LayerEntry(nullptr, effect);
+
+        if(j.contains("composer_fn"))
+            layer_entry->composer_fn = j["composer_fn"];
+
+        return layer_entry;
+    }
+
+    return nullptr;
 }

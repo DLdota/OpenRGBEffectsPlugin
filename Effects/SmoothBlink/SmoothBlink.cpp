@@ -210,8 +210,10 @@ void SmoothBlink::LoadCustomSettings(json settings)
     ui->cy->setValue(cy_shift);
 }
 
-json SmoothBlink::SaveCustomSettings(json settings)
+json SmoothBlink::SaveCustomSettings()
 {
+    json settings;
+
     settings["interval"]       = interval;
     settings["strength"]       = strength;
     settings["pulses"]         = pulses;

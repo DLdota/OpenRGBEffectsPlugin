@@ -157,8 +157,10 @@ void Hypnotoad::LoadCustomSettings(json settings)
     ui->cy->setValue(cy_shift);
 }
 
-json Hypnotoad::SaveCustomSettings(json settings)
+json Hypnotoad::SaveCustomSettings()
 {
+    json settings;
+
     settings["color_mode"]               = color_mode;
     settings["colors"]                   = ui->colors_picker->Colors();
     settings["animation_speed"]          = animation_speed;

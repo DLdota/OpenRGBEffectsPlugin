@@ -204,9 +204,11 @@ void Rain::LoadCustomSettings(json settings)
     }
 }
 
-json Rain::SaveCustomSettings(json settings)
+json Rain::SaveCustomSettings()
 {
-    settings["size"]   = size;
+    json settings;
+
+    settings["size"] = size;
 
     return settings;
 }

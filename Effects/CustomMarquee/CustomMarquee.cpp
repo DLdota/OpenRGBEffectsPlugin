@@ -84,8 +84,11 @@ void CustomMarquee::LoadCustomSettings(json settings)
     }
 }
 
-json CustomMarquee::SaveCustomSettings(json settings)
+json CustomMarquee::SaveCustomSettings()
 {
+    json settings;
+
     settings["colors"] = ui->colorsPicker->Colors();
+
     return settings;
 }

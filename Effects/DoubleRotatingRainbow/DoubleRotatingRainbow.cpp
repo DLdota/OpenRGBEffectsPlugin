@@ -82,7 +82,6 @@ void DoubleRotatingRainbow::StepEffect(std::vector<ControllerZone*> controller_z
     sin_reverse_time = sin(-time);
 }
 
-
 RGBColor DoubleRotatingRainbow::GetColor(float x, float y, float cx, float cy, bool reverse)
 {
     double c = reverse? cos_reverse_time : cos_time;
@@ -102,17 +101,16 @@ void DoubleRotatingRainbow::on_frequency_valueChanged(int value)
     frequency = value;
 }
 
-
 void DoubleRotatingRainbow::LoadCustomSettings(json settings)
 {
-    if(settings.contains("frequency"))
-        frequency = settings["frequency"];
-
-    ui->frequency->setValue(frequency);
+    if(settings.contains("frequency")) ui->frequency->setValue(settings["frequency"]);
 }
 
-json DoubleRotatingRainbow::SaveCustomSettings(json settings)
+json DoubleRotatingRainbow::SaveCustomSettings()
 {
-    settings["frequency"]          = frequency;
+    json settings;
+
+    settings["frequency"] = frequency;
+
     return settings;
 }

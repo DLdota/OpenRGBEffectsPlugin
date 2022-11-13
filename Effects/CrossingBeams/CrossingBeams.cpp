@@ -124,13 +124,16 @@ void CrossingBeams::LoadCustomSettings(json Settings)
     ui->thickness->setValue(thickness);
 }
 
-json CrossingBeams::SaveCustomSettings(json Settings)
+json CrossingBeams::SaveCustomSettings()
 {
-    Settings["v_speed"]    = v_speed;
-    Settings["h_speed"]        = h_speed;
-    Settings["glow"] = glow;
-    Settings["thickness"] = thickness;
-    return Settings;
+    json settings;
+
+    settings["v_speed"]     = v_speed;
+    settings["h_speed"]     = h_speed;
+    settings["glow"]        = glow;
+    settings["thickness"]   = thickness;
+
+    return settings;
 }
 
 void CrossingBeams::on_v_speed_valueChanged(int value)

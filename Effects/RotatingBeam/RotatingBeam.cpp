@@ -252,9 +252,12 @@ void RotatingBeam::LoadCustomSettings(json settings)
         ui->thickness->setValue(settings["thickness"]);
 }
 
-json RotatingBeam::SaveCustomSettings(json settings)
+json RotatingBeam::SaveCustomSettings()
 {
-    settings["mode"] = mode;
-    settings["thickness"] = thickness;
+    json settings;
+
+    settings["mode"]        = mode;
+    settings["thickness"]   = thickness;
+
     return settings;
 }

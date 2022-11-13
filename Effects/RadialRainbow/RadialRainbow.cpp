@@ -140,10 +140,13 @@ void RadialRainbow::LoadCustomSettings(json settings)
     ui->shape->setCurrentIndex(shape);
 }
 
-json RadialRainbow::SaveCustomSettings(json settings)
+json RadialRainbow::SaveCustomSettings()
 {
-    settings["cx"] = cx_shift;
-    settings["cy"] = cy_shift;
-    settings["shape"] = shape;
+    json settings;
+
+    settings["cx"]      = cx_shift;
+    settings["cy"]      = cy_shift;
+    settings["shape"]   = shape;
+
     return settings;
 }

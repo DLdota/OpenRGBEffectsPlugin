@@ -29,6 +29,7 @@ public:
     void AddPreview(RGBEffect*, ControllerZone*);
     void RemovePreview(RGBEffect*);
 
+
 private:
     EffectManager();
     ~EffectManager() {};

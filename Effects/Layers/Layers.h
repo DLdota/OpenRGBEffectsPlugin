@@ -29,12 +29,11 @@ public:
     void EffectState(bool) override;
 
     void LoadCustomSettings(json) override;
-    json SaveCustomSettings(json) override;
+    json SaveCustomSettings() override;
 
 
 private slots:
-    void on_add_layer_group_clicked();
-    void on_clear_clicked();
+    void OnAddGroupClicked();
 
 private:
     Ui::Layers *ui;

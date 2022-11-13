@@ -277,8 +277,10 @@ void Ambient::LoadCustomSettings(json settings)
     }
 }
 
-json Ambient::SaveCustomSettings(json settings)
+json Ambient::SaveCustomSettings()
 {
+    json settings;
+
     settings["left"] = left;
     settings["top"] = top;
     settings["height"] = height;

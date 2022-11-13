@@ -166,16 +166,16 @@ void SwirlCircles::on_radius_valueChanged(int value)
     radius = value;
 }
 
-
-void SwirlCircles::LoadCustomSettings(json Settings)
+void SwirlCircles::LoadCustomSettings(json settings)
 {
-    if (Settings.contains("radius")) radius    = Settings["radius"];
-
-    ui->radius->setValue(radius);
+    if (settings.contains("radius")) ui->radius->setValue(settings["radius"]);
 }
 
-json SwirlCircles::SaveCustomSettings(json Settings)
+json SwirlCircles::SaveCustomSettings()
 {
-    Settings["radius"]    = radius;
-    return Settings;
+    json settings;
+
+    settings["radius"] = radius;
+
+    return settings;
 }

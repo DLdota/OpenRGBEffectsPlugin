@@ -28,7 +28,7 @@ public:
     void SetUserColors(std::vector<RGBColor> colors) override;
     void SetRandomColorsEnabled(bool value) override;
     void LoadCustomSettings(json) override;
-    json SaveCustomSettings(json) override;
+    json SaveCustomSettings() override;
 
 private slots:
     void on_radius_valueChanged(int);

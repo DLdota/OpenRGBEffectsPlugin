@@ -198,10 +198,10 @@ void OpenRGBEffectTab::LoadProfileList()
 
 void OpenRGBEffectTab::ClearAll()
 {
-    for(OpenRGBEffectPage* effect_page: ui->EffectTabs->findChildren<OpenRGBEffectPage*>())
+    for(int i = 1; i < ui->EffectTabs->count(); i++)
     {
-        int tab_idx = ui->EffectTabs->indexOf(effect_page);
-        ui->EffectTabs->removeTab(tab_idx);
+        OpenRGBEffectPage* effect_page = dynamic_cast<OpenRGBEffectPage*>(ui->EffectTabs->widget(i));
+        ui->EffectTabs->removeTab(i);
         delete effect_page;
     }
 
@@ -326,37 +326,22 @@ void OpenRGBEffectTab::SaveProfileAction()
 
             std::vector<json> effects_settings;
 
-            QList<OpenRGBEffectPage*> pages = ui->EffectTabs->findChildren<OpenRGBEffectPage*>();
+
+            QList<OpenRGBEffectPage*> pages;
+
+            for(int i = 1; i < ui->EffectTabs->count(); i++)
+            {
+                pages.push_back(dynamic_cast<OpenRGBEffectPage*>(ui->EffectTabs->widget(i)));
+            }
 
             for(OpenRGBEffectPage* page: pages)
             {
                 RGBEffect* effect = page->GetEffect();
                 std::vector<ControllerZone*> controller_zones = effect_zones[effect];
 
-                json effect_settings;
+                json effect_settings = effect->ToJson();
 
-                effect_settings["EffectClassName"] = effect->EffectDetails.EffectClassName;
-                effect_settings["CustomName"] = effect->EffectDetails.CustomName;
-                effect_settings["FPS"] = effect->GetFPS();
-                effect_settings["Speed"] = effect->GetSpeed();
-                effect_settings["Slider2Val"] = effect->GetSlider2Val();
                 effect_settings["AutoStart"] = save_effects_state ? EffectManager::Get()->IsActive(effect) : false;
-                effect_settings["RandomColors"] = effect->IsRandomColorsEnabled();
-                effect_settings["AllowOnlyFirst"] = effect->IsOnlyFirstColorEnabled();
-                effect_settings["Brightness"] = effect->GetBrightness();
-
-                std::vector<RGBColor> colors = effect->GetUserColors();
-
-                for (unsigned int c = 0; c < colors.size(); c++)
-                {
-                    effect_settings["UserColors"][c] = colors[c];
-                }
-
-                if (effect->EffectDetails.HasCustomSettings)
-                {
-                    json j;
-                    effect_settings["CustomSettings"] = effect->SaveCustomSettings(j);
-                }
 
                 std::vector<json> zones;
 
@@ -535,21 +520,17 @@ void OpenRGBEffectTab::LoadEffect(json effect_settings)
 
 void OpenRGBEffectTab::StartAll()
 {
-    QList<OpenRGBEffectPage*> pages = ui->EffectTabs->findChildren<OpenRGBEffectPage*>();
-
-    for(OpenRGBEffectPage* page: pages)
+    for(int i = 1; i < ui->EffectTabs->count(); i++)
     {
-        page->StartEffect();
+       (dynamic_cast<OpenRGBEffectPage*>(ui->EffectTabs->widget(i)))->StartEffect();
     }
 }
 
 void OpenRGBEffectTab::StopAll()
 {
-    QList<OpenRGBEffectPage*> pages = ui->EffectTabs->findChildren<OpenRGBEffectPage*>();
-
-    for(OpenRGBEffectPage* page: pages)
+    for(int i = 1; i < ui->EffectTabs->count(); i++)
     {
-        page->StopEffect();
+       (dynamic_cast<OpenRGBEffectPage*>(ui->EffectTabs->widget(i)))->StopEffect();
     }
 }
 

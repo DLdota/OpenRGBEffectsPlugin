@@ -226,8 +226,10 @@ void CustomGradientWave::LoadCustomSettings(json settings)
 
 }
 
-json CustomGradientWave::SaveCustomSettings(json settings)
+json CustomGradientWave::SaveCustomSettings()
 {
+    json settings;
+
     settings["colors"]    = ui->colorsPicker->Colors();
     settings["spread"]    = spread;
     settings["direction"] = direction;

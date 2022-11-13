@@ -28,7 +28,7 @@ public:
     void StepEffect(std::vector<ControllerZone*>) override;
     void EffectState(bool) override;
     void LoadCustomSettings(json) override;
-    json SaveCustomSettings(json) override;
+    json SaveCustomSettings() override;
 
 private slots:
     void on_devices_currentIndexChanged(int);

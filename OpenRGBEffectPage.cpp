@@ -192,10 +192,26 @@ void OpenRGBEffectPage::InitUi()
 
     ui->extra_settings->setVisible(effect->EffectDetails.HasCustomSettings);
 
+    if(!effect->EffectDetails.HasCustomSettings)
+    {
+        ((QVBoxLayout*)layout())->addStretch();
+    }
+
     if(effect->IsAutoStart())
     {
         StartEffect();
     }
+}
+
+void OpenRGBEffectPage::SetPreviewButtonVisible(bool value)
+{
+    ui->preview->setVisible(value);
+}
+
+void OpenRGBEffectPage::SetFPSSliderVisible(bool value)
+{
+    ui->FPS_label->setVisible(value);
+    ui->FPS_slider->setVisible(value);
 }
 
 RGBEffect* OpenRGBEffectPage::GetEffect()
@@ -421,8 +437,7 @@ json OpenRGBEffectPage::ToJson()
 
     if (effect->EffectDetails.HasCustomSettings)
     {
-        json j;
-        effect_settings["CustomSettings"] = effect->SaveCustomSettings(j);
+        effect_settings["CustomSettings"] = effect->SaveCustomSettings();
     }
 
     return effect_settings;
@@ -461,10 +476,9 @@ void OpenRGBEffectPage::ApplyJson(json effect_settings)
     ui->SpeedSlider->setValue(effect->GetSpeed());
     ui->Slider2->setValue(effect->GetSlider2Val());
 
-    for(int i = 0; i < colors_layout->count(); i++)
+    for(unsigned int i = 0; i < ColorPickers.size(); i++)
     {
-        ColorPicker* picker = dynamic_cast<ColorPicker*>(colors_layout->itemAt(i)->widget());
-        picker->SetRGBColor(colors[i]);
+         ColorPickers[i]->SetRGBColor(colors[i]);
     }
 }
 

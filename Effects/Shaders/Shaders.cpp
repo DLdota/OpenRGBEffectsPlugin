@@ -253,22 +253,23 @@ void Shaders::LoadCustomSettings(json Settings)
 
 }
 
-json Shaders::SaveCustomSettings(json Settings)
+json Shaders::SaveCustomSettings()
 {
-    Settings["shader_name"]      = ui->shaders->currentText().toStdString();
-    Settings["shader_program"]   = shader_renderer->Program()->ToJSON();
-    Settings["width"]            = width;
-    Settings["height"]           = height;
-    Settings["show_rendering"]   = show_rendering;
-    Settings["invert_time"]      = invert_time;
+    json settings;
 
-    Settings["use_audio"]        = use_audio;
-    Settings["audio_device_idx"] = audio_device_idx;
-    Settings["amplitude"]        = amplitude;
-    Settings["decay"]            = decay;
-    Settings["avg_size"]         = avg_size;
+    settings["shader_name"]      = ui->shaders->currentText().toStdString();
+    settings["shader_program"]   = shader_renderer->Program()->ToJSON();
+    settings["width"]            = width;
+    settings["height"]           = height;
+    settings["show_rendering"]   = show_rendering;
+    settings["invert_time"]      = invert_time;
+    settings["use_audio"]        = use_audio;
+    settings["audio_device_idx"] = audio_device_idx;
+    settings["amplitude"]        = amplitude;
+    settings["decay"]            = decay;
+    settings["avg_size"]         = avg_size;
 
-    return Settings;
+    return settings;
 }
 
 void Shaders::StartAudio()

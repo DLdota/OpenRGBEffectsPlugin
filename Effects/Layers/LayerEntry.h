@@ -5,6 +5,7 @@
 #include "RGBEffect.h"
 #include "ColorUtils.h"
 #include "json.hpp"
+#include "OpenRGBEffectPage.h"
 
 using json = nlohmann::json;
 
@@ -17,36 +18,37 @@ class LayerEntry : public QWidget
     Q_OBJECT
 
 public:
-    explicit LayerEntry(QWidget *parent = nullptr);
+    explicit LayerEntry(QWidget *parent = nullptr, RGBEffect* effect = nullptr);
     ~LayerEntry();
 
     json ToJson();
-    void FromJson(json);
+    static LayerEntry* FromJson(json);
 
     void StepEffect(std::vector<ControllerZone*>);
     void OnControllerZonesListChanged(std::vector<ControllerZone*>);
     void EffectState(bool);
 
-    RGBEffect* effect = nullptr;
-    ColorBlendFn composer_fn = MULTIPLY;
+    ColorBlendFn GetComposerFn();
 
 signals:
     void Remove();
 
 private slots:
-    void on_effect_currentIndexChanged(int);
-    void on_preset_currentIndexChanged(int);
     void on_composer_fn_currentIndexChanged(int);
     void on_remove_clicked();
+    void on_edit_clicked();
 
 private:
     Ui::LayerEntry *ui;
-    std::map<std::string, std::vector<std::string>> effects_and_presets;
+    void PopulateCombos();
 
     std::vector<ControllerZone*> assigned_zones;
-    bool state = false;
+    bool state = false;    
+    ColorBlendFn composer_fn = MULTIPLY;
 
-    std::mutex mut;
+    RGBEffect* effect;
+    OpenRGBEffectPage*  effect_page = nullptr;
+    QDialog* effect_page_dialog = nullptr;
 
 };
 

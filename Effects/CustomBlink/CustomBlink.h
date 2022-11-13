@@ -41,7 +41,7 @@ public:
     void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void LoadCustomSettings(json) override;
-    json SaveCustomSettings(json) override;
+    json SaveCustomSettings() override;
 
 private slots:
     void on_add_clicked();

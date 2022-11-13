@@ -378,8 +378,10 @@ void CustomBlink::LoadCustomSettings(json j)
     }
 }
 
-json CustomBlink::SaveCustomSettings(json j)
+json CustomBlink::SaveCustomSettings()
 {
+    json settings;
+
     std::vector<std::string> pattern_list;
 
     for(const QString& str: selected_patterns_model->stringList())
@@ -387,10 +389,10 @@ json CustomBlink::SaveCustomSettings(json j)
         pattern_list.push_back(str.toStdString());
     }
 
-    j["interval"] = interval;
-    j["pattern_list"] = pattern_list;
+    settings["interval"] = interval;
+    settings["pattern_list"] = pattern_list;
 
-    return j;
+    return settings;
 }
 
 void CustomBlink::GenerateRandomColors()

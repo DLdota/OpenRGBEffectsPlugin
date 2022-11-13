@@ -501,16 +501,18 @@ void AudioParty::ZonesChanged(int min, int max)
     color_zone_stop = max;
 }
 
-json AudioParty::SaveCustomSettings(json Settings)
+json AudioParty::SaveCustomSettings()
 {
-    Settings["audio_device_idx"] = audio_device_idx;
-    Settings["amplitude"] = amplitude;
-    Settings["divisions"] = divisions;
-    Settings["effect_threshold"] = effect_threshold;
-    Settings["motion_zone_stop"] = motion_zone_stop;
-    Settings["color_zone_stop"] = color_zone_stop;
+    json settings;
 
-    return Settings;
+    settings["audio_device_idx"] = audio_device_idx;
+    settings["amplitude"] = amplitude;
+    settings["divisions"] = divisions;
+    settings["effect_threshold"] = effect_threshold;
+    settings["motion_zone_stop"] = motion_zone_stop;
+    settings["color_zone_stop"] = color_zone_stop;
+
+    return settings;
 }
 
 void AudioParty::LoadCustomSettings(json Settings)

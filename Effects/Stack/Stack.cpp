@@ -206,9 +206,12 @@ void Stack::LoadCustomSettings(json settings)
     }
 }
 
-json Stack::SaveCustomSettings(json settings)
+json Stack::SaveCustomSettings()
 {
+    json settings;
+
     settings["direction"] = ui->direction->currentIndex();
+
     return settings;
 }
 

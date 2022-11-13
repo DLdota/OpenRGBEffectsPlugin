@@ -595,7 +595,7 @@ void AudioVisualizer::LoadCustomSettings(json Settings)
     ui->comboBox_Audio_Device->setCurrentIndex(audio_device_idx);
 }
 
-json AudioVisualizer::SaveCustomSettings(json)
+json AudioVisualizer::SaveCustomSettings()
 {
     json Settings;
     /*---------------------------------------------*\
