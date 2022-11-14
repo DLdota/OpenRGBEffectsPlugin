@@ -254,14 +254,6 @@ void OpenRGBEffectTab::PluginInfoAction()
 
     dialog_layout->addWidget(plugin_info);
 
-    QHBoxLayout* buttons_layout = new QHBoxLayout();
-
-    QPushButton* close_button = new QPushButton();
-    close_button->setText("Close");
-    dialog->connect(close_button,SIGNAL(clicked()),dialog,SLOT(reject()));
-    buttons_layout->addWidget(close_button);
-    dialog_layout->addLayout(buttons_layout);
-
     dialog->exec();
 }
 
