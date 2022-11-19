@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>237</width>
-    <height>236</height>
+    <height>256</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,7 +41,11 @@
     </widget>
    </item>
    <item row="1" column="1" colspan="2">
-    <widget class="QListWidget" name="profile_list"/>
+    <widget class="QListWidget" name="profile_list">
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="7" column="1">
     <widget class="QPushButton" name="cancel">
@@ -57,7 +61,11 @@
     </widget>
    </item>
    <item row="4" column="1" colspan="2">
-    <widget class="QLineEdit" name="filename"/>
+    <widget class="QLineEdit" name="filename">
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="2" column="1" colspan="2">
     <widget class="QLabel" name="create_new_profile">
