@@ -6,43 +6,42 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>183</width>
-    <height>284</height>
+    <width>267</width>
+    <height>140</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="1">
-    <widget class="QTooltipedSlider" name="average">
-     <property name="minimum">
-      <number>8</number>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Radius</string>
      </property>
-     <property name="maximum">
-      <number>128</number>
-     </property>
-     <property name="singleStep">
-      <number>8</number>
-     </property>
-     <property name="value">
-      <number>32</number>
-     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QTooltipedSlider" name="radius">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
-    <widget class="QSpinBox" name="decay">
-     <property name="minimum">
-      <number>1</number>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Amplitude</string>
      </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="value">
-      <number>85</number>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="devices">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
     </widget>
    </item>
@@ -66,29 +65,20 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Amplitude</string>
+   <item row="2" column="1">
+    <widget class="QTooltipedSlider" name="average">
+     <property name="minimum">
+      <number>8</number>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Audio device</string>
+     <property name="maximum">
+      <number>128</number>
      </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Radius</string>
+     <property name="singleStep">
+      <number>8</number>
      </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QTooltipedSlider" name="radius">
+     <property name="value">
+      <number>32</number>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -101,28 +91,25 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="devices">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Audio device</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+   <item row="3" column="1">
+    <widget class="QSpinBox" name="decay">
+     <property name="minimum">
+      <number>1</number>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
+     <property name="maximum">
+      <number>100</number>
      </property>
-    </spacer>
+     <property name="value">
+      <number>85</number>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

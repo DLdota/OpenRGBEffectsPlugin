@@ -35,6 +35,7 @@ struct EffectInfo
     std::string Slider2Name = "";
 
     bool HasCustomSettings = false;
+    bool ExpandCustomSettings = false;
 };
 
 class RGBEffect : public QWidget

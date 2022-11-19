@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>270</width>
-    <height>189</height>
+    <width>234</width>
+    <height>40</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="0,0">
    <item row="0" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
@@ -23,19 +23,6 @@
    </item>
    <item row="0" column="1">
     <widget class="QComboBox" name="lightning_mode"/>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

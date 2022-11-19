@@ -17,6 +17,7 @@ Layers::Layers(QWidget *parent) :
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Combine effects together.<br /> <a href=\"https://en.wikipedia.org/wiki/Blend_modes\">Help about blend modes</a>";
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.ExpandCustomSettings = true;
 
     // remove intial dummy tabs
     ui->groups->clear();

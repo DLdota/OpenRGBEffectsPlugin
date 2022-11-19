@@ -192,9 +192,9 @@ void OpenRGBEffectPage::InitUi()
 
     ui->extra_settings->setVisible(effect->EffectDetails.HasCustomSettings);
 
-    if(!effect->EffectDetails.HasCustomSettings)
+    if(!effect->EffectDetails.ExpandCustomSettings)
     {
-        ((QVBoxLayout*)layout())->addStretch();
+        ((QVBoxLayout*)layout())->addStretch(100);
     }
 
     if(effect->IsAutoStart())

@@ -6,39 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>262</width>
-    <height>425</height>
+    <width>233</width>
+    <height>221</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="1">
-    <widget class="QPushButton" name="remove">
+   <item row="2" column="0">
+    <widget class="QPushButton" name="clear">
      <property name="text">
-      <string>Remove selected</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="current_label">
-     <property name="text">
-      <string>Current pattern:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QLabel" name="current">
-     <property name="text">
-      <string>-</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QPushButton" name="reset">
-     <property name="text">
-      <string>Reset time</string>
+      <string>Clear list</string>
      </property>
     </widget>
    </item>
@@ -49,29 +28,43 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QComboBox" name="patterns"/>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QListView" name="selected_patterns">
-     <property name="selectionMode">
-      <enum>QAbstractItemView::MultiSelection</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QPushButton" name="clear">
-     <property name="text">
-      <string>Clear list</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="1">
     <widget class="QPushButton" name="add">
      <property name="text">
       <string>Add</string>
      </property>
     </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="current_label">
+     <property name="text">
+      <string>Current pattern:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QPushButton" name="reset">
+     <property name="text">
+      <string>Reset time</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLabel" name="current">
+     <property name="text">
+      <string>-</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="remove">
+     <property name="text">
+      <string>Remove selected</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QComboBox" name="patterns"/>
    </item>
    <item row="5" column="1">
     <widget class="QSpinBox" name="interval">
@@ -86,18 +79,12 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+   <item row="1" column="0" colspan="2">
+    <widget class="QListView" name="selected_patterns">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::MultiSelection</enum>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+    </widget>
    </item>
   </layout>
  </widget>
