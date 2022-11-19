@@ -25,6 +25,15 @@ This is a plugin for [OpenRGB](https://gitlab.com/CalcProgrammer1/OpenRGB) that 
 
 You need `libopenal` installed.
 
+#### Fedora
+
+You need `openal-soft` installed.
+```
+
+sudo dnf install openal-soft
+
+```
+
 ### OSX
 
 Install openal-soft
