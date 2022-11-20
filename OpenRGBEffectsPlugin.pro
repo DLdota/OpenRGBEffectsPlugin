@@ -415,6 +415,7 @@ FORMS +=                                                                        
     Effects/CustomBlink/CustomBlink.ui                                                          \
     Effects/AudioVUMeter/AudioVUMeter.ui                                                        \
     Effects/Lightning/Lightning.ui                                                              \
+    Effects/AudioSync/AudioSync.ui                                                                        \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #
