@@ -159,11 +159,6 @@ HEADERS +=                                                                      
 # GUI and misc                                                                                  #
 #-----------------------------------------------------------------------------------------------#
 HEADERS +=                                                                                      \
-    OpenRGBEffectsPlugin.h                                                                      \
-    OpenRGBEffectTab.h                                                                          \
-    OpenRGBEffectPage.h                                                                         \
-    OpenRGBEffectSettings.h                                                                     \
-    EffectManager.h                                                                             \
     ColorPicker.h                                                                               \
     ColorsPicker.h                                                                              \
     ColorUtils.h                                                                                \
@@ -171,52 +166,56 @@ HEADERS +=                                                                      
     DeviceList.h                                                                                \
     DeviceListItem.h                                                                            \
     EffectList.h                                                                                \
+    EffectManager.h                                                                             \
+    EffectSearch.h                                                                              \
     EffectTabHeader.h                                                                           \
+    Effects/EffectRegisterer.h                                                                  \
+    Effects/RGBEffect.h                                                                         \
     LivePreviewController.h                                                                     \
+    OpenRGBEffectPage.h                                                                         \
+    OpenRGBEffectsPlugin.h                                                                      \
+    OpenRGBEffectSettings.h                                                                     \
+    OpenRGBEffectTab.h                                                                          \
     PluginInfo.h                                                                                \
     PreviewWidget.h                                                                             \
-    ZoneListItem.h                                                                              \
-    ScreenRecorder.h                                                                            \
-    SaveProfilePopup.h                                                                          \
     QTooltipedSlider.h                                                                          \
-    EffectSearch.h                                                                              \
+    SaveProfilePopup.h                                                                          \
+    ScreenRecorder.h                                                                            \
+    ZoneListItem.h                                                                              \
 
 SOURCES +=                                                                                      \
+    AudioManager.cpp                                                                            \
+    ColorPicker.cpp                                                                             \
+    ColorsPicker.cpp                                                                            \
     DeviceList.cpp                                                                              \
     DeviceListItem.cpp                                                                          \
     EffectList.cpp                                                                              \
+    EffectManager.cpp                                                                           \
+    EffectSearch.cpp                                                                            \
     EffectTabHeader.cpp                                                                         \
     LivePreviewController.cpp                                                                   \
-    OpenRGBEffectsPlugin.cpp                                                                    \
-    OpenRGBEffectTab.cpp                                                                        \
     OpenRGBEffectPage.cpp                                                                       \
+    OpenRGBEffectsPlugin.cpp                                                                    \
     OpenRGBEffectSettings.cpp                                                                   \
-    EffectManager.cpp                                                                           \
-    ColorPicker.cpp                                                                             \
-    ColorsPicker.cpp                                                                            \
+    OpenRGBEffectTab.cpp                                                                        \
     PluginInfo.cpp                                                                              \
-    ZoneListItem.cpp                                                                            \
+    QTooltipedSlider.cpp                                                                        \
     PreviewWidget.cpp                                                                           \
-    AudioManager.cpp                                                                            \
     ScreenRecorder.cpp                                                                          \
     SaveProfilePopup.cpp                                                                        \
-    QTooltipedSlider.cpp                                                                        \
-    EffectSearch.cpp                                                                            \
+    ZoneListItem.cpp                                                                            \
 
 FORMS +=                                                                                        \
+    ColorPicker.ui                                                                              \
+    ColorsPicker.ui                                                                             \
     DeviceList.ui                                                                               \
     DeviceListItem.ui                                                                           \
     EffectList.ui                                                                               \
     EffectSearch.ui                                                                             \
     EffectTabHeader.ui                                                                          \
-    Effects/Shaders/NewShaderPassTabHeader.ui                                                   \
-    Effects/Shaders/ShaderFileTabHeader.ui                                                      \
-    Effects/Shaders/ShaderPassEditor.ui                                                         \
     LivePreviewController.ui                                                                    \
     OpenRGBEffectPage.ui                                                                        \
     OpenRGBEffectTab.ui                                                                         \
-    ColorPicker.ui                                                                              \
-    ColorsPicker.ui                                                                             \
     PluginInfo.ui                                                                               \
     SaveProfilePopup.ui                                                                         \
     ZoneListItem.ui
@@ -228,59 +227,50 @@ INCLUDEPATH +=                                                                  
     Effects                                                                                     \
 
 SOURCES +=                                                                                      \
-    Effects/Rain/Rain.cpp                                                                       \
-    Effects/Wavy/Wavy.cpp                                                                       \
-    Effects/Visor/Visor.cpp                                                                     \
     Effects/Ambient/Ambient.cpp                                                                 \
     Effects/Ambient/RectangleSelector.cpp                                                       \
+    Effects/AudioParty/AudioParty.cpp                                                           \
+    Effects/AudioSine/AudioSine.cpp                                                             \
+    Effects/AudioStar/AudioStar.cpp                                                             \
     Effects/AudioSync/AudioSync.cpp                                                             \
-    Effects/Breathing/Breathing.cpp                                                             \
-    Effects/RainbowWave/RainbowWave.cpp                                                         \
-    Effects/StarryNight/StarryNight.cpp                                                         \
-    Effects/GradientWave/GradientWave.cpp                                                       \
     Effects/AudioVisualizer/AudioVisualizer.cpp                                                 \
-    Effects/Lightning/Lightning.cpp                                                             \
-    Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
-    Effects/Bubbles/Bubbles.cpp                                                                 \
-    Effects/ColorWheelEffect/ColorWheelEffect.cpp                                               \
-    Effects/FractalMotion/FractalMotion.cpp                                                     \
-    Effects/Hypnotoad/Hypnotoad.cpp                                                             \
-    Effects/MotionPoint/MotionPoint.cpp                                                         \
-    Effects/MotionPoints/MotionPoints.cpp                                                       \
-    Effects/NoiseMap/NoiseMap.cpp                                                               \
-    Effects/RadialRainbow/RadialRainbow.cpp                                                     \
-    Effects/Sequence/Sequence.cpp                                                               \
-    Effects/Stack/Stack.cpp                                                                     \
-    Effects/GifPlayer/GifPlayer.cpp                                                             \
-    Effects/SmoothBlink/SmoothBlink.cpp                                                         \
+    Effects/AudioVUMeter/AudioVUMeter.cpp                                                       \
+    Effects/Bloom/Bloom.cpp                                                                     \
     Effects/BouncingBall/BouncingBallEffect.cpp                                                 \
     Effects/BouncingBall/BouncingBallSimulation.cpp                                             \
-    Effects/AudioSine/AudioSine.cpp                                                             \
-    Effects/SwirlCircles/SwirlCircles.cpp                                                       \
-    Effects/SwirlCirclesAudio/SwirlCirclesAudio.cpp                                             \
-    Effects/CrossingBeams/CrossingBeams.cpp                                                     \
-    Effects/RotatingBeam/RotatingBeam.cpp                                                       \
-    Effects/AudioStar/AudioStar.cpp                                                             \
-    Effects/Sunrise/Sunrise.cpp                                                                 \
-    Effects/Marquee/Marquee.cpp                                                                 \
+    Effects/Breathing/Breathing.cpp                                                             \
+    Effects/BreathingCircle/BreathingCircle.cpp                                                 \
+    Effects/Bubbles/Bubbles.cpp                                                                 \
+    Effects/Clock/Clock.cpp                                                                     \
+    Effects/ColorWheelEffect/ColorWheelEffect.cpp                                               \
     Effects/Comet/Comet.cpp                                                                     \
-    Effects/Fill/Fill.cpp                                                                       \
-    Effects/Swap/Swap.cpp                                                                       \
+    Effects/CrossingBeams/CrossingBeams.cpp                                                     \
+    Effects/CustomBlink/CustomBlink.cpp                                                         \
+    Effects/CustomGradientWave/CustomGradientWave.cpp                                           \
     Effects/CustomMarquee/CustomMarquee.cpp                                                     \
-    Effects/Mosaic/Mosaic.cpp                                                                   \
-    Effects/Bloom/Bloom.cpp                                                                     \
-    Effects/Spiral/Spiral.cpp                                                                   \
-    Effects/RotatingRainbow/RotatingRainbow.cpp                                                 \
     Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.cpp                                     \
+    Effects/Fill/Fill.cpp                                                                       \
+    Effects/FractalMotion/FractalMotion.cpp                                                     \
+    Effects/GifPlayer/GifPlayer.cpp                                                             \
+    Effects/GradientWave/GradientWave.cpp                                                       \
+    Effects/Hypnotoad/Hypnotoad.cpp                                                             \
     Effects/Layers/Layers.cpp                                                                   \
     Effects/Layers/LayerEntry.cpp                                                               \
     Effects/Layers/LayerGroupEntry.cpp                                                          \
+    Effects/Lightning/Lightning.cpp                                                             \
+    Effects/Marquee/Marquee.cpp                                                                 \
     Effects/Mask/Mask.cpp                                                                       \
+    Effects/Mosaic/Mosaic.cpp                                                                   \
+    Effects/MotionPoint/MotionPoint.cpp                                                         \
+    Effects/MotionPoints/MotionPoints.cpp                                                       \
     Effects/MovingPanes/MovingPanes.cpp                                                         \
-    Effects/BreathingCircle/BreathingCircle.cpp                                                 \
-    Effects/AudioParty/AudioParty.cpp                                                           \    
-    Effects/CustomGradientWave/CustomGradientWave.cpp                                           \
-    Effects/ZigZag/ZigZag.cpp                                                                   \
+    Effects/NoiseMap/NoiseMap.cpp                                                               \
+    Effects/RadialRainbow/RadialRainbow.cpp                                                     \
+    Effects/Rain/Rain.cpp                                                                       \
+    Effects/RainbowWave/RainbowWave.cpp                                                         \
+    Effects/RotatingBeam/RotatingBeam.cpp                                                       \
+    Effects/RotatingRainbow/RotatingRainbow.cpp                                                 \
+    Effects/Sequence/Sequence.cpp                                                               \
     Effects/Shaders/NewShaderPassTabHeader.cpp                                                  \
     Effects/Shaders/ShaderFileTabHeader.cpp                                                     \
     Effects/Shaders/ShaderPass.cpp                                                              \
@@ -291,66 +281,64 @@ SOURCES +=                                                                      
     Effects/Shaders/ShaderRenderer.cpp                                                          \
     Effects/Shaders/GLSLHighlighter.cpp                                                         \
     Effects/Shaders/GLSLCodeEditor.cpp                                                          \
-    Effects/Clock/Clock.cpp                                                                     \
-    Effects/CustomBlink/CustomBlink.cpp                                                         \
-    Effects/AudioVUMeter/AudioVUMeter.cpp                                                       \
+    Effects/SmoothBlink/SmoothBlink.cpp                                                         \
+    Effects/SpectrumCycling/SpectrumCycling.cpp                                                 \
+    Effects/Spiral/Spiral.cpp                                                                   \
+    Effects/Stack/Stack.cpp                                                                     \
+    Effects/StarryNight/StarryNight.cpp                                                         \
+    Effects/Sunrise/Sunrise.cpp                                                                 \
+    Effects/Swap/Swap.cpp                                                                       \
+    Effects/SwirlCircles/SwirlCircles.cpp                                                       \
+    Effects/SwirlCirclesAudio/SwirlCirclesAudio.cpp                                             \
+    Effects/Visor/Visor.cpp                                                                     \
+    Effects/Wavy/Wavy.cpp                                                                       \
+    Effects/ZigZag/ZigZag.cpp                                                                   \
 
 HEADERS +=                                                                                      \
-    Effects/RGBEffect.h                                                                         \
-    Effects/Rain/Rain.h                                                                         \
-    Effects/Wavy/Wavy.h                                                                         \
-    Effects/Visor/Visor.h                                                                       \
     Effects/Ambient/Ambient.h                                                                   \
     Effects/Ambient/RectangleSelector.h                                                         \
+    Effects/AudioParty/AudioParty.h                                                             \
+    Effects/AudioSine/AudioSine.h                                                               \
+    Effects/AudioStar/AudioStar.h                                                               \
     Effects/AudioSync/AudioSync.h                                                               \
-    Effects/Breathing/Breathing.h                                                               \
-    Effects/RainbowWave/RainbowWave.h                                                           \
-    Effects/StarryNight/StarryNight.h                                                           \
-    Effects/GradientWave/GradientWave.h                                                         \
-    Effects/SpectrumCycling/SpectrumCycling.h                                                   \
     Effects/AudioVisualizer/AudioVisualizer.h                                                   \
-    Effects/Lightning/Lightning.h                                                               \
-    Effects/Bubbles/Bubbles.h                                                                   \
-    Effects/ColorWheelEffect/ColorWheelEffect.h                                                 \
-    Effects/EffectRegisterer.h                                                                  \
-    Effects/FractalMotion/FractalMotion.h                                                       \
-    Effects/Hypnotoad/Hypnotoad.h                                                               \
-    Effects/MotionPoint/MotionPoint.h                                                           \
-    Effects/MotionPoints/MotionPoints.h                                                         \
-    Effects/NoiseMap/NoiseMap.h                                                                 \
-    Effects/RadialRainbow/RadialRainbow.h                                                       \
-    Effects/Sequence/Sequence.h                                                                 \
-    Effects/Stack/Stack.h                                                                       \
-    Effects/GifPlayer/GifPlayer.h                                                               \
-    Effects/SmoothBlink/SmoothBlink.h                                                           \
+    Effects/AudioVUMeter/AudioVUMeter.h                                                         \
+    Effects/Bloom/Bloom.h                                                                       \
     Effects/BouncingBall/BouncingBallEffect.h                                                   \
     Effects/BouncingBall/BouncingBallSimulation.h                                               \
-    Effects/AudioSine/AudioSine.h                                                               \
-    Effects/SwirlCircles/SwirlCircles.h                                                         \
-    Effects/SwirlCirclesAudio/SwirlCirclesAudio.h                                               \
-    Effects/CrossingBeams/CrossingBeams.h                                                       \
-    Effects/RotatingBeam/RotatingBeam.h                                                         \
-    Effects/AudioStar/AudioStar.h                                                               \
-    Effects/Sunrise/Sunrise.h                                                                   \
-    Effects/Marquee/Marquee.h                                                                   \
+    Effects/Breathing/Breathing.h                                                               \
+    Effects/BreathingCircle/BreathingCircle.h                                                   \
+    Effects/Bubbles/Bubbles.h                                                                   \
+    Effects/Clock/Clock.h                                                                       \
+    Effects/ColorWheelEffect/ColorWheelEffect.h                                                 \
     Effects/Comet/Comet.h                                                                       \
-    Effects/Fill/Fill.h                                                                         \
-    Effects/Swap/Swap.h                                                                         \
+    Effects/CrossingBeams/CrossingBeams.h                                                       \
+    Effects/CustomBlink/CustomBlink.h                                                           \
+    Effects/CustomGradientWave/CustomGradientWave.h                                             \
     Effects/CustomMarquee/CustomMarquee.h                                                       \
-    Effects/Mosaic/Mosaic.h                                                                     \
-    Effects/Bloom/Bloom.h                                                                       \
-    Effects/Spiral/Spiral.h                                                                     \
-    Effects/RotatingRainbow/RotatingRainbow.h                                                   \
     Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.h                                       \
+    Effects/Fill/Fill.h                                                                         \
+    Effects/FractalMotion/FractalMotion.h                                                       \
+    Effects/GifPlayer/GifPlayer.h                                                               \
+    Effects/GradientWave/GradientWave.h                                                         \
+    Effects/Hypnotoad/Hypnotoad.h                                                               \
     Effects/Layers/Layers.h                                                                     \
     Effects/Layers/LayerEntry.h                                                                 \
     Effects/Layers/LayerGroupEntry.h                                                            \
+    Effects/Lightning/Lightning.h                                                               \
+    Effects/Marquee/Marquee.h                                                                   \
     Effects/Mask/Mask.h                                                                         \
+    Effects/Mosaic/Mosaic.h                                                                     \
+    Effects/MotionPoint/MotionPoint.h                                                           \
+    Effects/MotionPoints/MotionPoints.h                                                         \
     Effects/MovingPanes/MovingPanes.h                                                           \
-    Effects/BreathingCircle/BreathingCircle.h                                                   \
-    Effects/AudioParty/AudioParty.h                                                             \    
-    Effects/CustomGradientWave/CustomGradientWave.h                                             \
-    Effects/ZigZag/ZigZag.h                                                                     \
+    Effects/NoiseMap/NoiseMap.h                                                                 \
+    Effects/RadialRainbow/RadialRainbow.h                                                       \
+    Effects/Rain/Rain.h                                                                         \
+    Effects/RainbowWave/RainbowWave.h                                                           \
+    Effects/RotatingBeam/RotatingBeam.h                                                         \
+    Effects/RotatingRainbow/RotatingRainbow.h                                                   \
+    Effects/Sequence/Sequence.h                                                                 \
     Effects/Shaders/NewShaderPassTabHeader.h                                                    \
     Effects/Shaders/ShaderFileTabHeader.h                                                       \
     Effects/Shaders/ShaderPass.h                                                                \
@@ -361,61 +349,73 @@ HEADERS +=                                                                      
     Effects/Shaders/ShaderRenderer.h                                                            \
     Effects/Shaders/GLSLHighlighter.h                                                           \
     Effects/Shaders/GLSLCodeEditor.h                                                            \
-    Effects/Clock/Clock.h                                                                       \
-    Effects/CustomBlink/CustomBlink.h                                                           \
-    Effects/AudioVUMeter/AudioVUMeter.h                                                         \
+    Effects/SmoothBlink/SmoothBlink.h                                                           \
+    Effects/SpectrumCycling/SpectrumCycling.h                                                   \
+    Effects/Spiral/Spiral.h                                                                     \
+    Effects/Stack/Stack.h                                                                       \
+    Effects/StarryNight/StarryNight.h                                                           \
+    Effects/Sunrise/Sunrise.h                                                                   \
+    Effects/Swap/Swap.h                                                                         \
+    Effects/SwirlCircles/SwirlCircles.h                                                         \
+    Effects/SwirlCirclesAudio/SwirlCirclesAudio.h                                               \
+    Effects/Visor/Visor.h                                                                       \
+    Effects/Wavy/Wavy.h                                                                         \
+    Effects/ZigZag/ZigZag.h                                                                     \
 
 FORMS +=                                                                                        \
-    Effects/Rain/Rain.ui                                                                        \
-    Effects/Wavy/Wavy.ui                                                                        \
-    Effects/AudioVisualizer/AudioVisualizer.ui                                                  \
-    Effects/Bubbles/Bubbles.ui                                                                  \
-    Effects/ColorWheelEffect/ColorWheelEffect.ui                                                \
-    Effects/FractalMotion/FractalMotion.ui                                                      \
-    Effects/Hypnotoad/Hypnotoad.ui                                                              \
-    Effects/MotionPoint/MotionPoint.ui                                                          \
-    Effects/MotionPoints/MotionPoints.ui                                                        \
-    Effects/NoiseMap/NoiseMap.ui                                                                \
-    Effects/RadialRainbow/RadialRainbow.ui                                                      \
-    Effects/Sequence/Sequence.ui                                                                \
-    Effects/Stack/Stack.ui                                                                      \
-    Effects/GifPlayer/GifPlayer.ui                                                              \
-    Effects/SmoothBlink/SmoothBlink.ui                                                          \
-    Effects/BouncingBall/BouncingBallEffect.ui                                                  \
+    Effects/Ambient/Ambient.ui                                                                  \
+    Effects/AudioParty/AudioParty.ui                                                            \
     Effects/AudioSine/AudioSine.ui                                                              \
-    Effects/SwirlCircles/SwirlCircles.ui                                                        \
-    Effects/SwirlCirclesAudio/SwirlCirclesAudio.ui                                              \
-    Effects/CrossingBeams/CrossingBeams.ui                                                      \
-    Effects/RotatingBeam/RotatingBeam.ui                                                        \
     Effects/AudioStar/AudioStar.ui                                                              \
-    Effects/Sunrise/Sunrise.ui                                                                  \
-    Effects/Marquee/Marquee.ui                                                                  \
-    Effects/Comet/Comet.ui                                                                      \
-    Effects/Fill/Fill.ui                                                                        \
-    Effects/Swap/Swap.ui                                                                        \
-    Effects/CustomMarquee/CustomMarquee.ui                                                      \
-    Effects/Mosaic/Mosaic.ui                                                                    \
+    Effects/AudioSync/AudioSync.ui                                                              \
+    Effects/AudioVisualizer/AudioVisualizer.ui                                                  \
+    Effects/AudioVUMeter/AudioVUMeter.ui                                                        \
     Effects/Bloom/Bloom.ui                                                                      \
-    Effects/Spiral/Spiral.ui                                                                    \
-    Effects/RotatingRainbow/RotatingRainbow.ui                                                  \
+    Effects/BouncingBall/BouncingBallEffect.ui                                                  \
+    Effects/BreathingCircle/BreathingCircle.ui                                                  \
+    Effects/Bubbles/Bubbles.ui                                                                  \
+    Effects/Clock/Clock.ui                                                                      \
+    Effects/ColorWheelEffect/ColorWheelEffect.ui                                                \
+    Effects/Comet/Comet.ui                                                                      \
+    Effects/CrossingBeams/CrossingBeams.ui                                                      \
+    Effects/CustomBlink/CustomBlink.ui                                                          \
+    Effects/CustomGradientWave/CustomGradientWave.ui                                            \
+    Effects/CustomMarquee/CustomMarquee.ui                                                      \
     Effects/DoubleRotatingRainbow/DoubleRotatingRainbow.ui                                      \
+    Effects/Fill/Fill.ui                                                                        \
+    Effects/FractalMotion/FractalMotion.ui                                                      \
+    Effects/GifPlayer/GifPlayer.ui                                                              \
+    Effects/Hypnotoad/Hypnotoad.ui                                                              \
     Effects/Layers/Layers.ui                                                                    \
     Effects/Layers/LayerEntry.ui                                                                \
     Effects/Layers/LayerGroupEntry.ui                                                           \
-    Effects/Mask/Mask.ui                                                                        \
-    Effects/Ambient/Ambient.ui                                                                  \
-    Effects/MovingPanes/MovingPanes.ui                                                          \
-    Effects/BreathingCircle/BreathingCircle.ui                                                  \
-    Effects/AudioParty/AudioParty.ui                                                            \
-    Effects/Shaders/Shaders.ui                                                                  \
-    Effects/Shaders/GLSLCodeEditor.ui                                                           \
-    Effects/CustomGradientWave/CustomGradientWave.ui                                            \
-    Effects/ZigZag/ZigZag.ui                                                                    \
-    Effects/Clock/Clock.ui                                                                      \
-    Effects/CustomBlink/CustomBlink.ui                                                          \
-    Effects/AudioVUMeter/AudioVUMeter.ui                                                        \
     Effects/Lightning/Lightning.ui                                                              \
-    Effects/AudioSync/AudioSync.ui                                                                        \
+    Effects/Marquee/Marquee.ui                                                                  \
+    Effects/Mask/Mask.ui                                                                        \
+    Effects/Mosaic/Mosaic.ui                                                                    \
+    Effects/MotionPoint/MotionPoint.ui                                                          \
+    Effects/MotionPoints/MotionPoints.ui                                                        \
+    Effects/MovingPanes/MovingPanes.ui                                                          \
+    Effects/NoiseMap/NoiseMap.ui                                                                \
+    Effects/RadialRainbow/RadialRainbow.ui                                                      \
+    Effects/Rain/Rain.ui                                                                        \
+    Effects/RotatingBeam/RotatingBeam.ui                                                        \
+    Effects/RotatingRainbow/RotatingRainbow.ui                                                  \
+    Effects/Sequence/Sequence.ui                                                                \
+    Effects/Shaders/GLSLCodeEditor.ui                                                           \
+    Effects/Shaders/NewShaderPassTabHeader.ui                                                   \
+    Effects/Shaders/Shaders.ui                                                                  \
+    Effects/Shaders/ShaderFileTabHeader.ui                                                      \
+    Effects/Shaders/ShaderPassEditor.ui                                                         \
+    Effects/SmoothBlink/SmoothBlink.ui                                                          \
+    Effects/Spiral/Spiral.ui                                                                    \
+    Effects/Stack/Stack.ui                                                                      \
+    Effects/Sunrise/Sunrise.ui                                                                  \
+    Effects/Swap/Swap.ui                                                                        \
+    Effects/SwirlCircles/SwirlCircles.ui                                                        \
+    Effects/SwirlCirclesAudio/SwirlCirclesAudio.ui                                              \
+    Effects/Wavy/Wavy.ui                                                                        \
+    Effects/ZigZag/ZigZag.ui                                                                    \
 
 #-----------------------------------------------------------------------------------------------#
 # Windows  Configuration                                                                        #
