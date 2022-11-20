@@ -218,7 +218,7 @@ private slots:
     \*-------------*/
     void update();
     void on_spinBox_Background_Brightness_valueChanged(int);
-    void on_doubleSpinBox_Animation_Speed_valueChanged(float);
+    void on_doubleSpinBox_Animation_Speed_valueChanged(double);
 
     /*---------------------*\
     | Amp, Size, and Decay  |
@@ -230,8 +230,8 @@ private slots:
     /*-------------*\
     | Normalization |
     \*-------------*/
-    void on_doubleSpinBox_Normalization_Offset_valueChanged(float);
-    void on_doubleSpinBox_Normalization_Scale_valueChanged(float);
+    void on_doubleSpinBox_Normalization_Offset_valueChanged(double);
+    void on_doubleSpinBox_Normalization_Scale_valueChanged(double);
 
     /*------------------------------*\
     | Color and Brightness Settings  |
@@ -243,9 +243,9 @@ private slots:
     void on_comboBox_Average_Mode_currentIndexChanged(int);
     void on_checkBox_Reactive_Background_clicked(bool);
     void on_comboBox_Audio_Device_currentIndexChanged(int);
-    void on_doubleSpinBox_Filter_Constant_valueChanged(float);
+    void on_doubleSpinBox_Filter_Constant_valueChanged(double);
     void on_checkBox_Silent_Background_clicked(bool);
-    void on_doubleSpinBox_Background_Timeout_valueChanged(float);
+    void on_doubleSpinBox_Background_Timeout_valueChanged(double);
 
 private:
     /*---------*\

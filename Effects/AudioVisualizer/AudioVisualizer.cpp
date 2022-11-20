@@ -714,7 +714,7 @@ void AudioVisualizer::on_spinBox_Background_Brightness_valueChanged(int value)
     bkgd_bright = value;
 }
 
-void AudioVisualizer::on_doubleSpinBox_Animation_Speed_valueChanged(float value)
+void AudioVisualizer::on_doubleSpinBox_Animation_Speed_valueChanged(double value)
 {
     anim_speed = value;
 }
@@ -742,13 +742,13 @@ void AudioVisualizer::on_spinBox_Decay_valueChanged(int value)
 /*-------------*\
 | Normalization |
 \*-------------*/
-void AudioVisualizer::on_doubleSpinBox_Normalization_Offset_valueChanged(float value)
+void AudioVisualizer::on_doubleSpinBox_Normalization_Offset_valueChanged(double value)
 {
     nrml_ofst = value;
     SetNormalization(nrml_ofst, nrml_scl);
 }
 
-void AudioVisualizer::on_doubleSpinBox_Normalization_Scale_valueChanged(float value)
+void AudioVisualizer::on_doubleSpinBox_Normalization_Scale_valueChanged(double value)
 {
     nrml_scl = value;
     SetNormalization(nrml_ofst, nrml_scl);
@@ -801,7 +801,7 @@ void AudioVisualizer::on_comboBox_Audio_Device_currentIndexChanged(int index)
     SetDevice();
 }
 
-void AudioVisualizer::on_doubleSpinBox_Filter_Constant_valueChanged(float value)
+void AudioVisualizer::on_doubleSpinBox_Filter_Constant_valueChanged(double value)
 {
     filter_constant = value;
     if(filter_constant > 1.0f)
@@ -825,7 +825,7 @@ void AudioVisualizer::on_checkBox_Silent_Background_clicked(bool checked)
     }
 }
 
-void AudioVisualizer::on_doubleSpinBox_Background_Timeout_valueChanged(float value)
+void AudioVisualizer::on_doubleSpinBox_Background_Timeout_valueChanged(double value)
 {
     background_timeout = value;
 
