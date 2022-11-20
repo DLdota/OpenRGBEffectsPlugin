@@ -1,42 +1,36 @@
 #ifndef AUDIOSYNC_H
 #define AUDIOSYNC_H
 
-#include "RGBEffect.h"
-#include "chuck_fft.h"
-#include "hsv.h"
-#include "ctkrangeslider.h"
-#include "AudioManager.h"
-#include "EffectRegisterer.h"
-#include "QTooltipedSlider.h"
-
 #include <QLayout>
 #include <QComboBox>
 #include <QWidget>
-
 #include <QSpinBox>
 #include <QLabel>
 #include <QPushButton>
 #include <QSpacerItem>
 #include <QTimer>
 
+#include "ui_AudioSync.h"
+#include "RGBEffect.h"
+#include "EffectRegisterer.h"
+
 struct AudioSyncSettings
 {
     std::string name;
 
-    float       fade_step;
-    int         rainbow_shift;
-    int         bypass_min;
-    int         bypass_max;
-    int         avg_size;
-    int         avg_mode;
-    int         saturation_mode;
-    int         roll_mode;
-    int         decay;
-    float       filter_constant;
-    float       amplitude;
-    float       low;
-    float       middle;
-    float       high;
+    int     fade_step;
+    int     rainbow_shift;
+    int     bypass_min;
+    int     bypass_max;
+    int     avg_size;
+    int     avg_mode;
+    int     saturation_mode;
+    int     roll_mode;
+    int     decay;
+    int     filter_constant;
+    int     low;
+    int     middle;
+    int     high;
 };
 
 enum SaturationMode {
@@ -50,11 +44,16 @@ enum RollMode {
     RADIAL = 2
 };
 
+namespace Ui {
+class AudioSync;
+}
+
 class AudioSync: public RGBEffect
 {
     Q_OBJECT
+
 public:
-    AudioSync();
+    explicit AudioSync(QWidget *parent = nullptr);
     ~AudioSync();
 
     EFFECT_REGISTERER(ClassName(), CAT_AUDIO, [](){return new AudioSync;});
@@ -67,55 +66,37 @@ public:
     void EffectState(bool)                                      override;
 
 private slots:
-    void SelectDeviceChanged(int);
-    void FadeStepChanged(int);
-    void RainbowShiftChanged(int);
-    void BypassChanged(int,int);
-    void DecayChanged(int);
-    void AvgSizeChanged(int);
-    void AvgModeChanged(int);
-    void SaturationModeChanged(int);
-    void RollModeChanged(int);
-    void FilterConstantChanged(int);
-    void AmplitudeChanged(int);
-    void ToggleAmplitudeChangeInputs();
-    void LowChanged(int);
-    void MiddleChanged(int);
-    void HighChanged(int);
-    void RestoreDefaultSettings();
-    void UpdateUiSettings();
+    void on_device_currentIndexChanged(int);
+    void on_color_fade_speed_valueChanged(int);
+    void on_hue_shift_valueChanged(int);
+    void on_bypass_valuesChanged(int,int);
+    void on_decay_valueChanged(int);
+    void on_avg_size_valueChanged(int);
+    void on_avg_mode_currentIndexChanged(int);
+    void on_saturation_currentIndexChanged(int);
+    void on_roll_mode_currentIndexChanged(int);
+    void on_filter_constant_valueChanged(int);
+    void on_amplitude_valueChanged(int);
+    void on_low_valueChanged(int);
+    void on_middle_valueChanged(int);
+    void on_high_valueChanged(int);
+    void on_defaults_clicked();
+    void on_preset_currentIndexChanged(int);
+
+    //void UpdateUiSettings();
     void UpdateGraph(QPixmap);
-    void PresetChanged(int);
 
 signals:
     void UpdateGraphSignal(QPixmap) const;
 
-private:
+private:    
+    Ui::AudioSync *ui;
+
     /*-----*\
     | Ui    |
     \*-----*/
     QFrame* PrimaryFrame;
     QFrame* AudioSyncFrame;
-
-    QLabel*         preview;
-    ctkRangeSlider* bypass_slider;
-    QTooltipedSlider*        rainbow_shift_slider;
-    QTooltipedSlider*        fade_step_slider;
-    QTooltipedSlider*        decay_slider;
-    QTooltipedSlider*        avg_size_slider;
-    QComboBox*      avg_mode_selector;
-    QComboBox*      saturation_mode_selector;
-    QComboBox*      roll_mode_selector;
-    QTooltipedSlider*        filter_constant_slider;
-    QTooltipedSlider*        amplitude_slider;
-    QPushButton*    change_amplitude_button;
-    QSpinBox*       amplitude_slider_min;
-    QSpinBox*       amplitude_slider_max;
-    QTooltipedSlider*        low_slider;
-    QTooltipedSlider*        middle_slider;
-    QTooltipedSlider*        high_slider;
-    QComboBox*      preset_selector;
-    QComboBox*      device_list_selector;
 
     /*---------*\
     | Settings  |
@@ -123,19 +104,16 @@ private:
     AudioSyncSettings current_settings;
     std::vector<AudioSyncSettings> AudioSyncPresets
     {
-     AudioSyncSettings {"Default",    50,   0,  0,   256,   8,   0,  0,  0,  80,   1.0f,   0.5f,   1.0f,   1.0f,   1.0f  },
-     AudioSyncSettings {"Techno",     80,   0,  0,   256,   8,   1,  0,  0,  30,   1.0f,   0.75f,  0.4f,   1.0f,   1.6f  },
-     AudioSyncSettings {"Rock",       50, 165,  0,   256,  12,   1,  0,  0,  70,   1.0f,   0.9f,   1.2f,   1.4f,   1.4f  },
-     AudioSyncSettings {"Classical",  60,  67,  0,   256,   8,   0,  0,  0,  98,   1.0f,   1.0f,   0.8f,   0.8f,   1.73f }
+     AudioSyncSettings {"Default",    50,   0,  0,   256,   8,   0,  0,  0,  80,  100,  100,   100,   100 },
+     AudioSyncSettings {"Techno",     80,   0,  0,   256,   8,   1,  0,  0,  30,  100,  40,    100,   160 },
+     AudioSyncSettings {"Rock",       50, 165,  0,   256,  12,   1,  0,  0,  70,  100,  120,   140,   140 },
+     AudioSyncSettings {"Classical",  60,  67,  0,   256,   8,   0,  0,  0,  98,  100,  80,     80,   175 }
     };
-
-    int amplitude_min_value = 0;
-    int amplitude_max_value = 100;
 
     /*----------*\
     | internals  |
     \*----------*/
-    bool                  is_running;
+    bool                  is_running = false;
     int                   immediate_freq_hue = 0;
     int                   current_freq_hue = 0;
     float                 current_freq_sat = 0;
@@ -143,6 +121,7 @@ private:
     std::vector<int>      rainbow_hues;
     std::vector<RGBColor> colors_rotation;    
     int                   audio_device_idx = 0;
+    int amplitude = 100;
 
     RGBColor GetColor(int, int, int, int);
 
@@ -158,10 +137,10 @@ private:
     /*--------*\
     | Methods  |
     \*--------*/
-    void Init();
     void Start();
     void Stop();
     void CreateUi();
+    void LoadPreset(AudioSyncSettings);
 };
 
 #endif // AUDIOSYNC_H
