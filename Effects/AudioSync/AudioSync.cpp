@@ -69,8 +69,23 @@ AudioSync::AudioSync(QWidget *parent) :
     connect(this, SIGNAL(UpdateGraphSignal(QPixmap)), this, SLOT(UpdateGraph(QPixmap)));
 
     /*------------------------------------*\
-    | Fill in Normalization and FFT array  |
+    | Init preview                         |
     \*------------------------------------*/
+    QImage image(256, 64, QImage::Format_RGB30);
+
+    image.fill(Qt::black);
+
+    QPixmap pixmap;
+    pixmap.convertFromImage(image);
+
+    ui->preview->setPixmap(pixmap);
+    ui->preview->setScaledContents(true);
+
+    /*------------------------------------*\
+    | Fill in Normalization and FFT array  |
+    \*------------------------------------*//*---------------------------------------------------------------------------------*\
+    | Create a list of colors to read off of when drawing                               |
+    \*---------------------------------------------------------------------------------*/
     hanning(win_hanning, 256);
 
     float offset            = 0.04f;
@@ -458,6 +473,7 @@ void AudioSync::UpdateGraph(QPixmap pixmap)
     }
 
     ui->preview->setPixmap(pixmap);
+    ui->preview->setScaledContents(true);
 }
 
 void AudioSync::Start()
@@ -484,6 +500,7 @@ void AudioSync::Stop()
     {
         AudioManager::get()->UnRegisterClient(audio_device_idx, this);
     }
+
 }
 
 /*-----------------------------------------------------*\
