@@ -30,14 +30,11 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
     /*-----------------------------------------------*\
     | Extra options and custom widgets                |
     \*-----------------------------------------------*/
-    effect->DefineExtraOptions(ui->ExtraOptions);
+    //effect->DefineExtraOptions(ui->ExtraOptions);
 
-    QLayout* effect_layout = effect->layout();
-
-    if(effect_layout != nullptr)
-    {
-        effect_layout->setMargin(0);
-    }
+    ui->ExtraOptions->addWidget(effect);
+    ui->ExtraOptions->setMargin(0);
+    effect->setParent(ui->extra_settings);
 
     InitUi();
 
@@ -495,7 +492,6 @@ void OpenRGBEffectPage::on_toggle_info_clicked()
 {
     ToggleInfo();
 }
-
 
 void OpenRGBEffectPage::OpenPatternsFolder()
 {

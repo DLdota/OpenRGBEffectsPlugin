@@ -61,12 +61,14 @@ QMenu* OpenRGBEffectsPlugin::GetTrayMenu()
 
     QMenu* profilesMenu = new QMenu("Profiles", pluginsMenu);
 
+    pluginsMenu->setObjectName("OpenRGBEffectsPlugin::profilesMenu");
+
     // START ALL EFFECTS
 
     QAction* actionStartAll = new QAction("Start all effects", ui);
 
     connect(actionStartAll, &QAction::triggered, [=](){
-        ui->StartAll();
+        QMetaObject::invokeMethod(ui, "StartAll", Qt::QueuedConnection);
     });
 
     actionStartAll->setObjectName("OpenRGBEffectsPlugin::Action::StartAll");
@@ -80,7 +82,7 @@ QMenu* OpenRGBEffectsPlugin::GetTrayMenu()
     QAction* actionStopAll = new QAction("Stop all effects", ui);
 
     connect(actionStopAll, &QAction::triggered, [=](){
-        ui->StopAll();
+        QMetaObject::invokeMethod(ui, "StopAll", Qt::QueuedConnection);
     });
 
     actionStopAll->setObjectName("OpenRGBEffectsPlugin::Action::StopAll");
@@ -102,7 +104,7 @@ QMenu* OpenRGBEffectsPlugin::GetTrayMenu()
             QAction* profileAction = new QAction(profile_name, ui);
 
             connect(profileAction, &QAction::triggered, [=](){
-                ui->LoadProfile(profile);
+                QMetaObject::invokeMethod(ui, "LoadProfile", Qt::QueuedConnection, Q_ARG(QString, QString::fromStdString(profile)));
             });
 
             profileAction->setObjectName("OpenRGBEffectsPlugin::Action::Profile::"+profile_name);

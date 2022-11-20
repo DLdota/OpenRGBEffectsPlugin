@@ -5,6 +5,7 @@
 #include "RGBEffect.h"
 #include "EffectList.h"
 
+
 namespace Ui {
 class OpenRGBEffectTab;
 }
@@ -17,17 +18,15 @@ public:
     explicit OpenRGBEffectTab(QWidget *parent = nullptr);
     ~OpenRGBEffectTab();
 
-    void StartAll();
-    void StopAll();
-
-    void LoadProfile(std::string);
-
 signals:
     void ProfileListUpdated();
 
 public slots:
     void DeviceListChanged();
     void LoadProfileList();
+    void LoadProfile(QString);
+    void StartAll();
+    void StopAll();
 
 private slots:
     void on_device_list_SelectionChanged();

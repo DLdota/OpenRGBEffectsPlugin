@@ -1,11 +1,11 @@
 #include "OpenRGBEffectTab.h"
-#include "OpenRGBEffectPage.h"
 #include "OpenRGBEffectSettings.h"
 #include "EffectManager.h"
-#include "EffectTabHeader.h"
 #include "OpenRGBEffectsPlugin.h"
 #include "PluginInfo.h"
 #include "SaveProfilePopup.h"
+#include "EffectTabHeader.h"
+#include "OpenRGBEffectPage.h"
 
 #include <QAction>
 #include <QDialog>
@@ -51,7 +51,7 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
 
         if(!default_profile.empty())
         {
-            LoadProfile(default_profile);
+            LoadProfile(QString::fromStdString(default_profile));
         }
     });   
 }
@@ -123,7 +123,9 @@ void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
 
     connect(effect_header, &EffectTabHeader::CloseRequest, [=](){
         int tab_idx = ui->EffectTabs->indexOf(effect_page);
+
         ui->EffectTabs->removeTab(tab_idx);
+        ui->EffectTabs->tabBar()->removeTab(tab_idx);
 
         EffectManager::Get()->SetEffectUnActive(effect);
         EffectManager::Get()->RemoveMapping(effect);
@@ -132,7 +134,6 @@ void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
 
         delete effect_page;
         delete effect_header;
-        //delete effect;
     });
 
     connect(effect_header, &EffectTabHeader::Renamed, [=](std::string new_name){
@@ -186,7 +187,7 @@ void OpenRGBEffectTab::LoadProfileList()
         QAction* profile_action = new QAction(QString::fromStdString(file_name), this);
 
         connect(profile_action, &QAction::triggered,[=](){
-            LoadProfile(file_name);
+            LoadProfile(QString::fromStdString(file_name));
         });
 
         load_profile_menu->addAction(profile_action);
@@ -196,19 +197,7 @@ void OpenRGBEffectTab::LoadProfileList()
     emit ProfileListUpdated();
 }
 
-void OpenRGBEffectTab::ClearAll()
-{
-    for(int i = 1; i < ui->EffectTabs->count(); i++)
-    {
-        OpenRGBEffectPage* effect_page = dynamic_cast<OpenRGBEffectPage*>(ui->EffectTabs->widget(i));
-        ui->EffectTabs->removeTab(i);
-        delete effect_page;
-    }
 
-    effect_list->ShowStartStopButton(false);
-
-    EffectManager::Get()->ClearAssignments();
-}
 
 void OpenRGBEffectTab::on_EffectTabs_currentChanged(int current)
 {
@@ -369,16 +358,16 @@ void OpenRGBEffectTab::SaveProfileAction()
     dialog->exec();
 }
 
-void OpenRGBEffectTab::LoadProfile(std::string profile)
+void OpenRGBEffectTab::LoadProfile(QString profile)
 {
     StopAll();
     ClearAll();
 
-    printf("[OpenRGBEffectsPlugin] LoadProfile '%s'.\n", profile.c_str());
+    printf("[OpenRGBEffectsPlugin] LoadProfile '%s'.\n", profile.toStdString().c_str());
 
-    if(!profile.empty())
+    if(!profile.isEmpty())
     {
-        json settings = OpenRGBEffectSettings::LoadUserProfile(profile);
+        json settings = OpenRGBEffectSettings::LoadUserProfile(profile.toStdString());
 
         if(!settings.contains("version") || settings["version"] != OpenRGBEffectSettings::version)
         {
@@ -403,7 +392,7 @@ void OpenRGBEffectTab::LoadProfile(std::string profile)
             }
         }
 
-        latest_loaded_profile = profile;
+        latest_loaded_profile = profile.toStdString();
     }
 }
 
@@ -524,6 +513,27 @@ void OpenRGBEffectTab::StopAll()
     {
        (dynamic_cast<OpenRGBEffectPage*>(ui->EffectTabs->widget(i)))->StopEffect();
     }
+}
+
+void OpenRGBEffectTab::ClearAll()
+{
+    while(ui->EffectTabs->count() > 1)
+    {
+        int idx = ui->EffectTabs->count() - 1;
+
+        OpenRGBEffectPage* effect_page = dynamic_cast<OpenRGBEffectPage*>(ui->EffectTabs->widget(idx));
+        EffectTabHeader* effect_header = dynamic_cast<EffectTabHeader*>(ui->EffectTabs->tabBar()->tabButton(idx, QTabBar::RightSide));
+
+        ui->EffectTabs->removeTab(idx);
+        ui->EffectTabs->tabBar()->removeTab(idx);
+
+        delete effect_page;
+        delete effect_header;
+    }
+
+    effect_list->ShowStartStopButton(false);
+
+    EffectManager::Get()->ClearAssignments();
 }
 
 void OpenRGBEffectTab::OnStopEffects()
