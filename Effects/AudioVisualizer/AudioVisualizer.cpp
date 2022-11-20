@@ -1,5 +1,8 @@
 #include "AudioVisualizer.h"
 #include "Colors.h"
+#include "chuck_fft.h"
+#include "AudioManager.h"
+#include "hsv.h"
 
 /*---------------------------------------------------------*\
 |  Processing Code for Keyboard Visualizer                  |
@@ -142,13 +145,14 @@ AudioVisualizer::AudioVisualizer(QWidget* parent):
     ui->checkBox_Reactive_Background->setChecked(reactive_bkgd);
     ui->checkBox_Silent_Background->setChecked(silent_bkgd);
 
+    ui->preview->setScaledContents(true);
+
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     timer->start(15);
 
     image = new QImage(256, 64, QImage::Format_RGB32);
-    scene = new QGraphicsScene(this);
-    ui->graphicsView_Visualization_Preview->setScene(scene);
+
 }
 
 AudioVisualizer::~AudioVisualizer()
@@ -259,7 +263,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
                     if (!silent_bkgd || ((background_timer >= background_timeout) && (background_timeout > 0)))
                     {
                         int in_color = pixels_bg.pixels[y][x];
-                        pixels_render->pixels[y][x] = ToRGBColor((int(brightness * RGBGetBValue(in_color))), (int(brightness * RGBGetGValue(in_color))), (int(brightness * RGBGetRValue(in_color))));
+                        pixels_render->pixels[y][x] = ToRGBColor((int(brightness * RGBGetRValue(in_color))), (int(brightness * RGBGetGValue(in_color))), (int(brightness * RGBGetBValue(in_color))));
                     }
                     else
                     {
@@ -666,8 +670,7 @@ void AudioVisualizer::update()
     }
 
     pixmap.convertFromImage(*image);
-    scene->clear();
-    scene->addPixmap(pixmap);
+    ui->preview->setPixmap(pixmap);
 
     if(update_ui)
     {

@@ -65,6 +65,18 @@ AudioParty::AudioParty(QWidget *parent) :
 
     connect(zones_slider,SIGNAL(valuesChanged(int,int)), this, SLOT(ZonesChanged(int, int)));
 
+    /*------------------------------------*\
+    | Init preview                         |
+    \*------------------------------------*/
+    QImage image(256, 64, QImage::Format_RGB30);
+
+    image.fill(Qt::black);
+
+    QPixmap pixmap;
+    pixmap.convertFromImage(image);
+
+    ui->preview->setPixmap(pixmap);
+    ui->preview->setScaledContents(true);
 }
 
 AudioParty::~AudioParty()

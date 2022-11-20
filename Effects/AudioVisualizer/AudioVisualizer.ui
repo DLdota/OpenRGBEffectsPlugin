@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>608</width>
-    <height>463</height>
+    <width>544</width>
+    <height>402</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,484 +22,557 @@
     <height>0</height>
    </size>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0">
-   <item row="5" column="3">
-    <widget class="QComboBox" name="comboBox_Foreground_Mode">
-     <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToContents</enum>
+  <layout class="QGridLayout" name="gridLayout" columnstretch="1,0">
+   <item row="1" column="1">
+    <widget class="QFrame" name="amplitude_frame">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
      </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_Amplitude">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Amplitude (%)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="spinBox_Amplitude">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximum">
+         <number>1000000000</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
-   <item row="12" column="1" colspan="3">
-    <widget class="QGraphicsView" name="graphicsView_Visualization_Preview">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
-     </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
-     </property>
-     <property name="interactive">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QSpinBox" name="spinBox_Decay">
-     <property name="maximum">
-      <number>100</number>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QSpinBox" name="spinBox_Average_Size">
-     <property name="maximum">
-      <number>100</number>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_Average_Size">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>110</width>
-       <height>0</height>
-      </size>
-     </property>
+   <item row="2" column="0">
+    <widget class="QLabel" name="rendering_options_label">
      <property name="text">
-      <string>Average Size</string>
+      <string>Rendering options</string>
      </property>
     </widget>
    </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="label_Filter_Constant">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="1" column="0">
+    <widget class="QFrame" name="device_frame">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
      </property>
-     <property name="minimumSize">
-      <size>
-       <width>110</width>
-       <height>0</height>
-      </size>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
-     <property name="text">
-      <string>Filter Constant</string>
-     </property>
+     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_Audio_Device">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Device</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="comboBox_Audio_Device">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
-   <item row="10" column="3">
-    <widget class="QCheckBox" name="checkBox_Reactive_Background">
-     <property name="text">
-      <string/>
+   <item row="3" column="0" colspan="2">
+    <widget class="QFrame" name="rendering_options_frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QSpinBox" name="spinBox_Amplitude">
-     <property name="maximum">
-      <number>1000000000</number>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
-    </widget>
-   </item>
-   <item row="10" column="2">
-    <widget class="QLabel" name="label_Reactive_Background">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Reactive Background</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QSpinBox" name="spinBox_Background_Brightness">
-     <property name="maximum">
-      <number>100</number>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="2">
-    <widget class="QLabel" name="label_Audio_Device">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>90</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Audio Device</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="2">
-    <widget class="QLabel" name="label_Single_Color_Mode">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>90</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Single Color Mode</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_Normalization_Offset">
-     <property name="maximum">
-      <double>1.000000000000000</double>
-     </property>
-     <property name="singleStep">
-      <double>0.010000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="2">
-    <widget class="QLabel" name="label_FFT_Window_Mode">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>90</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>FFT Window Mode</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="2">
-    <widget class="QLabel" name="label_Average_Mode">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>90</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Average Mode</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="3">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_Animation_Speed">
-     <property name="maximum">
-      <double>1000000.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
-    <widget class="QLabel" name="label_Background_Mode">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>90</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Background Mode</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="3">
-    <widget class="QCheckBox" name="checkBox_Silent_Background">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
+     <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,1,0,1">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_Background_Brightness">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Background Brightness</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="spinBox_Background_Brightness">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QLabel" name="label_Animation_Speed">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>90</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Animation Speed</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_Animation_Speed">
+        <property name="maximum">
+         <double>1000000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_Background_Mode">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>90</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Background Mode</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="comboBox_Background_Mode">
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_Foreground_Mode">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>90</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Foreground Mode</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QComboBox" name="comboBox_Foreground_Mode">
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_Single_Color_Mode">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>90</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Single Color Mode</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QComboBox" name="comboBox_Single_Color_Mode">
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_Background_Timeout">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Background Timeout</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_Background_Timeout">
+        <property name="maximum">
+         <double>120000000000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_Reactive_Background">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Reactive Background</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QCheckBox" name="checkBox_Reactive_Background">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QLabel" name="label_Silent_Background">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Silent Background</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="3">
+       <widget class="QCheckBox" name="checkBox_Silent_Background">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item row="4" column="0">
-    <widget class="QLabel" name="label_Background_Brightness">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>110</width>
-       <height>0</height>
-      </size>
-     </property>
+    <widget class="QLabel" name="audio_settings_label">
      <property name="text">
-      <string>Background Brightness</string>
+      <string>Audio settings</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="0">
-    <widget class="QLabel" name="label_Background_Timeout">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="5" column="0" colspan="2">
+    <widget class="QFrame" name="audio_settings_frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
-     <property name="minimumSize">
-      <size>
-       <width>110</width>
-       <height>0</height>
-      </size>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
+     <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,1,0,1">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_Normalization_Offset">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Normalization Offset</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_Filter_Constant">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Filter Constant</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_Filter_Constant">
+        <property name="maximum">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_Average_Size">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Average Size</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="spinBox_Average_Size">
+        <property name="maximum">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_Decay">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Decay (% per step)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_Normalization_Offset">
+        <property name="maximum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QSpinBox" name="spinBox_Decay">
+        <property name="maximum">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLabel" name="label_Normalization_Scale">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Normalization Scale</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_Normalization_Scale">
+        <property name="maximum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QLabel" name="label_Average_Mode">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>90</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Average Mode</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="QComboBox" name="comboBox_Average_Mode">
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_FFT_Window_Mode">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>90</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>FFT Window Mode</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QComboBox" name="comboBox_FFT_Window_Mode">
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="preview">
      <property name="text">
-      <string>Background Timeout</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="2">
-    <widget class="QLabel" name="label_Foreground_Mode">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>90</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Foreground Mode</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="3">
-    <widget class="QComboBox" name="comboBox_Background_Mode">
-     <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToContents</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="0">
-    <widget class="QLabel" name="label_Visualization_Preview">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Visualization Preview</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="1">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_Normalization_Scale">
-     <property name="maximum">
-      <double>1.000000000000000</double>
-     </property>
-     <property name="singleStep">
-      <double>0.010000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_Amplitude">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>110</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Amplitude (%)</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="2">
-    <widget class="QLabel" name="label_Animation_Speed">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>90</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Animation Speed</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="1">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_Filter_Constant">
-     <property name="maximum">
-      <double>100.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="3">
-    <widget class="QComboBox" name="comboBox_FFT_Window_Mode">
-     <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToContents</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="1">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_Background_Timeout">
-     <property name="maximum">
-      <double>120000000000.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="3">
-    <widget class="QComboBox" name="comboBox_Single_Color_Mode">
-     <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToContents</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="2">
-    <widget class="QLabel" name="label_Silent_Background">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Silent Background</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label_Normalization_Scale">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>110</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Normalization Scale</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="3">
-    <widget class="QComboBox" name="comboBox_Average_Mode">
-     <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToContents</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="3">
-    <widget class="QComboBox" name="comboBox_Audio_Device">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToContents</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_Normalization_Offset">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>110</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Normalization Offset</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_Decay">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>110</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Decay (% per step)</string>
+      <string/>
      </property>
     </widget>
    </item>

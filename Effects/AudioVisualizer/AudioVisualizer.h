@@ -6,8 +6,6 @@
 #include "ui_AudioVisualizer.h"
 #include <QWidget>
 #include <QTimer>
-#include <QGraphicsScene>
-#include "AudioManager.h"
 
 /*---------------------------------------------------------*\
 | C/C++ Standard Library Includes                           |
@@ -22,9 +20,6 @@
 | Project Includes                                          |
 \*---------------------------------------------------------*/
 #include "RGBEffect.h"
-#include "chuck_fft.h"
-#include "AudioManager.h"
-#include "hsv.h"
 
 /*---------------------------------------------------------*\
 | Audio Library Includes                                    |
@@ -251,7 +246,6 @@ private:
     /*---------*\
     | GUI bits  |
     \*---------*/
-    QGraphicsScene* scene;
     QPixmap pixmap;
     QImage* image;
     QTimer* timer;
