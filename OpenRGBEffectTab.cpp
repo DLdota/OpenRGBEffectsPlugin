@@ -125,7 +125,6 @@ void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
         int tab_idx = ui->EffectTabs->indexOf(effect_page);
 
         ui->EffectTabs->removeTab(tab_idx);
-        ui->EffectTabs->tabBar()->removeTab(tab_idx);
 
         EffectManager::Get()->SetEffectUnActive(effect);
         EffectManager::Get()->RemoveMapping(effect);
@@ -525,7 +524,6 @@ void OpenRGBEffectTab::ClearAll()
         EffectTabHeader* effect_header = dynamic_cast<EffectTabHeader*>(ui->EffectTabs->tabBar()->tabButton(idx, QTabBar::RightSide));
 
         ui->EffectTabs->removeTab(idx);
-        ui->EffectTabs->tabBar()->removeTab(idx);
 
         delete effect_page;
         delete effect_header;
