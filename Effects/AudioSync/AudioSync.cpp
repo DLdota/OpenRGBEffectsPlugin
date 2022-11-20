@@ -123,7 +123,7 @@ void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)
     #ifdef _WIN32
     for (int i = 0; i < 512; i++)
     {
-        fft_tmp[i] *= (current_settings.amplitude * (amplitude_max_value - amplitude_min_value));
+        fft_tmp[i] *= amplitude;
     }
     #else
     for (int i = 0; i < 512; i++)
