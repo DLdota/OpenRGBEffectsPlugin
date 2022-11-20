@@ -21,7 +21,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_ADVANCED, [](){return new ZigZag;});
 
     static std::string const ClassName() {return "ZigZag";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
 
 private:

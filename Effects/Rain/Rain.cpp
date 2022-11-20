@@ -191,11 +191,6 @@ Rain::~Rain()
     delete ui;
 }
 
-void Rain::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void Rain::LoadCustomSettings(json settings)
 {
     if (settings.contains("size"))

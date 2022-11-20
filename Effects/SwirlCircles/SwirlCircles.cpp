@@ -29,13 +29,6 @@ SwirlCircles::~SwirlCircles()
     delete ui;
 }
 
-
-void SwirlCircles::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
-
 void SwirlCircles::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(ControllerZone* controller_zone : controller_zones)

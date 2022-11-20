@@ -22,7 +22,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_SIMPLE, [](){return new BreathingCircle;});
 
     static std::string const ClassName() {return "BreathingCircle";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
 
 private:

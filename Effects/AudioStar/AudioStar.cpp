@@ -86,12 +86,6 @@ void AudioStar::on_devices_currentIndexChanged(int value)
     }
 }
 
-
-void AudioStar::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void AudioStar::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     float fft_tmp[512];

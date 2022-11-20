@@ -39,7 +39,6 @@ SmoothBlink::~SmoothBlink()
     delete ui;
 }
 
-
 void SmoothBlink::Defaults()
 {
     ui->interval->setValue(default_interval);
@@ -50,12 +49,6 @@ void SmoothBlink::Defaults()
     ui->cx->setValue(50);
     ui->cy->setValue(50);
 }
-
-void SmoothBlink::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 
 void SmoothBlink::StepEffect(std::vector<ControllerZone*> controller_zones)
 {

@@ -23,7 +23,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_SPECIAL, [](){return new Layers;});
 
     static std::string const ClassName() {return "Layers";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void OnControllerZonesListChanged(std::vector<ControllerZone*>) override;
     void EffectState(bool) override;

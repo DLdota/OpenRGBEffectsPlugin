@@ -18,11 +18,6 @@ Clock::~Clock()
     delete ui;
 }
 
-void Clock::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 #ifdef WIN32
 #define localtime_r(_Time, _Tm) localtime_s(_Tm, _Time)
 #endif

@@ -162,12 +162,6 @@ AudioVisualizer::~AudioVisualizer()
     delete ui;
 }
 
-
-void AudioVisualizer::DefineExtraOptions(QLayout *Scaler)
-{
-    Scaler->addWidget(this);
-}
-
 void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
 

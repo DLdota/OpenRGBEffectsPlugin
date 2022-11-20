@@ -32,12 +32,6 @@ RadialRainbow::~RadialRainbow()
     delete ui;
 }
 
-void RadialRainbow::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
-
 void RadialRainbow::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     float cx_shift_mult = cx_shift / 100.f;

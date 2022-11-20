@@ -29,11 +29,6 @@ MotionPoints::~MotionPoints()
     delete ui;
 }
 
-void MotionPoints::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void MotionPoints::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     UpdatePoints();

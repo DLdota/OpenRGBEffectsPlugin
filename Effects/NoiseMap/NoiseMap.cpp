@@ -85,11 +85,6 @@ void NoiseMap::ResetNoise()
     noise = new SimplexNoise(frequency, amplitude, lacunarity, persistence);
 }
 
-void NoiseMap::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void NoiseMap::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(ControllerZone* controller_zone: controller_zones)

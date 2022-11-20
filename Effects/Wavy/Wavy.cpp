@@ -34,11 +34,6 @@ Wavy::~Wavy()
     delete ui;
 }
 
-void Wavy::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void Wavy::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(ControllerZone* controller_zone : controller_zones)

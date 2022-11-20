@@ -22,7 +22,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_RAINBOW, [](){return new RotatingRainbow;});
 
     static std::string const ClassName() {return "RotatingRainbow";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
 
 private:

@@ -114,7 +114,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_SIMPLE, [](){return new MotionPoints;});
 
     static std::string const ClassName() {return "MotionPoints";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void SetSlider2Val(unsigned int) override;
 

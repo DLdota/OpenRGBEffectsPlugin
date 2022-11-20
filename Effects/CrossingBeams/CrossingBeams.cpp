@@ -27,13 +27,6 @@ CrossingBeams::~CrossingBeams()
     delete ui;
 }
 
-
-void CrossingBeams::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
-
 void CrossingBeams::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     sine_x = sin( 0.01 * h_speed * progress);

@@ -29,11 +29,6 @@ MovingPanes::~MovingPanes()
     delete ui;
 }
 
-void MovingPanes::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void MovingPanes::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(unsigned int i = 0; i < controller_zones.size(); i++)

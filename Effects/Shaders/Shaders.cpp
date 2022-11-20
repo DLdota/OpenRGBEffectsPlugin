@@ -132,11 +132,6 @@ Shaders::~Shaders()
     delete ui;
 }
 
-void Shaders::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void Shaders::Resize()
 {
     shader_renderer->Program()->Resize(width, height);

@@ -21,7 +21,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_SIMPLE, [](){return new Swap;});
 
     static std::string const ClassName() {return "Swap";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
 
 private:

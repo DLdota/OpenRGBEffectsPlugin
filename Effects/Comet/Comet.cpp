@@ -29,11 +29,6 @@ Comet::~Comet()
     delete ui;
 }
 
-void Comet::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void Comet::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(unsigned int i = 0; i < controller_zones.size(); i++)

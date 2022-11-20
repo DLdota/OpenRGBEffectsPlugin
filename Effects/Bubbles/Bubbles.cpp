@@ -25,11 +25,6 @@ Bubbles::~Bubbles()
     delete ui;
 }
 
-void Bubbles::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void Bubbles::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(ControllerZone* controller_zone : controller_zones)

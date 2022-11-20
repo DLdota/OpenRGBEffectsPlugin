@@ -23,7 +23,6 @@ public:
 
     static std::string const ClassName() {return "RotatingBeam";}
 
-    void DefineExtraOptions(QLayout*)  override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void SetUserColors(std::vector<RGBColor> colors) override;
     void SetRandomColorsEnabled(bool value) override;

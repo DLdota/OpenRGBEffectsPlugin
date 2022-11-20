@@ -28,7 +28,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_SIMPLE, [](){return new Mosaic;});
 
     static std::string const ClassName() {return "Mosaic";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void OnControllerZonesListChanged(std::vector<ControllerZone*>) override;
 

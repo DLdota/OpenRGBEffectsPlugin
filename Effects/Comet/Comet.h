@@ -22,7 +22,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_SIMPLE, [](){return new Comet;});
 
     static std::string const ClassName() {return "Comet";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
 
 private:

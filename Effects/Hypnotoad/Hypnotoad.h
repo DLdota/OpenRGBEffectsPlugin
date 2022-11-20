@@ -27,7 +27,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_RAINBOW, [](){return new Hypnotoad;});
 
     static std::string const ClassName() {return "Hypnotoad";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void LoadCustomSettings(json) override;
     json SaveCustomSettings() override;

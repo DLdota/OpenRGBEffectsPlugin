@@ -50,11 +50,6 @@ Ambient::~Ambient()
     delete ui;
 }
 
-void Ambient::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     if(controller_zones.empty())

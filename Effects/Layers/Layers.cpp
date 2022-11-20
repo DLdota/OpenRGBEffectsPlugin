@@ -30,11 +30,6 @@ Layers::~Layers()
     delete ui;
 }
 
-void Layers::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 LayerGroupEntry* Layers::AddLayerGroup()
 {
     LayerGroupEntry* layer_group_entry = new LayerGroupEntry(this);

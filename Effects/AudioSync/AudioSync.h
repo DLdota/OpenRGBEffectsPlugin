@@ -61,7 +61,6 @@ public:
 
     static std::string const ClassName() {return "AudioSync";}
 
-    void DefineExtraOptions(QLayout*)                           override;
     void StepEffect(std::vector<ControllerZone*>)               override;
     void LoadCustomSettings(json)                               override;
     json SaveCustomSettings()                                   override;
@@ -95,7 +94,6 @@ private:
     /*-----*\
     | Ui    |
     \*-----*/
-    QSpacerItem* ToBottom;
     QFrame* PrimaryFrame;
     QFrame* AudioSyncFrame;
 
@@ -163,6 +161,7 @@ private:
     void Init();
     void Start();
     void Stop();
+    void CreateUi();
 };
 
 #endif // AUDIOSYNC_H

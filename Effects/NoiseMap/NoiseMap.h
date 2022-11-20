@@ -23,7 +23,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_RAINBOW, [](){return new NoiseMap;});
 
     static std::string const ClassName() {return "NoiseMap";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void LoadCustomSettings(json) override;
     json SaveCustomSettings() override;

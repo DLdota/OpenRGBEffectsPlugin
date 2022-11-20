@@ -28,7 +28,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_RANDOM, [](){return new Bloom;});
 
     static std::string const ClassName() {return "Bloom";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void OnControllerZonesListChanged(std::vector<ControllerZone*>) override;
 

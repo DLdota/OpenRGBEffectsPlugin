@@ -41,11 +41,6 @@ CustomBlink::~CustomBlink()
     delete ui;
 }
 
-void CustomBlink::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void CustomBlink::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     if(selected_patterns_model->stringList().isEmpty())

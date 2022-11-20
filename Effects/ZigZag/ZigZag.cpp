@@ -25,11 +25,6 @@ ZigZag::~ZigZag()
     delete ui;
 }
 
-void ZigZag::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void ZigZag::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(unsigned int i = 0; i < controller_zones.size(); i++)

@@ -33,8 +33,6 @@ public:
 
     void StepEffect(std::vector<ControllerZone*>) override;
     void OnControllerZonesListChanged(std::vector<ControllerZone*>) override;
-
-    void DefineExtraOptions(QLayout*) override;
     void LoadCustomSettings(json) override;
     json SaveCustomSettings() override;
 

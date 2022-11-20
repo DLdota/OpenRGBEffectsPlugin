@@ -23,7 +23,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_AUDIO, [](){return new AudioStar;});
 
     static std::string const ClassName() {return "AudioStar";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void EffectState(bool) override;
     void LoadCustomSettings(json) override;

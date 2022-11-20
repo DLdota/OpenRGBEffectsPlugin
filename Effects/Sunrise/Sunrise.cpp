@@ -31,13 +31,6 @@ Sunrise::~Sunrise()
     delete ui;
 }
 
-
-void Sunrise::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
-
 void Sunrise::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     QGradientStops stops;

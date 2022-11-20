@@ -21,11 +21,6 @@ Mask::~Mask()
     delete ui;
 }
 
-void Mask::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void Mask::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(unsigned int i = 0; i < controller_zones.size(); i++)

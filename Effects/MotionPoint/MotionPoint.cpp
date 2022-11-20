@@ -26,12 +26,6 @@ MotionPoint::~MotionPoint()
     delete ui;
 }
 
-
-void MotionPoint::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void MotionPoint::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     double t = (1 + sin(progress)) / 2.f;

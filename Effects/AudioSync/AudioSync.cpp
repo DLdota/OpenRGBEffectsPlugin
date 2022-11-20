@@ -12,6 +12,7 @@ AudioSync::AudioSync(): RGBEffect()
     EffectDetails.HasCustomSettings = true;
 
     Init();
+    CreateUi();
 }
 
 AudioSync::~AudioSync()
@@ -86,12 +87,10 @@ void AudioSync::Init()
     connect(this, SIGNAL(UpdateGraphSignal(QPixmap)), this, SLOT(UpdateGraph(QPixmap)));
 }
 
-void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
+void AudioSync::CreateUi()
 {
-    ToBottom = new QSpacerItem(0,0,QSizePolicy::Fixed, QSizePolicy::Fixed);
     PrimaryFrame = new QFrame();
     QVBoxLayout* PrimaryLayout = new QVBoxLayout();
-
 
     AudioSyncFrame = new QFrame();
     QVBoxLayout* MainAudioSyncLayout = new QVBoxLayout;
@@ -432,11 +431,11 @@ void AudioSync::DefineExtraOptions(QLayout* ParentLayout)
     connect(reset_defaults_button,SIGNAL(clicked(bool)), this, SLOT(RestoreDefaultSettings())); 
 
     AudioSyncFrame->setLayout(MainAudioSyncLayout);
-    PrimaryLayout->addSpacerItem(ToBottom);
     PrimaryLayout->addWidget(AudioSyncFrame);
     PrimaryFrame->setLayout(PrimaryLayout);
 
-    ParentLayout->addWidget(PrimaryFrame);
+    setLayout(new QGridLayout(this));
+    layout()->addWidget(PrimaryFrame);
 }
 
 void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)

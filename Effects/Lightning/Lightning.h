@@ -25,7 +25,6 @@ public:
 
     static std::string const ClassName() {return "Lightning";}
 
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void SetUserColors(std::vector<RGBColor>) override;
     void OnControllerZonesListChanged(std::vector<ControllerZone*>) override;

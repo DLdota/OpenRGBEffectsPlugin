@@ -29,12 +29,6 @@ Stack::~Stack()
     delete ui;
 }
 
-
-void Stack::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void Stack::StepEffect(std::vector<ControllerZone*> controller_zones)
 {    
     unsigned int size = controller_zones.size();

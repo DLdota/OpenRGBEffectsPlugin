@@ -32,11 +32,6 @@ RotatingBeam::~RotatingBeam()
     delete ui;
 }
 
-void RotatingBeam::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 QLineF RotatingBeam::Rotate()
 {
     QPointF p1, p2;

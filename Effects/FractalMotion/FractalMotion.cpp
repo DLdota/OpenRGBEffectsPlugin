@@ -30,12 +30,6 @@ FractalMotion::~FractalMotion()
     delete ui;
 }
 
-
-void FractalMotion::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void FractalMotion::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
 

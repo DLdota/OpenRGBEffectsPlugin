@@ -116,11 +116,6 @@ void AudioParty::UpdateGraph(QPixmap pixmap)
     ui->preview->setPixmap(pixmap);
 }
 
-void AudioParty::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void AudioParty::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     float fft_tmp[512];

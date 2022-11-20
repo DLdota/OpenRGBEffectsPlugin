@@ -22,7 +22,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_BEAMS, [](){return new CrossingBeams;});
 
     static std::string const ClassName() {return "CrossingBeams";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void LoadCustomSettings(json) override;
     json SaveCustomSettings() override;

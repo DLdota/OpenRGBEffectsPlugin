@@ -20,7 +20,6 @@ public:
 
     EFFECT_REGISTERER(ClassName(), CAT_SIMPLE, [](){return new Clock;});
     static std::string const ClassName() {return "Clock";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
 
 private:

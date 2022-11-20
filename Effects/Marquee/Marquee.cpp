@@ -32,11 +32,6 @@ Marquee::~Marquee()
     delete ui;
 }
 
-void Marquee::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void Marquee::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(unsigned int i = 0; i < controller_zones.size(); i++)

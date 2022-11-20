@@ -21,7 +21,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_ADVANCED, [](){return new MovingPanes;});
 
     static std::string const ClassName() {return "MovingPanes";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
 
 private:

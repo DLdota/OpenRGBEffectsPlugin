@@ -116,12 +116,6 @@ void AudioVUMeter::on_devices_currentIndexChanged(int value)
     }
 }
 
-
-void AudioVUMeter::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void AudioVUMeter::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     float fft_tmp[512];

@@ -23,7 +23,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_ADVANCED, [](){return new SwirlCircles;});
 
     static std::string const ClassName() {return "SwirlCircles";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void SetUserColors(std::vector<RGBColor> colors) override;
     void SetRandomColorsEnabled(bool value) override;

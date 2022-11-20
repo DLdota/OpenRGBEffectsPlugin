@@ -39,12 +39,6 @@ Hypnotoad::~Hypnotoad()
     delete ui;
 }
 
-void Hypnotoad::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
-
 void Hypnotoad::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     float cx_shift_mult = cx_shift / 100.f;

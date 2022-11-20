@@ -26,11 +26,6 @@ BreathingCircle::~BreathingCircle()
     delete ui;
 }
 
-void BreathingCircle::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void BreathingCircle::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(unsigned int i = 0; i < controller_zones.size(); i++)

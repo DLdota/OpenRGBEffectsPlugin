@@ -30,11 +30,6 @@ Lightning::~Lightning()
     delete ui;
 }
 
-void Lightning::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 RGBColor Lightning::TriggerLightning(ControllerZone* z, int n)
 {
     int Decay = Slider2Val;

@@ -29,11 +29,6 @@ RotatingRainbow::~RotatingRainbow()
     delete ui;
 }
 
-void RotatingRainbow::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void RotatingRainbow::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(unsigned int i = 0; i < controller_zones.size(); i++)

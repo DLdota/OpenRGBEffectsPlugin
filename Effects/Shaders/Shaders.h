@@ -32,7 +32,6 @@ public:
     EFFECT_REGISTERER(ClassName(), CAT_SPECIAL, [](){return new Shaders;});
 
     static std::string const ClassName() {return "Shaders";}
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void LoadCustomSettings(json) override;
     json SaveCustomSettings() override;

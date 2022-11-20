@@ -29,11 +29,6 @@ BouncingBallEffect::~BouncingBallEffect()
     }
 }
 
-void BouncingBallEffect::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void BouncingBallEffect::StepEffect(std::vector<ControllerZone*> controllerZones)
 {
     for (ControllerZone* controllerZone : controllerZones) {

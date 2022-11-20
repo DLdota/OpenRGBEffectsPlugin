@@ -30,7 +30,6 @@ public:
 
     void SetFPS(unsigned int value) override;
     void SetBrightness(unsigned int value) override;
-    void DefineExtraOptions(QLayout*) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void LoadCustomSettings(json) override;
     json SaveCustomSettings() override;

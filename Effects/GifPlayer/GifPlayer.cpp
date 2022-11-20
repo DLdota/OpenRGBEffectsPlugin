@@ -29,11 +29,6 @@ GifPlayer::~GifPlayer()
     delete ui;
 }
 
-void GifPlayer::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void GifPlayer::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     if(!movie)

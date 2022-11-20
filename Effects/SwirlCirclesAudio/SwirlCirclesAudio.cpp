@@ -52,13 +52,6 @@ SwirlCirclesAudio::~SwirlCirclesAudio()
     delete ui;
 }
 
-
-void SwirlCirclesAudio::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
-
 void SwirlCirclesAudio::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     float fft_tmp[512];

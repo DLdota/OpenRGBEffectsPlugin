@@ -28,11 +28,6 @@ Mosaic::~Mosaic()
     delete ui;
 }
 
-void Mosaic::DefineExtraOptions(QLayout* layout)
-{
-    layout->addWidget(this);
-}
-
 void Mosaic::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(unsigned int i = 0; i < controller_zones.size(); i++)
