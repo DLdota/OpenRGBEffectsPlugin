@@ -1,8 +1,5 @@
 #include "AudioVisualizer.h"
 #include "Colors.h"
-#include "chuck_fft.h"
-#include "AudioManager.h"
-#include "hsv.h"
 
 /*---------------------------------------------------------*\
 |  Processing Code for Keyboard Visualizer                  |

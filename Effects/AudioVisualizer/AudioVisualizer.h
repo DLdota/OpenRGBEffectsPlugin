@@ -6,6 +6,8 @@
 #include "ui_AudioVisualizer.h"
 #include <QWidget>
 #include <QTimer>
+#include <QGraphicsScene>
+#include "AudioManager.h"
 
 /*---------------------------------------------------------*\
 | C/C++ Standard Library Includes                           |
@@ -15,6 +17,9 @@
 #include <string.h>
 #include <vector>
 #include <thread>
+#include "chuck_fft.h"
+#include "AudioManager.h"
+#include "hsv.h"
 
 /*---------------------------------------------------------*\
 | Project Includes                                          |
