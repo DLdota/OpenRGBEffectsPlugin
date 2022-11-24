@@ -76,6 +76,23 @@ private:
              HEXCOLOR(0xff0000)
          }},
 
+        {"Borealis", std::vector<RGBColor>{
+             HEXCOLOR(0x14e81e),
+             HEXCOLOR(0x00ea8d),
+             HEXCOLOR(0x017ed5),
+             HEXCOLOR(0xb53dff),
+             HEXCOLOR(0x8d00c4),
+             HEXCOLOR(0x14e81e),
+         }},
+
+        {"Ocean", std::vector<RGBColor>{
+             HEXCOLOR(0x00007f),
+             HEXCOLOR(0x0000ff),
+             HEXCOLOR(0x00ffff),
+             HEXCOLOR(0x00aaff),
+             HEXCOLOR(0x00007f),
+         }},
+
         {"Pink/Blue", std::vector<RGBColor>{
              HEXCOLOR(0xfe00c5),
              HEXCOLOR(0x00c5ff),
@@ -88,6 +105,14 @@ private:
              HEXCOLOR(0xfe00fe),
              HEXCOLOR(0xfe00fe),
              HEXCOLOR(0xfee000),
+         }},
+
+        {"Pulse", std::vector<RGBColor>{
+             HEXCOLOR(0xff5500),
+             HEXCOLOR(0x000000),
+             HEXCOLOR(0x000000),
+             HEXCOLOR(0x000000),
+             HEXCOLOR(0xff5500),
          }},
 
         {"Purple/Orange", std::vector<RGBColor>{
