@@ -6,76 +6,39 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>258</width>
-    <height>238</height>
+    <width>254</width>
+    <height>266</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="4" column="0">
-    <widget class="QLabel" name="frequency_label">
-     <property name="text">
-      <string>Frequency</string>
-     </property>
-    </widget>
+   <item row="2" column="1">
+    <widget class="QComboBox" name="preset_choice"/>
    </item>
    <item row="7" column="0">
-    <widget class="QLabel" name="octaves_label">
+    <widget class="QLabel" name="lacunarity_label">
      <property name="text">
-      <string>Octaves</string>
+      <string>Lacunarity</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label">
+   <item row="5" column="0">
+    <widget class="QLabel" name="amplitude_label">
      <property name="text">
-      <string>Motion</string>
+      <string>Amplitude</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="colors_choice"/>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Motion speed</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="persistence_label">
-     <property name="text">
-      <string>Persistence</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="1">
-    <widget class="QComboBox" name="motion"/>
-   </item>
-   <item row="4" column="1">
-    <widget class="QTooltipedSlider" name="frequency">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>5000</number>
-     </property>
+   <item row="11" column="1">
+    <widget class="QTooltipedSlider" name="motion_speed">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="10" column="0" colspan="2">
-    <widget class="QPushButton" name="defaults">
-     <property name="text">
-      <string>Defaults</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
+   <item row="8" column="1">
     <widget class="QTooltipedSlider" name="persistence">
      <property name="minimum">
       <number>1</number>
@@ -88,24 +51,48 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="lacunarity_label">
+   <item row="8" column="0">
+    <widget class="QLabel" name="persistence_label">
      <property name="text">
-      <string>Lacunarity</string>
+      <string>Persistence</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="ColorsPicker" name="colorsPicker" native="true"/>
+   <item row="2" column="0">
+    <widget class="QLabel" name="preset_label">
+     <property name="text">
+      <string>Preset</string>
+     </property>
+    </widget>
    </item>
-   <item row="9" column="1">
-    <widget class="QTooltipedSlider" name="motion_speed">
+   <item row="0" column="0">
+    <widget class="QLabel" name="colors_choice_label">
+     <property name="text">
+      <string>Mode</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="motion_label">
+     <property name="text">
+      <string>Motion</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QTooltipedSlider" name="frequency">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>5000</number>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="9" column="1">
     <widget class="QTooltipedSlider" name="octaves">
      <property name="minimum">
       <number>1</number>
@@ -118,7 +105,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item row="7" column="1">
     <widget class="QTooltipedSlider" name="lacunarity">
      <property name="minimum">
       <number>1</number>
@@ -131,7 +118,31 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="6" column="0">
+    <widget class="QLabel" name="frequency_label">
+     <property name="text">
+      <string>Frequency</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="colors_choice"/>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="octaves_label">
+     <property name="text">
+      <string>Octaves</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0" colspan="2">
+    <widget class="QPushButton" name="defaults">
+     <property name="text">
+      <string>Defaults</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
     <widget class="QTooltipedSlider" name="amplitude">
      <property name="minimum">
       <number>1</number>
@@ -144,19 +155,18 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="amplitude_label">
+   <item row="11" column="0">
+    <widget class="QLabel" name="motion_speed_label">
      <property name="text">
-      <string>Amplitude</string>
+      <string>Motion speed</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="colors_choice_label">
-     <property name="text">
-      <string>Mode</string>
-     </property>
-    </widget>
+   <item row="3" column="0" colspan="2">
+    <widget class="ColorsPicker" name="colorsPicker" native="true"/>
+   </item>
+   <item row="10" column="1">
+    <widget class="QComboBox" name="motion"/>
    </item>
   </layout>
  </widget>

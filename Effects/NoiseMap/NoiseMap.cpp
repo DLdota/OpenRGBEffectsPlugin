@@ -22,6 +22,17 @@ NoiseMap::NoiseMap(QWidget *parent) :
     ui->colors_choice->addItems({"Rainbow", "Inverse rainbow", "Custom"});
     ui->colorsPicker->hide();
 
+    for(const NoiseMapPreset& preset: presets)
+    {
+        ui->preset_choice->addItem(QString::fromStdString(preset.name));
+    }
+
+    ui->preset_choice->blockSignals(false);
+    ui->preset_choice->hide();
+    ui->preset_label->hide();
+
+    LoadPreset("Default");
+
     ui->motion->addItems({"Up", "Down", "Left", "Right"});
 
     SetSpeed(50);
@@ -272,4 +283,24 @@ void NoiseMap::on_defaults_clicked()
 void NoiseMap::on_colors_choice_currentIndexChanged(int value)
 {
     ui->colorsPicker->setVisible(value==2);
+    ui->preset_choice->setVisible(value==2);
+    ui->preset_label->setVisible(value==2);
+}
+
+void NoiseMap::LoadPreset(const QString& text)
+{
+    std::string preset_name = text.toStdString();
+
+    for(const NoiseMapPreset& preset: presets)
+    {
+        if(preset_name == preset.name){
+            ui->colorsPicker->SetColors(preset.colors);
+            break;
+        }
+    }
+}
+
+void NoiseMap::on_preset_choice_currentTextChanged(const QString& text)
+{
+    LoadPreset(text);
 }

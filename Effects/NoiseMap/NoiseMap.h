@@ -8,6 +8,13 @@
 #include "EffectRegisterer.h"
 #include "SimplexNoise.h"
 
+typedef struct
+{
+    std::string name;
+    std::vector<RGBColor> colors;
+
+} NoiseMapPreset;
+
 namespace Ui {
 class NoiseMap;
 }
@@ -40,6 +47,7 @@ private slots:
 
     void on_colors_choice_currentIndexChanged(int);
     void on_colorsPicker_ColorsChanged();
+    void on_preset_choice_currentTextChanged(const QString&);
 
 private:
     Ui::NoiseMap *ui;
@@ -73,6 +81,40 @@ private:
 
     void GenerateGradient();
     QImage image = QImage(100, 1, QImage::Format_RGB32);
+
+    void LoadPreset(const QString&);
+
+    std::vector<NoiseMapPreset> presets =
+    {
+        {"Lava", std::vector<RGBColor>{
+             HEXCOLOR(0xff5500),
+             HEXCOLOR(0xffc800),
+             HEXCOLOR(0xc80000)
+         }},
+
+        {"Borealis", std::vector<RGBColor>{
+             HEXCOLOR(0x14e81e),
+             HEXCOLOR(0x00ea8d),
+             HEXCOLOR(0x017ed5),
+             HEXCOLOR(0xb53dff),
+             HEXCOLOR(0x8d00c4)
+         }},
+
+        {"Ocean", std::vector<RGBColor>{
+             HEXCOLOR(0x00007f),
+             HEXCOLOR(0x0000ff),
+             HEXCOLOR(0x00ffff),
+             HEXCOLOR(0x00aaff)
+         }},
+
+        {"Chemicals", std::vector<RGBColor>{
+             HEXCOLOR(0x9346ff),
+             HEXCOLOR(0x8868b5),
+             HEXCOLOR(0x7afc94),
+             HEXCOLOR(0x29ff48),
+             HEXCOLOR(0x4bff00)
+         }},
+    };
 };
 
 #endif // NOISEMAP_H
