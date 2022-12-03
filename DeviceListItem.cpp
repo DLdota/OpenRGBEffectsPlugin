@@ -1,5 +1,7 @@
 #include "DeviceListItem.h"
 #include "ui_DeviceListItem.h"
+#include "OpenRGBPluginsFont.h"
+
 #include <QVBoxLayout>
 
 DeviceListItem::DeviceListItem(std::vector<ControllerZone*> controller_zones) :
@@ -10,6 +12,15 @@ DeviceListItem::DeviceListItem(std::vector<ControllerZone*> controller_zones) :
 {
     ui->setupUi(this);
     ui->brightness->setVisible(false);
+
+    ui->danger_not_direct->setFont(OpenRGBPluginsFont::GetFont());
+    ui->enable->setFont(OpenRGBPluginsFont::GetFont());
+    ui->reverse->setFont(OpenRGBPluginsFont::GetFont());
+
+    ui->danger_not_direct->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::danger));
+    ui->reverse->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::arrows_exchange));
+
+    UpdateCheckState();
 
     bool has_direct = false;
 
@@ -71,6 +82,8 @@ void DeviceListItem::SetEnabled(bool state)
     {
         item->SetEnableChecked(state);
     }
+
+    UpdateCheckState();
 }
 
 void DeviceListItem::SetReverse(bool state)
@@ -89,6 +102,8 @@ void DeviceListItem::on_enable_toggled(bool state)
     {
         item->SetEnableChecked(state);
     }
+
+    UpdateCheckState();
 
     emit SelectionChanged();
 }
@@ -276,4 +291,15 @@ void DeviceListItem::RunGlobalCheckVerification()
     ui->reverse->setChecked(reversed_count == controller->zones.size());
     ui->enable->blockSignals(false);
     ui->reverse->blockSignals(false);
+
+    UpdateCheckState();
+}
+
+void DeviceListItem::UpdateCheckState()
+{
+    ui->enable->setText(
+                ui->enable->isChecked()?
+                    OpenRGBPluginsFont::icon(OpenRGBPluginsFont::check_o):
+                    OpenRGBPluginsFont::icon(OpenRGBPluginsFont::check)
+                    );
 }

@@ -70,5 +70,6 @@
         <file>shaders/audio-idle-crazylines.fs</file>
         <file>shaders/fire.fs</file>
         <file>shaders/shine.fs</file>
+        <file>OpenRGBPlugins.ttf</file>
     </qresource>
 </RCC>

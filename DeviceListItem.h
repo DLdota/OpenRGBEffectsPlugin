@@ -50,6 +50,7 @@ private:
     std::vector<ControllerZone*> controller_zones;
     RGBController* controller;
     bool single_zone;
+    void UpdateCheckState();
 };
 
 #endif // DEVICELISTITEM_H

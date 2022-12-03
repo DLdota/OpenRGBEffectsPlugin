@@ -1,6 +1,7 @@
 #include "EffectList.h"
 #include "ui_EffectList.h"
 #include "ColorUtils.h"
+#include "OpenRGBPluginsFont.h"
 
 #include <QMenu>
 #include <QAction>
@@ -15,6 +16,8 @@ EffectList::EffectList(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->start_stop_all_button->setFont(OpenRGBPluginsFont::GetFont());
+    ui->start_stop_all_button->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::play_track_next_o));
     ShowStartStopButton(false);
 
     main_menu = new QMenu(this);

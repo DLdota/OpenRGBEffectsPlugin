@@ -38,7 +38,7 @@
       <string>Toggle brightness sliders</string>
      </property>
      <property name="text">
-      <string>☀</string>
+      <string/>
      </property>
      <property name="checkable">
       <bool>true</bool>

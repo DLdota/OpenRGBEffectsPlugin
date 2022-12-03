@@ -40,7 +40,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
+     <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,0,0,0">
       <item row="0" column="0">
        <widget class="QLabel" name="device_name">
         <property name="text">
@@ -61,7 +61,7 @@
 Using an effect on a device WILL damage the flash or controller</string>
         </property>
         <property name="text">
-         <string>⚠</string>
+         <string>-</string>
         </property>
        </widget>
       </item>
@@ -71,7 +71,7 @@ Using an effect on a device WILL damage the flash or controller</string>
          <string>Add to current effect</string>
         </property>
         <property name="text">
-         <string>✔</string>
+         <string/>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -84,7 +84,7 @@ Using an effect on a device WILL damage the flash or controller</string>
          <string>Change direction</string>
         </property>
         <property name="text">
-         <string>⇔</string>
+         <string/>
         </property>
         <property name="checkable">
          <bool>true</bool>

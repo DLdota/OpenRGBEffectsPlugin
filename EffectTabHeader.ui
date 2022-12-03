@@ -91,14 +91,14 @@
    <item>
     <widget class="QToolButton" name="rename">
      <property name="text">
-      <string>✎</string>
+      <string/>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QToolButton" name="close">
      <property name="text">
-      <string>×</string>
+      <string/>
      </property>
     </widget>
    </item>

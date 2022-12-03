@@ -16,6 +16,7 @@
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QUrl>
+#include "OpenRGBPluginsFont.h"
 
 OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
     QWidget(parent),
@@ -26,6 +27,11 @@ OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
 
     ui->EffectDesciption->setVisible(false);
     ui->time_measure->setVisible(false);
+
+    ui->preview->setFont(OpenRGBPluginsFont::GetFont());
+    ui->toggle_info->setFont(OpenRGBPluginsFont::GetFont());
+    ui->preview->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::tv));
+    ui->toggle_info->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::chevron_down));
 
     /*-----------------------------------------------*\
     | Extra options and custom widgets                |
@@ -475,7 +481,7 @@ void OpenRGBEffectPage::ApplyJson(json effect_settings)
 
     for(unsigned int i = 0; i < ColorPickers.size(); i++)
     {
-         ColorPickers[i]->SetRGBColor(colors[i]);
+        ColorPickers[i]->SetRGBColor(colors[i]);
     }
 }
 
@@ -483,7 +489,11 @@ void OpenRGBEffectPage::ToggleInfo()
 {
     info_visible = !info_visible;
 
-    ui->toggle_info->setText(info_visible?"▲":"▼");
+    ui->toggle_info->setText(
+                info_visible?
+                    OpenRGBPluginsFont::icon(OpenRGBPluginsFont::chevron_up):
+                    OpenRGBPluginsFont::icon(OpenRGBPluginsFont::chevron_down)
+                    );
     ui->EffectDesciption->setVisible(info_visible);
     ui->time_measure->setVisible(info_visible);
 }

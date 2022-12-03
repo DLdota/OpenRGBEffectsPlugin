@@ -182,6 +182,7 @@ HEADERS +=                                                                      
     SaveProfilePopup.h                                                                          \
     ScreenRecorder.h                                                                            \
     ZoneListItem.h                                                                              \
+    OpenRGBPluginsFont.h
 
 SOURCES +=                                                                                      \
     AudioManager.cpp                                                                            \
@@ -204,6 +205,7 @@ SOURCES +=                                                                      
     ScreenRecorder.cpp                                                                          \
     SaveProfilePopup.cpp                                                                        \
     ZoneListItem.cpp                                                                            \
+    OpenRGBPluginsFont.cpp
 
 FORMS +=                                                                                        \
     ColorPicker.ui                                                                              \

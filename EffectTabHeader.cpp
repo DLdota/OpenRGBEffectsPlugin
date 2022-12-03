@@ -2,12 +2,21 @@
 #include "ui_EffectTabHeader.h"
 #include <QPropertyAnimation>
 #include <QInputDialog>
+#include "OpenRGBPluginsFont.h"
 
 EffectTabHeader::EffectTabHeader(QWidget *parent,  RGBEffect* effect) :
     QWidget(parent),
     ui(new Ui::EffectTabHeader)
 {
     ui->setupUi(this);
+
+    ui->start_stop->setFont(OpenRGBPluginsFont::GetFont());
+    ui->rename->setFont(OpenRGBPluginsFont::GetFont());
+    ui->close->setFont(OpenRGBPluginsFont::GetFont());
+
+    ui->rename->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::rename));
+    ui->close->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::close));
+
     ui->effect_name->setText(QString::fromStdString(effect->EffectDetails.EffectName));
     ToogleRunningIndicator(false);
 
@@ -20,8 +29,13 @@ EffectTabHeader::EffectTabHeader(QWidget *parent,  RGBEffect* effect) :
 
 void EffectTabHeader::ToogleRunningIndicator(bool state)
 {
-   ui->start_stop->setText(state?"◉":"○");
-   ui->start_stop->setToolTip(state?"Started":"Stopped");
+    ui->start_stop->setText(
+                state ?
+                    OpenRGBPluginsFont::icon(OpenRGBPluginsFont::toggle_off):
+                    OpenRGBPluginsFont::icon(OpenRGBPluginsFont::toggle_on)
+                    );
+
+    ui->start_stop->setToolTip(state?"Started":"Stopped");
 }
 
 EffectTabHeader::~EffectTabHeader()

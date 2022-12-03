@@ -1,5 +1,6 @@
 #include "DeviceList.h"
 #include "ui_DeviceList.h"
+#include "OpenRGBPluginsFont.h"
 
 #include "OpenRGBEffectsPlugin.h"
 #include <QVBoxLayout>
@@ -11,6 +12,10 @@ DeviceList::DeviceList(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->devices->setLayout(new QVBoxLayout(ui->devices));
+
+    ui->toggle_brightness->setFont(OpenRGBPluginsFont::GetFont());
+    ui->toggle_brightness->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::sun));
+
     InitControllersList();
 }
 

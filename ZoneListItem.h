@@ -39,6 +39,7 @@ signals:
 
 private:
     Ui::ZoneListItem *ui;
+    void UpdateCheckState();
 };
 
 #endif // ZONELISTITEM_H

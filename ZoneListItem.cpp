@@ -1,5 +1,6 @@
 #include "ZoneListItem.h"
 #include "ui_ZoneListItem.h"
+#include "OpenRGBPluginsFont.h"
 
 ZoneListItem::ZoneListItem(QString name) :
     QWidget(nullptr),
@@ -8,6 +9,13 @@ ZoneListItem::ZoneListItem(QString name) :
     ui->setupUi(this);
     ui->brightness->setVisible(false);
     ui->zone_name->setText("• " + name);
+
+    ui->enable->setFont(OpenRGBPluginsFont::GetFont());
+    ui->reverse->setFont(OpenRGBPluginsFont::GetFont());
+
+    ui->reverse->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::arrows_exchange));
+
+    UpdateCheckState();
 }
 
 ZoneListItem::~ZoneListItem()
@@ -37,6 +45,7 @@ void ZoneListItem::SetEnableChecked(bool state)
     ui->enable->blockSignals(true);
     ui->enable->setChecked(state);
     ui->enable->blockSignals(false);
+    UpdateCheckState();
 }
 
 void ZoneListItem::SetReverseChecked(bool state)
@@ -48,6 +57,7 @@ void ZoneListItem::SetReverseChecked(bool state)
 
 void ZoneListItem::on_enable_toggled(bool state)
 {
+    UpdateCheckState();
     emit Enabled(state);
 }
 
@@ -76,3 +86,11 @@ void ZoneListItem::SetBrightness(int value)
     ui->brightness->setValue(value);
 }
 
+void ZoneListItem::UpdateCheckState()
+{
+    ui->enable->setText(
+                ui->enable->isChecked()?
+                    OpenRGBPluginsFont::icon(OpenRGBPluginsFont::check_o):
+                    OpenRGBPluginsFont::icon(OpenRGBPluginsFont::check)
+                    );
+}
