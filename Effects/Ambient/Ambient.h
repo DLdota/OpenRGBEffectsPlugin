@@ -42,7 +42,7 @@ private slots:
 private:
     Ui::Ambient *ui;
 
-    ScreenRecorder* screen_recorder = nullptr;
+    ScreenRecorder screen_recorder;
 
     int screen_index = -1;
 

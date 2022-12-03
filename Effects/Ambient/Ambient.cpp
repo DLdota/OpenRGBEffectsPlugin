@@ -32,8 +32,6 @@ Ambient::Ambient(QWidget *parent) :
         ui->height->setValue(rect.height());
     });
 
-    screen_recorder = new ScreenRecorder();
-
     QList<QScreen*> screens = QGuiApplication::screens();
 
     for(QScreen* screen: screens)
@@ -41,12 +39,13 @@ Ambient::Ambient(QWidget *parent) :
         ui->screen->addItem(screen->name());
     }
 
-    screen_recorder->SetScreen(0);
-    screen_recorder->SetRect(QRect(left, top, width, height));
+    screen_recorder.SetScreen(0);
+    screen_recorder.SetRect(QRect(left, top, width, height));
 }
 
 Ambient::~Ambient()
 {
+    delete rectangle_selector_overlay;
     delete ui;
 }
 
@@ -59,17 +58,15 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     if(width == 0 || height == 0)
     {
-        RGBColor color = ColorUtils::OFF();
-
         for(ControllerZone* controller_zone : controller_zones)
         {
-            controller_zone->SetAllZoneLEDs(color, Brightness);
+            controller_zone->SetAllZoneLEDs(0, Brightness);
         }
 
         return;
     }
 
-    const QImage& image = screen_recorder->Capture();
+    const QImage& image = screen_recorder.Capture();
 
     switch (mode) {
 
@@ -217,7 +214,7 @@ RGBColor Ambient::Smooth(RGBColor color)
 
     if(color != old_single_color)
     {
-        smoothed = ColorUtils::Interpolate(old_single_color, color, 0.05);
+        smoothed = ColorUtils::Interpolate(old_single_color, color, 0.05f);
         old_single_color = smoothed;
     }
     else {
@@ -231,11 +228,11 @@ void Ambient::EffectState(bool state)
 {
     if(state)
     {
-        screen_recorder->Start();
+        screen_recorder.Start();
     }
     else
     {
-        screen_recorder->Stop();
+        screen_recorder.Stop();
     }
 }
 
@@ -288,25 +285,25 @@ json Ambient::SaveCustomSettings()
 void Ambient::on_left_valueChanged(int value)
 {
     left = value;
-    screen_recorder->SetRect(QRect(left, top, width, height));
+    screen_recorder.SetRect(QRect(left, top, width, height));
 }
 
 void Ambient::on_top_valueChanged(int value)
 {
     top = value;
-    screen_recorder->SetRect(QRect(left, top, width, height));
+    screen_recorder.SetRect(QRect(left, top, width, height));
 }
 
 void Ambient::on_width_valueChanged(int value)
 {
     width = value;
-    screen_recorder->SetRect(QRect(left, top, width, height));
+    screen_recorder.SetRect(QRect(left, top, width, height));
 }
 
 void Ambient::on_height_valueChanged(int value)
 {
     height = value;
-    screen_recorder->SetRect(QRect(left, top, width, height));
+    screen_recorder.SetRect(QRect(left, top, width, height));
 }
 
 void Ambient::on_mode_currentIndexChanged(int value)
@@ -317,7 +314,7 @@ void Ambient::on_mode_currentIndexChanged(int value)
 void Ambient::on_screen_currentIndexChanged(int value)
 {
     screen_index = value;
-    screen_recorder->SetScreen(screen_index);
+    screen_recorder.SetScreen(screen_index);
 }
 
 

@@ -145,7 +145,9 @@ void EffectManager::EffectThreadFunction(RGBEffect* effect)
             controller_zones.push_back(previews[effect]);
         }
 
+        lock.lock();
         effect->StepEffect(controller_zones);
+        lock.unlock();
 
         // Use a set to update only once the controllers
         std::set<RGBController*> controllers;
@@ -204,7 +206,9 @@ void EffectManager::AddPreview(RGBEffect* effect, ControllerZone* preview)
 
 void EffectManager::RemovePreview(RGBEffect* effect)
 {
+    lock.lock();
     previews.erase(effect);
+    lock.unlock();
 }
 
 void EffectManager::NotifySelectionChanged(RGBEffect* effect)

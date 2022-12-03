@@ -22,6 +22,8 @@ LivePreviewController::LivePreviewController(QWidget *parent) :
     modes[0] = mode();
     zones[0] = zone();
 
+    zones[0].matrix_map = nullptr;
+
     SetupZone("Matrix 64x64", ZONE_TYPE_MATRIX, 64, 64);
 
     modes[0].name = "Direct";
@@ -48,10 +50,17 @@ LivePreviewController::LivePreviewController(QWidget *parent) :
 LivePreviewController::~LivePreviewController()
 {
     delete ui;
+
+    if(zones[0].matrix_map != nullptr)
+    {
+        delete zones[0].matrix_map;
+    }
 }
 
 void LivePreviewController::SetupZone(std::string name, zone_type zt, unsigned int width, unsigned int height)
 {
+    lock.lock();
+
     unsigned int size = width * height;
 
     colors.resize(size);
@@ -73,13 +82,17 @@ void LivePreviewController::SetupZone(std::string name, zone_type zt, unsigned i
     {
         for(unsigned int idx = 0 ; idx < size; idx++)
         {
-            colors[idx] = ToRGBColor(0,0,0);
-            leds[idx].name = "LED " +  std::to_string(idx);
+            colors[idx] = 0;
         }
 
     }
     else if (zt == ZONE_TYPE_MATRIX)
     {
+        if(zones[0].matrix_map != nullptr)
+        {
+            delete zones[0].matrix_map;
+        }
+
         unsigned int *map = new unsigned int[height * width];
 
         zones[0].matrix_map = new matrix_map_type();
@@ -92,15 +105,18 @@ void LivePreviewController::SetupZone(std::string name, zone_type zt, unsigned i
             for(unsigned int w = 0; w < width; w++)
             {
                 int idx = (h*width) + w;
-                colors[idx] = ToRGBColor(0,0,0);
-                leds[idx].name = "LED " +  std::to_string(idx);
+                colors[idx] = 0;
                 map[(h*width) + w] = idx;
             }
         }
     }
+
+    lock.unlock();
 }
 
-void LivePreviewController::DeviceUpdateLEDs() {
+void LivePreviewController::DeviceUpdateLEDs()
+{
+    lock.lock();
 
     zone_type zt = zones[0].type;
 
@@ -133,8 +149,9 @@ void LivePreviewController::DeviceUpdateLEDs() {
             }
         }
         emit Rendered(image);
-    }
+    }    
 
+    lock.unlock();
 }
 
 

@@ -231,6 +231,7 @@ void OpenRGBEffectPage::StopEffect()
 void OpenRGBEffectPage::OpenPreview()
 {
     preview_dialog = new QDialog(this);
+
     preview_dialog->setAttribute(Qt::WA_DeleteOnClose);
     preview_dialog->setModal(false);
     preview_dialog->setWindowTitle(QString::fromStdString(effect->EffectDetails.EffectName + " preview"));
@@ -243,7 +244,6 @@ void OpenRGBEffectPage::OpenPreview()
     preview_dialog->setMinimumSize(256,256);
 
     QVBoxLayout* dialog_layout = new QVBoxLayout(preview_dialog);
-
     LivePreviewController* preview = new LivePreviewController(preview_dialog);
     preview_zone = new ControllerZone(preview, 0, false, 100);
     EffectManager::Get()->AddPreview(effect, preview_zone);
@@ -261,6 +261,8 @@ void OpenRGBEffectPage::OpenPreview()
     connect(preview_dialog, &QDialog::finished, [=](){
         ui->preview->setDisabled(false);
         EffectManager::Get()->RemovePreview(effect);
+
+        delete preview_zone;
     });
 }
 

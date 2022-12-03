@@ -14,18 +14,16 @@ class LivePreviewController : public QWidget, public RGBController
     Q_OBJECT
 
 public:
-    explicit LivePreviewController(QWidget *parent = nullptr);
+    LivePreviewController(QWidget *parent = nullptr);
     ~LivePreviewController();
 
     // RGBController overrides
     void DeviceUpdateLEDs()    override;
-
     void SetupZones()          override {};
-    void SetupColors()         override {};
+    void UpdateZoneLEDs(int)   override {};
     void ResizeZone(int, int)  override {};
     void SetCustomMode()       override {};
     void DeviceUpdateMode()    override {};
-    void UpdateZoneLEDs(int)   override {};
     void UpdateSingleLED(int)  override {};
 
 signals:
@@ -82,7 +80,7 @@ private:
     unsigned int width = presets[0].width;
     unsigned int height = presets[0].height;
 
-
+    std::mutex lock;
 };
 
 #endif // LIVEPREVIEWCONTROLLER_H

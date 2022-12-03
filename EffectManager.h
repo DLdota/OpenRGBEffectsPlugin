@@ -44,6 +44,8 @@ private:
 
     std::map<RGBEffect*, std::vector<ControllerZone*>> effect_zones;
     std::map<RGBEffect*, ControllerZone*> previews;
+
+    std::mutex lock;
 };
 
 #endif // EFFECTMANAGER_H

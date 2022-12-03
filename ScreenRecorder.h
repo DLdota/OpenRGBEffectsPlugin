@@ -32,9 +32,10 @@ private:
 
     QScreen* screen = nullptr;
     QRect rect;
-    QImage capture;
+    QPixmap capture;
 
-    std::mutex mut;
+    std::mutex lock;
+
 };
 
 #endif // SCREENRECORDER_H
