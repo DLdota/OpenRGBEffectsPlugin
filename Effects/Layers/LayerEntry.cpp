@@ -142,6 +142,8 @@ LayerEntry* LayerEntry::FromJson(json j)
         if(j.contains("composer_fn"))
             layer_entry->composer_fn = j["composer_fn"];
 
+        layer_entry->ui->composer_fn->setCurrentIndex(layer_entry->composer_fn);
+
         return layer_entry;
     }
 
