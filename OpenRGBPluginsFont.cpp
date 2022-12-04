@@ -19,7 +19,8 @@ OpenRGBPluginsFont *OpenRGBPluginsFont::Get()
         else
         {
             QString family = QFontDatabase::applicationFontFamilies(instance->fontId).at(0);
-            instance->font = QFont(family);
+            instance->font = QFont(family, 13);
+            instance->font.setStyleStrategy(QFont::PreferAntialias);
         }
     }
 
