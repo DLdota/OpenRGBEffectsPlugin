@@ -262,6 +262,10 @@ void DeviceListItem::ApplySelection(std::vector<ControllerZone*> selection)
     {
         RunGlobalCheckVerification();
     }
+    else
+    {
+        UpdateCheckState();
+    }
 }
 
 void DeviceListItem::RunGlobalCheckVerification()
