@@ -3,6 +3,7 @@
 #include "OpenRGBEffectSettings.h"
 #include <QDialog>
 #include "EffectList.h"
+#include "OpenRGBPluginsFont.h"
 
 LayerEntry::LayerEntry(QWidget *parent, RGBEffect* effect) :
     QWidget(parent),
@@ -10,6 +11,12 @@ LayerEntry::LayerEntry(QWidget *parent, RGBEffect* effect) :
     effect(effect)
 {
     ui->setupUi(this);
+
+    ui->edit->setFont(OpenRGBPluginsFont::GetFont());
+    ui->remove->setFont(OpenRGBPluginsFont::GetFont());
+
+    ui->edit->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::options));
+    ui->remove->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::close));
 
     PopulateCombos();
 

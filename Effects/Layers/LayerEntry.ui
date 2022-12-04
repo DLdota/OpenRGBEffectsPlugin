@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>229</width>
-    <height>48</height>
+    <width>222</width>
+    <height>43</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -53,20 +53,6 @@
       <enum>QFrame::Sunken</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="3">
-       <widget class="QToolButton" name="edit">
-        <property name="text">
-         <string>🖉</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="remove">
-        <property name="text">
-         <string>🗙</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="composer_fn">
         <property name="sizePolicy">
@@ -83,10 +69,24 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="3">
+       <widget class="QToolButton" name="edit">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="effect_name">
         <property name="text">
          <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QToolButton" name="remove">
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
