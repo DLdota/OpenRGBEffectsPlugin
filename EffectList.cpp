@@ -20,10 +20,11 @@ EffectList::EffectList(QWidget *parent) :
     ui->start_stop_all_button->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::play_track_next_o));
     ShowStartStopButton(false);
 
-    main_menu = new QMenu(this);
+    main_menu = new QMenu(this);    
     ui->new_effect->setMenu(main_menu);
 
     effect_search = new EffectSearch(this);
+
     QWidgetAction* search_action = new QWidgetAction(this);
 
     search_action->setDefaultWidget(effect_search);
@@ -121,7 +122,7 @@ void EffectList::on_start_stop_all_button_clicked()
 
 void EffectList::ShowStartStopButton(bool visible)
 {
-    ui->start_stop_all_button->setVisible(visible);
+    ui->start_stop_all_button->setEnabled(visible);
 }
 
 void EffectList::AddMenu(QMenu* menu)
