@@ -10,6 +10,12 @@
     <height>133</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -34,6 +40,12 @@
    </property>
    <item row="0" column="0">
     <widget class="QFrame" name="frame">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -105,7 +117,11 @@ Using an effect on a device WILL damage the flash or controller</string>
        </widget>
       </item>
       <item row="2" column="0" colspan="4">
-       <layout class="QVBoxLayout" name="zones"/>
+       <layout class="QVBoxLayout" name="zones">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMinAndMaxSize</enum>
+        </property>
+       </layout>
       </item>
      </layout>
     </widget>

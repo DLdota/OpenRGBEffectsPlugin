@@ -66,6 +66,8 @@ void DeviceList::InitControllersList()
             emit SelectionChanged();
         });
     }
+
+    ((QVBoxLayout*) ui->devices->layout())->addStretch(10000);
 }
 
 void DeviceList::on_toggle_select_all_clicked()

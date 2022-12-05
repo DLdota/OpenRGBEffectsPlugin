@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>455</width>
-    <height>274</height>
+    <width>624</width>
+    <height>256</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,7 +22,7 @@
   <property name="autoFillBackground">
    <bool>false</bool>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0">
    <item row="0" column="0">
     <widget class="QTabWidget" name="EffectTabs">
      <property name="sizePolicy">
@@ -30,6 +30,12 @@
        <horstretch>1</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>300</width>
+       <height>0</height>
+      </size>
      </property>
      <property name="tabPosition">
       <enum>QTabWidget::West</enum>
@@ -39,15 +45,21 @@
    <item row="0" column="1">
     <widget class="QFrame" name="frame">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
      <property name="minimumSize">
       <size>
-       <width>0</width>
+       <width>300</width>
        <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>300</width>
+       <height>16777215</height>
       </size>
      </property>
      <property name="frameShape">
