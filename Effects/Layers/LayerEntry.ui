@@ -71,6 +71,9 @@
       </item>
       <item row="0" column="3">
        <widget class="QToolButton" name="edit">
+        <property name="toolTip">
+         <string>Edit layer settings</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -85,6 +88,9 @@
       </item>
       <item row="0" column="4">
        <widget class="QToolButton" name="remove">
+        <property name="toolTip">
+         <string>Remove layer</string>
+        </property>
         <property name="text">
          <string/>
         </property>

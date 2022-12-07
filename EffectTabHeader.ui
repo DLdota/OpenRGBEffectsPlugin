@@ -90,6 +90,9 @@
    </item>
    <item>
     <widget class="QToolButton" name="rename">
+     <property name="toolTip">
+      <string>Rename effect</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -97,6 +100,9 @@
    </item>
    <item>
     <widget class="QToolButton" name="close">
+     <property name="toolTip">
+      <string>Remove effect</string>
+     </property>
      <property name="text">
       <string/>
      </property>
