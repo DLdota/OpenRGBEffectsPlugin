@@ -44,6 +44,8 @@ private:
     EffectSearch* effect_search;
     std::vector<QMenu*> sub_menus;
     std::vector<QAction*> sub_actions;
+
+    void EnableStartStopButton(bool);
 };
 
 #endif // EFFECTLIST_H

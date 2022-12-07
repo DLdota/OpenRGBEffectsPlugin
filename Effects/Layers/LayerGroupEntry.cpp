@@ -21,6 +21,7 @@ LayerGroupEntry::LayerGroupEntry(QWidget *parent) :
         ui->composer_fn->addItem(QString::fromStdString(fn));
     }
 
+    ui->effect_list->ShowStartStopButton(false);
     ui->effect_list->AddEffectsMenus();
 }
 
