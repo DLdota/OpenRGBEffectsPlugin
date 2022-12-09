@@ -120,9 +120,9 @@ void EffectList::on_start_stop_all_button_clicked()
     emit ToggleAllEffectsState();
 }
 
-void EffectList::EnableStartStopButton(bool visible)
+void EffectList::EnableStartStopButton(bool state)
 {
-    ui->start_stop_all_button->setEnabled(visible);
+    ui->start_stop_all_button->setEnabled(state);
 }
 
 void EffectList::ShowStartStopButton(bool visible)

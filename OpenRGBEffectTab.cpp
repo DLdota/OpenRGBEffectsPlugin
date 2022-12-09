@@ -129,7 +129,7 @@ void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
         EffectManager::Get()->SetEffectUnActive(effect);
         EffectManager::Get()->RemoveMapping(effect);
 
-        effect_list->ShowStartStopButton(ui->EffectTabs->count() > 1);
+        effect_list->EnableStartStopButton(ui->EffectTabs->count() > 1);
 
         delete effect_page;
         delete effect_header;
@@ -158,7 +158,7 @@ void OpenRGBEffectTab::CreateEffectTab(RGBEffect* effect)
 
     ui->EffectTabs->setCurrentIndex(tab_position);
 
-    effect_list->ShowStartStopButton(ui->EffectTabs->count() > 1);
+    effect_list->EnableStartStopButton(ui->EffectTabs->count() > 1);
 }
 
 void OpenRGBEffectTab::DeviceListChanged()
@@ -529,7 +529,7 @@ void OpenRGBEffectTab::ClearAll()
         delete effect_header;
     }
 
-    effect_list->ShowStartStopButton(false);
+    effect_list->EnableStartStopButton(false);
 
     EffectManager::Get()->ClearAssignments();
 }

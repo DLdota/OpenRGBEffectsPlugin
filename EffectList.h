@@ -24,7 +24,8 @@ public:
     static std::map<std::string, std::vector<std::string>> categorized_effects;
 
     static void RegisterEffect(std::string, std::string, std::function<RGBEffect*()>);
-    void ShowStartStopButton(bool);
+    void ShowStartStopButton(bool);    
+    void EnableStartStopButton(bool);
 
     void AddMenu(QMenu*);
     void AddAction(QAction*);
@@ -45,7 +46,6 @@ private:
     std::vector<QMenu*> sub_menus;
     std::vector<QAction*> sub_actions;
 
-    void EnableStartStopButton(bool);
 };
 
 #endif // EFFECTLIST_H
