@@ -52,6 +52,18 @@
    </property>
    <item>
     <widget class="QToolButton" name="start_stop">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="text">
       <string>-</string>
      </property>
@@ -90,6 +102,18 @@
    </item>
    <item>
     <widget class="QToolButton" name="rename">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="toolTip">
       <string>Rename effect</string>
      </property>
@@ -100,6 +124,18 @@
    </item>
    <item>
     <widget class="QToolButton" name="close">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="toolTip">
       <string>Remove effect</string>
      </property>

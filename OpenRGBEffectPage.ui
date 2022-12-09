@@ -43,6 +43,18 @@
      <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0" columnstretch="0,0,1,0">
       <item row="0" column="0">
        <widget class="QToolButton" name="preview">
+        <property name="minimumSize">
+         <size>
+          <width>26</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>26</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string>Preview</string>
         </property>
@@ -53,6 +65,18 @@
       </item>
       <item row="0" column="1">
        <widget class="QToolButton" name="toggle_info">
+        <property name="minimumSize">
+         <size>
+          <width>26</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>26</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string>Expand/Collapse</string>
         </property>
