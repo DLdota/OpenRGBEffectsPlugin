@@ -1,4 +1,5 @@
 #include "LivePreviewController.h"
+#include "OpenRGBPluginsFont.h"
 #include <QScreen>
 
 LivePreviewController::LivePreviewController(QWidget *parent) :
@@ -45,6 +46,9 @@ LivePreviewController::LivePreviewController(QWidget *parent) :
     ui->preview_widget->setScaledContents(ui->scale->isChecked());
 
     ui->brightness->setValue(modes[0].brightness);
+
+    ui->brightness_label->setFont(OpenRGBPluginsFont::GetFont());
+    ui->brightness_label->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::sun));
 }
 
 LivePreviewController::~LivePreviewController()
