@@ -59,6 +59,7 @@ void EffectList::AddEffectsMenus()
 
         QMenu* category_menu = new QMenu(QString::fromStdString(category), this);
         main_menu->addMenu(category_menu);
+        main_menu->setMinimumWidth(188);
 
         std::vector<std::string> effect_names = entry.second;
 

@@ -1,4 +1,5 @@
 #include "EffectSearch.h"
+#include "qscrollbar.h"
 #include "ui_EffectSearch.h"
 
 #include <QAction>
@@ -9,7 +10,10 @@ EffectSearch::EffectSearch(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->results->hide();
+    ui->results->setMaximumWidth(168);
+    ui->results->horizontalScrollBar()->hide();
     ui->no_results->hide();
+    ui->no_results->setMaximumWidth(168);
 }
 
 EffectSearch::~EffectSearch()
