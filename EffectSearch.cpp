@@ -1,19 +1,19 @@
 #include "EffectSearch.h"
-#include "qscrollbar.h"
 #include "ui_EffectSearch.h"
 
 #include <QAction>
+#include <QScrollBar>
 
-EffectSearch::EffectSearch(QWidget *parent) :
+EffectSearch::EffectSearch(QWidget *parent,  unsigned int w) :
     QWidget(parent),
     ui(new Ui::EffectSearch)
 {
     ui->setupUi(this);
     ui->results->hide();
-    ui->results->setMaximumWidth(168);
-    ui->results->horizontalScrollBar()->hide();
+    ui->results->setMaximumWidth(w);
+    ui->results->horizontalScrollBar()->setDisabled(true);
     ui->no_results->hide();
-    ui->no_results->setMaximumWidth(168);
+    ui->no_results->setMaximumWidth(w);
 }
 
 EffectSearch::~EffectSearch()

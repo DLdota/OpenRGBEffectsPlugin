@@ -20,10 +20,15 @@ EffectList::EffectList(QWidget *parent) :
     ui->start_stop_all_button->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::play_track_next_o));
     EnableStartStopButton(false);
 
-    main_menu = new QMenu(this);    
+    main_menu = new QMenu(ui->new_effect);
     ui->new_effect->setMenu(main_menu);
 
-    effect_search = new EffectSearch(this);
+    unsigned int menu_width = width() - ui->start_stop_all_button->width() - layout()->spacing();
+    main_menu->setMinimumWidth(menu_width);
+
+
+    int scroll_bar_size = qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+    effect_search = new EffectSearch(ui->new_effect, menu_width - scroll_bar_size);
 
     QWidgetAction* search_action = new QWidgetAction(this);
 
@@ -59,7 +64,6 @@ void EffectList::AddEffectsMenus()
 
         QMenu* category_menu = new QMenu(QString::fromStdString(category), this);
         main_menu->addMenu(category_menu);
-        main_menu->setMinimumWidth(188);
 
         std::vector<std::string> effect_names = entry.second;
 

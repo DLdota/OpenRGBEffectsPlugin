@@ -14,7 +14,7 @@ class EffectSearch : public QWidget
     Q_OBJECT
 
 public:
-    explicit EffectSearch(QWidget *parent = nullptr);
+    explicit EffectSearch(QWidget *parent = nullptr, unsigned int w = 0);
     ~EffectSearch();
 
     void add(std::string);
