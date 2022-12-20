@@ -44,19 +44,6 @@ AudioManager::~AudioManager()
     }
 
     devices_capture_threads.clear();
-
-    /*--------------------------*\
-    | Delete all of the buffers  |
-    \*--------------------------*/
-    std::map<int, std::array<float,512>>::iterator buffers_it;
-
-    for (buffers_it = devices_buffers.begin(); buffers_it != devices_buffers.end(); buffers_it++)
-    {
-        std::array<float,512> buffer = buffers_it->second;
-        delete &buffer;
-    }
-
-    devices_buffers.clear();
 }
 
 std::vector<char *> AudioManager::GetAudioDevices()
