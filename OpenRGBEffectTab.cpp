@@ -196,8 +196,6 @@ void OpenRGBEffectTab::LoadProfileList()
     emit ProfileListUpdated();
 }
 
-
-
 void OpenRGBEffectTab::on_EffectTabs_currentChanged(int current)
 {
     if(current > 0)
@@ -306,7 +304,6 @@ void OpenRGBEffectTab::SaveProfileAction()
 
             std::vector<json> effects_settings;
 
-
             QList<OpenRGBEffectPage*> pages;
 
             for(int i = 1; i < ui->EffectTabs->count(); i++)
@@ -337,13 +334,20 @@ void OpenRGBEffectTab::SaveProfileAction()
 
             settings["Effects"] = effects_settings;
 
-            OpenRGBEffectSettings::SaveUserProfile(settings, profile_name.toStdString());
+            bool ok = OpenRGBEffectSettings::SaveUserProfile(settings, profile_name.toStdString());
 
-            LoadProfileList();
-
-            if(should_load_at_startup)
+            if(!ok)
             {
-                OpenRGBEffectSettings::SetDefaultProfile(profile_name.toStdString());
+                QMessageBox::critical(this,"Error","An error has occured, check the application logs for more details.");
+            }
+            else
+            {
+                LoadProfileList();
+
+                if(should_load_at_startup)
+                {
+                    OpenRGBEffectSettings::SetDefaultProfile(profile_name.toStdString());
+                }
             }
         }
 
@@ -496,7 +500,6 @@ void OpenRGBEffectTab::LoadEffect(json effect_settings)
     EffectManager::Get()->Assign(saved_zones, effect);
     ui->device_list->ApplySelection(saved_zones);
 }
-
 
 void OpenRGBEffectTab::StartAll()
 {
