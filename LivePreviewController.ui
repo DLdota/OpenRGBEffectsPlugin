@@ -84,7 +84,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1,0">
+     <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1">
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -209,6 +209,14 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>presets</tabstop>
+  <tabstop>width</tabstop>
+  <tabstop>height</tabstop>
+  <tabstop>reverse</tabstop>
+  <tabstop>scale</tabstop>
+  <tabstop>brightness</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
