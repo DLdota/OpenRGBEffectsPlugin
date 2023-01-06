@@ -24,6 +24,7 @@ struct EffectInfo
     std::string CustomName = "";
 
     bool IsReversable = false;
+    bool SupportsRandom = true;
     int  MaxSpeed = 0;
     int  MinSpeed = 0;
 

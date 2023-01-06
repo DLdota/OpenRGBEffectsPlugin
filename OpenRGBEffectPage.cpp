@@ -144,9 +144,9 @@ void OpenRGBEffectPage::InitUi()
     bool show_colors = effect->EffectDetails.UserColors > 0;
     ui->Colors->setVisible(show_colors);
     ui->ColorsLabel->setVisible(show_colors);
-    ui->ColorsSettingsLabel->setVisible(show_colors);
-    ui->RandomCheckbox->setVisible(show_colors);
 
+    ui->ColorsSettingsLabel->setVisible(effect->EffectDetails.SupportsRandom || effect->EffectDetails.AllowOnlyFirst);
+    ui->RandomCheckbox->setVisible(effect->EffectDetails.SupportsRandom);
     ui->OnlyFirst->setVisible(effect->EffectDetails.AllowOnlyFirst);
 
     if (effect->EffectDetails.UserColors > 0)
