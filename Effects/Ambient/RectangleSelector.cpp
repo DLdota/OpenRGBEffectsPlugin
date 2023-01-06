@@ -56,7 +56,7 @@ void RectangleSelector::paintEvent(QPaintEvent* event)
 
     QPainter painter(this);
 
-    texture.setDevicePixelRatio(devicePixelRatioF());
+    texture.setDevicePixelRatio(devicePixelRatioF() / qApp->desktop()->devicePixelRatioF());
 
     painter.setPen(QColor(0, 0, 0, 128));
     painter.setBrush(Qt::NoBrush);
@@ -68,7 +68,7 @@ QRect RectangleSelector::MapToLogicalCoordinates(const QRect& rect) {
     for(QScreen *screen :  QApplication::screens())
     {
         QRect geometry = screen->geometry();
-        qreal ratio = screen->devicePixelRatio();
+        qreal ratio = screen->devicePixelRatio() / qApp->desktop()->devicePixelRatioF();
         QRect physical_geometry(geometry.x(), geometry.y(), std::lrint((qreal) geometry.width() * ratio), lrint((qreal) geometry.height() * ratio));
 
         if(physical_geometry.contains(rect.center()))
@@ -91,7 +91,7 @@ std::vector<QRect> RectangleSelector::GetScreenGeometries()
     for(QScreen *screen :  QApplication::screens())
     {
         QRect geometry = screen->geometry();
-        qreal ratio = screen->devicePixelRatio();
+        qreal ratio = screen->devicePixelRatio() / qApp->desktop()->devicePixelRatioF();
 
         screen_geometries.emplace_back(geometry.x(), geometry.y(),
                                        std::lrint((qreal) geometry.width() * ratio),
