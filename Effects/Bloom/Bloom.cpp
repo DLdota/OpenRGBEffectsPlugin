@@ -12,6 +12,7 @@ Bloom::Bloom(QWidget *parent) :
     EffectDetails.EffectName = "Bloom";
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Flower blooming effect";
+    EffectDetails.HasCustomSettings = true;
 
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 10;
@@ -67,6 +68,11 @@ void Bloom::StepEffect(std::vector<ControllerZone*> controller_zones)
     }
 }
 
+void Bloom::on_saturation_valueChanged(int value)
+{
+    saturation = value;
+}
+
 void Bloom::UpdateFlowers(unsigned int i)
 {
     float delta = (float) Speed / (float) FPS;
@@ -75,9 +81,9 @@ void Bloom::UpdateFlowers(unsigned int i)
     {
         flower.hue += (flower.speed_mult * delta);
         flower.hsv.hue = (int) flower.hue % 360;
+        flower.hsv.saturation = saturation;
     }
 }
-
 
 void Bloom::Reset(std::vector<ControllerZone*> controller_zones)
 {
@@ -92,6 +98,7 @@ void Bloom::Reset(std::vector<ControllerZone*> controller_zones)
             Flower flower;
             flower.hsv = ColorUtils::RandomHSVColor();
             flower.hue = flower.hsv.hue;
+            flower.saturation = flower.hsv.saturation;
             flower.speed_mult = ((double) rand() / (RAND_MAX)) + 1;
             zone_flowers.push_back(flower);
         }
@@ -103,4 +110,19 @@ void Bloom::Reset(std::vector<ControllerZone*> controller_zones)
 void Bloom::OnControllerZonesListChanged(std::vector<ControllerZone*> controller_zones)
 {
     Reset(controller_zones);
+}
+
+json Bloom::SaveCustomSettings()
+{
+    json settings;
+
+    settings["saturation"] = saturation;
+
+    return settings;
+}
+
+void Bloom::LoadCustomSettings(json Settings)
+{
+    if (Settings.contains("saturation"))
+        ui->saturation->setValue(Settings["saturation"]);
 }

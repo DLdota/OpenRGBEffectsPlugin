@@ -14,6 +14,7 @@ class Bloom;
 struct Flower {
     hsv_t hsv;
     float hue;
+    int saturation;
     float speed_mult = 1.f;
 };
 
@@ -31,6 +32,12 @@ public:
     void StepEffect(std::vector<ControllerZone*>) override;
     void OnControllerZonesListChanged(std::vector<ControllerZone*>) override;
 
+    void LoadCustomSettings(json) override;
+    json SaveCustomSettings() override;
+
+private slots:
+    void on_saturation_valueChanged(int);
+
 private:
     Ui::Bloom *ui;
     std::vector<std::vector<Flower>> flowers;
@@ -38,6 +45,7 @@ private:
     void Reset(std::vector<ControllerZone*>);
 
     void UpdateFlowers(unsigned int);
+    int  saturation   = 255;
 };
 
 
