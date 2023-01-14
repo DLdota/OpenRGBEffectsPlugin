@@ -422,9 +422,18 @@ void OpenRGBEffectTab::LoadEffect(json effect_settings)
 
         for(ControllerZone* controller_zone: ui->device_list->GetControllerZones())
         {
+            bool location_matches = [&]() {
+                const auto location_str = j["location"].get<std::string>();
+                if (location_str.find("HID: ") == 0)
+                {
+                    // We don't compare location of hid device since it changes randomly.
+                    return true;
+                }
+                return controller_zone->controller->location == location_str;
+            }();
             if(
+                    location_matches &&
                     controller_zone->controller->name        == j["name"] &&
-                    controller_zone->controller->location    == j["location"] &&
                     controller_zone->controller->serial      == j["serial"] &&
                     controller_zone->controller->description == j["description"] &&
                     controller_zone->controller->version     == j["version"] &&
