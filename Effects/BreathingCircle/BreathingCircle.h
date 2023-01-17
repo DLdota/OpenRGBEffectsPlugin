@@ -5,7 +5,6 @@
 #include "ui_BreathingCircle.h"
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
-#include "hsv.h"
 
 namespace Ui {
 class BreathingCircle;
@@ -29,6 +28,8 @@ private:
 
     double time = 0.0;
     double progress = 0.0;
+    bool growing = true;
+    RGBColor randomColor = ColorUtils::RandomRGBColor();
     RGBColor GetColor(float, float, float, float);
 };
 

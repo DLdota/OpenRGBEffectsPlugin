@@ -13,7 +13,7 @@ BreathingCircle::BreathingCircle(QWidget *parent) :
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "A breathing circle effect";
     EffectDetails.IsReversable = true;
-    EffectDetails.SupportsRandom = false;
+    EffectDetails.SupportsRandom = true;
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 10;
     EffectDetails.UserColors   = 1;
@@ -59,13 +59,23 @@ void BreathingCircle::StepEffect(std::vector<ControllerZone*> controller_zones)
                     controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
                 }
             }
-
         }
     }
 
+    double prevProgress = progress;
     time += (float) Speed / (float) FPS;
     progress = 0.35 * (1 + sin(0.1 * time));
 
+    // New random color after done shrinking
+    if (!growing && progress > prevProgress)
+    {
+        growing = true;
+        randomColor = ColorUtils::RandomRGBColor();
+    }
+    else if (growing && progress < prevProgress)
+    {
+        growing = false;
+    }
 }
 
 RGBColor BreathingCircle::GetColor(float x, float y, float w, float h)
@@ -75,5 +85,8 @@ RGBColor BreathingCircle::GetColor(float x, float y, float w, float h)
     if(distance > progress || distance < progress - Slider2Val/(0.5*(w+h)))
         return ColorUtils::OFF();
 
-    return UserColors[0];
+    if (RandomColorsEnabled)
+        return randomColor;
+    else
+        return UserColors[0];
 }
