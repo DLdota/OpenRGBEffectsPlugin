@@ -14,7 +14,7 @@ bool OpenRGBEffectSettings::SetDefaultProfile(std::string filename)
     json j;
     j["default_profile"] = filename;
 
-    return write_file(SettingsFolder() + folder_separator() + "EffectSettings.json", j);
+    return write_file(SettingsFolder() / "EffectSettings.json", j);
 }
 
 bool OpenRGBEffectSettings::DeleteProfile(std::string filename)
@@ -24,7 +24,7 @@ bool OpenRGBEffectSettings::DeleteProfile(std::string filename)
         return false;
     }
 
-    std::string path = ProfilesFolder() + folder_separator() + filename;
+    std::string path = ProfilesFolder() / filename;
 
     QFile f(QString::fromStdString(path));
 
@@ -45,7 +45,7 @@ std::string OpenRGBEffectSettings::DefaultProfile()
 {
     json j;
 
-    std::ifstream file(SettingsFolder() + folder_separator() + "EffectSettings.json");
+    std::ifstream file(SettingsFolder() / "EffectSettings.json");
 
     if(file)
     {
@@ -80,7 +80,7 @@ bool OpenRGBEffectSettings::SaveUserProfile(json j, std::string filename)
         return false;
     }
 
-    return write_file(ProfilesFolder() + folder_separator() + filename, j);
+    return write_file(ProfilesFolder() / filename, j);
 }
 
 json OpenRGBEffectSettings::LoadUserProfile(std::string filename)
@@ -97,7 +97,7 @@ json OpenRGBEffectSettings::LoadUserProfile(std::string filename)
         return Settings;
     }
 
-    return load_json_file(ProfilesFolder() + folder_separator() + filename);
+    return load_json_file(ProfilesFolder() / filename);
 }
 
 bool OpenRGBEffectSettings::SaveEffectPattern(json j, std::string effect_name, std::string file_name)
@@ -107,17 +107,17 @@ bool OpenRGBEffectSettings::SaveEffectPattern(json j, std::string effect_name, s
         return false;
     }
 
-    return write_file(PatternsFolder() + folder_separator() + effect_name + folder_separator() + file_name, j);
+    return write_file(PatternsFolder() / effect_name / file_name, j);
 }
 
 json OpenRGBEffectSettings::LoadPattern(std::string effect_name, std::string file_name)
 {
-    return load_json_file(PatternsFolder() + folder_separator() + effect_name + folder_separator() + file_name);
+    return load_json_file(PatternsFolder() / effect_name / file_name);
 }
 
 std::vector<std::string> OpenRGBEffectSettings::ListPattern(std::string effect_name)
 {
-    return list_files(PatternsFolder() + folder_separator() + effect_name);
+    return list_files(PatternsFolder() / effect_name);
 }
 
 std::vector<std::string> OpenRGBEffectSettings::ListProfiles()
@@ -132,7 +132,7 @@ bool OpenRGBEffectSettings::CreateSettingsDirectory()
 
 bool OpenRGBEffectSettings::CreateEffectPatternsDirectory(std::string effect_name)
 {
-    return create_dir(PatternsFolder() + folder_separator() + effect_name);
+    return create_dir(PatternsFolder() / effect_name);
 }
 
 bool OpenRGBEffectSettings::CreateEffectProfilesDirectory()
@@ -140,16 +140,7 @@ bool OpenRGBEffectSettings::CreateEffectProfilesDirectory()
     return create_dir(ProfilesFolder());
 }
 
-std::string OpenRGBEffectSettings::folder_separator()
-{
-#if defined(WIN32) || defined(_WIN32)
-    return "\\";
-#else
-    return "/";
-#endif
-}
-
-bool OpenRGBEffectSettings::write_file(std::string file_name, json j)
+bool OpenRGBEffectSettings::write_file(filesystem::path file_name, json j)
 {
     std::ofstream file(file_name, std::ios::out | std::ios::binary);
 
@@ -170,7 +161,7 @@ bool OpenRGBEffectSettings::write_file(std::string file_name, json j)
     return true;
 }
 
-json OpenRGBEffectSettings::load_json_file(std::string file_name)
+json OpenRGBEffectSettings::load_json_file(filesystem::path file_name)
 {
     json j;
 
@@ -192,7 +183,7 @@ json OpenRGBEffectSettings::load_json_file(std::string file_name)
     return j;
 }
 
-std::vector<std::string> OpenRGBEffectSettings::list_files(std::string path)
+std::vector<std::string> OpenRGBEffectSettings::list_files(filesystem::path path)
 {
     std::vector<std::string> filenames;
 
@@ -212,7 +203,7 @@ std::vector<std::string> OpenRGBEffectSettings::list_files(std::string path)
     return filenames;
 }
 
-bool OpenRGBEffectSettings::create_dir(std::string directory)
+bool OpenRGBEffectSettings::create_dir(filesystem::path directory)
 {
     QDir dir(QString::fromStdString(directory));
 
@@ -225,17 +216,17 @@ bool OpenRGBEffectSettings::create_dir(std::string directory)
 }
 
 
-std::string OpenRGBEffectSettings::SettingsFolder()
+filesystem::path OpenRGBEffectSettings::SettingsFolder()
 {
-    return OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() + "plugins" + folder_separator() + "settings";
+    return OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() / "plugins" / "settings";
 }
 
-std::string OpenRGBEffectSettings::ProfilesFolder()
+filesystem::path OpenRGBEffectSettings::ProfilesFolder()
 {
-    return SettingsFolder() + folder_separator() + "effect-profiles";
+    return SettingsFolder() / "effect-profiles";
 }
 
-std::string OpenRGBEffectSettings::PatternsFolder()
+filesystem::path OpenRGBEffectSettings::PatternsFolder()
 {
-    return SettingsFolder() + folder_separator() + "effect-patterns";
+    return SettingsFolder() / "effect-patterns";
 }

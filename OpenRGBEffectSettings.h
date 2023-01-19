@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include "json.hpp"
+#include "filesystem.h"
 
 using json = nlohmann::json;
 
@@ -26,21 +27,20 @@ public:
     static std::vector<std::string> ListPattern(std::string);
     static json LoadPattern(std::string, std::string);
 
-    static std::string PatternsFolder();
+    static filesystem::path PatternsFolder();
 
 private:
     static bool CreateSettingsDirectory();
     static bool CreateEffectProfilesDirectory();
     static bool CreateEffectPatternsDirectory(std::string);
 
-    static std::string folder_separator();
-    static std::string SettingsFolder();
-    static std::string ProfilesFolder();
+    static filesystem::path SettingsFolder();
+    static filesystem::path ProfilesFolder();
 
-    static bool create_dir(std::string);
-    static std::vector<std::string> list_files(std::string);
-    static json load_json_file(std::string);
-    static bool write_file(std::string, json);
+    static bool create_dir(filesystem::path);
+    static std::vector<std::string> list_files(filesystem::path);
+    static json load_json_file(filesystem::path);
+    static bool write_file(filesystem::path, json);
 };
 
 #endif // OPENRGBEFFECTSETTINGS_H
