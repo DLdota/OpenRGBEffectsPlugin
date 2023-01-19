@@ -505,7 +505,7 @@ void OpenRGBEffectPage::on_toggle_info_clicked()
 
 void OpenRGBEffectPage::OpenPatternsFolder()
 {
-    QUrl url = QUrl::fromLocalFile(QString::fromStdString(OpenRGBEffectSettings::PatternsFolder()));
+    QUrl url = QUrl::fromLocalFile(QString::fromStdString(OpenRGBEffectSettings::PatternsFolder().string()));
     QDesktopServices::openUrl(url);
 }
 

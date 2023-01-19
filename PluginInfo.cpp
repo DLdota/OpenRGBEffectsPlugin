@@ -27,7 +27,7 @@ void PluginInfo::on_open_plugin_folder_clicked()
 {
     filesystem::path config_dir = OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() / "plugins";
 
-    QUrl url = QUrl::fromLocalFile(QString::fromStdString(config_dir.u8string()));
+    QUrl url = QUrl::fromLocalFile(QString::fromStdString(config_dir.string()));
 
     printf("[OpenRGBEffectsPlugin] Opening %s\n", url.path().toStdString().c_str());
 

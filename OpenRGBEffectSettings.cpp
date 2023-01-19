@@ -24,9 +24,9 @@ bool OpenRGBEffectSettings::DeleteProfile(std::string filename)
         return false;
     }
 
-    std::string path = ProfilesFolder() / filename;
+    filesystem::path path = ProfilesFolder() / filename;
 
-    QFile f(QString::fromStdString(path));
+    QFile f(QString::fromStdString(path.string()));
 
     if (f.exists())
     {
@@ -187,7 +187,7 @@ std::vector<std::string> OpenRGBEffectSettings::list_files(filesystem::path path
 {
     std::vector<std::string> filenames;
 
-    QDir dir(QString::fromStdString(path));
+    QDir dir(QString::fromStdString(path.string()));
 
     if(dir.exists())
     {       
@@ -205,7 +205,7 @@ std::vector<std::string> OpenRGBEffectSettings::list_files(filesystem::path path
 
 bool OpenRGBEffectSettings::create_dir(filesystem::path directory)
 {
-    QDir dir(QString::fromStdString(directory));
+    QDir dir(QString::fromStdString(directory.string()));
 
     if(dir.exists())
     {
