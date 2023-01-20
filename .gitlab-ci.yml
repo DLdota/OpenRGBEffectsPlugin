@@ -23,116 +23,60 @@ before_script:
  - echo "started by ${GITLAB_USER_NAME}"
 
 #-----------------------------------------------------------------------#
-# Linux (AppImage) 32-bit Build Target                                  #
+# Buster 64-bit Build Target                                            #
 #-----------------------------------------------------------------------#
-"Linux 32":
-  image: registry.gitlab.com/openrgbdevelopers/openrgb-linux-ci-deb-builder:buster-32
-  stage: build
-  script:
-  - apt install -y libopenal-dev
-  - export QT_SELECT=qt5
-  - export $(dpkg-architecture)
-  - ./scripts/scripts_build-plugin.sh
-  
-  artifacts:
-    name: "${CI_PROJECT_NAME}_Linux_32_${CI_COMMIT_SHORT_SHA}"
-    paths:
-    - ./libOpenRGBEffectsPlugin.so.1.0.0
-    expire_in: 30 days
-
-#-----------------------------------------------------------------------#
-# Linux 64-bit Build Target                                             #
-#-----------------------------------------------------------------------#
-"Linux 64":
+"Buster 64":
   image: registry.gitlab.com/openrgbdevelopers/openrgb-linux-ci-deb-builder:buster-64
   stage: build
   script:
+  - apt update
   - apt install -y libopenal-dev
   - export QT_SELECT=qt5
   - export $(dpkg-architecture)
   - ./scripts/scripts_build-plugin.sh
   
   artifacts:
-    name: "${CI_PROJECT_NAME}_Linux_64_${CI_COMMIT_SHORT_SHA}"
+    name: "${CI_PROJECT_NAME}_Buster_64_${CI_COMMIT_SHORT_SHA}"
     paths:
     - ./libOpenRGBEffectsPlugin.so.1.0.0
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
-# Windows (32-bit) Build Target                                         #
+# Bullseye 64-bit Build Target                                          #
 #-----------------------------------------------------------------------#
-"Windows 32":
-  extends:
-  - .shared_windows_runners
+"Bullseye 64":
+  image: registry.gitlab.com/openrgbdevelopers/openrgb-linux-ci-deb-builder:bullseye-64
   stage: build
   script:
-  - $esc = "$([char]27)"
-  - $count = 0
-  - function _unix_tmsec_ { [int64](([datetime]::UtcNow)-(get-date "1/1/1970")).TotalSeconds }
-  - function _fold_start_ { param( [string]$TEXT_TAG ) $t=_unix_tmsec_; $global:count += 1; Write-Host -NoNewLine "`r`n`r`nsection_start:${t}:sect_${count}`r${esc}[0K${esc}[33m${TEXT_TAG}${esc}[39m`r`n"; }
-  - function _fold_final_ {                            $t=_unix_tmsec_;                     Write-Host -NoNewLine   "`r`n`r`nsection_end:${t}:sect_${count}`r${esc}[0K`r`n"           ; }
-
-  - _fold_start_ 'configuring the msvc environment variables'
-  - Push-Location "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Auxiliary/Build"
-  - '& cmd.exe /C "vcvarsall.bat x86 & set" | Foreach-Object { if ($_ -match "(.*?)=(.*)") { Set-Item -force -path "Env:\$($matches[1])" -value "$($matches[2])" } }'
-  - Pop-Location
-  - _fold_final_
-  
-  - _fold_start_ 'downloading precompiled versions of qtbase, qttools (for windeployqt) and jom (for a more parallel nmake)'
-  - mkdir _qt
-  - mkdir _qt_download
-  - Push-Location _qt_download
-  - curl.exe -LJ -o qt-base.7z        'https://gitlab.com/OpenRGBDevelopers/openrgb-linux-ci-deb-builder/-/package_files/56183447/download' 
-  - curl.exe -LJ -o qt-tools.7z       'https://gitlab.com/OpenRGBDevelopers/openrgb-linux-ci-deb-builder/-/package_files/56183451/download'
-  - curl.exe -LJ -o qt-webengine.7z   'https://gitlab.com/OpenRGBDevelopers/openrgb-linux-ci-deb-builder/-/package_files/56183482/download'
-  - curl.exe -LJ -o qt-webchannel.7z  'https://gitlab.com/OpenRGBDevelopers/openrgb-linux-ci-deb-builder/-/package_files/56183486/download'
-  - curl.exe -LJ -o qt-declare.7z     'https://gitlab.com/OpenRGBDevelopers/openrgb-linux-ci-deb-builder/-/package_files/56183490/download'
-  - curl.exe -LJ -o qt-location.7z    'https://gitlab.com/OpenRGBDevelopers/openrgb-linux-ci-deb-builder/-/package_files/56183492/download'
-  - _fold_final_
-  
-  - _fold_start_ 'extracting the downloaded qt binaries'
-  - 7z x qt-base.7z        '-o../_qt' -y
-  - 7z x qt-tools.7z       '-o../_qt' -y
-  - 7z x qt-webengine.7z   '-o../_qt' -y
-  - 7z x qt-webchannel.7z  '-o../_qt' -y
-  - 7z x qt-declare.7z     '-o../_qt' -y
-  - 7z x qt-location.7z    '-o../_qt' -y
-  - _fold_final_
-  
-  - _fold_start_ 'turn the qt install from enterprise to foss; remove the licensing checks'
-  - ${qconfig-pri-folder} = '..\_qt\5.15.0\msvc2019\mkspecs\qconfig.pri'
-  - (Get-Content ${qconfig-pri-folder}).replace('QT_EDITION = Enterprise', 'QT_EDITION = OpenSource') | Set-Content ${qconfig-pri-folder}
-  - (Get-Content ${qconfig-pri-folder}).replace('QT_LICHECK = licheck.exe', '')                       | Set-Content ${qconfig-pri-folder}
-  - Pop-Location
-  - _fold_final_
-  
-  - _fold_start_ "Find the .pro's name"
-  - ${PATHCLEAN} = (dir *.pro)
-  - ${TOCLEAN} = (${PATHCLEAN} -replace '.*\\' , '')
-  - ${FNAME} = (${TOCLEAN} -replace '.pro.','.pro')
-  - _fold_final_
-
-  - _fold_start_ 'run qmake and generate the msvc nmake makefile'
-  - mkdir _build; cd _build
-  - ..\_qt\5.15.0\msvc2019\bin\qmake ../${FNAME}
-  - _fold_final_
-  
-  - _fold_start_ 'start the actual build with jom instead of nmake; for speed'
-  - nmake
-  - _fold_final_
-
-  - _fold_start_ 'Copy Qt5Network to distrobution folder'
-  - - if (${FNAME} -contains 'Update'){cp ..\_qt\5.15.0\msvc2019\bin\Qt5Network.dll release}
-  - _fold_final_
-
-  - _fold_start_ 'Preparing artifact'  
-  - mv release/OpenRGBEffectsPlugin.dll ../
-  - _fold_final_
+  - apt update
+  - apt install -y libopenal-dev
+  - export QT_SELECT=qt5
+  - export $(dpkg-architecture)
+  - ./scripts/scripts_build-plugin.sh
 
   artifacts:
-    name: "${CI_PROJECT_NAME}_Windows_32_${CI_COMMIT_SHORT_SHA}"
+    name: "${CI_PROJECT_NAME}_Bullseye_64_${CI_COMMIT_SHORT_SHA}"
     paths:
-    - OpenRGBEffectsPlugin.dll
+    - ./libOpenRGBEffectsPlugin.so.1.0.0
+    expire_in: 30 days
+
+#-----------------------------------------------------------------------#
+# Bookworm 64-bit Build Target                                          #
+#-----------------------------------------------------------------------#
+"Bookworm 64":
+  image: registry.gitlab.com/openrgbdevelopers/openrgb-linux-ci-deb-builder:bookworm-64
+  stage: build
+  script:
+  - apt update
+  - apt install -y libopenal-dev
+  - export QT_SELECT=qt5
+  - export $(dpkg-architecture)
+  - ./scripts/scripts_build-plugin.sh
+
+  artifacts:
+    name: "${CI_PROJECT_NAME}_Bookworm_64_${CI_COMMIT_SHORT_SHA}"
+    paths:
+    - ./libOpenRGBEffectsPlugin.so.1.0.0
     expire_in: 30 days
 
 #-----------------------------------------------------------------------#
