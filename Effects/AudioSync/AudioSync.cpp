@@ -47,6 +47,7 @@ AudioSync::AudioSync(QWidget *parent) :
     \*------------------------------------*/
     ui->saturation->addItem("No saturation");
     ui->saturation->addItem("Saturate high amplitudes");
+    ui->saturation->addItem("Black and white mode");
 
     /*------------------------------------*\
     | Populate roll mode list              |
@@ -365,6 +366,10 @@ void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)
             {
                 current_freq_sat = 255 - 255 * pow(max_value, 3);
             }
+        }
+        else if(current_settings.saturation_mode == B_W_MODE)
+        {
+            current_freq_sat = 0;
         }
         else
         {

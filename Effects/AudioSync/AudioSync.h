@@ -35,7 +35,8 @@ struct AudioSyncSettings
 
 enum SaturationMode {
     NO_SATURATION = 0,
-    SATURATE_HIGH_AMPLITUDES = 1
+    SATURATE_HIGH_AMPLITUDES = 1,
+    B_W_MODE = 2
 };
 
 enum RollMode {
