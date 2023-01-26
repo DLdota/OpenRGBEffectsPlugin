@@ -35,6 +35,15 @@ void OpenRGBEffectsPlugin::Load(bool Dt, ResourceManager *RM)
 {
     DarkTheme = Dt;
     RMPointer = RM;
+    OpenRGBPluginInfo info = OpenRGBEffectsPlugin::GetPluginInfo();
+    NetworkPlugin net_plugin;
+    net_plugin.name = info.Name;
+    net_plugin.description = info.Description;
+    net_plugin.protocol_version = 1;
+    net_plugin.version = info.Version;
+    net_plugin.callback = OpenRGBEffectsPlugin::HandleSDK;
+    net_plugin.callback_arg = (void*)this;
+    RMPointer->GetServer()->RegisterPlugin(net_plugin);
 }
 
 QWidget* OpenRGBEffectsPlugin::GetWidget()
@@ -126,6 +135,8 @@ void OpenRGBEffectsPlugin::Unload()
 
     RMPointer->UnregisterDeviceListChangeCallback(DeviceListChangedCallback, ui);
     RMPointer->UnregisterDetectionProgressCallback(DeviceListChangedCallback, ui);
+    OpenRGBPluginInfo info = OpenRGBEffectsPlugin::GetPluginInfo();
+    RMPointer->GetServer()->UnregisterPlugin(info.Name);
 }
 
 void OpenRGBEffectsPlugin::DeviceListChangedCallback(void* o)
@@ -135,4 +146,35 @@ void OpenRGBEffectsPlugin::DeviceListChangedCallback(void* o)
     EffectManager::Get()->ClearAssignments();
 
     QMetaObject::invokeMethod((OpenRGBEffectTab *)o, "DeviceListChanged", Qt::QueuedConnection);
+}
+
+unsigned char* OpenRGBEffectsPlugin::HandleSDK(void * instance, unsigned int pkt_id, unsigned char* data, unsigned int* data_size)
+{
+    OpenRGBEffectsPlugin* plugin = (OpenRGBEffectsPlugin*)instance;
+    unsigned char* data_out = nullptr;
+
+    switch (pkt_id)
+    {
+        case NET_PACKET_ID_REQUEST_EFFECT_LIST:
+            data_out = plugin->ui->GetEffectListDescription(data_size);
+            break;
+        case NET_PACKET_ID_START_EFFECT:
+            {
+                unsigned short name_len;
+                memcpy(&name_len, &data[0], sizeof(name_len));
+                char* name = (char *)&data[sizeof(unsigned short)];
+                plugin->ui->SetEffectState(std::string(name), true);
+            }
+            break;
+        case NET_PACKET_ID_STOP_EFFECT:
+            {
+                unsigned short name_len;
+                memcpy(&name_len, &data[0], sizeof(name_len));
+                char* name = (char *)&data[sizeof(unsigned short)];
+                plugin->ui->SetEffectState(std::string(name), false);
+            }
+            break;
+
+    }
+    return data_out;
 }

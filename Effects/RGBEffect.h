@@ -53,6 +53,7 @@ public:
     virtual void OnControllerZonesListChanged(std::vector<ControllerZone*>) {}
 
     virtual void EffectState(bool Enabled) { EffectEnabled = Enabled; }
+    virtual bool IsEnabled() { return EffectEnabled; }
 
     virtual void LoadCustomSettings(json) {}
     virtual json SaveCustomSettings() { return json(); }

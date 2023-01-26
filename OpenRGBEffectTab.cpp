@@ -550,3 +550,94 @@ void OpenRGBEffectTab::OnStopEffects()
 {
     StopAll();
 }
+
+void OpenRGBEffectTab::SetEffectState(std::string name, bool running)
+{
+    QList<OpenRGBEffectPage*> pages = ui->EffectTabs->findChildren<OpenRGBEffectPage*>();
+
+    for(OpenRGBEffectPage* page: pages)
+    {
+        if (page->GetEffect()->EffectDetails.EffectName == name)
+        {
+            if (running)
+            {
+                page->StartEffect();
+            } else {
+                page->StopEffect();
+            }
+            break;
+        }
+    }
+}
+
+unsigned char * OpenRGBEffectTab::GetEffectListDescription(unsigned int* data_size)
+{
+    std::vector<RGBEffect*> registered_effects;
+    QList<OpenRGBEffectPage*> pages = ui->EffectTabs->findChildren<OpenRGBEffectPage*>();
+
+    for(OpenRGBEffectPage* page: pages)
+    {
+        registered_effects.push_back(page->GetEffect());
+    }
+    unsigned int data_ptr = 0;
+    unsigned short num_effects = registered_effects.size();
+
+    *data_size += sizeof(unsigned int);
+    *data_size += sizeof(num_effects);
+
+    for (unsigned int i = 0; i < num_effects; i++)
+    {
+        *data_size += sizeof(unsigned short);
+        *data_size += strlen(registered_effects[i]->EffectDetails.EffectName.c_str()) + 1;
+
+        *data_size += sizeof(unsigned short);
+        *data_size += strlen(registered_effects[i]->EffectDetails.EffectDescription.c_str()) + 1;
+
+        *data_size += sizeof(bool);
+    }
+
+    /*---------------------------------------------------------*\
+    | Create data buffer                                        |
+    \*---------------------------------------------------------*/
+    unsigned char *data_buf = new unsigned char[*data_size];
+
+    /*---------------------------------------------------------*\
+    | Copy in num_effects                                       |
+    \*---------------------------------------------------------*/
+    memcpy(&data_buf[data_ptr], &num_effects, sizeof(num_effects));
+    data_ptr += sizeof(num_effects);
+
+    for (unsigned int i = 0; i < num_effects; i++)
+    {
+        /*---------------------------------------------------------*\
+        | Copy in effect name (size+data)                           |
+        \*---------------------------------------------------------*/
+        unsigned short str_len = strlen(registered_effects[i]->EffectDetails.EffectName.c_str()) + 1;
+
+        memcpy(&data_buf[data_ptr], &str_len, sizeof(unsigned short));
+        data_ptr += sizeof(unsigned short);
+
+        strcpy((char *)&data_buf[data_ptr], registered_effects[i]->EffectDetails.EffectName.c_str());
+        data_ptr += str_len;
+
+        /*---------------------------------------------------------*\
+        | Copy in effect description (size+data)                    |
+        \*---------------------------------------------------------*/
+        str_len = strlen(registered_effects[i]->EffectDetails.EffectDescription.c_str()) + 1;
+
+        memcpy(&data_buf[data_ptr], &str_len, sizeof(unsigned short));
+        data_ptr += sizeof(unsigned short);
+
+        strcpy((char *)&data_buf[data_ptr], registered_effects[i]->EffectDetails.EffectDescription.c_str());
+        data_ptr += str_len;
+
+        /*---------------------------------------------------------*\
+        | Copy whether effect is enabled (data)                     |
+        \*---------------------------------------------------------*/
+        bool enabled = registered_effects[i]->IsEnabled();
+        memcpy(&data_buf[data_ptr], &enabled, sizeof(bool));
+        data_ptr += sizeof(bool);
+    }
+
+    return(data_buf);
+}
