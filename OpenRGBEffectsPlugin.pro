@@ -464,6 +464,8 @@ win32:DEFINES +=                                                        \
 unix:!macx {
     LIBS += -lopenal
     QMAKE_CXXFLAGS += -std=c++17
+    target.path=$$PREFIX/lib/
+    INSTALLS += target
 }
 
 #-----------------------------------------------------------------------#
