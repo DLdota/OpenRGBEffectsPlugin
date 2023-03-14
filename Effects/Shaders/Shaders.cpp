@@ -26,6 +26,7 @@ Shaders::Shaders(QWidget *parent) :
     EffectDetails.MaxSpeed     = 2000;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 
     shader_renderer = new ShaderRenderer(this);
 

@@ -15,6 +15,7 @@ Ambient::Ambient(QWidget *parent) :
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Takes a portion of the screen and reflect it to your devices";
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 
     ui->mode->addItems({
                            "Scaled average",

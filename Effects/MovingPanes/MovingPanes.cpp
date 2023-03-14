@@ -19,6 +19,7 @@ MovingPanes::MovingPanes(QWidget *parent) :
     EffectDetails.MaxSlider2Val = 50;
     EffectDetails.MinSlider2Val = 2;
     EffectDetails.Slider2Name   = "Divisions";
+    EffectDetails.SupportsRandom = false;
 
     SetSpeed(50);
     SetSlider2Val(4);

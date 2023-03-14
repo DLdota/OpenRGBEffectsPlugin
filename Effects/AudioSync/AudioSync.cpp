@@ -17,6 +17,7 @@ AudioSync::AudioSync(QWidget *parent) :
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Display frequency based colors with different modes";
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 
     /*------------------------------------*\
     | Populate device list                 |

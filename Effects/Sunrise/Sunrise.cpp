@@ -16,6 +16,7 @@ Sunrise::Sunrise(QWidget *parent) :
     EffectDetails.MinSpeed     = 1;
     EffectDetails.UserColors   = 4;
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 
     UserColors.resize(4);
     UserColors[0] = ColorUtils::fromQColor(Qt::white);

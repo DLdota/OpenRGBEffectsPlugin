@@ -19,6 +19,7 @@ AudioParty::AudioParty(QWidget *parent) :
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Color change speed";
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 
     SetSpeed(50);
     SetSlider2Val(25);

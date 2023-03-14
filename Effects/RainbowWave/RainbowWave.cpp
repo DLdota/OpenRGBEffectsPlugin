@@ -14,6 +14,7 @@ RainbowWave::RainbowWave() : RGBEffect()
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.MaxSlider2Val = 50;
     EffectDetails.Slider2Name   = "Frequency";
+    EffectDetails.SupportsRandom = false;
 
     SetSpeed(40);
     SetSlider2Val(10);

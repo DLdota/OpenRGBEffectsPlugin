@@ -17,6 +17,7 @@ CustomGradientWave::CustomGradientWave(QWidget *parent) :
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 
     gradient = QImage(100, 1, QImage::Format_RGB32);
 

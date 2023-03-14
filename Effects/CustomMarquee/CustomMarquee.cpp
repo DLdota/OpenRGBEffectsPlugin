@@ -15,6 +15,7 @@ CustomMarquee::CustomMarquee(QWidget *parent) :
     EffectDetails.MaxSpeed     = 50;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 
     SetSpeed(25);
 

@@ -156,6 +156,15 @@ private:
              HEXCOLOR(0xff6e00),
              HEXCOLOR(0xff0000),
              HEXCOLOR(0xff2100)
+         }},
+
+        {"Vaporwave", std::vector<RGBColor>{
+             HEXCOLOR(0xFF71CE),
+             HEXCOLOR(0xB967FF),
+             HEXCOLOR(0x01CDFE),
+             HEXCOLOR(0x05FFA1),
+             HEXCOLOR(0xFFFB96),
+             HEXCOLOR(0xFF71CE)
          }}
     };
 };

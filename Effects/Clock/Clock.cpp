@@ -11,6 +11,7 @@ Clock::Clock(QWidget *parent) :
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Digital clock";
     EffectDetails.UserColors = 3;
+    EffectDetails.SupportsRandom = false;
 }
 
 Clock::~Clock()

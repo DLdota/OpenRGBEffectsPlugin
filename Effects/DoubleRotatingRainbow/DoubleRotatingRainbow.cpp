@@ -22,6 +22,7 @@ DoubleRotatingRainbow::DoubleRotatingRainbow(QWidget *parent) :
     EffectDetails.Slider2Name   = "Color speed";
 
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 
     SetSpeed(50);
     SetSlider2Val(20);

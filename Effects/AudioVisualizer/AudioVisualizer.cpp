@@ -41,6 +41,7 @@ AudioVisualizer::AudioVisualizer(QWidget* parent):
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Display audio equalizer on your devices. A ported version of <a href=\"https://gitlab.com/CalcProgrammer1/KeyboardVisualizer\">KeyboardVisualizer</a>";
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 
     /*---------------------*\
     | Setup default values  |

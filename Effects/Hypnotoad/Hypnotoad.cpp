@@ -20,6 +20,7 @@ Hypnotoad::Hypnotoad(QWidget *parent) :
     EffectDetails.MaxSpeed     = 100;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 
     ui->color_mode->addItems({"Rainbow", "Custom"});
     ui->color_rotation_direction->addItems({"Clockwise","Counter-clockwise"});

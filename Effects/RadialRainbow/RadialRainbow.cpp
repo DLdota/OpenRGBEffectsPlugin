@@ -20,6 +20,7 @@ RadialRainbow::RadialRainbow(QWidget *parent) :
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Frequency";
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 
     ui->shape->addItems({"Circles", "Squares"});
 

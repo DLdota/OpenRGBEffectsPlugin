@@ -16,6 +16,7 @@ GifPlayer::GifPlayer(QWidget *parent) :
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Use GIFs to create your own effect";
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 }
 
 GifPlayer::~GifPlayer()

@@ -17,7 +17,7 @@ AudioVUMeter::AudioVUMeter(QWidget *parent) :
     EffectDetails.MaxSpeed     = 20;
     EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;
-
+    EffectDetails.SupportsRandom = false;
     SetSpeed(50);
 
     std::vector<char *> devices = AudioManager::get()->GetAudioDevices();

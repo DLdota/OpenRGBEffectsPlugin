@@ -18,6 +18,7 @@ Sequence::Sequence(QWidget *parent) :
     EffectDetails.MinSlider2Val = 1;
     EffectDetails.Slider2Name   = "Fade time";
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 
     SetSpeed(10);
 }

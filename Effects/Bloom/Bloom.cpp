@@ -13,6 +13,7 @@ Bloom::Bloom(QWidget *parent) :
     EffectDetails.EffectClassName = ClassName();
     EffectDetails.EffectDescription = "Flower blooming effect";
     EffectDetails.HasCustomSettings = true;
+    EffectDetails.SupportsRandom = false;
 
     EffectDetails.MaxSpeed     = 200;
     EffectDetails.MinSpeed     = 10;
