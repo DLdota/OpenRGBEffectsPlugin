@@ -37,7 +37,6 @@ void Bloom::StepEffect(std::vector<ControllerZone*> controller_zones)
 
         UpdateFlowers(i);
 
-        int start_idx = controller_zones[i]->start_idx();
         zone_type ZT = controller_zones[i]->type();
         unsigned int leds_count = controller_zones[i]->leds_count();
 
@@ -46,7 +45,7 @@ void Bloom::StepEffect(std::vector<ControllerZone*> controller_zones)
             for (unsigned int LedID = 0; LedID < leds_count; LedID++)
             {
                 RGBColor color = hsv2rgb(&flowers[i][LedID].hsv);
-                controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
+                controller_zones[i]->SetLED(LedID, color, Brightness);
             }
         }
 
@@ -62,7 +61,7 @@ void Bloom::StepEffect(std::vector<ControllerZone*> controller_zones)
                    int idx = (row_id * cols) + col_id;
                    int LedID = controller_zones[i]->map()[idx];
                    RGBColor color = hsv2rgb(&flowers[i][idx].hsv);
-                   controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
+                   controller_zones[i]->SetLED(LedID, color, Brightness);
                 }
             }
         }

@@ -447,7 +447,6 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
         int                 y_count                 = 0;
         zone_type           type                    = controller_zone->type();
         ZoneIndexType *     zone_index_map          = NULL;
-        int start_idx = controller_zone->start_idx();
 
         /*--------------------------------------------------------------*\
         | If matrix type and matrix mapping is valid, get X and Y count  |
@@ -495,7 +494,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
 
                     if( color_idx != 0xFFFFFFFF )
                     {
-                        controller_zone->SetLED(start_idx + color_idx, pixels_out->pixels[zone_index_map->y_index[y]][zone_index_map->x_index[x]], Brightness);
+                        controller_zone->SetLED(color_idx, pixels_out->pixels[zone_index_map->y_index[y]][zone_index_map->x_index[x]], Brightness);
                         //controller_zone->controller->zones[controller_zone->zone_idx].colors[color_idx] = pixels_out->pixels[zone_index_map->y_index[y]][zone_index_map->x_index[x]];
                     }
                 }
@@ -505,7 +504,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
         case ZONE_TYPE_SINGLE:
             for (int r = 0; r < x_count; r++)
             {
-                controller_zone->SetLED(start_idx + r, pixels_out->pixels[ROW_IDX_SINGLE_COLOR][0], Brightness);
+                controller_zone->SetLED(r, pixels_out->pixels[ROW_IDX_SINGLE_COLOR][0], Brightness);
                 //controller_zone->controller->zones[controller_zone->zone_idx].colors[r] = pixels_out->pixels[ROW_IDX_SINGLE_COLOR][0];
             }
             break;
@@ -513,7 +512,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
         case ZONE_TYPE_LINEAR:
             for (int x = 0; x < x_count; x++)
             {
-                controller_zone->SetLED(start_idx + x, pixels_out->pixels[ROW_IDX_BAR_GRAPH][zone_index_map->x_index[x]], Brightness);
+                controller_zone->SetLED(x, pixels_out->pixels[ROW_IDX_BAR_GRAPH][zone_index_map->x_index[x]], Brightness);
                 //controller_zone->controller->zones[controller_zone->zone_idx].colors[x] = pixels_out->pixels[ROW_IDX_BAR_GRAPH][zone_index_map->x_index[x]];
             }
             break;

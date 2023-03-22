@@ -12,11 +12,19 @@ class ControllerZone
 
 public:
 
-    ControllerZone(RGBController* controller, unsigned int zone_idx, bool reverse, int self_brightness):
+    ControllerZone(RGBController* controller,
+                   unsigned int zone_idx,
+                   bool reverse,
+                   int self_brightness,
+                   bool is_segment,
+                   int segment_idx = -1
+            ):
         controller(controller),
         zone_idx(zone_idx),
         reverse(reverse),
-        self_brightness(self_brightness)
+        self_brightness(self_brightness),
+        is_segment(is_segment),
+        segment_idx(segment_idx)
     {};
 
     RGBController* controller;
@@ -24,21 +32,24 @@ public:
     bool reverse;
     unsigned int self_brightness;
 
+    bool is_segment;
+    int segment_idx;
+
     zone_type type()
     {
-        return controller->zones[zone_idx].type;
+        return is_segment ? controller->zones[zone_idx].segments[segment_idx].type : controller->zones[zone_idx].type;
     }
 
-    unsigned int start_idx()
+    unsigned int startidx()
     {
-        return controller->zones[zone_idx].start_idx;
+        return is_segment ? controller->zones[zone_idx].start_idx + controller->zones[zone_idx].segments[segment_idx].start_idx : controller->zones[zone_idx].start_idx;
     }
 
     unsigned int size()
     {
         return type() == ZONE_TYPE_MATRIX ?
                     controller->zones[zone_idx].matrix_map->width *
-                controller->zones[zone_idx].matrix_map->height : leds_count();
+                    controller->zones[zone_idx].matrix_map->height : leds_count();
     }
 
     unsigned int matrix_size()
@@ -49,7 +60,7 @@ public:
 
     unsigned int leds_count()
     {
-        return controller->zones[zone_idx].leds_count;
+        return is_segment ? controller->zones[zone_idx].segments[segment_idx].leds_count : controller->zones[zone_idx].leds_count;
     }
 
     unsigned int matrix_map_width()
@@ -68,19 +79,26 @@ public:
     }
 
     bool operator==(ControllerZone const & rhs) const
-    {
-        return this->controller == rhs.controller && this->zone_idx == rhs.zone_idx;
+    {        
+        return this->controller == rhs.controller && this->zone_idx == rhs.zone_idx && this->segment_idx == rhs.segment_idx;
     }
 
     bool operator<(ControllerZone const & rhs) const
     {
-        // whatever
-        return this->controller != rhs.controller || this->zone_idx != rhs.zone_idx;
+        if (is_segment)
+        {
+            return this->controller != rhs.controller || this->zone_idx != rhs.zone_idx || this->segment_idx != rhs.segment_idx;
+        }
+        else
+        {
+            // whatever
+            return this->controller != rhs.controller || this->zone_idx != rhs.zone_idx;
+        }
     }
 
     std::string display_name()
     {
-        return controller->name + " " +  std::to_string(zone_idx);
+        return controller->name + ": " +  controller->zones[zone_idx].name + (is_segment ? (" - " + controller->zones[zone_idx].segments[segment_idx].name) : "");
     }
 
     json to_json()
@@ -95,17 +113,29 @@ public:
         j["description"] = controller->description;
         j["version"] = controller->version;
         j["vendor"] = controller->vendor;
+        j["is_segment"] = is_segment;
+        j["segment_idx"] = segment_idx;
         return j;
     }
 
     void SetAllZoneLEDs(RGBColor color, int brightness)
     {
-        controller->SetAllZoneLEDs(zone_idx, ColorUtils::apply_brightness(color, (self_brightness / 100.f) * (brightness / 100.f)));
+        if(is_segment)
+        {
+            for(unsigned int i = 0; i < leds_count(); i ++)
+            {
+                SetLED(i, color, brightness);
+            }
+        }
+        else
+        {
+            controller->SetAllZoneLEDs(zone_idx, ColorUtils::apply_brightness(color, (self_brightness / 100.f) * (brightness / 100.f)));
+        }
     }
 
     void SetLED(int idx, RGBColor color, int brightness)
     {
-         controller->SetLED(idx, ColorUtils::apply_brightness(color,  (self_brightness / 100.f) * (brightness / 100.f)));
+        controller->SetLED(startidx() + idx, ColorUtils::apply_brightness(color,  (self_brightness / 100.f) * (brightness / 100.f)));
     }
 
 };

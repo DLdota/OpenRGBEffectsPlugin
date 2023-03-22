@@ -1,6 +1,7 @@
 #ifndef ZONELISTITEM_H
 #define ZONELISTITEM_H
 
+#include "ControllerZone.h"
 #include <QWidget>
 
 namespace Ui {
@@ -12,7 +13,7 @@ class ZoneListItem : public QWidget
     Q_OBJECT
 
 public:
-    ZoneListItem(QString);
+    ZoneListItem(ControllerZone*);
     ~ZoneListItem();
 
     void SetEnableChecked(bool);
@@ -27,6 +28,8 @@ public:
 
     void SetBrightness(int);
 
+    ControllerZone* GetControllerZone();
+
 private slots:
     void on_enable_toggled(bool);
     void on_reverse_toggled(bool);
@@ -38,6 +41,7 @@ signals:
     void BrightnessChanged(int);
 
 private:
+    ControllerZone* controller_zone;
     Ui::ZoneListItem *ui;
     void UpdateCheckState();
 };

@@ -27,8 +27,6 @@ void StarryNight::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     int LEDPerCycle = Slider2Val;
 
-    int AmountMadeThisCycle = 0;
-
     for (unsigned int ControllerID = 0; ControllerID < controller_zones.size(); ControllerID++)
     {
         // Note: this rand() call is the cause, see comment at the top of the file
@@ -47,12 +45,11 @@ void StarryNight::StepEffect(std::vector<ControllerZone*> controller_zones)
             {
                 for (int ZonesMade = 0; ZonesMade < MakeForZone; ZonesMade++)
                 {
-                    int StartingLED = controller_zones[ControllerID]->start_idx();
                     int RandomLedID = rand() % controller_zones[ControllerID]->leds_count();
 
                     NewStar LEDStar;
                     LEDStar.Index = ControllerID;
-                    LEDStar.LED = (StartingLED + RandomLedID);
+                    LEDStar.LED = RandomLedID;
                     LEDStar.state = 255;
 
                     if (RandomColorsEnabled)
@@ -65,7 +62,6 @@ void StarryNight::StepEffect(std::vector<ControllerZone*> controller_zones)
                     }
 
                     CurrentStars.push_back(LEDStar);
-                    AmountMadeThisCycle += 1;
                 }
             }
 

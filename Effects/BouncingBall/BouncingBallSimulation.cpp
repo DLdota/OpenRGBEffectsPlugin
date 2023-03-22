@@ -12,7 +12,6 @@ BouncingBallSimulation::BouncingBallSimulation(
 {
     this->zoneIndex = controllerZone->zone_idx;
     this->zoneType = controllerZone->type();
-    this->startIndex = controllerZone->start_idx();
 
     if (this->zoneType == ZONE_TYPE_MATRIX) {
         this->width = controllerZone->matrix_map_width();

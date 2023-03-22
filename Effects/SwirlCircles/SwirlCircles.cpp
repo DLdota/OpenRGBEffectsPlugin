@@ -33,7 +33,6 @@ void SwirlCircles::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(ControllerZone* controller_zone : controller_zones)
     {
-        unsigned int start_idx = controller_zone->start_idx();
         bool reverse = controller_zone->reverse;
         zone_type ZT = controller_zone->type();
 
@@ -51,7 +50,7 @@ void SwirlCircles::StepEffect(std::vector<ControllerZone*> controller_zones)
             for(unsigned int i = 0; i < width; i++)
             {
                 RGBColor color = GetColor(i, 0, width, height, x1, y1);
-                controller_zone->SetLED(start_idx + i, color, Brightness);
+                controller_zone->SetLED(i, color, Brightness);
             }
 
         }
@@ -74,7 +73,7 @@ void SwirlCircles::StepEffect(std::vector<ControllerZone*> controller_zones)
                     RGBColor color = GetColor(w, h, width, height, x1, y1);
 
                     unsigned int led_num = map[h * width + w];
-                    controller_zone->SetLED(start_idx + led_num,color, Brightness);
+                    controller_zone->SetLED(led_num, color, Brightness);
                 }
             }
 

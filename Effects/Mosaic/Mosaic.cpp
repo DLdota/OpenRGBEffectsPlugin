@@ -32,7 +32,6 @@ void Mosaic::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     for(unsigned int i = 0; i < controller_zones.size(); i++)
     {        
-        int start_idx = controller_zones[i]->start_idx();
         zone_type ZT = controller_zones[i]->type();
 
         if(tiles[i].size() != controller_zones[i]->size())
@@ -49,7 +48,7 @@ void Mosaic::StepEffect(std::vector<ControllerZone*> controller_zones)
             for (unsigned int LedID = 0; LedID < leds_count; LedID++)
             {
                 RGBColor color = hsv2rgb(&tiles[i][LedID].hsv);
-                controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
+                controller_zones[i]->SetLED(LedID, color, Brightness);
             }
         }
 
@@ -65,7 +64,7 @@ void Mosaic::StepEffect(std::vector<ControllerZone*> controller_zones)
                    int idx = (row_id * cols) + col_id;
                    int LedID = controller_zones[i]->map()[idx];
                    RGBColor color = hsv2rgb(&tiles[i][idx].hsv);
-                   controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
+                   controller_zones[i]->SetLED(LedID, color, Brightness);
                 }
             }
 

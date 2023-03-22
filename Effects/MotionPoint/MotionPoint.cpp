@@ -32,7 +32,6 @@ void MotionPoint::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     for(ControllerZone* controller_zone: controller_zones)
     {
-        int start_idx = controller_zone->start_idx();
         zone_type ZT = controller_zone->type();
         int leds_count = controller_zone->leds_count();
 
@@ -41,7 +40,7 @@ void MotionPoint::StepEffect(std::vector<ControllerZone*> controller_zones)
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
                 RGBColor color = GetColor(leds_count, LedID, t);
-                controller_zone->SetLED(start_idx + LedID, color, Brightness);
+                controller_zone->SetLED(LedID, color, Brightness);
             }
         }
 
@@ -57,7 +56,7 @@ void MotionPoint::StepEffect(std::vector<ControllerZone*> controller_zones)
                 for (int row_id = 0; row_id < rows; row_id++)
                 {
                     int LedID = controller_zone->controller->zones[controller_zone->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                    controller_zone->SetLED(start_idx + LedID, color, Brightness);
+                    controller_zone->SetLED(LedID, color, Brightness);
                 }
             }
         }

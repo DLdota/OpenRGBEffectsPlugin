@@ -164,7 +164,6 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
     {
         for(ControllerZone* controller_zone : controller_zones)
         {
-            unsigned int start_idx = controller_zone->start_idx();
             unsigned int leds_count = controller_zone->leds_count();
             bool reverse = controller_zone->reverse;
 
@@ -178,7 +177,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
                 for(unsigned int i = 0; i < width; i++)
                 {                   
                     QColor color = scaled.pixelColor(reverse ? leds_count - i - 1 : i, 0);
-                    controller_zone->SetLED(start_idx + i, ColorUtils::fromQColor(color), Brightness);
+                    controller_zone->SetLED(i, ColorUtils::fromQColor(color), Brightness);
                 }
 
             }
@@ -196,7 +195,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
                     {
                         QColor color = scaled.pixelColor(reverse ? width - w - 1: w, h);
                         unsigned int led_num = map[h * width + w];
-                        controller_zone->SetLED(start_idx + led_num, ColorUtils::fromQColor(color), Brightness);
+                        controller_zone->SetLED(led_num, ColorUtils::fromQColor(color), Brightness);
                     }
                 }
 

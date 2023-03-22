@@ -124,7 +124,6 @@ void RotatingBeam::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     for(ControllerZone* controller_zone : controller_zones)
     {
-        unsigned int start_idx = controller_zone->start_idx();
         zone_type ZT = controller_zone->type();
 
         if(ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
@@ -135,7 +134,7 @@ void RotatingBeam::StepEffect(std::vector<ControllerZone*> controller_zones)
             for(unsigned int i = 0; i < width; i++)
             {
                 RGBColor color = GetColor(i, width * 0.25, line, width - 1, height - 1);
-                controller_zone->SetLED(start_idx + i, color, Brightness);
+                controller_zone->SetLED(i, color, Brightness);
             }
 
         }
@@ -152,7 +151,7 @@ void RotatingBeam::StepEffect(std::vector<ControllerZone*> controller_zones)
                     RGBColor color = GetColor(w, h, line, width - 1, height - 1);
 
                     unsigned int led_num = map[h * width + w];
-                    controller_zone->SetLED(start_idx + led_num,color, Brightness);
+                    controller_zone->SetLED(led_num,color, Brightness);
                 }
             }
 

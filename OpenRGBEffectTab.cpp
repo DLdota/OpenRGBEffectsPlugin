@@ -431,6 +431,10 @@ void OpenRGBEffectTab::LoadEffect(json effect_settings)
                 }
                 return controller_zone->controller->location == location_str;
             }();
+
+            bool is_segment = j.contains("is_segment") ? (bool)j["is_segment"] : false;
+            int segment_idx = j.contains("segment_idx") ? (int)j["segment_idx"] : -1;
+
             if(
                     location_matches &&
                     controller_zone->controller->name        == j["name"] &&
@@ -438,7 +442,9 @@ void OpenRGBEffectTab::LoadEffect(json effect_settings)
                     controller_zone->controller->description == j["description"] &&
                     controller_zone->controller->version     == j["version"] &&
                     controller_zone->controller->vendor      == j["vendor"] &&
-                    controller_zone->zone_idx                == j["zone_idx"]
+                    controller_zone->zone_idx                == j["zone_idx"]&&
+                    controller_zone->is_segment              == is_segment &&
+                    controller_zone->segment_idx             == segment_idx
                     )
             {
                 if(j.contains("self_brightness"))

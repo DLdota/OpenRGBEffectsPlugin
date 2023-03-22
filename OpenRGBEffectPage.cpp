@@ -251,7 +251,7 @@ void OpenRGBEffectPage::OpenPreview()
 
     QVBoxLayout* dialog_layout = new QVBoxLayout(preview_dialog);
     LivePreviewController* preview = new LivePreviewController(preview_dialog);
-    preview_zone = new ControllerZone(preview, 0, false, 100);
+    preview_zone = new ControllerZone(preview, 0, false, 100, false);
     EffectManager::Get()->AddPreview(effect, preview_zone);
 
     dialog_layout->addWidget(preview);

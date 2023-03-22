@@ -2,13 +2,16 @@
 #include "ui_ZoneListItem.h"
 #include "OpenRGBPluginsFont.h"
 
-ZoneListItem::ZoneListItem(QString name) :
+ZoneListItem::ZoneListItem(ControllerZone* controller_zone) :
     QWidget(nullptr),
+    controller_zone(controller_zone),
     ui(new Ui::ZoneListItem)
 {
+    std::string name = controller_zone->display_name();
+
     ui->setupUi(this);
     ui->brightness->setVisible(false);
-    ui->zone_name->setText("• " + name);
+    ui->zone_name->setText(QString::fromStdString("• " + name));
 
     ui->enable->setFont(OpenRGBPluginsFont::GetFont());
     ui->reverse->setFont(OpenRGBPluginsFont::GetFont());
@@ -21,6 +24,11 @@ ZoneListItem::ZoneListItem(QString name) :
 ZoneListItem::~ZoneListItem()
 {
     delete ui;
+}
+
+ControllerZone* ZoneListItem::GetControllerZone()
+{
+    return controller_zone;
 }
 
 void ZoneListItem::DisableControls()

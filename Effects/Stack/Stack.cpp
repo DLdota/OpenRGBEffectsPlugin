@@ -45,7 +45,6 @@ void Stack::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     for(unsigned int i = 0; i < controller_zones.size(); i++)
     {
-        int start_idx = controller_zones[i]->start_idx();
         zone_type ZT = controller_zones[i]->type();
         int leds_count = controller_zones[i]->leds_count();
         bool reverse = controller_zones[i]->reverse;
@@ -56,7 +55,7 @@ void Stack::StepEffect(std::vector<ControllerZone*> controller_zones)
             {
                 RGBColor color = GetColor(i, reverse ? leds_count - LedID - 1 : LedID);
                 current_colors[i][LedID] = color;
-                controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
+                controller_zones[i]->SetLED(LedID, color, Brightness);
             }
         }
 
@@ -76,7 +75,7 @@ void Stack::StepEffect(std::vector<ControllerZone*> controller_zones)
                     for (int row_id = 0; row_id < rows; row_id++)
                     {
                         int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                        controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
+                        controller_zones[i]->SetLED(LedID, color, Brightness);
                     }
                 }
             }
@@ -91,7 +90,7 @@ void Stack::StepEffect(std::vector<ControllerZone*> controller_zones)
                     for (int col_id = 0; col_id < cols; col_id++)
                     {
                         int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                        controller_zones[i]->SetLED(start_idx + LedID, color, Brightness);
+                        controller_zones[i]->SetLED(LedID, color, Brightness);
                     }
                 }
             }

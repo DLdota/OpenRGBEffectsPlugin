@@ -169,7 +169,6 @@ void Shaders::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     for(ControllerZone* controller_zone : controller_zones)
     {
-        unsigned int start_idx = controller_zone->start_idx();
         zone_type ZT = controller_zone->type();
 
         if(ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
@@ -182,7 +181,7 @@ void Shaders::StepEffect(std::vector<ControllerZone*> controller_zones)
             for(unsigned int i = 0; i < width; i++)
             {
                 QColor color = scaled.pixelColor(i, 0);
-                controller_zone->SetLED(start_idx + i, ColorUtils::fromQColor(color), Brightness);
+                controller_zone->SetLED(i, ColorUtils::fromQColor(color), Brightness);
             }
 
         }
@@ -201,7 +200,7 @@ void Shaders::StepEffect(std::vector<ControllerZone*> controller_zones)
                     QColor color = scaled.pixelColor(w, h);
 
                     unsigned int led_num = map[h * width + w];
-                    controller_zone->SetLED(start_idx + led_num, ColorUtils::fromQColor(color), Brightness);
+                    controller_zone->SetLED(led_num, ColorUtils::fromQColor(color), Brightness);
                 }
             }
 

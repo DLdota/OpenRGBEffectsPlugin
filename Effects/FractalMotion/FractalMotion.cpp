@@ -32,10 +32,8 @@ FractalMotion::~FractalMotion()
 
 void FractalMotion::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
-
     for(ControllerZone* controller_zone: controller_zones)
     {
-        int start_idx = controller_zone->start_idx();
         zone_type ZT = controller_zone->type();
         int leds_count = controller_zone->leds_count();
 
@@ -44,7 +42,7 @@ void FractalMotion::StepEffect(std::vector<ControllerZone*> controller_zones)
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
                 RGBColor color = GetColor(LedID, 0, 1);
-                controller_zone->SetLED(start_idx + LedID, color, Brightness);
+                controller_zone->SetLED(LedID, color, Brightness);
             }
         }
 
@@ -59,7 +57,7 @@ void FractalMotion::StepEffect(std::vector<ControllerZone*> controller_zones)
                 {
                     RGBColor color = GetColor(col_id, row_id, rows);
                     int LedID = controller_zone->controller->zones[controller_zone->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                    controller_zone->SetLED(start_idx + LedID, color, Brightness);
+                    controller_zone->SetLED(LedID, color, Brightness);
                 }
             }
         }

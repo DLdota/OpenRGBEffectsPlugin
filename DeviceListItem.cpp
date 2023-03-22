@@ -57,7 +57,8 @@ void DeviceListItem::SetupZonesListItems()
 {
     for(unsigned int i = 0; i < controller_zones.size(); i++)
     {
-        ZoneListItem* item = new ZoneListItem(QString::fromStdString(controller->zones[i].name));
+        ZoneListItem* item = new ZoneListItem(controller_zones[i]);
+
         ui->zones->addWidget(item);
         zone_items.push_back(item);
         item->SetBrightness(controller_zones[i]->self_brightness);
@@ -246,9 +247,16 @@ void DeviceListItem::ApplySelection(std::vector<ControllerZone*> selection)
             }
             else
             {
-                zone_items[controller_zone->zone_idx]->SetEnableChecked(true);
-                zone_items[controller_zone->zone_idx]->SetReverseChecked(controller_zone->reverse);
-                zone_items[controller_zone->zone_idx]->SetBrightness(controller_zone->self_brightness);
+                for(ZoneListItem* zone_list_item: zone_items)
+                {
+                    if(zone_list_item->GetControllerZone() == controller_zone)
+                    {
+                        zone_list_item->SetEnableChecked(true);
+                        zone_list_item->SetReverseChecked(controller_zone->reverse);
+                        zone_list_item->SetBrightness(controller_zone->self_brightness);
+                    }
+                }
+
             }
         }
     }
