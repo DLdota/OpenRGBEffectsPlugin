@@ -43,6 +43,7 @@ INCLUDEPATH +=                                                                  
     OpenRGB/net_port                                                                            \
     OpenRGB/RGBController                                                                       \
     OpenRGB/dependencies/json                                                                   \
+    OpenRGB/dependencies/hidapi                                                                 \
     OpenRGB/qt                                                                                  \
     OpenRGB/hidapi_wrapper                                                                      \
 
@@ -52,6 +53,7 @@ HEADERS +=                                                                      
     OpenRGB/NetworkProtocol.h                                                                   \
     OpenRGB/NetworkServer.h                                                                     \
     OpenRGB/OpenRGBPluginInterface.h                                                            \
+    OpenRGB/LogManager.h                                                                        \
     OpenRGB/ProfileManager.h                                                                    \
     OpenRGB/ResourceManager.h                                                                   \
     OpenRGB/SettingsManager.h                                                                   \
@@ -64,6 +66,7 @@ HEADERS +=                                                                      
 
 SOURCES +=                                                                                      \
     OpenRGB/RGBController/RGBController.cpp                                                     \
+    OpenRGB/LogManager.cpp                                                                      \
     OpenRGB/NetworkServer.cpp                                                                   \
     OpenRGB/qt/hsv.cpp                                                                          \
 
