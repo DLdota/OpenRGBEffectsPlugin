@@ -1,7 +1,5 @@
 #include "ColorPicker.h"
-#include "OpenRGBEffectsPlugin.h"
 #include "ui_ColorPicker.h"
-#include "ColorWheel.h"
 
 #include <QString>
 #include <QFile>

@@ -43,7 +43,6 @@ INCLUDEPATH +=                                                                  
     OpenRGB/net_port                                                                            \
     OpenRGB/RGBController                                                                       \
     OpenRGB/dependencies/json                                                                   \
-    OpenRGB/dependencies/ColorWheel                                                             \
     OpenRGB/qt                                                                                  \
     OpenRGB/hidapi_wrapper                                                                      \
 
@@ -60,13 +59,12 @@ HEADERS +=                                                                      
     OpenRGB/i2c_smbus/i2c_smbus.h                                                               \
     OpenRGB/net_port/net_port.h                                                                 \
     OpenRGB/RGBController/RGBController.h                                                       \
-    OpenRGB/dependencies/ColorWheel/ColorWheel.h                                                \
     OpenRGB/qt/hsv.h                                                                            \
     OpenRGB/hidapi_wrapper/hidapi_wrapper.h                                                     \
 
 SOURCES +=                                                                                      \
     OpenRGB/RGBController/RGBController.cpp                                                     \
-    OpenRGB/dependencies/ColorWheel/ColorWheel.cpp                                              \
+    OpenRGB/NetworkServer.cpp                                                                   \
     OpenRGB/qt/hsv.cpp                                                                          \
 
 
