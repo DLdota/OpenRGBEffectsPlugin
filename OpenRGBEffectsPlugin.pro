@@ -45,6 +45,7 @@ INCLUDEPATH +=                                                                  
     OpenRGB/dependencies/json                                                                   \
     OpenRGB/dependencies/ColorWheel                                                             \
     OpenRGB/qt                                                                                  \
+    OpenRGB/hidapi_wrapper                                                                      \
 
 HEADERS +=                                                                                      \
     OpenRGB/Colors.h                                                                            \
@@ -61,7 +62,7 @@ HEADERS +=                                                                      
     OpenRGB/RGBController/RGBController.h                                                       \
     OpenRGB/dependencies/ColorWheel/ColorWheel.h                                                \
     OpenRGB/qt/hsv.h                                                                            \
-
+    OpenRGB/hidapi_wrapper/hidapi_wrapper.h                                                     \
 
 SOURCES +=                                                                                      \
     OpenRGB/RGBController/RGBController.cpp                                                     \
