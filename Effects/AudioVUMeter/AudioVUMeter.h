@@ -37,6 +37,7 @@ private slots:
     void on_color_offset_valueChanged(int);
     void on_color_spread_valueChanged(int);
     void on_saturation_valueChanged(int);
+    void on_invert_hue_stateChanged(int);
 
 private:
     Ui::AudioVUMeter *ui;
@@ -51,8 +52,9 @@ private:
 
     float last_height = 0.f;
 
-    float color_offset = 0.f;
-    float color_spread = 0.f;
+    float color_offset = 180.f;
+    float color_spread = 50.f;
+    bool invert_hue = false;
     int   saturation   = 255;
 
     void Start();
@@ -60,7 +62,7 @@ private:
 
     int audio_device_idx = 0;
     float amplitude = 100.f;
-    int avg_size = 1;
+    int avg_size = 16;
 
     RGBColor GetColor(float, float, float);
 };

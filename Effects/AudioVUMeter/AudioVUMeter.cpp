@@ -18,7 +18,7 @@ AudioVUMeter::AudioVUMeter(QWidget *parent) :
     EffectDetails.MinSpeed     = 1;
     EffectDetails.HasCustomSettings = true;
     EffectDetails.SupportsRandom = false;
-    SetSpeed(50);
+    SetSpeed(10);
 
     std::vector<char *> devices = AudioManager::get()->GetAudioDevices();
 
@@ -97,6 +97,11 @@ void AudioVUMeter::on_color_spread_valueChanged(int value)
 void AudioVUMeter::on_saturation_valueChanged(int value)
 {
     saturation = value;
+}
+
+void AudioVUMeter::on_invert_hue_stateChanged(int value)
+{
+    invert_hue = value;
 }
 
 void AudioVUMeter::on_devices_currentIndexChanged(int value)
@@ -319,7 +324,13 @@ RGBColor AudioVUMeter::GetColor(float a, float y, float h)
     float r_l_amp = last_height*h;
 
     hsv_t hsv;
-    hsv.hue = int(color_offset + y/h*360*color_spread*0.01)%360;
+    hsv.hue = int(color_offset + (y/h*360*color_spread*0.01))%360;
+
+    if(invert_hue)
+    {
+        hsv.hue = 360 - hsv.hue;
+    }
+
     hsv.saturation = saturation;
 
     if(y <= r_amp)
@@ -356,6 +367,7 @@ json AudioVUMeter::SaveCustomSettings()
     settings["color_offset"] = color_offset;
     settings["color_spread"] = color_spread;
     settings["saturation"] = saturation;
+    settings["invert_hue"] = invert_hue;
 
     return settings;
 }
@@ -382,5 +394,8 @@ void AudioVUMeter::LoadCustomSettings(json Settings)
 
     if (Settings.contains("saturation"))
         ui->saturation->setValue(Settings["saturation"]);
+
+    if (Settings.contains("invert_hue"))
+        ui->invert_hue->setChecked(Settings["invert_hue"]);
 
 }
