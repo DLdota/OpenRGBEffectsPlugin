@@ -92,8 +92,11 @@
    </item>
    <item row="6" column="1">
     <widget class="QTooltipedSlider" name="spread">
+     <property name="maximum">
+      <number>100</number>
+     </property>
      <property name="value">
-      <number>99</number>
+      <number>100</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

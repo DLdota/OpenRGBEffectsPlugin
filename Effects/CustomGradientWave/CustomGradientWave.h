@@ -58,7 +58,7 @@ private:
     QImage gradient;
     void GenerateGradient();
 
-    int spread    = 99;
+    int spread    = 100;
     int direction = HORIZONTAL;
     int height    = 50;
     int width     = 50;
