@@ -7,6 +7,14 @@
 #include "json.hpp"
 #include "filesystem.h"
 
+struct GlobalSettingsStruct
+{
+    int fpscapture = 60;
+    int brightness = 100;
+    int fps = 60;
+    std::string startup_profile;
+};
+
 using json = nlohmann::json;
 
 class OpenRGBEffectSettings
@@ -15,10 +23,10 @@ class OpenRGBEffectSettings
 public:    
     static unsigned int version;
 
-    static bool DeleteProfile(std::string);
-    static bool SetDefaultProfile(std::string);
-    static std::string DefaultProfile();
+    static bool WriteGlobalSettings();
+    static void LoadGlobalSettings();
 
+    static bool DeleteProfile(std::string);
     static bool SaveUserProfile(json, std::string);
     static json LoadUserProfile(std::string);
     static std::vector<std::string> ListProfiles();
@@ -28,6 +36,8 @@ public:
     static json LoadPattern(std::string, std::string);
 
     static filesystem::path PatternsFolder();
+
+    static GlobalSettingsStruct globalSettings;
 
 private:
     static bool CreateSettingsDirectory();
@@ -41,6 +51,7 @@ private:
     static std::vector<std::string> list_files(filesystem::path);
     static json load_json_file(filesystem::path);
     static bool write_file(filesystem::path, json);
+
 };
 
 #endif // OPENRGBEFFECTSETTINGS_H

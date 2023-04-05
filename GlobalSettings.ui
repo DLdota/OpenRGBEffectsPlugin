@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>305</width>
-    <height>61</height>
+    <width>404</width>
+    <height>217</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -19,38 +19,130 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="0,0">
+  <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0">
    <property name="sizeConstraint">
     <enum>QLayout::SetMaximumSize</enum>
    </property>
-   <item row="1" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="fpscapture_label">
-       <property name="text">
-        <string>FPS capture</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTooltipedSlider" name="fpscapture">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>60</number>
-       </property>
-       <property name="value">
-        <number>60</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
+   <item row="5" column="0">
+    <widget class="QFrame" name="ambientFrame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="fpscaptureLabel">
+        <property name="text">
+         <string>FPS capture</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QTooltipedSlider" name="fpscaptureSlider">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>60</number>
+        </property>
+        <property name="value">
+         <number>60</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QFrame" name="globalFrame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="1" column="2">
+       <widget class="QTooltipedSlider" name="brightnessSlider">
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="value">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QTooltipedSlider" name="fpsSlider">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>60</number>
+        </property>
+        <property name="value">
+         <number>60</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="fpsLabel">
+        <property name="text">
+         <string>FPS</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="brightnessLabel">
+        <property name="text">
+         <string>Brightness</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>**Global settings:**</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::MarkdownText</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>*Set default value for new effects*</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::MarkdownText</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
     <widget class="QLabel" name="globalsettings_label">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -72,6 +164,7 @@
      </property>
      <property name="font">
       <font>
+       <weight>50</weight>
        <bold>false</bold>
       </font>
      </property>
@@ -79,10 +172,23 @@
       <enum>Qt::LeftToRight</enum>
      </property>
      <property name="text">
-      <string>Ambient Settings</string>
+      <string>**Ambient settings:**</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::MarkdownText</enum>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>*Configure screen recorded behavior*</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::MarkdownText</enum>
      </property>
     </widget>
    </item>

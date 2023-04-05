@@ -1,4 +1,5 @@
 #include "ScreenRecorder.h"
+#include "OpenRGBEffectSettings.h"
 
 ScreenRecorder* ScreenRecorder::instance;
 
@@ -70,11 +71,9 @@ void ScreenRecorder::CaptureThreadFunction()
 {
     printf("[OpenRGBEffectsPlugin] SCREENRECORDER: Thread started\n");
 
-
-
     while(continue_capture)
     {
-        int delay = 1000 / fpscapture;
+        int delay = 1000 / OpenRGBEffectSettings::globalSettings.fpscapture;
         if(screen == nullptr)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -95,14 +94,6 @@ void ScreenRecorder::CaptureThreadFunction()
     }
 
     printf("[OpenRGBEffectsPlugin] SCREENRECORDER: Thread stopped\n");
-}
-
-void ScreenRecorder::SetFpsCapture(int value) {
-    fpscapture = value;
-}
-
-int ScreenRecorder::GetFpsCapture() {
-    return fpscapture;
 }
 
 const QImage ScreenRecorder::Capture()

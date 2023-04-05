@@ -8,13 +8,43 @@
 
 unsigned int OpenRGBEffectSettings::version = 2;
 
+GlobalSettingsStruct OpenRGBEffectSettings::globalSettings;
 
-bool OpenRGBEffectSettings::SetDefaultProfile(std::string filename)
+bool OpenRGBEffectSettings::WriteGlobalSettings()
 {
     json j;
-    j["default_profile"] = filename;
+
+    j["fpscapture"]         = globalSettings.fpscapture;
+    j["fps"]                = globalSettings.fps;
+    j["brightness"]         = globalSettings.brightness;
+    j["startup_profile"]    = globalSettings.startup_profile;
 
     return write_file(SettingsFolder() / "EffectSettings.json", j);
+}
+
+void OpenRGBEffectSettings::LoadGlobalSettings()
+{
+    json j;
+
+    std::ifstream file(SettingsFolder() / "EffectSettings.json");
+
+    if(file)
+    {
+        try
+        {
+            file >> j;
+            file.close();
+
+            if(j.contains("fpscapture"))        globalSettings.fpscapture       = j ["fpscapture"];
+            if(j.contains("fps"))               globalSettings.fps              = j ["fps"];
+            if(j.contains("brightness"))        globalSettings.brightness       = j ["brightness"];
+            if(j.contains("startup_profile"))   globalSettings.startup_profile  = j ["startup_profile"];
+        }
+        catch(const std::exception& e)
+        {
+             printf("[OpenRGBEffectsPlugin] Cannot read file: %s\n", e.what());
+        }
+    }
 }
 
 bool OpenRGBEffectSettings::DeleteProfile(std::string filename)
@@ -30,42 +60,16 @@ bool OpenRGBEffectSettings::DeleteProfile(std::string filename)
 
     if (f.exists())
     {
-        if(filename == DefaultProfile())
+        if(globalSettings.startup_profile == filename)
         {
-            SetDefaultProfile("");
+            globalSettings.startup_profile = "";
+            WriteGlobalSettings();
         }
 
         return f.remove();
     }
 
     return false;
-}
-
-std::string OpenRGBEffectSettings::DefaultProfile()
-{
-    json j;
-
-    std::ifstream file(SettingsFolder() / "EffectSettings.json");
-
-    if(file)
-    {
-        try
-        {
-            file >> j;
-            file.close();
-        }
-        catch(const std::exception& e)
-        {
-             printf("[OpenRGBEffectsPlugin] Cannot read file: %s\n", e.what());
-        }
-    }
-
-    if(j.contains("default_profile"))
-    {
-        return j["default_profile"];
-    }
-
-    return "";
 }
 
 bool OpenRGBEffectSettings::SaveUserProfile(json j, std::string filename)

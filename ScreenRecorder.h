@@ -26,9 +26,6 @@ public:
     void SetScreen(int screen_index);
     void SetRect(QRect rect);
 
-    void SetFpsCapture(int value);
-    int GetFpsCapture();
-
 private:
     std::thread* capture_thread = nullptr;
 
@@ -42,7 +39,6 @@ private:
     QPixmap capture;
 
     std::mutex lock;
-    int fpscapture = 60;
 
 };
 

@@ -18,7 +18,9 @@ public:
     ~GlobalSettings();
 
 private slots:
-    void on_fpscapture_valueChanged(int);
+    void on_fpscaptureSlider_valueChanged(int);
+    void on_brightnessSlider_valueChanged(int);
+    void on_fpsSlider_valueChanged(int);
 
 private:
     Ui::GlobalSettings *ui;

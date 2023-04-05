@@ -44,6 +44,7 @@ void OpenRGBEffectsPlugin::Load(bool Dt, ResourceManager *RM)
     net_plugin.callback = OpenRGBEffectsPlugin::HandleSDK;
     net_plugin.callback_arg = (void*)this;
     RMPointer->GetServer()->RegisterPlugin(net_plugin);
+    OpenRGBEffectSettings::LoadGlobalSettings();
 }
 
 QWidget* OpenRGBEffectsPlugin::GetWidget()

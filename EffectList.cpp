@@ -2,6 +2,7 @@
 #include "ui_EffectList.h"
 #include "ColorUtils.h"
 #include "OpenRGBPluginsFont.h"
+#include "OpenRGBEffectSettings.h"
 
 #include <QMenu>
 #include <QAction>
@@ -88,6 +89,9 @@ void EffectList::AddEffectsMenus()
 void EffectList::AddEffect(std::string effect_name)
 {
     RGBEffect* effect = effects_construtors[effect_name]();
+
+    effect->SetFPS(OpenRGBEffectSettings::globalSettings.fps);
+    effect->SetBrightness(OpenRGBEffectSettings::globalSettings.brightness);
 
     // Add some random colors, so we already see something fancy
     std::vector<RGBColor> random_colors;

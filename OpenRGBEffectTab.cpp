@@ -49,11 +49,11 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     QTimer::singleShot(2000, [=](){
         LoadProfileList();
 
-        std::string default_profile = OpenRGBEffectSettings::DefaultProfile();
+        std::string startup_profile = OpenRGBEffectSettings::globalSettings.startup_profile;
 
-        if(!default_profile.empty())
+        if(!startup_profile.empty())
         {
-            LoadProfile(QString::fromStdString(default_profile));
+            LoadProfile(QString::fromStdString(startup_profile));
         }
     });   
 }
@@ -356,8 +356,6 @@ void OpenRGBEffectTab::SaveProfileAction()
 
             settings["Effects"] = effects_settings;
 
-            settings["Fpscapture"] = ScreenRecorder::Get()->GetFpsCapture();
-
             bool ok = OpenRGBEffectSettings::SaveUserProfile(settings, profile_name.toStdString());
 
             if(!ok)
@@ -370,7 +368,8 @@ void OpenRGBEffectTab::SaveProfileAction()
 
                 if(should_load_at_startup)
                 {
-                    OpenRGBEffectSettings::SetDefaultProfile(profile_name.toStdString());
+                    OpenRGBEffectSettings::globalSettings.startup_profile = profile_name.toStdString();
+                    OpenRGBEffectSettings::WriteGlobalSettings();
                 }
             }
         }
@@ -417,13 +416,6 @@ void OpenRGBEffectTab::LoadProfile(QString profile)
             {
                 printf("[OpenRGBEffectsPlugin] Unknown error while loading effect.\n");
             }
-        }
-        if (settings.contains("Fpscapture"))
-        {
-            ScreenRecorder::Get()->SetFpsCapture(settings["Fpscapture"]);
-        }
-        else {
-            ScreenRecorder::Get()->SetFpsCapture(60);
         }
 
         latest_loaded_profile = profile.toStdString();
