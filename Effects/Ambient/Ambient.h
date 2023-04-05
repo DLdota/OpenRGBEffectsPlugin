@@ -69,7 +69,7 @@ private:
     int top = 0;
     int width = 1;
     int height = 1;
-    int smoothness = 1000;
+    int smoothness = 1;
     RGBColor previous[15360][8640];
 };
 

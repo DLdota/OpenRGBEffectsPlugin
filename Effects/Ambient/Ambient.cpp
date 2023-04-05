@@ -340,5 +340,8 @@ void Ambient::on_select_rectangle_clicked() {
 
 void Ambient::on_smoothness_valueChanged(int value)
 {
+    if (value > 1000) {
+        value = 1000;
+    }
     smoothness = 1000 - value + 1;
 }
