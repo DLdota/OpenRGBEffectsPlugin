@@ -184,7 +184,8 @@ HEADERS +=                                                                      
     SaveProfilePopup.h                                                                          \
     ScreenRecorder.h                                                                            \
     ZoneListItem.h                                                                              \
-    OpenRGBPluginsFont.h
+    OpenRGBPluginsFont.h                                                                        \
+    GlobalSettings.h
 
 SOURCES +=                                                                                      \
     AudioManager.cpp                                                                            \
@@ -207,7 +208,8 @@ SOURCES +=                                                                      
     ScreenRecorder.cpp                                                                          \
     SaveProfilePopup.cpp                                                                        \
     ZoneListItem.cpp                                                                            \
-    OpenRGBPluginsFont.cpp
+    OpenRGBPluginsFont.cpp                                                                      \
+    GlobalSettings.cpp
 
 FORMS +=                                                                                        \
     ColorPicker.ui                                                                              \
@@ -222,7 +224,8 @@ FORMS +=                                                                        
     OpenRGBEffectTab.ui                                                                         \
     PluginInfo.ui                                                                               \
     SaveProfilePopup.ui                                                                         \
-    ZoneListItem.ui
+    ZoneListItem.ui                                                                             \
+    GlobalSettings.ui
 
 #-----------------------------------------------------------------------------------------------#
 # Effects                                                                                       #

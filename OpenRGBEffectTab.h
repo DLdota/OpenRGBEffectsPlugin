@@ -39,6 +39,7 @@ private slots:
     void SaveProfileAction();
     void DeleteProfileAction();
     void PluginInfoAction();
+    void GlobalSettingsAction();
 
 private:
     Ui::OpenRGBEffectTab *ui;

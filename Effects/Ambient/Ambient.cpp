@@ -40,8 +40,8 @@ Ambient::Ambient(QWidget *parent) :
         ui->screen->addItem(screen->name());
     }
 
-    screen_recorder.SetScreen(0);
-    screen_recorder.SetRect(QRect(left, top, width, height));
+    ScreenRecorder::Get()->SetScreen(0);
+    ScreenRecorder::Get()->SetRect(QRect(left, top, width, height));
 }
 
 Ambient::~Ambient()
@@ -67,15 +67,16 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
         return;
     }
 
-    const QImage& image = screen_recorder.Capture();
+    const QImage& image = ScreenRecorder::Get()->Capture();
+
+    int w = image.width();
+    int h = image.height();
 
     switch (mode) {
 
     case CALCULATED_AVERAGE:
     {
         int r = 0 , g = 0 , b = 0;
-        int w = image.width();
-        int h = image.height();
 
         RGBColor color;
 
@@ -105,7 +106,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
 
         for(ControllerZone* controller_zone : controller_zones)
         {
-            controller_zone->SetAllZoneLEDs(color, Brightness);
+            controller_zone->SetAllZoneLEDs(Smooth(color), Brightness);
         }
 
         break;
@@ -114,8 +115,6 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
     case MOST_COMMON:
     {
         std::vector<RGBColor> image_colors;
-        int w = image.width();
-        int h = image.height();
 
         std::unordered_map<RGBColor, int> colors;
         RGBColor most_common = ColorUtils::OFF();
@@ -146,12 +145,11 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     case SCALED_AVERAGE:
     {
-        QImage scaled = image.scaled(1, 1);
+        QImage scaled_internal = image.scaled(1, 1);
 
-        RGBColor color = ColorUtils::fromQColor(scaled.pixelColor(0,0));
+        RGBColor color = ColorUtils::fromQColor(scaled_internal.pixelColor(0,0));
 
         RGBColor smoothed = Smooth(color);
-
         for(ControllerZone* controller_zone : controller_zones)
         {
             controller_zone->SetAllZoneLEDs(smoothed, Brightness);
@@ -177,7 +175,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
                 for(unsigned int i = 0; i < width; i++)
                 {                   
                     QColor color = scaled.pixelColor(reverse ? leds_count - i - 1 : i, 0);
-                    controller_zone->SetLED(i, ColorUtils::fromQColor(color), Brightness);
+                    controller_zone->SetLED(i, SmoothMatrix(ColorUtils::fromQColor(color), i, 0), Brightness);
                 }
 
             }
@@ -195,7 +193,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
                     {
                         QColor color = scaled.pixelColor(reverse ? width - w - 1: w, h);
                         unsigned int led_num = map[h * width + w];
-                        controller_zone->SetLED(led_num, ColorUtils::fromQColor(color), Brightness);
+                        controller_zone->SetLED(led_num, SmoothMatrix(ColorUtils::fromQColor(color), w, h), Brightness);
                     }
                 }
 
@@ -214,7 +212,8 @@ RGBColor Ambient::Smooth(RGBColor color)
 
     if(color != old_single_color)
     {
-        smoothed = ColorUtils::Interpolate(old_single_color, color, 0.05f);
+        float smoothness_f = smoothness;
+        smoothed = ColorUtils::Interpolate(old_single_color, color, smoothness_f / 1000);
         old_single_color = smoothed;
     }
     else {
@@ -224,15 +223,27 @@ RGBColor Ambient::Smooth(RGBColor color)
     return smoothed;
 }
 
+RGBColor Ambient::SmoothMatrix(RGBColor color, int w, int h)
+{
+    if(color != previous[w][h])
+    {
+        float smoothness_f = smoothness;
+        color = ColorUtils::Interpolate(previous[w][h], color, smoothness_f / 1000);
+        previous[w][h] = color;
+    }
+
+    return color;
+}
+
 void Ambient::EffectState(bool state)
 {
     if(state)
     {
-        screen_recorder.Start();
+        ScreenRecorder::Get()->Start();
     }
     else
     {
-        screen_recorder.Stop();
+        ScreenRecorder::Get()->Stop();
     }
 }
 
@@ -267,6 +278,10 @@ void Ambient::LoadCustomSettings(json settings)
     {
         ui->screen->setCurrentIndex(settings["screen_index"]);
     }
+    if(settings.contains("smoothness"))
+    {
+        ui->smoothness->setValue(settings["smoothness"]);
+    }
 }
 
 json Ambient::SaveCustomSettings()
@@ -279,31 +294,32 @@ json Ambient::SaveCustomSettings()
     settings["width"] = width;
     settings["mode"] = mode;
     settings["screen_index"] = screen_index;
+    settings["smoothness"] = smoothness;
     return settings;
 }
 
 void Ambient::on_left_valueChanged(int value)
 {
     left = value;
-    screen_recorder.SetRect(QRect(left, top, width, height));
+    ScreenRecorder::Get()->SetRect(QRect(left, top, width, height));
 }
 
 void Ambient::on_top_valueChanged(int value)
 {
     top = value;
-    screen_recorder.SetRect(QRect(left, top, width, height));
+    ScreenRecorder::Get()->SetRect(QRect(left, top, width, height));
 }
 
 void Ambient::on_width_valueChanged(int value)
 {
     width = value;
-    screen_recorder.SetRect(QRect(left, top, width, height));
+    ScreenRecorder::Get()->SetRect(QRect(left, top, width, height));
 }
 
 void Ambient::on_height_valueChanged(int value)
 {
     height = value;
-    screen_recorder.SetRect(QRect(left, top, width, height));
+    ScreenRecorder::Get()->SetRect(QRect(left, top, width, height));
 }
 
 void Ambient::on_mode_currentIndexChanged(int value)
@@ -314,10 +330,15 @@ void Ambient::on_mode_currentIndexChanged(int value)
 void Ambient::on_screen_currentIndexChanged(int value)
 {
     screen_index = value;
-    screen_recorder.SetScreen(screen_index);
+    ScreenRecorder::Get()->SetScreen(screen_index);
 }
 
 
 void Ambient::on_select_rectangle_clicked() {
     rectangle_selector_overlay->StartSelection(screen_index);
+}
+
+void Ambient::on_smoothness_valueChanged(int value)
+{
+    smoothness = 1000 - value + 1;
 }

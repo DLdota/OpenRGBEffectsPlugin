@@ -6,6 +6,8 @@
 #include "SaveProfilePopup.h"
 #include "EffectTabHeader.h"
 #include "OpenRGBEffectPage.h"
+#include "GlobalSettings.h"
+#include "ScreenRecorder.h"
 
 #include <QAction>
 #include <QDialog>
@@ -76,11 +78,15 @@ void OpenRGBEffectTab::InitEffectTabs()
     connect(delete_profile, &QAction::triggered, this, &OpenRGBEffectTab::DeleteProfileAction);
     manage_profile_menu->addAction(delete_profile);
 
+    QAction* global_settings = new QAction("Settings", this);
+    connect(global_settings, &QAction::triggered, this, &OpenRGBEffectTab::GlobalSettingsAction);
+
     QAction* plugin_info = new QAction("About", this);
     connect(plugin_info, &QAction::triggered, this, &OpenRGBEffectTab::PluginInfoAction);
 
     effect_list->AddMenu(manage_profile_menu);    
     effect_list->AddEffectsMenus();
+    effect_list->AddAction(global_settings);
     effect_list->AddAction(plugin_info);
 
     QLabel* label = new QLabel("No effects added yet.\n Please select one from the list to get started.");
@@ -243,6 +249,22 @@ void OpenRGBEffectTab::PluginInfoAction()
     dialog->exec();
 }
 
+void OpenRGBEffectTab::GlobalSettingsAction()
+{
+    QDialog* dialog = new QDialog();
+    dialog->setWindowTitle("Global settings");
+    dialog->setMinimumSize(100,50);
+    dialog->setModal(true);
+
+    QVBoxLayout* dialog_layout = new QVBoxLayout(dialog);
+
+    GlobalSettings* global_settings = new GlobalSettings(dialog);
+
+    dialog_layout->addWidget(global_settings);
+
+    dialog->exec();
+}
+
 void OpenRGBEffectTab::DeleteProfileAction()
 {
     QString current_profile = QString::fromStdString(latest_loaded_profile);
@@ -334,6 +356,8 @@ void OpenRGBEffectTab::SaveProfileAction()
 
             settings["Effects"] = effects_settings;
 
+            settings["Fpscapture"] = ScreenRecorder::Get()->GetFpsCapture();
+
             bool ok = OpenRGBEffectSettings::SaveUserProfile(settings, profile_name.toStdString());
 
             if(!ok)
@@ -393,6 +417,13 @@ void OpenRGBEffectTab::LoadProfile(QString profile)
             {
                 printf("[OpenRGBEffectsPlugin] Unknown error while loading effect.\n");
             }
+        }
+        if (settings.contains("Fpscapture"))
+        {
+            ScreenRecorder::Get()->SetFpsCapture(settings["Fpscapture"]);
+        }
+        else {
+            ScreenRecorder::Get()->SetFpsCapture(60);
         }
 
         latest_loaded_profile = profile.toStdString();

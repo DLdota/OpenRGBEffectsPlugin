@@ -38,11 +38,13 @@ private slots:
     void on_height_valueChanged(int);
     void on_mode_currentIndexChanged(int);
     void on_screen_currentIndexChanged(int);
+    void on_smoothness_valueChanged(int);
+
+private:
+
 
 private:
     Ui::Ambient *ui;
-
-    ScreenRecorder screen_recorder;
 
     int screen_index = -1;
 
@@ -61,11 +63,14 @@ private:
 
     RGBColor old_single_color = ToRGBColor(0,0,0);
     RGBColor Smooth(RGBColor color);
+    RGBColor SmoothMatrix(RGBColor color, int w, int h);
 
     int left = 0;
     int top = 0;
     int width = 1;
     int height = 1;
+    int smoothness = 1000;
+    RGBColor previous[15360][8640];
 };
 
 #endif // AMBIENT_H
