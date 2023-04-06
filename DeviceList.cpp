@@ -3,6 +3,7 @@
 #include "OpenRGBPluginsFont.h"
 
 #include "OpenRGBEffectsPlugin.h"
+#include "OpenRGBEffectSettings.h"
 #include <QVBoxLayout>
 
 
@@ -44,6 +45,22 @@ void DeviceList::InitControllersList()
 
     for(RGBController* controller : controllers)
     {
+        bool has_direct = false;
+
+        for(unsigned int i = 0; i < controller->modes.size(); i++)
+        {
+            if(controller->modes[i].name == "Direct")
+            {
+                has_direct = true;
+                break;
+            }
+        }
+
+        if(OpenRGBEffectSettings::globalSettings.hide_unsupported && !has_direct)
+        {
+            continue;
+        }
+
         std::vector<ControllerZone*> iteration_zones;
 
         for(unsigned int i = 0; i < controller->zones.size(); i++)
@@ -66,7 +83,7 @@ void DeviceList::InitControllersList()
             continue;
         }
 
-        DeviceListItem* item = new DeviceListItem(iteration_zones);
+        DeviceListItem* item = new DeviceListItem(iteration_zones, has_direct);
         ui->devices->layout()->addWidget(item);
         device_items.push_back(item);
 

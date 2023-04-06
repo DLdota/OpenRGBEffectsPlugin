@@ -1,10 +1,11 @@
 #include "DeviceListItem.h"
 #include "ui_DeviceListItem.h"
 #include "OpenRGBPluginsFont.h"
+#include "OpenRGBEffectSettings.h"
 
 #include <QVBoxLayout>
 
-DeviceListItem::DeviceListItem(std::vector<ControllerZone*> controller_zones) :
+DeviceListItem::DeviceListItem(std::vector<ControllerZone*> controller_zones, bool has_direct) :
     QWidget(nullptr),
     ui(new Ui::DeviceListItem),
     controller_zones(controller_zones),
@@ -21,17 +22,6 @@ DeviceListItem::DeviceListItem(std::vector<ControllerZone*> controller_zones) :
     ui->reverse->setText(OpenRGBPluginsFont::icon(OpenRGBPluginsFont::arrows_exchange));
 
     UpdateCheckState();
-
-    bool has_direct = false;
-
-    for(unsigned int i = 0; i < controller->modes.size(); i++)
-    {
-        if(controller->modes[i].name == "Direct")
-        {
-            has_direct = true;
-            break;
-        }
-    }
 
     ui->danger_not_direct->setVisible(!has_direct);
 

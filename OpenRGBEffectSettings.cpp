@@ -18,6 +18,7 @@ bool OpenRGBEffectSettings::WriteGlobalSettings()
     j["fps"]                = globalSettings.fps;
     j["brightness"]         = globalSettings.brightness;
     j["startup_profile"]    = globalSettings.startup_profile;
+    j["hide_unsupported"]   = globalSettings.hide_unsupported;
 
     return write_file(SettingsFolder() / "EffectSettings.json", j);
 }
@@ -35,10 +36,11 @@ void OpenRGBEffectSettings::LoadGlobalSettings()
             file >> j;
             file.close();
 
-            if(j.contains("fpscapture"))        globalSettings.fpscapture       = j ["fpscapture"];
-            if(j.contains("fps"))               globalSettings.fps              = j ["fps"];
-            if(j.contains("brightness"))        globalSettings.brightness       = j ["brightness"];
-            if(j.contains("startup_profile"))   globalSettings.startup_profile  = j ["startup_profile"];
+            if(j.contains("fpscapture"))         globalSettings.fpscapture        = j ["fpscapture"];
+            if(j.contains("fps"))                globalSettings.fps               = j ["fps"];
+            if(j.contains("brightness"))         globalSettings.brightness        = j ["brightness"];
+            if(j.contains("startup_profile"))    globalSettings.startup_profile   = j ["startup_profile"];
+            if(j.contains("hide_unsupported"))   globalSettings.hide_unsupported  = j ["hide_unsupported"];
         }
         catch(const std::exception& e)
         {

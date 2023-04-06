@@ -9,9 +9,10 @@
 
 struct GlobalSettingsStruct
 {
-    int fpscapture = 60;
-    int brightness = 100;
-    int fps = 60;
+    int  fpscapture = 60;
+    int  brightness = 100;
+    int  fps = 60;
+    bool hide_unsupported = false;
     std::string startup_profile;
 };
 

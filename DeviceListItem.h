@@ -15,7 +15,7 @@ class DeviceListItem : public QWidget
     Q_OBJECT
 
 public:
-    DeviceListItem(std::vector<ControllerZone*>);
+    DeviceListItem(std::vector<ControllerZone*>, bool has_direct);
     ~DeviceListItem();    
     void SetEnabled(bool);
     void SetReverse(bool);

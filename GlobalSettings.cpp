@@ -14,17 +14,10 @@ GlobalSettings::GlobalSettings(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->fpscaptureSlider->blockSignals(true);
-    ui->brightnessSlider->blockSignals(true);
-    ui->fpsSlider->blockSignals(true);
-
     ui->fpscaptureSlider->setValue(OpenRGBEffectSettings::globalSettings.fpscapture);
     ui->brightnessSlider->setValue(OpenRGBEffectSettings::globalSettings.brightness);
     ui->fpsSlider->setValue(OpenRGBEffectSettings::globalSettings.fps);
-
-    ui->fpscaptureSlider->blockSignals(false);
-    ui->brightnessSlider->blockSignals(false);
-    ui->fpsSlider->blockSignals(false);
+    ui->hide_unsupportedCheckBox->setChecked(OpenRGBEffectSettings::globalSettings.hide_unsupported);
 }
 
 GlobalSettings::~GlobalSettings()
@@ -35,17 +28,24 @@ GlobalSettings::~GlobalSettings()
 void GlobalSettings::on_fpscaptureSlider_valueChanged(int value)
 {
     OpenRGBEffectSettings::globalSettings.fpscapture = value;
-    OpenRGBEffectSettings::WriteGlobalSettings();
 }
 
 void GlobalSettings::on_brightnessSlider_valueChanged(int value)
 {
     OpenRGBEffectSettings::globalSettings.brightness = value;
-    OpenRGBEffectSettings::WriteGlobalSettings();
 }
 
 void GlobalSettings::on_fpsSlider_valueChanged(int value)
 {
     OpenRGBEffectSettings::globalSettings.fps = value;
+}
+
+void GlobalSettings::on_hide_unsupportedCheckBox_clicked(bool state)
+{
+    OpenRGBEffectSettings::globalSettings.hide_unsupported = state;
+}
+
+void GlobalSettings::on_applyButton_clicked()
+{
     OpenRGBEffectSettings::WriteGlobalSettings();
 }
