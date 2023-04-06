@@ -6,6 +6,7 @@
 #include <string>
 #include "json.hpp"
 #include "filesystem.h"
+#include "RGBController.h"
 
 struct GlobalSettingsStruct
 {
@@ -13,7 +14,9 @@ struct GlobalSettingsStruct
     int  brightness = 100;
     int  fps = 60;
     bool hide_unsupported = false;
+    bool prefer_random = false;
     std::string startup_profile;
+    std::vector<RGBColor> prefered_colors;
 };
 
 using json = nlohmann::json;

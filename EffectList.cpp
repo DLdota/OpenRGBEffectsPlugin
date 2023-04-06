@@ -92,16 +92,23 @@ void EffectList::AddEffect(std::string effect_name)
 
     effect->SetFPS(OpenRGBEffectSettings::globalSettings.fps);
     effect->SetBrightness(OpenRGBEffectSettings::globalSettings.brightness);
-
-    // Add some random colors, so we already see something fancy
-    std::vector<RGBColor> random_colors;
+    effect->SetRandomColorsEnabled(OpenRGBEffectSettings::globalSettings.prefer_random);
+    // Add random or prefered colors, so we already see something fancy
+    std::vector<RGBColor> initial_colors;
 
     for(unsigned int i = 0; i < effect->EffectDetails.UserColors; i ++)
     {
-        random_colors.push_back(ColorUtils::RandomRGBColor());
+        if(i < OpenRGBEffectSettings::globalSettings.prefered_colors.size())
+        {
+            initial_colors.push_back(OpenRGBEffectSettings::globalSettings.prefered_colors[i]);
+        }
+        else
+        {
+            initial_colors.push_back(ColorUtils::RandomRGBColor());
+        }
     }
 
-    effect->SetUserColors(random_colors);
+    effect->SetUserColors(initial_colors);
 
     emit EffectAdded(effect);
 }

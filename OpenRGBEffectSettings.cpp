@@ -19,6 +19,8 @@ bool OpenRGBEffectSettings::WriteGlobalSettings()
     j["brightness"]         = globalSettings.brightness;
     j["startup_profile"]    = globalSettings.startup_profile;
     j["hide_unsupported"]   = globalSettings.hide_unsupported;
+    j["prefer_random"]      = globalSettings.prefer_random;
+    j["prefered_colors"]    = globalSettings.prefered_colors;
 
     return write_file(SettingsFolder() / "EffectSettings.json", j);
 }
@@ -36,11 +38,20 @@ void OpenRGBEffectSettings::LoadGlobalSettings()
             file >> j;
             file.close();
 
-            if(j.contains("fpscapture"))         globalSettings.fpscapture        = j ["fpscapture"];
-            if(j.contains("fps"))                globalSettings.fps               = j ["fps"];
-            if(j.contains("brightness"))         globalSettings.brightness        = j ["brightness"];
-            if(j.contains("startup_profile"))    globalSettings.startup_profile   = j ["startup_profile"];
-            if(j.contains("hide_unsupported"))   globalSettings.hide_unsupported  = j ["hide_unsupported"];
+            if(j.contains("fpscapture"))         globalSettings.fpscapture        =j["fpscapture"];
+            if(j.contains("fps"))                globalSettings.fps               =j["fps"];
+            if(j.contains("brightness"))         globalSettings.brightness        =j["brightness"];
+            if(j.contains("startup_profile"))    globalSettings.startup_profile   =j["startup_profile"];
+            if(j.contains("hide_unsupported"))   globalSettings.hide_unsupported  =j["hide_unsupported"];
+            if(j.contains("prefer_random"))      globalSettings.prefer_random     =j["prefer_random"];
+
+            if(j.contains("prefered_colors"))
+            {
+                for(unsigned int color : j["prefered_colors"])
+                {
+                    globalSettings.prefered_colors.push_back(color);
+                }
+            }
         }
         catch(const std::exception& e)
         {

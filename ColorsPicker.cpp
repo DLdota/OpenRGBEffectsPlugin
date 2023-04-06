@@ -66,6 +66,11 @@ void ColorsPicker::SetColors(std::vector<RGBColor> value)
     ResetColors();
 }
 
+void ColorsPicker::SetText(std::string text)
+{
+    ui->colors_label->setText(QString::fromStdString(text));
+}
+
 void ColorsPicker::on_colors_count_spinBox_valueChanged(int)
 {
     ResetColors();

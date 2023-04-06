@@ -18,6 +18,7 @@ public:
 
     std::vector<RGBColor> Colors();
     void SetColors(std::vector<RGBColor>);
+    void SetText(std::string);
 
 signals:
     void ColorsChanged();

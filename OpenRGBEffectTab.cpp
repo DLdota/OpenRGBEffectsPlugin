@@ -251,18 +251,17 @@ void OpenRGBEffectTab::PluginInfoAction()
 
 void OpenRGBEffectTab::GlobalSettingsAction()
 {
-    QDialog* dialog = new QDialog();
-    dialog->setWindowTitle("Global settings");
-    dialog->setMinimumSize(100,50);
-    dialog->setModal(true);
+    QDialog dialog;
+    dialog.setWindowTitle("Global settings");
+    dialog.setModal(true);
 
-    QVBoxLayout* dialog_layout = new QVBoxLayout(dialog);
+    QVBoxLayout dialog_layout(&dialog);
 
-    GlobalSettings* global_settings = new GlobalSettings(dialog);
+    GlobalSettings global_settings(&dialog);
 
-    dialog_layout->addWidget(global_settings);
+    dialog_layout.addWidget(&global_settings);
 
-    dialog->exec();
+    dialog.exec();
 }
 
 void OpenRGBEffectTab::DeleteProfileAction()

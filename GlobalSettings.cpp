@@ -18,11 +18,16 @@ GlobalSettings::GlobalSettings(QWidget *parent) :
     ui->brightnessSlider->setValue(OpenRGBEffectSettings::globalSettings.brightness);
     ui->fpsSlider->setValue(OpenRGBEffectSettings::globalSettings.fps);
     ui->hide_unsupportedCheckBox->setChecked(OpenRGBEffectSettings::globalSettings.hide_unsupported);
+    ui->randomColorsCheckBox->setChecked(OpenRGBEffectSettings::globalSettings.prefer_random);
+
+    ui->preferedColors->SetText("Prefered colors");
+    ui->preferedColors->SetColors(OpenRGBEffectSettings::globalSettings.prefered_colors);
 }
 
 GlobalSettings::~GlobalSettings()
 {
     delete ui;
+    OpenRGBEffectSettings::WriteGlobalSettings();
 }
 
 void GlobalSettings::on_fpscaptureSlider_valueChanged(int value)
@@ -40,12 +45,18 @@ void GlobalSettings::on_fpsSlider_valueChanged(int value)
     OpenRGBEffectSettings::globalSettings.fps = value;
 }
 
-void GlobalSettings::on_hide_unsupportedCheckBox_clicked(bool state)
+void GlobalSettings::on_hide_unsupportedCheckBox_stateChanged(int state)
 {
     OpenRGBEffectSettings::globalSettings.hide_unsupported = state;
 }
 
-void GlobalSettings::on_applyButton_clicked()
+void GlobalSettings::on_preferedColors_ColorsChanged()
 {
-    OpenRGBEffectSettings::WriteGlobalSettings();
+    OpenRGBEffectSettings::globalSettings.prefered_colors = ui->preferedColors->Colors();
 }
+
+void GlobalSettings::on_randomColorsCheckBox_stateChanged(int state)
+{
+    OpenRGBEffectSettings::globalSettings.prefer_random = state;
+}
+
