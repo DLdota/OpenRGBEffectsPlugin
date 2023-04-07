@@ -98,7 +98,7 @@ void EffectList::AddEffect(std::string effect_name)
 
     for(unsigned int i = 0; i < effect->EffectDetails.UserColors; i ++)
     {
-        if(i < OpenRGBEffectSettings::globalSettings.prefered_colors.size())
+        if(OpenRGBEffectSettings::globalSettings.use_prefered_colors && i < OpenRGBEffectSettings::globalSettings.prefered_colors.size())
         {
             initial_colors.push_back(OpenRGBEffectSettings::globalSettings.prefered_colors[i]);
         }

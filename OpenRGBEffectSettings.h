@@ -15,6 +15,7 @@ struct GlobalSettingsStruct
     int  fps = 60;
     bool hide_unsupported = false;
     bool prefer_random = false;
+    bool use_prefered_colors = false;
     std::string startup_profile;
     std::vector<RGBColor> prefered_colors;
 };

@@ -23,11 +23,13 @@ private slots:
     void on_brightnessSlider_valueChanged(int);
     void on_fpsSlider_valueChanged(int);
     void on_hide_unsupportedCheckBox_stateChanged(int);
+    void on_usePreferedColorsCheckBox_stateChanged(int);
     void on_preferedColors_ColorsChanged();
     void on_randomColorsCheckBox_stateChanged(int);
 
 private:
     Ui::GlobalSettings *ui;
+
 };
 
 #endif // GLOBALSETTINGS_H
