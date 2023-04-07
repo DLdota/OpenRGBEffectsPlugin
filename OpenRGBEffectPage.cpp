@@ -321,54 +321,53 @@ void OpenRGBEffectPage::SavePatternAction()
     }
     else
     {
-        QDialog* dialog = new QDialog();
+        QDialog dialog;
 
-        dialog->setMinimumSize(300,320);
-        dialog->setModal(true);
-        dialog->setWindowTitle("Save pattern to file...");
+        dialog.setModal(true);
+        dialog.setWindowTitle("Save pattern to file...");
 
-        QLabel* text1 = new QLabel("Choose an existing pattern from this list:",dialog);
-        QLabel* text2 = new QLabel("Or create a new one:",dialog);
+        QLabel text1("Choose an existing pattern from this list:", &dialog);
+        QLabel text2("Or create a new one:", &dialog);
 
-        QVBoxLayout* dialog_layout = new QVBoxLayout(dialog);
-        QListWidget* list_widget = new QListWidget(dialog);
+        QVBoxLayout dialog_layout(&dialog);
+        QListWidget list_widget(&dialog);
 
         for(const std::string& f: filenames)
         {
-            list_widget->addItem(QString::fromStdString(f));
+            list_widget.addItem(QString::fromStdString(f));
         }
 
-        QLineEdit* filename_input = new QLineEdit(dialog);
+        QLineEdit filename_input(&dialog);
 
-        filename_input->setText(QString("my-pattern"));
+        filename_input.setText(QString("my-pattern"));
 
-        dialog_layout->addWidget(text1);
-        dialog_layout->addWidget(list_widget);
-        dialog_layout->addWidget(text2);
-        dialog_layout->addWidget(filename_input);
+        dialog_layout.addWidget(&text1);
+        dialog_layout.addWidget(&list_widget);
+        dialog_layout.addWidget(&text2);
+        dialog_layout.addWidget(&filename_input);
 
-        QHBoxLayout* buttons_layout = new QHBoxLayout();
+        QHBoxLayout buttons_layout;
 
-        QPushButton* ok_button = new QPushButton();
-        ok_button->setText("OK");
-        buttons_layout->addWidget(ok_button);
+        QPushButton ok_button;
+        ok_button.setText("OK");
+        buttons_layout.addWidget(&ok_button);
 
-        QPushButton* cancel_button = new QPushButton();
-        cancel_button->setText("Cancel");
-        dialog->connect(cancel_button,SIGNAL(clicked()),dialog,SLOT(reject()));
-        buttons_layout->addWidget(cancel_button);
+        QPushButton cancel_button;
+        cancel_button.setText("Cancel");
+        dialog.connect(&cancel_button,SIGNAL(clicked()),&dialog,SLOT(reject()));
+        buttons_layout.addWidget(&cancel_button);
 
-        dialog->connect(ok_button,SIGNAL(clicked()),dialog,SLOT(accept()));
+        dialog.connect(&ok_button,SIGNAL(clicked()),&dialog,SLOT(accept()));
 
-        dialog_layout->addLayout(buttons_layout);
+        dialog_layout.addLayout(&buttons_layout);
 
-        connect(list_widget, &QListWidget::currentItemChanged, [=](){
-            filename_input->setText(list_widget->currentItem()->text());
+        connect(&list_widget, &QListWidget::currentItemChanged, [&](){
+            filename_input.setText(list_widget.currentItem()->text());
         });
 
-        if (dialog->exec())
+        if (dialog.exec())
         {
-            filename = filename_input->text();
+            filename = filename_input.text();
         }
     }
 
@@ -397,18 +396,18 @@ void OpenRGBEffectPage::LoadPatternAction()
         return;
     }
 
-    QInputDialog *inp = new QInputDialog(this);
+    QInputDialog inp(this);
 
-    inp->setOptions(QInputDialog::UseListViewForComboBoxItems);
-    inp->setComboBoxItems(file_list);
-    inp->setWindowTitle("Load pattern from file...");
-    inp->setLabelText("Choose a pattern file from this list:");
+    inp.setOptions(QInputDialog::UseListViewForComboBoxItems);
+    inp.setComboBoxItems(file_list);
+    inp.setWindowTitle("Load pattern from file...");
+    inp.setLabelText("Choose a pattern file from this list:");
 
-    if(!inp->exec()){
+    if(!inp.exec()){
         return;
     }
 
-    QString filename = inp->textValue();
+    QString filename = inp.textValue();
 
     json effect_settings = OpenRGBEffectSettings::LoadPattern(effect->EffectDetails.EffectClassName, filename.toStdString());
 
@@ -511,53 +510,51 @@ void OpenRGBEffectPage::OpenPatternsFolder()
 
 void OpenRGBEffectPage::EditPatternAction()
 {
-    QDialog* dialog = new QDialog();
+    QDialog dialog;
 
-    dialog->setMinimumSize(300,320);
-    dialog->setModal(true);
-    dialog->setWindowTitle("Edit or share your settings.");
+    dialog.setModal(true);
+    dialog.setWindowTitle("Edit or share your settings.");
 
-    QVBoxLayout* dialog_layout = new QVBoxLayout(dialog);
+    QVBoxLayout dialog_layout(&dialog);
 
-    QTextEdit* text_edit = new QTextEdit(dialog);
+    QTextEdit text_edit(&dialog);
 
-    text_edit->setText(QString::fromStdString(ToJson().dump(4)));
+    text_edit.setText(QString::fromStdString(ToJson().dump(4)));
 
-    dialog_layout->addWidget(text_edit);
+    dialog_layout.addWidget(&text_edit);
 
-    QHBoxLayout* buttons_layout = new QHBoxLayout();
+    QHBoxLayout buttons_layout;
 
-    QPushButton* cancel_button = new QPushButton();
-    cancel_button->setText("Cancel");
-    dialog->connect(cancel_button,SIGNAL(clicked()),dialog,SLOT(reject()));
-    buttons_layout->addWidget(cancel_button);
+    QPushButton cancel_button;
+    cancel_button.setText("Cancel");
+    dialog.connect(&cancel_button,SIGNAL(clicked()),&dialog,SLOT(reject()));
+    buttons_layout.addWidget(&cancel_button);
 
-    QPushButton* copy_button = new QPushButton();
-    copy_button->setText("Copy to clipboard");
+    QPushButton copy_button;
+    copy_button.setText("Copy to clipboard");
 
-    dialog->connect(copy_button, &QPushButton::clicked, [=](){
+    dialog.connect(&copy_button, &QPushButton::clicked, [&](){
         std::string text =
                 "**" + effect->EffectDetails.EffectClassName + "**" + "\n" +
                 "```" +
-                text_edit->toPlainText().toStdString() +
+                text_edit.toPlainText().toStdString() +
                 "```" ;
 
-        QClipboard *clipboard = QGuiApplication::clipboard();
-        clipboard->setText(QString::fromStdString(text));
+        QGuiApplication::clipboard()->setText(QString::fromStdString(text));
     });
 
-    buttons_layout->addWidget(copy_button);
+    buttons_layout.addWidget(&copy_button);
 
-    QPushButton* accept_button = new QPushButton();
-    accept_button->setText("Apply");
-    dialog->connect(accept_button,SIGNAL(clicked()),dialog,SLOT(accept()));
-    buttons_layout->addWidget(accept_button);
+    QPushButton accept_button;
+    accept_button.setText("Apply");
+    dialog.connect(&accept_button,SIGNAL(clicked()),&dialog,SLOT(accept()));
+    buttons_layout.addWidget(&accept_button);
 
-    dialog_layout->addLayout(buttons_layout);
+    dialog_layout.addLayout(&buttons_layout);
 
-    if (dialog->exec())
+    if (dialog.exec())
     {
-        QString text = text_edit->toPlainText();
+        QString text = text_edit.toPlainText();
 
         if (!text.isEmpty())
         {
