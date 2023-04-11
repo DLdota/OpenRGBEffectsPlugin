@@ -46,7 +46,7 @@ void RainbowWave::StepEffect(std::vector<ControllerZone*> controller_zones)
             HSVVal.hue = HUE;
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
-                controller_zone->SetLED(LedID, RGBColor(hsv2rgb(&HSVVal)), Brightness);
+                controller_zone->SetLED(LedID, RGBColor(hsv2rgb(&HSVVal)), Brightness, Temperature, Tint);
             }
         }
 
@@ -60,7 +60,7 @@ void RainbowWave::StepEffect(std::vector<ControllerZone*> controller_zones)
 
                 HSVVal.hue = HUE;
 
-                controller_zone->SetLED(LedID, RGBColor(hsv2rgb(&HSVVal)), Brightness);
+                controller_zone->SetLED(LedID, RGBColor(hsv2rgb(&HSVVal)), Brightness, Temperature, Tint);
             }
         }
 
@@ -87,7 +87,7 @@ void RainbowWave::StepEffect(std::vector<ControllerZone*> controller_zones)
                 for (int RowID = 0; RowID < RowCount; RowID++)
                 {
                     int LedID = controller_zone->map()[((RowID * ColumnCount) + ColumnID)];
-                    controller_zone->SetLED(LedID, RGBColor(hsv2rgb(&HSVVal)), Brightness);
+                    controller_zone->SetLED(LedID, RGBColor(hsv2rgb(&HSVVal)), Brightness, Temperature, Tint);
                 }
             }
         }

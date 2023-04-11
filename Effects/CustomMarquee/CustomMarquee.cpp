@@ -39,7 +39,7 @@ void CustomMarquee::StepEffect(std::vector<ControllerZone*> controller_zones)
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
                 RGBColor color = GetColor(reverse ? leds_count - LedID - 1 : LedID);
-                controller_zone->SetLED(LedID, color, Brightness);
+                controller_zone->SetLED(LedID, color, Brightness, Temperature, Tint);
             }
         }
 
@@ -55,7 +55,7 @@ void CustomMarquee::StepEffect(std::vector<ControllerZone*> controller_zones)
                 for (int row_id = 0; row_id < rows; row_id++)
                 {
                     int LedID = controller_zone->map()[((row_id * cols) + col_id)];
-                    controller_zone->SetLED(LedID, color, Brightness);
+                    controller_zone->SetLED(LedID, color, Brightness, Temperature, Tint);
                 }
             }
         }

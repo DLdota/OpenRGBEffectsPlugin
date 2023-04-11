@@ -61,7 +61,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
     {
         for(ControllerZone* controller_zone : controller_zones)
         {
-            controller_zone->SetAllZoneLEDs(0, Brightness);
+            controller_zone->SetAllZoneLEDs(0, Brightness, Temperature, Tint);
         }
 
         return;
@@ -106,7 +106,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
 
         for(ControllerZone* controller_zone : controller_zones)
         {
-            controller_zone->SetAllZoneLEDs(Smooth(color), Brightness);
+            controller_zone->SetAllZoneLEDs(Smooth(color), Brightness, Temperature, Tint);
         }
 
         break;
@@ -137,7 +137,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
 
         for(ControllerZone* controller_zone : controller_zones)
         {
-            controller_zone->SetAllZoneLEDs(smoothed, Brightness);
+            controller_zone->SetAllZoneLEDs(smoothed, Brightness, Temperature, Tint);
         }
 
         break;
@@ -152,7 +152,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
         RGBColor smoothed = Smooth(color);
         for(ControllerZone* controller_zone : controller_zones)
         {
-            controller_zone->SetAllZoneLEDs(smoothed, Brightness);
+            controller_zone->SetAllZoneLEDs(smoothed, Brightness, Temperature, Tint);
         }
 
         break;
@@ -175,7 +175,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
                 for(unsigned int i = 0; i < width; i++)
                 {                   
                     QColor color = scaled.pixelColor(reverse ? leds_count - i - 1 : i, 0);
-                    controller_zone->SetLED(i, SmoothMatrix(ColorUtils::fromQColor(color), i, 0), Brightness);
+                    controller_zone->SetLED(i, SmoothMatrix(ColorUtils::fromQColor(color), i, 0), Brightness, Temperature, Tint);
                 }
 
             }
@@ -193,7 +193,7 @@ void Ambient::StepEffect(std::vector<ControllerZone*> controller_zones)
                     {
                         QColor color = scaled.pixelColor(reverse ? width - w - 1: w, h);
                         unsigned int led_num = map[h * width + w];
-                        controller_zone->SetLED(led_num, SmoothMatrix(ColorUtils::fromQColor(color), w, h), Brightness);
+                        controller_zone->SetLED(led_num, SmoothMatrix(ColorUtils::fromQColor(color), w, h), Brightness, Temperature, Tint);
                     }
                 }
 

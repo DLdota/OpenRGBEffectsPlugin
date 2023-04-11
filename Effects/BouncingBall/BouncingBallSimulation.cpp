@@ -72,7 +72,7 @@ void BouncingBallSimulation::StepEffect()
         unsigned int ledId = zoneType == ZONE_TYPE_MATRIX
                 ? controllerZone->map()[ledIndex]
                 : ledIndex;
-        controllerZone->SetLED(startIndex + ledId, RGBColor(hsv2rgb(&pixelColor)), Brightness);
+        controllerZone->SetLED(startIndex + ledId, RGBColor(hsv2rgb(&pixelColor)), Brightness, Temperature, Tint);
 
         // Update new and old LED indices
         newLedIds.insert(ledId);
@@ -81,7 +81,7 @@ void BouncingBallSimulation::StepEffect()
 
     // Turn off LEDs no longer within radius of ball
     for (const unsigned int& oldLedId : oldLedIds) {
-        controllerZone->SetLED(startIndex + oldLedId, off, Brightness);
+        controllerZone->SetLED(startIndex + oldLedId, off, Brightness, Temperature, Tint);
     }
 
     // New LEDs changed this frame will be old LEDs next frame
@@ -198,7 +198,7 @@ void BouncingBallSimulation::initSimulation()
 
     oldLedIds.clear();
     newLedIds.clear();
-    controllerZone->SetAllZoneLEDs(off, Brightness);
+    controllerZone->SetAllZoneLEDs(off, Brightness, Temperature, Tint);
 }
 
 void BouncingBallSimulation::SetBrightness(unsigned int Brightness)

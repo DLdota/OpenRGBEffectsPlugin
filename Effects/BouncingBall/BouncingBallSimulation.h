@@ -69,6 +69,8 @@ private:
 
     unsigned int fps;
     float Brightness;
+    int Temperature=0;
+    int Tint=0;
     int width;
     int height;
     int numLeds;

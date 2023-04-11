@@ -22,7 +22,7 @@ public:
     json ToJson();
     void FromJson(json);
 
-    void StepEffect(std::vector<ControllerZone*>, int);
+    void StepEffect(std::vector<ControllerZone*>, int, int , int);
     void OnControllerZonesListChanged(std::vector<ControllerZone*>);
     void EffectState(bool);
 

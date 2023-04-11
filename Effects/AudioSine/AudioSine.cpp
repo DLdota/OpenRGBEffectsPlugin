@@ -122,7 +122,7 @@ void AudioSine::StepEffect(std::vector<ControllerZone*> controller_zones)
                 float sine_value = GetSineValue(i, width, controller_zone->reverse);
 
                 RGBColor color = GetColor(sine_value, 0, height);
-                controller_zone->SetLED(i, color, Brightness);
+                controller_zone->SetLED(i, color, Brightness, Temperature, Tint);
             }
 
         }
@@ -141,7 +141,7 @@ void AudioSine::StepEffect(std::vector<ControllerZone*> controller_zones)
                     RGBColor color = GetColor(sine_value, h, height);
 
                     unsigned int led_num = map[h * width + w];
-                    controller_zone->SetLED(led_num, color, Brightness);
+                    controller_zone->SetLED(led_num, color, Brightness, Temperature, Tint);
                 }
             }
         }

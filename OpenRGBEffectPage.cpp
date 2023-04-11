@@ -188,6 +188,9 @@ void OpenRGBEffectPage::InitUi()
         effect->SetUserColors(UserColors);
     }
 
+    ui->Temperature->setValue(effect->GetTemperature());
+    ui->Tint->setValue(effect->GetTint());
+
     effect->SetRandomColorsEnabled(effect->IsRandomColorsEnabled());
 
     ui->FPS_slider->setValue(effect->GetFPS());
@@ -306,6 +309,16 @@ void OpenRGBEffectPage::on_RandomCheckbox_clicked()
 void OpenRGBEffectPage::on_OnlyFirst_clicked()
 {
     effect->SetOnlyFirstColorEnabled(ui->OnlyFirst->isChecked());
+}
+
+void OpenRGBEffectPage::on_Temperature_valueChanged(int value)
+{
+    effect->SetTemperature(value);
+}
+
+void OpenRGBEffectPage::on_Tint_valueChanged(int value)
+{
+    effect->SetTint(value);
 }
 
 void OpenRGBEffectPage::SavePatternAction()
@@ -430,6 +443,8 @@ json OpenRGBEffectPage::ToJson()
     effect_settings["RandomColors"] = effect->IsRandomColorsEnabled();
     effect_settings["AllowOnlyFirst"] = effect->IsOnlyFirstColorEnabled();
     effect_settings["Brightness"] = effect->GetBrightness();
+    effect_settings["Temperature"] = effect->GetTemperature();
+    effect_settings["Tint"] = effect->GetTint();
 
     std::vector<RGBColor> colors = effect->GetUserColors();
 
@@ -466,6 +481,16 @@ void OpenRGBEffectPage::ApplyJson(json effect_settings)
     if(effect_settings.contains("Brightness"))
     {
         effect->SetBrightness(effect_settings["Brightness"]);
+    }
+
+    if(effect_settings.contains("Temperature"))
+    {
+        effect->SetTemperature(effect_settings["Temperature"]);
+    }
+
+    if(effect_settings.contains("Tint"))
+    {
+        effect->SetTint(effect_settings["Tint"]);
     }
 
     if(effect_settings.contains("CustomSettings"))

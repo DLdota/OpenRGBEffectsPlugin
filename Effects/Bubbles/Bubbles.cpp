@@ -37,7 +37,7 @@ void Bubbles::StepEffect(std::vector<ControllerZone*> controller_zones)
 
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
-                controller_zone->SetLED(LedID, GetColor(LedID, 0, leds_count, 1), Brightness);
+                controller_zone->SetLED(LedID, GetColor(LedID, 0, leds_count, 1), Brightness, Temperature, Tint);
             }
         }
 
@@ -52,7 +52,7 @@ void Bubbles::StepEffect(std::vector<ControllerZone*> controller_zones)
                 {
                     RGBColor color = GetColor(col_id, row_id, cols, rows);
                     int LedID = controller_zone->map()[((row_id * cols) + col_id)];
-                    controller_zone->SetLED(LedID, color, Brightness);
+                    controller_zone->SetLED(LedID, color, Brightness, Temperature, Tint);
                 }
             }
         }

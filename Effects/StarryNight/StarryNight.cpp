@@ -85,12 +85,12 @@ void StarryNight::StepEffect(std::vector<ControllerZone*> controller_zones)
             {
                 ToBeDeleted.push_back(StarIndex);
                 SetColor.value = 0;
-                controller_zones[CTRLR]->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor), Brightness);
+                controller_zones[CTRLR]->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor), Brightness, Temperature, Tint);
             }
             else
             {
                 SetColor.value = CurrentStars[StarIndex].state;
-                controller_zones[CTRLR]->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor), Brightness);
+                controller_zones[CTRLR]->SetLED(CurrentStars[StarIndex].LED,hsv2rgb(&SetColor), Brightness, Temperature, Tint);
                 CurrentStars[StarIndex].state -= (float(Speed) / float(FPS) );
             }
         }
@@ -114,6 +114,6 @@ void StarryNight::OnControllerZonesListChanged(std::vector<ControllerZone*> cont
 
     for(ControllerZone* controller_zone : controller_zones)
     {
-        controller_zone->SetAllZoneLEDs(ColorUtils::OFF(), Brightness);
+        controller_zone->SetAllZoneLEDs(ColorUtils::OFF(), Brightness, Temperature, Tint);
     }
 }

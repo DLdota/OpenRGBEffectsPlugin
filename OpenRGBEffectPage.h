@@ -39,6 +39,8 @@ private slots:
     void on_RandomCheckbox_clicked();
     void on_OnlyFirst_clicked();    
     void on_toggle_info_clicked();
+    void on_Temperature_valueChanged(int value);
+    void on_Tint_valueChanged(int value);
 
     void SavePatternAction();
     void LoadPatternAction();

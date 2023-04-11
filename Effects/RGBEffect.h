@@ -82,6 +82,12 @@ public:
     virtual unsigned int GetBrightness() { return Brightness; }
     virtual void SetBrightness(unsigned int value) { Brightness = value; }
 
+    virtual int GetTemperature() { return Temperature; }
+    virtual void SetTemperature(int value) { Temperature = value; }
+
+    virtual int GetTint() { return Tint; }
+    virtual void SetTint(int value) { Tint = value; }
+
     EffectInfo EffectDetails;
 
     void EmitMeasure(float t, int d){ emit TimeMeasured(t, d); }
@@ -98,6 +104,8 @@ public:
         j["RandomColors"]     = IsRandomColorsEnabled();
         j["AllowOnlyFirst"]   = IsOnlyFirstColorEnabled();
         j["Brightness"]       = GetBrightness();
+        j["Temperature"]      = GetTemperature();
+        j["Tint"]             = GetTint();
 
         std::vector<RGBColor> colors = GetUserColors();
 
@@ -127,6 +135,8 @@ protected:
     bool OnlyFirstColorEnabled = false;
     bool EffectEnabled = false;
     float Brightness = 100;
+    int Temperature = 0;
+    int Tint = 0;
 };
 
 #endif // RGBEFFECT_H

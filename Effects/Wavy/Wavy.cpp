@@ -46,7 +46,7 @@ void Wavy::StepEffect(std::vector<ControllerZone*> controller_zones)
 
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
-                controller_zone->SetLED(LedID, GetColor(LedID, leds_count), Brightness);
+                controller_zone->SetLED(LedID, GetColor(LedID, leds_count), Brightness, Temperature, Tint);
             }
         }
 
@@ -62,7 +62,7 @@ void Wavy::StepEffect(std::vector<ControllerZone*> controller_zones)
                 for (int row_id = 0; row_id < rows; row_id++)
                 {
                     int LedID = controller_zone->map()[((row_id * cols) + col_id)];
-                    controller_zone->SetLED(LedID, color, Brightness);
+                    controller_zone->SetLED(LedID, color, Brightness, Temperature, Tint);
                 }
             }
         }

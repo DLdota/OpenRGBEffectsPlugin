@@ -116,7 +116,7 @@ void SwirlCirclesAudio::StepEffect(std::vector<ControllerZone*> controller_zones
             for(unsigned int i = 0; i < width; i++)
             {
                 RGBColor color = GetColor(i, 0, width, height, x1, y1);
-                controller_zone->SetLED(i, color, Brightness);
+                controller_zone->SetLED(i, color, Brightness, Temperature, Tint);
             }
 
         }
@@ -138,7 +138,7 @@ void SwirlCirclesAudio::StepEffect(std::vector<ControllerZone*> controller_zones
                     RGBColor color = GetColor(w, h, width, height, x1, y1);
 
                     unsigned int led_num = controller_zone->map()[h * width + w];
-                    controller_zone->SetLED(led_num,color, Brightness);
+                    controller_zone->SetLED(led_num,color, Brightness, Temperature, Tint);
                 }
             }
 

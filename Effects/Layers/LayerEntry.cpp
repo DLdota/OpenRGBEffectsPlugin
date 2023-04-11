@@ -139,6 +139,16 @@ LayerEntry* LayerEntry::FromJson(json j)
             effect->SetBrightness(effect_settings["Brightness"]);
         }
 
+        if(effect_settings.contains("Temperature"))
+        {
+            effect->SetTemperature(effect_settings["Temperature"]);
+        }
+
+        if(effect_settings.contains("Tint"))
+        {
+            effect->SetTint(effect_settings["Tint"]);
+        }
+
         if(effect_settings.contains("CustomSettings"))
         {
             effect->LoadCustomSettings(effect_settings["CustomSettings"]);

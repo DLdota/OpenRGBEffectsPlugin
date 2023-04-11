@@ -522,6 +522,24 @@ void OpenRGBEffectTab::LoadEffect(json effect_settings)
         effect->SetBrightness(100);
     }
 
+    if(effect_settings.contains("Temperature"))
+    {
+        effect->SetTemperature(effect_settings["Temperature"]);
+    }
+    else
+    {
+        effect->SetTemperature(0);
+    }
+
+    if(effect_settings.contains("Tint"))
+    {
+        effect->SetTint(effect_settings["Tint"]);
+    }
+    else
+    {
+        effect->SetTint(0);
+    }
+
     printf("[OpenRGBEffectsPlugin] Effect %s: Loading custom settings\n", name.c_str());
 
     if(effect_settings.contains("CustomSettings"))

@@ -33,7 +33,7 @@ void Mask::StepEffect(std::vector<ControllerZone*> controller_zones)
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
                 RGBColor color = GetColor(LedID, 0.5, leds_count - 1, 1);
-                controller_zone->SetLED(LedID, color, Brightness);
+                controller_zone->SetLED(LedID, color, Brightness, Temperature, Tint);
             }
         }
 
@@ -49,7 +49,7 @@ void Mask::StepEffect(std::vector<ControllerZone*> controller_zones)
                     RGBColor color = GetColor(col_id, row_id, cols - 1, rows - 1);
 
                     int LedID = controller_zone->map()[((row_id * cols) + col_id)];
-                    controller_zone->SetLED(LedID, color, Brightness);
+                    controller_zone->SetLED(LedID, color, Brightness, Temperature, Tint);
                 }
             }
 

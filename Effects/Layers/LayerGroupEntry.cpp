@@ -50,11 +50,11 @@ void LayerGroupEntry::AddLayerEntry(LayerEntry* layer_entry)
     layer_entry->EffectState(state);
 }
 
-void LayerGroupEntry::StepEffect(std::vector<ControllerZone*> controller_zones, int Brightness)
+void LayerGroupEntry::StepEffect(std::vector<ControllerZone*> controller_zones, int Brightness, int Temperature, int Tint)
 {
     for(ControllerZone* controller_zone: controller_zones)
     {
-        controller_zone->SetAllZoneLEDs(ColorUtils::OFF(), 0.f);
+        controller_zone->SetAllZoneLEDs(ColorUtils::OFF(), 0.f, 0 , 0);
     }
 
     for(unsigned int l = 0; l < layer_entries.size(); l++){
@@ -96,14 +96,14 @@ void LayerGroupEntry::StepEffect(std::vector<ControllerZone*> controller_zones, 
         }
     }
 
-    // apply global brightness
+    // apply global adjustments
     for(ControllerZone* controller_zone: controller_zones)
     {
         RGBColor* current = controller_zone->controller->zones[controller_zone->zone_idx].colors;
 
         for(unsigned int i = 0; i < controller_zone->leds_count(); i ++)
         {
-            current[i] = ColorUtils::apply_brightness(current[i], Brightness / 100.f);
+            current[i] = ColorUtils::apply_adjustments(current[i], Brightness / 100.f, Temperature, Tint);
         }
     }
 }

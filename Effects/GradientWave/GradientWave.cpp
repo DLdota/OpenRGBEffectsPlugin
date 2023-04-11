@@ -83,7 +83,7 @@ void GradientWave::StepEffect(std::vector<ControllerZone*> controller_zones)
                     RGBCol[CVal] = int(S[CVal] + (float(GetGradientPos)/float(LEDCount))*(F[CVal]-S[CVal]));
                 }
 
-                controller_zone->SetLED((RVRS ?  ((LEDCount - 1) - LedID) :  LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]), Brightness);
+                controller_zone->SetLED((RVRS ?  ((LEDCount - 1) - LedID) :  LedID), ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]), Brightness, Temperature, Tint);
             }
 
             float speed_mult = LEDCount > 0 ? 0.1 * (float) LEDCount : 1.f;
@@ -131,7 +131,7 @@ void GradientWave::StepEffect(std::vector<ControllerZone*> controller_zones)
                 for (int RowID = 0; RowID < RowCount; RowID++)
                 {
                     int LedID = controller_zone->map()[((RowID * ColumnCount) + (RVRS ? (ColumnCount - 1) - ColumnID: ColumnID ) )];
-                    controller_zone->SetLED(LedID,ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]), Brightness);
+                    controller_zone->SetLED(LedID,ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]), Brightness, Temperature, Tint);
                 }
             }
 
