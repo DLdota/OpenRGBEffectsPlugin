@@ -42,6 +42,7 @@ AudioSync::AudioSync(QWidget *parent) :
     ui->bypass->setMaximumPosition(256);
 
     ui->color_fade_speed->setValue(50);
+    ui->hue_shift->setValue(0);
 
     /*--------------------------*\
     | Map signal to UpdateGraph  |
@@ -60,19 +61,6 @@ AudioSync::AudioSync(QWidget *parent) :
 
     ui->preview->setPixmap(pixmap);
     ui->preview->setScaledContents(true);
-
-    /*---------------------------------------------------------------------------------*\
-    | Create a list of colors to read off of when drawing                               |
-    \*---------------------------------------------------------------------------------*/
-    int start_hue = 360;
-    int stop_hue =  0;
-
-    float hue_step = (stop_hue-start_hue)/256.0f;
-
-    for(int i = 0; i<256;i++)
-    {
-        rainbow_hues.push_back(ceil(start_hue + i * hue_step));
-    }
 
     /*--------------------------*\
     | Setup audio                |
@@ -147,9 +135,7 @@ void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     for(int i = 0; i < 256; i++)
     {
-        int shifted = (i + rainbow_shift) % rainbow_hues.size();
-        HSVPixel.hue = rainbow_hues[shifted];
-
+        HSVPixel.hue = ((i + hue_shift) * 360 / 256) % 360;
         HSVPixel.saturation = (i >= bypass_min && i <= bypass_max) ? 255 : 128;
         HSVPixel.value = (i >= bypass_min && i <= bypass_max) ? 255 : 128;
 
@@ -192,17 +178,10 @@ void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     if(max_idx >= bypass_min && max_idx <= bypass_max)
     {
-        int shifted = (max_idx + rainbow_shift)%rainbow_hues.size();
-        immediate_freq_hue = rainbow_hues[shifted];
+        immediate_freq_hue = ((max_idx + hue_shift) * 360 / 256) % 360;
 
-        // slowly reach immediate
-        if(current_freq_hue < immediate_freq_hue)
-        {
-            current_freq_hue += ((immediate_freq_hue - current_freq_hue) / (1.0f - (fade_step / 100.f))) / FPS;
-        }else
-        {
-            current_freq_hue -= ((current_freq_hue - immediate_freq_hue ) / (1.0f - (fade_step / 100.f)) )/ FPS;
-        }
+        // slowly reach immediate hue
+        current_freq_hue += ((immediate_freq_hue - current_freq_hue) * ((fade_step / 100.f))) / FPS;
 
         if(saturation_mode == SATURATE_HIGH_AMPLITUDES)
         {
@@ -348,7 +327,7 @@ json AudioSync::SaveCustomSettings()
 
 
     settings["fade_step"]           = fade_step;
-    settings["rainbow_shift"]       = rainbow_shift;
+    settings["hue_shift"]           = hue_shift;
     settings["bypass_min"]          = bypass_min;
     settings["bypass_max"]          = bypass_max;
     settings["roll_mode"]           = roll_mode;
@@ -368,7 +347,7 @@ void AudioSync::on_color_fade_speed_valueChanged(int value)
 
 void AudioSync::on_hue_shift_valueChanged(int value)
 {
-    rainbow_shift = value;
+    hue_shift = value;
 }
 
 void AudioSync::on_bypass_valuesChanged(int min,int max)

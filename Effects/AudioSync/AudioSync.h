@@ -83,10 +83,10 @@ private:
     int                     current_freq_hue = 0;
     float                   current_freq_sat = 0;
     float                   current_freq_val = 0;
-    std::vector<int>        rainbow_hues;
+    //std::vector<int>        rainbow_hues;
     std::vector<RGBColor>   colors_rotation;
     int                     fade_step;
-    int                     rainbow_shift;
+    int                     hue_shift;
     int                     bypass_min;
     int                     bypass_max;
     int                     saturation_mode;
