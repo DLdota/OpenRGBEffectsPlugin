@@ -1,5 +1,7 @@
 #include "AudioVisualizer.h"
 #include "Colors.h"
+#include "Audio/AudioManager.h"
+#include "OpenRGBEffectSettings.h"
 
 /*---------------------------------------------------------*\
 |  Processing Code for Keyboard Visualizer                  |
@@ -8,29 +10,8 @@
 |  Modded by CoffeeIsLife (gitlab.com/CoffeeIsLife)         |
 \*---------------------------------------------------------*/
 
-/*---------------------------------------------------------*\
-| Global variables                                          |
-\*---------------------------------------------------------*/
-#ifndef TRUE
-#define TRUE 1
-#define FALSE 0
-#endif
-
-int     ledstrip_sections_size  = 1;
-int     matrix_setup_pos;
-int     matrix_setup_size;
-float   fft_nrml[256];
-float   fft_fltr[256];
-bool    ledstrip_mirror_x       = false;
-bool    ledstrip_mirror_y       = false;
-bool    ledstrip_single_color   = false;
-int     ledstrip_rotate_x       = 0;
-
 REGISTER_EFFECT(AudioVisualizer);
 
-/*----------*\
-| Functions  |
-\*----------*/
 AudioVisualizer::AudioVisualizer(QWidget* parent):
     RGBEffect(parent),
     ui(new Ui::AudioVisualizerUi)
@@ -43,129 +24,108 @@ AudioVisualizer::AudioVisualizer(QWidget* parent):
     EffectDetails.HasCustomSettings = true;
     EffectDetails.SupportsRandom = false;
 
-    /*---------------------*\
-    | Setup default values  |
-    \*---------------------*/
-    background_timer     = 0;
-    background_timeout   = 120;
-
-    amplitude            = 100;
-    anim_speed           = 100.0f;
-    avg_mode             = 0;
-    avg_size             = 8;
-    bkgd_step            = 0;
-    bkgd_bright          = 100;
-    bkgd_mode            = VISUALIZER_PATTERN_ANIM_RAINBOW_SINUSOIDAL;
-    window_mode          = 1;
-    decay                = 80;
-    frgd_mode            = VISUALIZER_PATTERN_STATIC_GREEN_YELLOW_RED;
-    single_color_mode    = VISUALIZER_SINGLE_COLOR_FOLLOW_FOREGROUND;
-    reactive_bkgd        = false;
-    audio_device_idx     = 0;
-    filter_constant      = 1.0f;
-
-    update_ui            = false;
-    shutdown_flag        = false;
-
-    hanning(win_hanning, 256);
-    hamming(win_hamming, 256);
-    blackman(win_blackman, 256);
-
-    nrml_ofst            = 0.04f;
-    nrml_scl             = 0.5f;
-
     pixels_render = &pixels_vs1;
     pixels_out = &pixels_vs2;
 
-    SetNormalization(nrml_ofst, nrml_scl);
+    background_timer     = 0;
+    bkgd_step            = 0;
 
-    ui->doubleSpinBox_Normalization_Offset->setValue(nrml_ofst);
-    ui->doubleSpinBox_Normalization_Scale->setValue(nrml_scl);
-    ui->doubleSpinBox_Animation_Speed->setValue(anim_speed);
-    ui->doubleSpinBox_Filter_Constant->setValue(filter_constant);
+    /*---------------------*\
+    | Setup default values  |
+    \*---------------------*/
+    ui->doubleSpinBox_Animation_Speed->setValue(100.0f);
+    ui->spinBox_Background_Brightness->setValue(100);
+    ui->doubleSpinBox_Background_Timeout->setValue(120);
+    ui->checkBox_Reactive_Background->setChecked(false);
+    ui->checkBox_Silent_Background->setChecked(false);
 
-    ui->spinBox_Amplitude->setValue(amplitude);
-    ui->spinBox_Background_Brightness->setValue(bkgd_bright);
-    ui->spinBox_Average_Size->setValue(avg_size);
-    ui->spinBox_Decay->setValue(decay);
-    ui->doubleSpinBox_Background_Timeout->setValue(background_timeout);
-
-    ui->comboBox_FFT_Window_Mode->blockSignals(true);
-    ui->comboBox_FFT_Window_Mode->addItem("None");
-    ui->comboBox_FFT_Window_Mode->addItem("Hanning");
-    ui->comboBox_FFT_Window_Mode->addItem("Hamming");
-    ui->comboBox_FFT_Window_Mode->addItem("Blackman");
-    ui->comboBox_FFT_Window_Mode->setCurrentIndex(window_mode);
-    ui->comboBox_FFT_Window_Mode->blockSignals(false);
-
-    ui->comboBox_Background_Mode->blockSignals(true);
     for(int i = 0; i < VISUALIZER_NUM_PATTERNS; i++)
     {
         ui->comboBox_Background_Mode->addItem(visualizer_pattern_labels[i]);
-    }
-    ui->comboBox_Background_Mode->setCurrentIndex(bkgd_mode);
-    ui->comboBox_Background_Mode->blockSignals(false);
-
-    ui->comboBox_Foreground_Mode->blockSignals(true);
-    for(int i = 0; i < VISUALIZER_NUM_PATTERNS; i++)
-    {
         ui->comboBox_Foreground_Mode->addItem(visualizer_pattern_labels[i]);
     }
-    ui->comboBox_Foreground_Mode->setCurrentIndex(frgd_mode);
-    ui->comboBox_Foreground_Mode->blockSignals(false);
 
-    ui->comboBox_Single_Color_Mode->blockSignals(true);
+    ui->comboBox_Background_Mode->setCurrentIndex(VISUALIZER_PATTERN_ANIM_RAINBOW_SINUSOIDAL);
+    ui->comboBox_Foreground_Mode->setCurrentIndex(VISUALIZER_PATTERN_STATIC_GREEN_YELLOW_RED);
+
     for(int i = 0; i < VISUALIZER_NUM_SINGLE_COLOR; i++)
     {
         ui->comboBox_Single_Color_Mode->addItem(visualizer_single_color_labels[i]);
     }
-    ui->comboBox_Single_Color_Mode->setCurrentIndex(single_color_mode);
-    ui->comboBox_Single_Color_Mode->blockSignals(false);
 
-    ui->comboBox_Average_Mode->blockSignals(true);
-    ui->comboBox_Average_Mode->addItem("Binning");
-    ui->comboBox_Average_Mode->addItem("Low Pass");
-    ui->comboBox_Average_Mode->setCurrentIndex(avg_mode);
-    ui->comboBox_Average_Mode->blockSignals(false);
+    ui->comboBox_Single_Color_Mode->setCurrentIndex(VISUALIZER_SINGLE_COLOR_FOLLOW_FOREGROUND);
 
-    ui->comboBox_Audio_Device->blockSignals(true);
-
-    std::vector<char *> devices = AudioManager::get()->GetAudioDevices();
-
-    for(const char * str : devices)
-    {
-        ui->comboBox_Audio_Device->addItem(QString::fromUtf8(str));
-    }
-
-    ui->comboBox_Audio_Device->setCurrentIndex(audio_device_idx);
-    ui->comboBox_Audio_Device->blockSignals(false);
-
-    ui->checkBox_Reactive_Background->setChecked(reactive_bkgd);
-    ui->checkBox_Silent_Background->setChecked(silent_bkgd);
-
+    /*--------------------------*\
+    | Setup preview              |
+    \*--------------------------*/
     ui->preview->setScaledContents(true);
-
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    timer->start(15);
-
+    connect(this, SIGNAL(UpdateGraphSignal()), this, SLOT(Update()));
     image = new QImage(256, 64, QImage::Format_RGB32);
 
+    /*--------------------------*\
+    | Setup audio                |
+    \*--------------------------*/
+    memcpy(&audio_settings_struct, &OpenRGBEffectSettings::globalSettings.audio_settings,sizeof(Audio::AudioSettingsStruct));
+
+    audio_signal_processor.SetNormalization(&audio_settings_struct);
+
+    connect(&audio_settings, &AudioSettings::AudioDeviceChanged, this, &AudioVisualizer::OnAudioDeviceChanged);
+    connect(&audio_settings, &AudioSettings::NormalizationChanged,[=]{
+        audio_signal_processor.SetNormalization(&audio_settings_struct);
+    });
+
+    audio_settings.SetSettings(&audio_settings_struct);
 }
 
 AudioVisualizer::~AudioVisualizer()
 {
-    if (RegisteredForDevice)
+    delete ui;
+}
+
+void AudioVisualizer::EffectState(const bool state)
+{
+    ZoneMaps.clear();
+    EffectEnabled = state;
+    state ? Start() : Stop();
+}
+
+void AudioVisualizer::Start()
+{
+    if(audio_settings_struct.audio_device >= 0)
     {
-        AudioManager::get()->UnRegisterClient(previous_audio_device_idx,this);
-        RegisteredForDevice = false;
+        AudioManager::get()->RegisterClient(audio_settings_struct.audio_device, this);
+    }
+}
+
+void AudioVisualizer::Stop()
+{
+    if(audio_settings_struct.audio_device >= 0)
+    {
+        AudioManager::get()->UnRegisterClient(audio_settings_struct.audio_device, this);
+    }
+}
+
+void AudioVisualizer::OnAudioDeviceChanged(int value)
+{
+    bool was_running = EffectEnabled;
+
+    if(EffectEnabled)
+    {
+        Stop();
     }
 
-    delete ui;
+    audio_settings_struct.audio_device = value;
+
+    if(was_running)
+    {
+        Start();
+    }
 }
 
 void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
+
+    audio_signal_processor.Process(FPS, &audio_settings_struct);
 
     if (ZoneMaps.size() != controller_zones.size())
     {
@@ -176,8 +136,6 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
             ZoneMaps.push_back(nullptr);
         }
     }
-
-    Update();
 
     /*-------------------------*\
     | Overflow background step  |
@@ -195,7 +153,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
     \*------------------------*/
     DrawPattern(frgd_mode, 100, &pixels_fg);
 
-    float brightness = fft_fltr[5];
+    float brightness = audio_signal_processor.Data().fft_fltr[5];
 
     /*----------------------------------------------------------------------*\
     | If music isn't playing, fade in the single color LEDs after 2 seconds  |
@@ -217,7 +175,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
     {
         for (int i = 0; i < 128; i++)
         {
-            if (fft_fltr[2 * i] >= 0.0001f)
+            if (audio_signal_processor.Data().fft_fltr[2 * i] >= 0.0001f)
             {
                 background_timer = 0;
             }
@@ -242,7 +200,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
             /*-----------------------------*\
             | Draw Spectrograph Foreground  |
             \*-----------------------------*/
-            if (fft_fltr[x] >((1 / 64.0f)*(64.0f - y)))
+            if (audio_signal_processor.Data().fft_fltr[x] >((1 / 64.0f)*(64.0f - y)))
             {
                 if (shutdown_flag == true)
                 {
@@ -282,7 +240,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
             {
                 if (x < 128)
                 {
-                    if ((fft_fltr[5] - 0.05f) >((1 / 128.0f)*(127-x)))
+                    if ((audio_signal_processor.Data().fft_fltr[5] - 0.05f) >((1 / 128.0f)*(127-x)))
                     {
                         if (shutdown_flag == true)
                         {
@@ -316,7 +274,7 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
                 }
                 else
                 {
-                    if ((fft_fltr[5] - 0.05f) >((1 / 128.0f)*((x-128))))
+                    if ((audio_signal_processor.Data().fft_fltr[5] - 0.05f) >((1 / 128.0f)*((x-128))))
                     {
                         if (shutdown_flag == true)
                         {
@@ -364,59 +322,61 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
         \*--------------------------------------------------------*/
         switch (single_color_mode)
         {
-        case VISUALIZER_SINGLE_COLOR_BLACK:
-            DrawSingleColorStatic(brightness, COLOR_BLACK, pixels_render);
-            break;
+            case VISUALIZER_SINGLE_COLOR_BLACK:
+                DrawSingleColorStatic(brightness, COLOR_BLACK, pixels_render);
+                break;
 
-        case VISUALIZER_SINGLE_COLOR_WHITE:
-            DrawSingleColorStatic(brightness, COLOR_WHITE, pixels_render);
-            break;
+            case VISUALIZER_SINGLE_COLOR_WHITE:
+                DrawSingleColorStatic(brightness, COLOR_WHITE, pixels_render);
+                break;
 
-        case VISUALIZER_SINGLE_COLOR_RED:
-            DrawSingleColorStatic(brightness, COLOR_RED, pixels_render);
-            break;
+            case VISUALIZER_SINGLE_COLOR_RED:
+                DrawSingleColorStatic(brightness, COLOR_RED, pixels_render);
+                break;
 
-        case VISUALIZER_SINGLE_COLOR_ORANGE:
-            DrawSingleColorStatic(brightness, COLOR_ORANGE, pixels_render);
-            break;
+            case VISUALIZER_SINGLE_COLOR_ORANGE:
+                DrawSingleColorStatic(brightness, COLOR_ORANGE, pixels_render);
+                break;
 
-        case VISUALIZER_SINGLE_COLOR_YELLOW:
-            DrawSingleColorStatic(brightness, COLOR_YELLOW, pixels_render);
-            break;
+            case VISUALIZER_SINGLE_COLOR_YELLOW:
+                DrawSingleColorStatic(brightness, COLOR_YELLOW, pixels_render);
+                break;
 
-        case VISUALIZER_SINGLE_COLOR_GREEN:
-            DrawSingleColorStatic(brightness, COLOR_LIME, pixels_render);
-            break;
+            case VISUALIZER_SINGLE_COLOR_GREEN:
+                DrawSingleColorStatic(brightness, COLOR_LIME, pixels_render);
+                break;
 
-        case VISUALIZER_SINGLE_COLOR_CYAN:
-            DrawSingleColorStatic(brightness, COLOR_CYAN, pixels_render);
-            break;
+            case VISUALIZER_SINGLE_COLOR_CYAN:
+                DrawSingleColorStatic(brightness, COLOR_CYAN, pixels_render);
+                break;
 
-        case VISUALIZER_SINGLE_COLOR_BLUE:
-            DrawSingleColorStatic(brightness, COLOR_BLUE, pixels_render);
-            break;
+            case VISUALIZER_SINGLE_COLOR_BLUE:
+                DrawSingleColorStatic(brightness, COLOR_BLUE, pixels_render);
+                break;
 
-        case VISUALIZER_SINGLE_COLOR_PURPLE:
-            DrawSingleColorStatic(brightness, COLOR_PURPLE, pixels_render);
-            break;
+            case VISUALIZER_SINGLE_COLOR_PURPLE:
+                DrawSingleColorStatic(brightness, COLOR_PURPLE, pixels_render);
+                break;
 
-        case VISUALIZER_SINGLE_COLOR_ELECTRIC_AQUAMARINE:
-            DrawSingleColorStatic(brightness, COLOR_ELECTRIC_ULTRAMARINE, pixels_render);
-            break;
+            case VISUALIZER_SINGLE_COLOR_ELECTRIC_AQUAMARINE:
+                DrawSingleColorStatic(brightness, COLOR_ELECTRIC_ULTRAMARINE, pixels_render);
+                break;
 
-        case VISUALIZER_SINGLE_COLOR_BACKGROUND:
-            /*----------------------------------------------------------*\
-            | Intentionally do nothing, leave the background unmodified  |
-            \*----------------------------------------------------------*/
-            break;
+            case VISUALIZER_SINGLE_COLOR_BACKGROUND:
+                /*----------------------------------------------------------*\
+                | Intentionally do nothing, leave the background unmodified  |
+                \*----------------------------------------------------------*/
+                break;
 
-        case VISUALIZER_SINGLE_COLOR_FOLLOW_BACKGROUND:
-            DrawSingleColorBackground(brightness, &pixels_bg, pixels_render);
-            break;
+            case VISUALIZER_SINGLE_COLOR_FOLLOW_BACKGROUND:
+                DrawSingleColorBackground(brightness, &pixels_bg, pixels_render);
+                break;
 
-        case VISUALIZER_SINGLE_COLOR_FOLLOW_FOREGROUND:
-            DrawSingleColorForeground(brightness, &pixels_fg, pixels_render);
-            break;
+            case VISUALIZER_SINGLE_COLOR_FOLLOW_FOREGROUND:
+                DrawSingleColorForeground(brightness, &pixels_fg, pixels_render);
+                break;
+
+            default: break;
         }
     }
 
@@ -484,179 +444,49 @@ void AudioVisualizer::StepEffect(std::vector<ControllerZone*> controller_zones)
 
         switch (controller_zone->type())
         {
-        case ZONE_TYPE_MATRIX:
-            for (int y = 0; y < y_count; y++)
-            {
-                for (int x = 0; x < x_count; x++)
+            case ZONE_TYPE_MATRIX:
+                for (int y = 0; y < y_count; y++)
                 {
-                    unsigned int map_idx = (y * x_count) + x;
-                    unsigned int color_idx = controller_zone->map()[map_idx];
-
-                    if( color_idx != 0xFFFFFFFF )
+                    for (int x = 0; x < x_count; x++)
                     {
-                        controller_zone->SetLED(color_idx, pixels_out->pixels[zone_index_map->y_index[y]][zone_index_map->x_index[x]], Brightness);
-                        //controller_zone->controller->zones[controller_zone->zone_idx].colors[color_idx] = pixels_out->pixels[zone_index_map->y_index[y]][zone_index_map->x_index[x]];
+                        unsigned int map_idx = (y * x_count) + x;
+                        unsigned int color_idx = controller_zone->map()[map_idx];
+
+                        if( color_idx != 0xFFFFFFFF )
+                        {
+                            controller_zone->SetLED(color_idx, pixels_out->pixels[zone_index_map->y_index[y]][zone_index_map->x_index[x]], Brightness);
+                        }
                     }
                 }
-            }
-            break;
+                break;
 
-        case ZONE_TYPE_SINGLE:
-            for (int r = 0; r < x_count; r++)
-            {
-                controller_zone->SetLED(r, pixels_out->pixels[ROW_IDX_SINGLE_COLOR][0], Brightness);
-                //controller_zone->controller->zones[controller_zone->zone_idx].colors[r] = pixels_out->pixels[ROW_IDX_SINGLE_COLOR][0];
-            }
-            break;
+            case ZONE_TYPE_SINGLE:
+                for (int r = 0; r < x_count; r++)
+                {
+                    controller_zone->SetLED(r, pixels_out->pixels[ROW_IDX_SINGLE_COLOR][0], Brightness);
+                }
+                break;
 
-        case ZONE_TYPE_LINEAR:
-            for (int x = 0; x < x_count; x++)
-            {
-                controller_zone->SetLED(x, pixels_out->pixels[ROW_IDX_BAR_GRAPH][zone_index_map->x_index[x]], Brightness);
-                //controller_zone->controller->zones[controller_zone->zone_idx].colors[x] = pixels_out->pixels[ROW_IDX_BAR_GRAPH][zone_index_map->x_index[x]];
-            }
-            break;
+            case ZONE_TYPE_LINEAR:
+                for (int x = 0; x < x_count; x++)
+                {
+                    controller_zone->SetLED(x, pixels_out->pixels[ROW_IDX_BAR_GRAPH][zone_index_map->x_index[x]], Brightness);
+                }
+                break;
+
+            default: break;
         }
 
         i++;
     }
+
+    emit UpdateGraphSignal();
 }
-
-void AudioVisualizer::LoadCustomSettings(json Settings)
-{
-    /*----------------------------------------------*\
-    | Set all values to the settings stored in json  |
-    \*----------------------------------------------*/
-    if (Settings.contains("Amplitude"))            amplitude          = Settings["Amplitude"];
-    if (Settings.contains("BackgroundBrightness")) bkgd_bright        = Settings["BackgroundBrightness"];
-    if (Settings.contains("AverageSize"))          avg_size           = Settings["AverageSize"];
-    if (Settings.contains("Decay"))                decay              = Settings["Decay"];
-    if (Settings.contains("NormalizationOffset"))  nrml_ofst          = Settings["NormalizationOffset"];
-    if (Settings.contains("NormalizationScale"))   nrml_scl           = Settings["NormalizationScale"];
-    if (Settings.contains("FilterConstant"))       filter_constant    = Settings["FilterConstant"];
-    if (Settings.contains("BackgroundMode"))       bkgd_mode          = Settings["BackgroundMode"];
-    if (Settings.contains("ForegroundMode"))       frgd_mode          = Settings["ForegroundMode"];
-    if (Settings.contains("SingleColorMode"))      single_color_mode  = Settings["SingleColorMode"];
-    if (Settings.contains("AverageMode"))          avg_mode           = Settings["AverageMode"];
-    if (Settings.contains("AnimationSpeed"))       anim_speed         = Settings["AnimationSpeed"];
-    if (Settings.contains("ReactiveBackground"))   reactive_bkgd      = Settings["ReactiveBackground"];
-    if (Settings.contains("SilentBackground"))     silent_bkgd        = Settings["SilentBackground"];
-    if (Settings.contains("BackgroundTimeout"))    background_timeout = Settings["BackgroundTimeout"];
-    if (Settings.contains("AudioDevice"))          audio_device_idx   = Settings["AudioDevice"];
-
-    /*-----------------*\
-    | Set GUI elements  |
-    \*-----------------*/
-    ui->doubleSpinBox_Normalization_Offset->setValue(nrml_ofst);
-    ui->doubleSpinBox_Normalization_Scale->setValue(nrml_scl);
-    ui->doubleSpinBox_Animation_Speed->setValue(anim_speed);
-    ui->doubleSpinBox_Filter_Constant->setValue(filter_constant);
-
-    ui->spinBox_Amplitude->setValue(amplitude);
-    ui->spinBox_Background_Brightness->setValue(bkgd_bright);
-    ui->spinBox_Average_Size->setValue(avg_size);
-    ui->spinBox_Decay->setValue(decay);
-    ui->doubleSpinBox_Background_Timeout->setValue(background_timeout);
-
-    ui->comboBox_Average_Mode->blockSignals(true);
-    ui->comboBox_Average_Mode->setCurrentIndex(avg_mode);
-    ui->comboBox_Average_Mode->blockSignals(false);
-
-    ui->comboBox_Background_Mode->blockSignals(true);
-    ui->comboBox_Background_Mode->setCurrentIndex(bkgd_mode);
-    ui->comboBox_Background_Mode->blockSignals(false);
-
-    ui->comboBox_FFT_Window_Mode->blockSignals(true);
-    ui->comboBox_FFT_Window_Mode->setCurrentIndex(window_mode);
-    ui->comboBox_FFT_Window_Mode->blockSignals(false);
-
-    ui->comboBox_Foreground_Mode->blockSignals(true);
-    ui->comboBox_Foreground_Mode->setCurrentIndex(frgd_mode);
-    ui->comboBox_Foreground_Mode->blockSignals(false);
-
-    ui->comboBox_Single_Color_Mode->blockSignals(true);
-    ui->comboBox_Single_Color_Mode->setCurrentIndex(single_color_mode);
-    ui->comboBox_Single_Color_Mode->blockSignals(false);
-
-    ui->checkBox_Reactive_Background->setChecked(reactive_bkgd);
-    ui->checkBox_Silent_Background->setChecked(silent_bkgd);
-
-    if (RegisteredForDevice)
-    {
-        AudioManager::get()->UnRegisterClient(previous_audio_device_idx,this);
-        RegisteredForDevice = false;
-    }
-
-    ui->comboBox_Audio_Device->setCurrentIndex(audio_device_idx);
-}
-
-json AudioVisualizer::SaveCustomSettings()
-{
-    json Settings;
-    /*---------------------------------------------*\
-    | Only allow for Silent OR Reactive. Not both   |
-    \*---------------------------------------------*/
-    if ((silent_bkgd == true) && (reactive_bkgd == true))
-    {
-        silent_bkgd = false;
-    }
-
-    Settings["Amplitude"] = amplitude;
-    Settings["BackgroundBrightness"] = bkgd_bright;
-    Settings["AverageSize"] = avg_size;
-    Settings["Decay"] = decay;
-    Settings["NormalizationOffset"] = nrml_ofst;
-    Settings["NormalizationScale"] = nrml_scl;
-    Settings["FilterConstant"] = filter_constant;
-    Settings["BackgroundMode"] = bkgd_mode;
-    Settings["ForegroundMode"] = frgd_mode;
-    Settings["SingleColorMode"] = single_color_mode;
-    Settings["AverageMode"] = avg_mode;
-    Settings["AnimationSpeed"] = anim_speed;
-    Settings["ReactiveBackground"] = reactive_bkgd;
-    Settings["SilentBackground"] = silent_bkgd;
-    Settings["BackgroundTimeout"] = background_timeout;
-    Settings["AudioDevice"] = audio_device_idx;
-
-    return Settings;
-}
-
-void AudioVisualizer::EffectState(bool IsRunning)
-{
-    ZoneMaps.clear();
-    EffectActive = IsRunning;
-    SetDevice();
-
-    if (!IsRunning)
-    {
-        if (RegisteredForDevice)
-        {
-            AudioManager::get()->UnRegisterClient(previous_audio_device_idx,this);
-            RegisteredForDevice = false;
-        }
-    }
-}
-
-void AudioVisualizer::SetDevice()
-{
-    if (RegisteredForDevice)
-    {
-        AudioManager::get()->UnRegisterClient(previous_audio_device_idx,this);
-        RegisteredForDevice = false;
-    }
-
-    if (EffectActive)
-    {
-        AudioManager::get()->RegisterClient(audio_device_idx,this);
-        RegisteredForDevice = true;
-    }
-}
-
 
 /*----------*\
 | GUI slots  |
 \*----------*/
-void AudioVisualizer::update()
+void AudioVisualizer::Update()
 {
     for(int x = 0; x < 256; x++)
     {
@@ -668,45 +498,6 @@ void AudioVisualizer::update()
 
     pixmap.convertFromImage(*image);
     ui->preview->setPixmap(pixmap);
-
-    if(update_ui)
-    {
-        update_ui = false;
-
-        ui->doubleSpinBox_Normalization_Offset->setValue(nrml_ofst);
-        ui->doubleSpinBox_Normalization_Scale->setValue(nrml_scl);
-        ui->doubleSpinBox_Animation_Speed->setValue(anim_speed);
-        ui->doubleSpinBox_Filter_Constant->setValue(filter_constant);
-
-        ui->spinBox_Amplitude->setValue(amplitude);
-        ui->spinBox_Background_Brightness->setValue(bkgd_bright);
-        ui->spinBox_Average_Size->setValue(avg_size);
-        ui->spinBox_Decay->setValue(decay);
-        ui->doubleSpinBox_Background_Timeout->setValue(background_timeout);
-
-        ui->comboBox_Average_Mode->blockSignals(true);
-        ui->comboBox_Average_Mode->setCurrentIndex(avg_mode);
-        ui->comboBox_Average_Mode->blockSignals(false);
-
-        ui->comboBox_Background_Mode->blockSignals(true);
-        ui->comboBox_Background_Mode->setCurrentIndex(bkgd_mode);
-        ui->comboBox_Background_Mode->blockSignals(false);
-
-        ui->comboBox_FFT_Window_Mode->blockSignals(true);
-        ui->comboBox_FFT_Window_Mode->setCurrentIndex(window_mode);
-        ui->comboBox_FFT_Window_Mode->blockSignals(false);
-
-        ui->comboBox_Foreground_Mode->blockSignals(true);
-        ui->comboBox_Foreground_Mode->setCurrentIndex(frgd_mode);
-        ui->comboBox_Foreground_Mode->blockSignals(false);
-
-        ui->comboBox_Single_Color_Mode->blockSignals(true);
-        ui->comboBox_Single_Color_Mode->setCurrentIndex(single_color_mode);
-        ui->comboBox_Single_Color_Mode->blockSignals(false);
-
-        ui->checkBox_Reactive_Background->setChecked(reactive_bkgd);
-        ui->checkBox_Silent_Background->setChecked(silent_bkgd);
-    }
 }
 
 void AudioVisualizer::on_spinBox_Background_Brightness_valueChanged(int value)
@@ -719,320 +510,6 @@ void AudioVisualizer::on_doubleSpinBox_Animation_Speed_valueChanged(double value
     anim_speed = value;
 }
 
-
-/*---------------------*\
-| Amp, Size, and Decay  |
-\*---------------------*/
-void AudioVisualizer::on_spinBox_Amplitude_valueChanged(int value)
-{
-    amplitude = value;
-}
-
-void AudioVisualizer::on_spinBox_Average_Size_valueChanged(int value)
-{
-    avg_size = value;
-}
-
-void AudioVisualizer::on_spinBox_Decay_valueChanged(int value)
-{
-    decay = value;
-}
-
-
-/*-------------*\
-| Normalization |
-\*-------------*/
-void AudioVisualizer::on_doubleSpinBox_Normalization_Offset_valueChanged(double value)
-{
-    nrml_ofst = value;
-    SetNormalization(nrml_ofst, nrml_scl);
-}
-
-void AudioVisualizer::on_doubleSpinBox_Normalization_Scale_valueChanged(double value)
-{
-    nrml_scl = value;
-    SetNormalization(nrml_ofst, nrml_scl);
-}
-
-
-/*------------------------------*\
-| Color and Brightness Settings  |
-\*------------------------------*/
-void AudioVisualizer::on_comboBox_FFT_Window_Mode_currentIndexChanged(int index)
-{
-    window_mode = index;
-}
-
-void AudioVisualizer::on_comboBox_Background_Mode_currentIndexChanged(int index)
-{
-    bkgd_mode = index;
-}
-
-void AudioVisualizer::on_comboBox_Foreground_Mode_currentIndexChanged(int index)
-{
-    frgd_mode = index;
-}
-
-void AudioVisualizer::on_comboBox_Single_Color_Mode_currentIndexChanged(int index)
-{
-    single_color_mode = index;
-}
-
-void AudioVisualizer::on_comboBox_Average_Mode_currentIndexChanged(int index)
-{
-    avg_mode = index;
-}
-
-void AudioVisualizer::on_checkBox_Reactive_Background_clicked(bool checked)
-{
-    reactive_bkgd = checked;
-
-    if (reactive_bkgd == true)
-    {
-        silent_bkgd = false;
-        ui->checkBox_Silent_Background->setChecked(false);
-    }
-}
-
-void AudioVisualizer::on_comboBox_Audio_Device_currentIndexChanged(int index)
-{
-    previous_audio_device_idx = audio_device_idx;
-    audio_device_idx = index;
-    SetDevice();
-}
-
-void AudioVisualizer::on_doubleSpinBox_Filter_Constant_valueChanged(double value)
-{
-    filter_constant = value;
-    if(filter_constant > 1.0f)
-    {
-        filter_constant = 1.0f;
-    }
-    else if(filter_constant < 0.0f)
-    {
-        filter_constant = 0.0f;
-    }
-}
-
-void AudioVisualizer::on_checkBox_Silent_Background_clicked(bool checked)
-{
-    silent_bkgd = checked;
-
-    if (silent_bkgd == true)
-    {
-        reactive_bkgd = false;
-        ui->checkBox_Reactive_Background->setChecked(false);
-    }
-}
-
-void AudioVisualizer::on_doubleSpinBox_Background_Timeout_valueChanged(double value)
-{
-    background_timeout = value;
-
-    if (update_ui == false)
-    {
-        background_timer = 0;
-    }
-}
-
-
-/*---------------------------------*\
-| Actual visualizer implementation  |
-\*---------------------------------*/
-void AudioVisualizer::Update()
-{
-    float fft_tmp[512];
-    for (int i = 0; i < 256; i++)
-    {
-        /*------------------*\
-        | Clear the buffers  |
-        \*------------------*/
-        fft_tmp[i] = 0;
-
-        /*-----------------------------------------------------------------------------------------*\
-        | fft = fft * ( a decimal of decay divided by the opposite of FPS (1 for 60 and 60 for 1)   |
-        \*-----------------------------------------------------------------------------------------*/
-        fft[i] = fft[i] * ((float(decay) / 100.0f) / (60 / FPS) );
-    }
-
-    AudioManager::get()->Capture(audio_device_idx, fft_tmp);
-
-    #ifdef _WIN32
-    for (int i = 0; i < 512; i++)
-    {
-        fft_tmp[i] *= amplitude;
-    }
-    #else
-    for (int i = 0; i < 512; i++)
-    {
-        fft_tmp[i] = (fft_tmp[i] - 128.0f) * (amplitude / 128.0f);
-    }
-    #endif
-
-    /*----------------------*\
-    | Apply selected window  |
-    \*----------------------*/
-    switch (window_mode)
-    {
-    case 0:
-        break;
-
-    case 1:
-        apply_window(fft_tmp, win_hanning, 256);
-        break;
-
-    case 2:
-        apply_window(fft_tmp, win_hamming, 256);
-        break;
-
-    case 3:
-        apply_window(fft_tmp, win_blackman, 256);
-        break;
-
-    default:
-        break;
-    }
-
-    /*------------------------*\
-    | Run the FFT calculation  |
-    \*------------------------*/
-    rfft(fft_tmp, 256, 1);
-
-    fft_tmp[0] = fft_tmp[2];
-
-    apply_window(fft_tmp, fft_nrml, 256);
-
-    /*----------------------*\
-    | Compute FFT magnitude  |
-    \*----------------------*/
-    for (int i = 0; i < 128; i += 2)
-    {
-        float fftmag;
-
-        /*---------------------------------------------------------------------------------*\
-        | Compute magnitude from real and imaginary components of FFT and apply simple LPF  |
-        \*---------------------------------------------------------------------------------*/
-        fftmag = (float)sqrt((fft_tmp[i] * fft_tmp[i]) + (fft_tmp[i + 1] * fft_tmp[i + 1]));
-
-        /*----------------------------------------------------------------------------------------*\
-        | Apply a slight logarithmic filter to minimize noise from very low amplitude frequencies  |
-        \*----------------------------------------------------------------------------------------*/
-        fftmag = ( 0.5f * log10(1.1f * fftmag) ) + ( 0.9f * fftmag );
-
-        /*---------------------------*\
-        | Limit FFT magnitude to 1.0  |
-        \*---------------------------*/
-        if (fftmag > 1.0f)
-        {
-            fftmag = 1.0f;
-        }
-
-        /*----------------------------------------------------------*\
-        | Update to new values only if greater than previous values  |
-        \*----------------------------------------------------------*/
-        if (fftmag > fft[i*2])
-        {
-            fft[i*2] = fftmag;;
-        }
-
-        /*----------------------------*\
-        | Prevent from going negative  |
-        \*----------------------------*/
-        if (fft[i*2] < 0.0f)
-        {
-            fft[i*2] = 0.0f;
-        }
-
-        /*----------------------------------------------------------------*\
-        | Set odd indexes to match their corresponding even index, as the  |
-        | FFT input array uses two indices for one value (real+imaginary)  |
-        \*----------------------------------------------------------------*/
-        fft[(i * 2) + 1] = fft[i * 2];
-        fft[(i * 2) + 2] = fft[i * 2];
-        fft[(i * 2) + 3] = fft[i * 2];
-    }
-
-    if (avg_mode == 0)
-    {
-        /*--------------------------------------------*\
-        | Apply averaging over given number of values  |
-        \*--------------------------------------------*/
-        int k;
-        float sum1 = 0;
-        float sum2 = 0;
-        for (k = 0; k < avg_size; k++)
-        {
-            sum1 += fft[k];
-            sum2 += fft[255 - k];
-        }
-        /*------------------------------*\
-        | Compute averages for end bars  |
-        \*------------------------------*/
-        sum1 = sum1 / k;
-        sum2 = sum2 / k;
-        for (k = 0; k < avg_size; k++)
-        {
-            fft[k] = sum1;
-            fft[255 - k] = sum2;
-        }
-        for (int i = 0; i < (256 - avg_size); i += avg_size)
-        {
-            float sum = 0;
-            for (int j = 0; j < avg_size; j += 1)
-            {
-                sum += fft[i + j];
-            }
-
-            float avg = sum / avg_size;
-
-            for (int j = 0; j < avg_size; j += 1)
-            {
-                fft[i + j] = avg;
-            }
-        }
-    }
-    else if(avg_mode == 1)
-    {
-        for (int i = 0; i < avg_size; i++)
-        {
-            float sum1 = 0;
-            float sum2 = 0;
-            int j;
-            for (j = 0; j <= i + avg_size; j++)
-            {
-                sum1 += fft[j];
-                sum2 += fft[255 - j];
-            }
-            fft[i] = sum1 / j;
-            fft[255 - i] = sum2 / j;
-        }
-        for (int i = avg_size; i < 256 - avg_size; i++)
-        {
-            float sum = 0;
-            for (int j = 1; j <= avg_size; j++)
-            {
-                sum += fft[i - j];
-                sum += fft[i + j];
-            }
-            sum += fft[i];
-
-            fft[i] = sum / (2 * avg_size + 1);
-        }
-    }
-    for(int i = 0; i < 256; i++)
-    {
-        fft_fltr[i] = fft_fltr[i] + (filter_constant * (fft[i] - fft_fltr[i]));
-    }
-}
-
-void AudioVisualizer::SetNormalization(float offset, float scale)
-{
-    for (int i = 0; i < 256; i++)
-    {
-        fft[i] = 0.0f;
-        fft_nrml[i] = offset + (scale * (i / 256.0f));
-    }
-}
 
 void AudioVisualizer::DrawSolidColor(int bright, RGBColor color, vis_pixels *pixels)
 {
@@ -1285,73 +762,73 @@ void AudioVisualizer::DrawPattern(VISUALIZER_PATTERN pattern, int bright, vis_pi
         break;
 
     case VISUALIZER_PATTERN_STATIC_RED_BLUE:
-        {
+    {
         RGBColor colors[] = { COLOR_RED, COLOR_BLUE };
         DrawHorizontalBars(bright, colors, 2, pixels);
-        }
+    }
         break;
 
     case VISUALIZER_PATTERN_STATIC_CYAN_ORANGE:
-        {
+    {
         RGBColor colors[] = { COLOR_CYAN, COLOR_ORANGE };
         DrawHorizontalBars(bright, colors, 2, pixels);
-        }
+    }
         break;
 
     case VISUALIZER_PATTERN_STATIC_CYAN_PURPLE:
-        {
+    {
         RGBColor colors[] = { COLOR_CYAN, COLOR_PURPLE };
         DrawHorizontalBars(bright, colors, 2, pixels);
-        }
+    }
         break;
 
     case VISUALIZER_PATTERN_STATIC_CYAN_ELECTRIC_AQUAMARINE:
-        {
+    {
         RGBColor colors[] = { COLOR_CYAN, COLOR_ELECTRIC_ULTRAMARINE };
         DrawHorizontalBars(bright, colors, 2, pixels);
-        }
+    }
         break;
 
     case VISUALIZER_PATTERN_STATIC_GREEN_YELLOW_RED:
-        {
+    {
         RGBColor colors[] = { COLOR_LIME, COLOR_YELLOW, COLOR_RED };
         DrawHorizontalBars(bright, colors, 3, pixels);
-        }
+    }
         break;
 
     case VISUALIZER_PATTERN_STATIC_GREEN_WHITE_RED:
-        {
+    {
         RGBColor colors[] = { COLOR_LIME, COLOR_WHITE, COLOR_RED };
         DrawHorizontalBars(bright, colors, 3, pixels);
-        }
+    }
         break;
 
     case VISUALIZER_PATTERN_STATIC_BLUE_CYAN_WHITE:
-        {
+    {
         RGBColor colors[] = { COLOR_BLUE, COLOR_CYAN, COLOR_WHITE };
         DrawHorizontalBars(bright, colors, 3, pixels);
-        }
+    }
         break;
 
     case VISUALIZER_PATTERN_STATIC_RED_WHITE_BLUE:
-        {
+    {
         RGBColor colors[] = { COLOR_RED, COLOR_WHITE, COLOR_BLUE };
         DrawHorizontalBars(bright, colors, 3, pixels);
-        }
+    }
         break;
 
     case VISUALIZER_PATTERN_STATIC_RAINBOW:
-        {
+    {
         RGBColor colors[] = { COLOR_RED, COLOR_YELLOW, COLOR_LIME, COLOR_CYAN, COLOR_BLUE, COLOR_PURPLE };
         DrawHorizontalBars(bright, colors, 6, pixels);
-        }
+    }
         break;
 
     case VISUALIZER_PATTERN_STATIC_RAINBOW_INVERSE:
-        {
+    {
         RGBColor colors[] = { COLOR_PURPLE, COLOR_BLUE, COLOR_CYAN, COLOR_LIME, COLOR_YELLOW, COLOR_RED };
         DrawHorizontalBars(bright, colors, 6, pixels);
-        }
+    }
         break;
 
     case VISUALIZER_PATTERN_ANIM_RAINBOW_SINUSOIDAL:
@@ -1438,4 +915,100 @@ void AudioVisualizer::SetupLinearGrid(int x_count, int * x_idx_list)
             }
         }
     }
+}
+
+/*------------------------------*\
+| GUI Bindings                   |
+\*------------------------------*/
+void AudioVisualizer::on_audio_settings_clicked()
+{
+    audio_settings.show();
+}
+
+void AudioVisualizer::on_comboBox_Background_Mode_currentIndexChanged(int index)
+{
+    bkgd_mode = index;
+}
+
+void AudioVisualizer::on_comboBox_Foreground_Mode_currentIndexChanged(int index)
+{
+    frgd_mode = index;
+}
+
+void AudioVisualizer::on_comboBox_Single_Color_Mode_currentIndexChanged(int index)
+{
+    single_color_mode = index;
+}
+
+void AudioVisualizer::on_checkBox_Reactive_Background_stateChanged(int value)
+{
+    reactive_bkgd = value;
+
+    if (reactive_bkgd)
+    {
+        ui->checkBox_Silent_Background->setChecked(false);
+    }
+}
+
+void AudioVisualizer::on_checkBox_Silent_Background_stateChanged(int value)
+{
+    silent_bkgd = value;
+
+    if (silent_bkgd)
+    {
+        ui->checkBox_Reactive_Background->setChecked(false);
+    }
+}
+
+void AudioVisualizer::on_doubleSpinBox_Background_Timeout_valueChanged(double value)
+{
+    background_timeout = value;
+    background_timer = 0;
+}
+
+/*----------------------------------------------*\
+| From/to json                                   |
+\*----------------------------------------------*/
+void AudioVisualizer::LoadCustomSettings(json Settings)
+{
+    if (Settings.contains("BackgroundBrightness"))
+        ui->spinBox_Background_Brightness->setValue(Settings["BackgroundBrightness"]);
+
+    if (Settings.contains("BackgroundMode"))
+        ui->comboBox_Background_Mode->setCurrentIndex(Settings["BackgroundMode"]);
+
+    if (Settings.contains("ForegroundMode"))
+        ui->comboBox_Foreground_Mode->setCurrentIndex(Settings["ForegroundMode"]);
+
+    if (Settings.contains("SingleColorMode"))
+        ui->comboBox_Single_Color_Mode->setCurrentIndex(Settings["SingleColorMode"]);
+
+    if (Settings.contains("AnimationSpeed"))
+        ui->doubleSpinBox_Animation_Speed->setValue(Settings["AnimationSpeed"]);
+
+    if (Settings.contains("ReactiveBackground"))
+        ui->checkBox_Reactive_Background->setChecked(Settings["ReactiveBackground"]);
+
+    if (Settings.contains("SilentBackground"))
+        ui->checkBox_Silent_Background->setChecked(Settings["SilentBackground"]);
+
+    if (Settings.contains("BackgroundTimeout"))
+        ui->doubleSpinBox_Background_Timeout->setValue(Settings["BackgroundTimeout"]);
+}
+
+json AudioVisualizer::SaveCustomSettings()
+{
+    json Settings;
+
+    Settings["BackgroundBrightness"] = bkgd_bright;
+    Settings["BackgroundMode"] = bkgd_mode;
+    Settings["ForegroundMode"] = frgd_mode;
+    Settings["SingleColorMode"] = single_color_mode;
+    Settings["AnimationSpeed"] = anim_speed;
+    Settings["ReactiveBackground"] = reactive_bkgd;
+    Settings["SilentBackground"] = silent_bkgd;
+    Settings["BackgroundTimeout"] = background_timeout;
+    Settings["audio_settings"] = audio_settings_struct;
+
+    return Settings;
 }

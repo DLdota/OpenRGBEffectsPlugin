@@ -7,7 +7,6 @@
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
 #include "RectangleSelector.h"
-#include "ScreenRecorder.h"
 
 namespace Ui {
 class Ambient;

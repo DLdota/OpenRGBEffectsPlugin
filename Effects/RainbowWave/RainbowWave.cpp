@@ -86,7 +86,7 @@ void RainbowWave::StepEffect(std::vector<ControllerZone*> controller_zones)
 
                 for (int RowID = 0; RowID < RowCount; RowID++)
                 {
-                    int LedID = controller_zone->controller->zones[controller_zone->zone_idx].matrix_map->map[((RowID * ColumnCount) + ColumnID)];
+                    int LedID = controller_zone->map()[((RowID * ColumnCount) + ColumnID)];
                     controller_zone->SetLED(LedID, RGBColor(hsv2rgb(&HSVVal)), Brightness);
                 }
             }

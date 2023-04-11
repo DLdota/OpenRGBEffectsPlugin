@@ -132,7 +132,6 @@ HEADERS +=                                                                      
 SOURCES +=                                                                                      \
     Dependencies/ctkrangeslider/ctkrangeslider.cpp                                              \
 
-
 #-----------------------------------------------------------------------------------------------#
 # chuck_fft                                                                                     #
 #-----------------------------------------------------------------------------------------------#
@@ -161,6 +160,10 @@ HEADERS +=                                                                      
 # GUI and misc                                                                                  #
 #-----------------------------------------------------------------------------------------------#
 HEADERS +=                                                                                      \
+    Audio/AudioDataStruct.h                                                                     \
+    Audio/AudioSettings.h                                                                       \
+    Audio/AudioSettingsStruct.h                                                                 \
+    Audio/AudioSignalProcessor.h                                                                \
     ColorPicker.h                                                                               \
     ColorsPicker.h                                                                              \
     ColorUtils.h                                                                                \
@@ -188,7 +191,10 @@ HEADERS +=                                                                      
     GlobalSettings.h
 
 SOURCES +=                                                                                      \
-    AudioManager.cpp                                                                            \
+    Audio/AudioSettings.cpp                                                                     \
+    Audio/AudioSettingsStruct.cpp                                                               \
+    Audio/AudioSignalProcessor.cpp                                                              \
+    Audio/AudioManager.cpp                                                                      \
     ColorPicker.cpp                                                                             \
     ColorsPicker.cpp                                                                            \
     DeviceList.cpp                                                                              \
@@ -212,6 +218,7 @@ SOURCES +=                                                                      
     GlobalSettings.cpp
 
 FORMS +=                                                                                        \
+    Audio/AudioSettings.ui                                                                      \
     ColorPicker.ui                                                                              \
     ColorsPicker.ui                                                                             \
     DeviceList.ui                                                                               \
@@ -232,6 +239,7 @@ FORMS +=                                                                        
 #-----------------------------------------------------------------------------------------------#
 INCLUDEPATH +=                                                                                  \
     Effects                                                                                     \
+    Audio                                                                                       \
 
 SOURCES +=                                                                                      \
     Effects/Ambient/Ambient.cpp                                                                 \
@@ -281,7 +289,6 @@ SOURCES +=                                                                      
     Effects/Shaders/NewShaderPassTabHeader.cpp                                                  \
     Effects/Shaders/ShaderFileTabHeader.cpp                                                     \
     Effects/Shaders/ShaderPass.cpp                                                              \
-    Effects/Shaders/ShaderPassData.cpp                                                          \
     Effects/Shaders/ShaderPassEditor.cpp                                                        \
     Effects/Shaders/ShaderProgram.cpp                                                           \
     Effects/Shaders/Shaders.cpp                                                                 \

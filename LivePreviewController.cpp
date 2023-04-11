@@ -1,6 +1,5 @@
 #include "LivePreviewController.h"
 #include "OpenRGBPluginsFont.h"
-#include <QScreen>
 
 LivePreviewController::LivePreviewController(QWidget *parent) :
     QWidget(parent),

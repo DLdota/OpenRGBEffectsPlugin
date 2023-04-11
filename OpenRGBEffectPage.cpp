@@ -1,8 +1,10 @@
 #include "OpenRGBEffectPage.h"
 #include "OpenRGBEffectSettings.h"
+#include "OpenRGBPluginsFont.h"
 #include "EffectManager.h"
 #include "ColorUtils.h"
 #include "LivePreviewController.h"
+
 #include <QDialog>
 #include <QFile>
 #include <iomanip>
@@ -16,7 +18,6 @@
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QUrl>
-#include "OpenRGBPluginsFont.h"
 
 OpenRGBEffectPage::OpenRGBEffectPage(QWidget *parent, RGBEffect* effect):
     QWidget(parent),

@@ -1,7 +1,4 @@
 #include "GlobalSettings.h"
-#include "OpenRGBEffectsPlugin.h"
-#include "ScreenRecorder.h"
-#include "json.hpp"
 #include "OpenRGBEffectSettings.h"
 
 #include <QDesktopServices>
@@ -24,6 +21,11 @@ GlobalSettings::GlobalSettings(QWidget *parent) :
     ui->preferedColors->SetText("Prefered colors");
     ui->preferedColors->setEnabled(OpenRGBEffectSettings::globalSettings.use_prefered_colors);
     ui->preferedColors->SetColors(OpenRGBEffectSettings::globalSettings.prefered_colors);
+    audio_settings.SetSettings(&OpenRGBEffectSettings::globalSettings.audio_settings);
+
+    connect(&audio_settings, &AudioSettings::AudioDeviceChanged, [=](int value){
+        OpenRGBEffectSettings::globalSettings.audio_settings.audio_device = value;
+    });
 }
 
 GlobalSettings::~GlobalSettings()
@@ -68,3 +70,8 @@ void GlobalSettings::on_randomColorsCheckBox_stateChanged(int state)
     OpenRGBEffectSettings::globalSettings.prefer_random = state;
 }
 
+void GlobalSettings::on_audioSettings_clicked()
+{
+    audio_settings.setModal(true);
+    audio_settings.show();
+}

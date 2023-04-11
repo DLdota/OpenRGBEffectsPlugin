@@ -1,6 +1,7 @@
 #include "SwirlCirclesAudio.h"
 #include "ColorUtils.h"
-#include "AudioManager.h"
+#include "Audio/AudioManager.h"
+#include "OpenRGBEffectSettings.h"
 
 REGISTER_EFFECT(SwirlCirclesAudio);
 
@@ -25,26 +26,20 @@ SwirlCirclesAudio::SwirlCirclesAudio(QWidget *parent) :
     SetSpeed(50);
     SetSlider2Val(50);
 
-    std::vector<char *> devices = AudioManager::get()->GetAudioDevices();
+    /*--------------------------*\
+    | Setup audio                |
+    \*--------------------------*/
 
-    for(const char * str : devices)
-    {
-        ui->devices->addItem(QString::fromUtf8(str));
-    }
+    memcpy(&audio_settings_struct, &OpenRGBEffectSettings::globalSettings.audio_settings,sizeof(Audio::AudioSettingsStruct));
 
-    hanning(win_hanning, 256);
+    audio_signal_processor.SetNormalization(&audio_settings_struct);
 
-    float offset            = 0.04f;
-    float scale             = 0.5f;
+    connect(&audio_settings, &AudioSettings::AudioDeviceChanged, this, &SwirlCirclesAudio::OnAudioDeviceChanged);
+    connect(&audio_settings, &AudioSettings::NormalizationChanged,[=]{
+        audio_signal_processor.SetNormalization(&audio_settings_struct);
+    });
 
-    /*------------------------------------*\
-    | Fill in Normalization and FFT array  |
-    \*------------------------------------*/
-    for (int i = 0; i < 256; i++)
-    {
-        fft[i] = 0.0f;
-        fft_nrml[i] = offset + (scale * (i / 256.0f));
-    }
+    audio_settings.SetSettings(&audio_settings_struct);
 }
 
 SwirlCirclesAudio::~SwirlCirclesAudio()
@@ -52,148 +47,54 @@ SwirlCirclesAudio::~SwirlCirclesAudio()
     delete ui;
 }
 
+void SwirlCirclesAudio::EffectState(const bool state)
+{
+    EffectEnabled = state;
+    state ? Start() : Stop();
+}
+
+void SwirlCirclesAudio::Start()
+{
+    if(audio_settings_struct.audio_device >= 0)
+    {
+        AudioManager::get()->RegisterClient(audio_settings_struct.audio_device, this);
+    }
+}
+
+void SwirlCirclesAudio::Stop()
+{
+    if(audio_settings_struct.audio_device >= 0)
+    {
+        AudioManager::get()->UnRegisterClient(audio_settings_struct.audio_device, this);
+    }
+}
+
+void SwirlCirclesAudio::OnAudioDeviceChanged(int value)
+{
+    bool was_running = EffectEnabled;
+
+    if(EffectEnabled)
+    {
+        Stop();
+    }
+
+    audio_settings_struct.audio_device = value;
+
+    if(was_running)
+    {
+        Start();
+    }
+}
+
 void SwirlCirclesAudio::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
-    float fft_tmp[512];
-
-    for (int i = 0; i < 256; i++)
-    {
-        /*------------------*\
-        | Clear the buffers  |
-        \*------------------*/
-        fft_tmp[i] = 0;
-
-        /*----------------------*\
-        | Decay previous values  |
-        \*----------------------*/
-        fft[i] = fft[i] * ((float(decay) / 100.0f / (60 / FPS)));
-    }
-
-    AudioManager::get()->Capture(audio_device_idx, fft_tmp);
-
-#ifdef _WIN32
-    for (int i = 0; i < 512; i++)
-    {
-        fft_tmp[i] *= amplitude;
-    }
-#else
-    for (int i = 0; i < 512; i++)
-    {
-        fft_tmp[i] = (fft_tmp[i] - 128.0f) * (amplitude / 128.0f);
-    }
-#endif
-
-    apply_window(fft_tmp, win_hanning, 256);
-
-    /*------------------------*\
-    | Run the FFT calculation  |    void EffectState(bool) override;
-
-    \*------------------------*/
-    rfft(fft_tmp, 256, 1);
-
-    fft_tmp[0] = fft_tmp[2];
-
-    apply_window(fft_tmp, fft_nrml, 256);
-
-    /*----------------------*\
-    | Compute FFT magnitude  |
-    \*----------------------*/
-    for (int i = 0; i < 128; i += 2)
-    {
-        float fftmag;
-
-        /*---------------------------------------------------------------------------------*\
-        | Compute magnitude from real and imaginary components of FFT and apply simple LPF  |
-        \*---------------------------------------------------------------------------------*/
-        fftmag = (float)sqrt((fft_tmp[i] * fft_tmp[i]) + (fft_tmp[i + 1] * fft_tmp[i + 1]));
-
-        /*----------------------------------------------------------------------------------------*\
-        | Apply a slight logarithmic filter to minimize noise from very low amplitude frequencies  |
-        \*----------------------------------------------------------------------------------------*/
-        fftmag = ( 0.5f * log10(1.1f * fftmag) ) + ( 0.9f * fftmag );
-
-        /*---------------------------*\
-        | Limit FFT magnitude to 1.0  |
-        \*---------------------------*/
-        if (fftmag > 1.0f)
-        {
-            fftmag = 1.0f;
-        }
-
-        /*----------------------------------------------------------*\
-        | Update to new values only if greater than previous values  |
-        \*----------------------------------------------------------*/
-        if (fftmag > fft[i*2])
-        {
-            fft[i*2] = fftmag;;
-        }
-
-        /*----------------------------*\
-        | Prevent from going negative  |
-        \*----------------------------*/
-        if (fft[i*2] < 0.0f)
-        {
-            fft[i*2] = 0.0f;
-        }
-
-        /*--------------------------------------------------------------------*\
-        | Set odd indexes to match their corresponding even index, as the FFT  |
-        | input array uses two indices for one value (real+imaginary)          |
-        \*--------------------------------------------------------------------*/
-        fft[(i * 2) + 1] = fft[i * 2];
-        fft[(i * 2) + 2] = fft[i * 2];
-        fft[(i * 2) + 3] = fft[i * 2];
-    }
-
-
-    /*--------------------------------------------*\
-    | Apply averaging over given number of values  |
-    \*--------------------------------------------*/
-    int k;
-    float sum1 = 0;
-    float sum2 = 0;
-
-    for (k = 0; k < avg_size; k++)
-    {
-        sum1 += fft[k];
-        sum2 += fft[255 - k];
-    }
-    /*------------------------------*\
-    | Compute averages for end bars  |
-    \*------------------------------*/
-
-    sum1 = sum1 / k;
-    sum2 = sum2 / k;
-
-    for (k = 0; k < avg_size; k++)
-    {
-        fft[k] = sum1;
-        fft[255 - k] = sum2;
-    }
-
-    for (int i = 0; i < (256 - avg_size); i += avg_size)
-    {
-        float sum = 0;
-        for (int j = 0; j < avg_size; j += 1)
-        {
-            sum += fft[i + j];
-        }
-
-        float avg = sum / avg_size;
-
-        for (int j = 0; j < avg_size; j += 1)
-        {
-            fft[i + j] = avg;
-        }
-    }
+    audio_signal_processor.Process(FPS, &audio_settings_struct);
 
     current_level = 0.f;
 
     for(int i = 0; i < 256; i++)
     {
-        fft_fltr[i] = fft_fltr[i] + (filter_constant * (fft[i] - fft_fltr[i]));
-
-        current_level += fft_fltr[i];
+        current_level += audio_signal_processor.Data().fft_fltr[i];
     }
 
     for(ControllerZone* controller_zone : controller_zones)
@@ -223,7 +124,6 @@ void SwirlCirclesAudio::StepEffect(std::vector<ControllerZone*> controller_zones
         {
             unsigned int width = controller_zone->matrix_map_width();
             unsigned int height = controller_zone->matrix_map_height();
-            unsigned int * map = controller_zone->map();
 
             float hx = 0.5 * width;
             float hy = 0.5 * height;
@@ -237,7 +137,7 @@ void SwirlCirclesAudio::StepEffect(std::vector<ControllerZone*> controller_zones
                 {
                     RGBColor color = GetColor(w, h, width, height, x1, y1);
 
-                    unsigned int led_num = map[h * width + w];
+                    unsigned int led_num = controller_zone->map()[h * width + w];
                     controller_zone->SetLED(led_num,color, Brightness);
                 }
             }
@@ -252,7 +152,6 @@ void SwirlCirclesAudio::StepEffect(std::vector<ControllerZone*> controller_zones
         hsv1.hue++;
         hsv2.hue++;
     }
-
 }
 
 RGBColor SwirlCirclesAudio::GetColor(unsigned int x, unsigned int y, unsigned int w, unsigned int h, float x1, float y1)
@@ -312,88 +211,39 @@ void SwirlCirclesAudio::SetRandomColorsEnabled(bool value)
     }
 }
 
-
 void SwirlCirclesAudio::ResetUserColors()
 {
     rgb2hsv(UserColors[0], &hsv1);
     rgb2hsv(UserColors[1], &hsv2);
 }
 
-
-void SwirlCirclesAudio::EffectState(const bool state)
-{
-    EffectEnabled = state;
-    state ? Start() : Stop();
-}
-
-void SwirlCirclesAudio::Start()
-{
-    if(audio_device_idx >= 0)
-    {
-        AudioManager::get()->RegisterClient(audio_device_idx, this);
-    }
-}
-
-void SwirlCirclesAudio::Stop()
-{
-    if(audio_device_idx >= 0)
-    {
-        AudioManager::get()->UnRegisterClient(audio_device_idx, this);
-    }
-}
-
-void SwirlCirclesAudio::on_devices_currentIndexChanged(int value)
-{
-    bool was_running = EffectEnabled;
-
-    if(EffectEnabled)
-    {
-        Stop();
-    }
-
-    audio_device_idx = value;
-
-    if(was_running)
-    {
-        Start();
-    }
-}
-
-void SwirlCirclesAudio::on_amplitude_valueChanged(int value)
-{
-    amplitude = value;
-}
-
-void SwirlCirclesAudio::on_decay_valueChanged(int value)
-{
-    decay = value;
-}
-
-void SwirlCirclesAudio::on_average_valueChanged(int value)
-{
-    avg_size = value;
-}
 void SwirlCirclesAudio::on_radius_valueChanged(int value)
 {
     radius = value;
+}
+
+void SwirlCirclesAudio::on_audio_settings_clicked()
+{
+    audio_settings.show();
 }
 
 json SwirlCirclesAudio::SaveCustomSettings()
 {
     json settings;
 
-    settings["audio_device_idx"]    = audio_device_idx;
-    settings["amplitude"]           = amplitude;
-    settings["decay"]               = decay;
     settings["radius"]              = radius;
+    settings["audio_settings"] = audio_settings_struct;
 
     return settings;
 }
 
 void SwirlCirclesAudio::LoadCustomSettings(json settings)
 {
-    if (settings.contains("audio_device_idx"))  ui->devices->setCurrentIndex(settings["audio_device_idx"]);
-    if (settings.contains("amplitude"))         ui->amplitude->setValue(settings["amplitude"]);
-    if (settings.contains("decay"))             ui->decay->setValue(settings["decay"]);
     if (settings.contains("radius"))            ui->radius->setValue(settings["radius"]);
+
+    if (settings.contains("audio_settings"))
+    {
+        audio_settings_struct = settings["audio_settings"];
+        audio_settings.SetSettings(&audio_settings_struct);
+    }
 }

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include "AudioSettingsStruct.h"
 #include "json.hpp"
 #include "filesystem.h"
 #include "RGBController.h"
@@ -18,6 +19,8 @@ struct GlobalSettingsStruct
     bool use_prefered_colors = false;
     std::string startup_profile;
     std::vector<RGBColor> prefered_colors;
+    Audio::AudioSettingsStruct      audio_settings;
+
 };
 
 using json = nlohmann::json;

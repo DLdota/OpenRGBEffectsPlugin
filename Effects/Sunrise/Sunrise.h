@@ -5,7 +5,6 @@
 #include "ui_Sunrise.h"
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
-#include "ColorUtils.h"
 
 namespace Ui {
 class Sunrise;

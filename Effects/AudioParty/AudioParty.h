@@ -1,12 +1,15 @@
 #ifndef AUDIOPARTY_H
 #define AUDIOPARTY_H
 
+#include "AudioSignalProcessor.h"
+#include "AudioSettings.h"
+#include "AudioSettingsStruct.h"
+
 #include <QWidget>
 #include "ui_AudioParty.h"
 #include "ColorUtils.h"
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
-#include "chuck_fft.h"
 #include "ctkrangeslider.h"
 
 namespace Ui {
@@ -30,8 +33,9 @@ public:
     json SaveCustomSettings() override;
 
 private slots:
-    void on_devices_currentIndexChanged(int);
-    void on_amplitude_valueChanged(int);
+    void OnAudioDeviceChanged(int);
+    void on_audio_settings_clicked();
+
     void on_divisions_valueChanged(int);
     void on_effect_threshold_valueChanged(double);
     void ZonesChanged(int, int);
@@ -43,27 +47,15 @@ signals:
 private:
     Ui::AudioParty *ui;
 
-    float fft[256];
-    unsigned char buffer[256];
-    float win_hanning[256];
-    float fft_nrml[256];
-    float fft_fltr[256] = { 0 };
-    float decay = 85.f;
-    float filter_constant = 1.f;
-
     void Start();
     void Stop();
 
     double x_shift = 0.f;
     double color_shift = 0.f;
-
-    int audio_device_idx = 0;
     float divisions = 2.0;
     float effect_threshold = 0.2;
-    float amplitude = 100.f;
-    unsigned int avg_size = 8;
-    unsigned int motion_zone_stop = 8;
-    unsigned int color_zone_stop = 24;
+    unsigned int motion_zone_stop = 64;
+    unsigned int color_zone_stop = 192;
 
     RGBColor background = ColorUtils::OFF();
     RGBColor wave_color = ToRGBColor(0,255,0);
@@ -77,6 +69,9 @@ private:
 
     ctkRangeSlider* zones_slider;
 
+    AudioSettings                   audio_settings;
+    Audio::AudioSettingsStruct      audio_settings_struct;
+    AudioSignalProcessor            audio_signal_processor;
 };
 
 #endif // AUDIOPARTY_H

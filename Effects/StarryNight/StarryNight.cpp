@@ -27,7 +27,7 @@ void StarryNight::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
     int LEDPerCycle = Slider2Val;
 
-    for (unsigned int ControllerID = 0; ControllerID < controller_zones.size(); ControllerID++)
+    for (unsigned int i = 0; i < controller_zones.size(); i++)
     {
         // Note: this rand() call is the cause, see comment at the top of the file
         // CurrentStars should be a map <ControllerZone*, std::vector<NewStar>>
@@ -45,10 +45,10 @@ void StarryNight::StepEffect(std::vector<ControllerZone*> controller_zones)
             {
                 for (int ZonesMade = 0; ZonesMade < MakeForZone; ZonesMade++)
                 {
-                    int RandomLedID = rand() % controller_zones[ControllerID]->leds_count();
+                    int RandomLedID = rand() % controller_zones[i]->leds_count();
 
                     NewStar LEDStar;
-                    LEDStar.Index = ControllerID;
+                    LEDStar.Index = i;
                     LEDStar.LED = RandomLedID;
                     LEDStar.state = 255;
 

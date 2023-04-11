@@ -1,6 +1,7 @@
 #include "AudioStar.h"
 #include "ColorUtils.h"
-#include "AudioManager.h"
+#include "Audio/AudioManager.h"
+#include "OpenRGBEffectSettings.h"
 
 REGISTER_EFFECT(AudioStar);
 
@@ -18,29 +19,24 @@ AudioStar::AudioStar(QWidget *parent) :
     EffectDetails.HasCustomSettings = true;
     EffectDetails.SupportsRandom = false;
 
+    ui->edge_beatFrame->setVisible(false);
+
     SetSpeed(50);
 
-    std::vector<char *> devices = AudioManager::get()->GetAudioDevices();
+    /*--------------------------*\
+    | Setup audio                |
+    \*--------------------------*/
 
-    for(const char * str : devices)
-    {
-        ui->devices->addItem(QString::fromUtf8(str));
-    }
+    memcpy(&audio_settings_struct, &OpenRGBEffectSettings::globalSettings.audio_settings,sizeof(Audio::AudioSettingsStruct));
 
-    hanning(win_hanning, 256);
+    audio_signal_processor.SetNormalization(&audio_settings_struct);
 
-    float offset            = 0.04f;
-    float scale             = 0.5f;
+    connect(&audio_settings, &AudioSettings::AudioDeviceChanged, this, &AudioStar::OnAudioDeviceChanged);
+    connect(&audio_settings, &AudioSettings::NormalizationChanged,[=]{
+        audio_signal_processor.SetNormalization(&audio_settings_struct);
+    });
 
-    /*------------------------------------*\
-    | Fill in Normalization and FFT array  |
-    \*------------------------------------*/
-    for (int i = 0; i < 256; i++)
-    {
-        fft[i] = 0.0f;
-        fft_nrml[i] = offset + (scale * (i / 256.0f));
-    }
-
+    audio_settings.SetSettings(&audio_settings_struct);
 }
 
 AudioStar::~AudioStar()
@@ -56,21 +52,21 @@ void AudioStar::EffectState(const bool state)
 
 void AudioStar::Start()
 {
-    if(audio_device_idx >= 0)
+    if(audio_settings_struct.audio_device >= 0)
     {
-        AudioManager::get()->RegisterClient(audio_device_idx, this);
+        AudioManager::get()->RegisterClient(audio_settings_struct.audio_device, this);
     }
 }
 
 void AudioStar::Stop()
 {
-    if(audio_device_idx >= 0)
+    if(audio_settings_struct.audio_device >= 0)
     {
-        AudioManager::get()->UnRegisterClient(audio_device_idx, this);
+        AudioManager::get()->UnRegisterClient(audio_settings_struct.audio_device, this);
     }
 }
 
-void AudioStar::on_devices_currentIndexChanged(int value)
+void AudioStar::OnAudioDeviceChanged(int value)
 {
     bool was_running = EffectEnabled;
 
@@ -79,7 +75,7 @@ void AudioStar::on_devices_currentIndexChanged(int value)
         Stop();
     }
 
-    audio_device_idx = value;
+    audio_settings_struct.audio_device = value;
 
     if(was_running)
     {
@@ -89,149 +85,13 @@ void AudioStar::on_devices_currentIndexChanged(int value)
 
 void AudioStar::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
-    float fft_tmp[512];
-
-    for (int i = 0; i < 256; i++)
-    {
-        /*------------------*\
-        | Clear the buffers  |
-        \*------------------*/
-        fft_tmp[i] = 0;
-
-        /*----------------------*\
-        | Decay previous values  |
-        \*----------------------*/
-        fft[i] = fft[i] * ((float(decay) / 100.0f / (60 / FPS)));
-    }
-
-    AudioManager::get()->Capture(audio_device_idx, fft_tmp);
-
-#ifdef _WIN32
-    for (int i = 0; i < 512; i++)
-    {
-        fft_tmp[i] *= amplitude;
-    }
-#else
-    for (int i = 0; i < 512; i++)
-    {
-        fft_tmp[i] = (fft_tmp[i] - 128.0f) * (amplitude / 128.0f);
-    }
-#endif
-
-    apply_window(fft_tmp, win_hanning, 256);
-
-    /*------------------------*\
-    | Run the FFT calculation  |
-    \*------------------------*/
-    rfft(fft_tmp, 256, 1);
-
-    fft_tmp[0] = fft_tmp[2];
-
-    apply_window(fft_tmp, fft_nrml, 256);
-
-    /*----------------------*\
-    | Compute FFT magnitude  |
-    \*----------------------*/
-    for (int i = 0; i < 128; i += 2)
-    {
-        float fftmag;
-
-        /*---------------------------------------------------------------------------------*\
-        | Compute magnitude from real and imaginary components of FFT and apply simple LPF  |
-        \*---------------------------------------------------------------------------------*/
-        fftmag = (float)sqrt((fft_tmp[i] * fft_tmp[i]) + (fft_tmp[i + 1] * fft_tmp[i + 1]));
-
-        /*----------------------------------------------------------------------------------------*\
-        | Apply a slight logarithmic filter to minimize noise from very low amplitude frequencies  |
-        \*----------------------------------------------------------------------------------------*/
-        fftmag = ( 0.5f * log10(1.1f * fftmag) ) + ( 0.9f * fftmag );
-
-        /*---------------------------*\
-        | Limit FFT magnitude to 1.0  |
-        \*---------------------------*/
-        if (fftmag > 1.0f)
-        {
-            fftmag = 1.0f;
-        }
-
-        /*----------------------------------------------------------*\
-        | Update to new values only if greater than previous values  |
-        \*----------------------------------------------------------*/
-        if (fftmag > fft[i*2])
-        {
-            fft[i*2] = fftmag;;
-        }
-
-        /*----------------------------*\
-        | Prevent from going negative  |
-        \*----------------------------*/
-        if (fft[i*2] < 0.0f)
-        {
-            fft[i*2] = 0.0f;
-        }
-
-        /*--------------------------------------------------------------------*\
-        | Set odd indexes to match their corresponding even index, as the FFT  |
-        | input array uses two indices for one value (real+imaginary)          |
-        \*--------------------------------------------------------------------*/
-        fft[(i * 2) + 1] = fft[i * 2];
-        fft[(i * 2) + 2] = fft[i * 2];
-        fft[(i * 2) + 3] = fft[i * 2];
-    }
-
-
-    /*--------------------------------------------*\
-    | Apply averaging over given number of values  |
-    \*--------------------------------------------*/
-    int k;
-    float sum1 = 0;
-    float sum2 = 0;
-
-    for (k = 0; k < avg_size; k++)
-    {
-        sum1 += fft[k];
-        sum2 += fft[255 - k];
-    }
-
-    /*------------------------------*\
-    | Compute averages for end bars  |
-    \*------------------------------*/
-    sum1 = sum1 / k;
-    sum2 = sum2 / k;
-
-    for (k = 0; k < avg_size; k++)
-    {
-        fft[k] = sum1;
-        fft[255 - k] = sum2;
-    }
-
-    for (int i = 0; i < (256 - avg_size); i += avg_size)
-    {
-        float sum = 0;
-
-        for (int j = 0; j < avg_size; j += 1)
-        {
-            sum += fft[i + j];
-        }
-
-        float avg = sum / avg_size;
-
-        for (int j = 0; j < avg_size; j += 1)
-        {
-            fft[i + j] = avg;
-        }
-    }
-
-    for(int i = 0; i < 256; i++)
-    {
-        fft_fltr[i] = fft_fltr[i] + (filter_constant * (fft[i] - fft_fltr[i]));
-    }
+    audio_signal_processor.Process(FPS, &audio_settings_struct);
 
     amp = 0;
 
-    for(int i = 0; i < 256; i += avg_size)
+    for(int i = 0; i < 256; i += audio_settings_struct.avg_size)
     {
-        amp += fft_fltr[i];
+        amp += audio_signal_processor.Data().fft_fltr[i];
     }
 
     for(ControllerZone* controller_zone : controller_zones)
@@ -283,7 +143,7 @@ RGBColor AudioStar::GetColor(float x, float y, float w, float h)
 
     float angle = fabs(atan2((x - cx), (y  - cy)));
 
-    double freq_amp = fft_fltr[(int)(256 * (angle / (pi*2)))];
+    double freq_amp = audio_signal_processor.Data().fft_fltr[(int)(256 * (angle / (pi*2)))];
 
     hsv.hue = (int)((angle/pi)*360 + time) % 360;
     hsv.saturation = 255;
@@ -301,7 +161,9 @@ RGBColor AudioStar::GetColor(float x, float y, float w, float h)
 
             edge.hue = edge_beat_hue;
             edge.saturation = edge_beat_saturation;
-            edge.value = 255 * std::min<float>(1., 0.01 * edge_beat_sensivity * (fft_fltr[0] + fft_fltr[8]));
+            edge.value = 255 * std::min<float>(
+                        1.,
+                        0.01 * edge_beat_sensivity * (audio_signal_processor.Data().fft_fltr[0] + audio_signal_processor.Data().fft_fltr[8]));
 
             return ColorUtils::Screen(color, RGBColor(hsv2rgb(&edge)));
         }
@@ -325,55 +187,33 @@ void AudioStar::on_edge_beat_sensivity_valueChanged(int value)
     edge_beat_sensivity = value;
 }
 
-
-void AudioStar::on_amplitude_valueChanged(int value)
-{
-    amplitude = value;
-}
-
-void AudioStar::on_decay_valueChanged(int value)
-{
-    decay = value;
-}
-
 void AudioStar::on_edge_beat_stateChanged(int value)
 {
-    ui->edge_beat_sensivity->setVisible(value);
-    ui->edge_beat_saturation->setVisible(value);
-    ui->edge_beat_hue->setVisible(value);
-    ui->edge_beat_sensivity_label->setVisible(value);
-    ui->edge_beat_saturation_label->setVisible(value);
-    ui->edge_beat_hue_label->setVisible(value);
-
     edge_beat = value;
+
+    ui->edge_beatFrame->setVisible(value);
+}
+
+void AudioStar::on_audio_settings_clicked()
+{
+    audio_settings.show();
 }
 
 json AudioStar::SaveCustomSettings()
 {
     json settings;
 
-    settings["audio_device_idx"] = audio_device_idx;
-    settings["amplitude"] = amplitude;
-    settings["decay"] = decay;
     settings["edge_beat"] = edge_beat;
     settings["edge_beat_sensivity"] = edge_beat_sensivity;
     settings["edge_beat_saturation"] = edge_beat_saturation;
     settings["edge_beat_hue"] = edge_beat_hue;
+    settings["audio_settings"] = audio_settings_struct;
 
     return settings;
 }
 
 void AudioStar::LoadCustomSettings(json Settings)
 {
-    if (Settings.contains("audio_device_idx"))
-        ui->devices->setCurrentIndex(Settings["audio_device_idx"]);
-
-    if (Settings.contains("amplitude"))
-        ui->amplitude->setValue(Settings["amplitude"]);
-
-    if (Settings.contains("decay"))
-        ui->decay->setValue(Settings["decay"]);
-
     if (Settings.contains("edge_beat"))
         ui->edge_beat->setChecked(Settings["edge_beat"]);
 
@@ -385,4 +225,10 @@ void AudioStar::LoadCustomSettings(json Settings)
 
     if (Settings.contains("edge_beat_hue"))
         ui->edge_beat_hue->setValue(Settings["edge_beat_hue"]);
+
+    if (Settings.contains("audio_settings"))
+    {
+        audio_settings_struct = Settings["audio_settings"];
+        audio_settings.SetSettings(&audio_settings_struct);
+    }
 }

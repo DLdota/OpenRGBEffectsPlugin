@@ -1,7 +1,6 @@
 #include "DeviceListItem.h"
 #include "ui_DeviceListItem.h"
 #include "OpenRGBPluginsFont.h"
-#include "OpenRGBEffectSettings.h"
 
 #include <QVBoxLayout>
 

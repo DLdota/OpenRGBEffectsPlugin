@@ -56,7 +56,7 @@ void FractalMotion::StepEffect(std::vector<ControllerZone*> controller_zones)
                 for (int row_id = 0; row_id < rows; row_id++)
                 {
                     RGBColor color = GetColor(col_id, row_id, rows);
-                    int LedID = controller_zone->controller->zones[controller_zone->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
+                    int LedID = controller_zone->map()[((row_id * cols) + col_id)];
                     controller_zone->SetLED(LedID, color, Brightness);
                 }
             }

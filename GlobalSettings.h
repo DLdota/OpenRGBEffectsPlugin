@@ -1,7 +1,7 @@
 #ifndef GLOBALSETTINGS_H
 #define GLOBALSETTINGS_H
 
-#include "json.hpp"
+#include "AudioSettings.h"
 #include "ui_GlobalSettings.h"
 
 #include <QWidget>
@@ -26,10 +26,12 @@ private slots:
     void on_usePreferedColorsCheckBox_stateChanged(int);
     void on_preferedColors_ColorsChanged();
     void on_randomColorsCheckBox_stateChanged(int);
+    void on_audioSettings_clicked();
 
 private:
     Ui::GlobalSettings *ui;
 
+    AudioSettings                   audio_settings;
 };
 
 #endif // GLOBALSETTINGS_H

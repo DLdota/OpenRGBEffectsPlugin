@@ -2,7 +2,6 @@
 #include "ColorUtils.h"
 #include <QFileDialog>
 
-
 REGISTER_EFFECT(GifPlayer);
 
 GifPlayer::GifPlayer(QWidget *parent) :
@@ -62,7 +61,6 @@ void GifPlayer::StepEffect(std::vector<ControllerZone*> controller_zones)
         {
             unsigned int width = controller_zone->matrix_map_width();
             unsigned int height = controller_zone->matrix_map_height();
-            unsigned int * map = controller_zone->map();
 
             QImage scaled = image.scaled(width, height);
 
@@ -72,7 +70,7 @@ void GifPlayer::StepEffect(std::vector<ControllerZone*> controller_zones)
                 {
                     QColor color = scaled.pixelColor(w, h);
 
-                    unsigned int led_num = map[h * width + w];
+                    unsigned int led_num = controller_zone->map()[h * width + w];
                     controller_zone->SetLED(led_num, ColorUtils::fromQColor(color), Brightness);
                 }
             }

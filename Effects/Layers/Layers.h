@@ -6,7 +6,6 @@
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
 #include "LayerGroupEntry.h"
-#include "ColorUtils.h"
 
 namespace Ui {
 class Layers;

@@ -1,6 +1,5 @@
 #include "EffectTabHeader.h"
 #include "ui_EffectTabHeader.h"
-#include <QPropertyAnimation>
 #include <QInputDialog>
 #include "OpenRGBPluginsFont.h"
 

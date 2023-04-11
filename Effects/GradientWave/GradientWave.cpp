@@ -130,7 +130,7 @@ void GradientWave::StepEffect(std::vector<ControllerZone*> controller_zones)
 
                 for (int RowID = 0; RowID < RowCount; RowID++)
                 {
-                    int LedID = controller_zone->controller->zones[controller_zone->zone_idx].matrix_map->map[((RowID * ColumnCount) + (RVRS ? (ColumnCount - 1) - ColumnID: ColumnID ) )];
+                    int LedID = controller_zone->map()[((RowID * ColumnCount) + (RVRS ? (ColumnCount - 1) - ColumnID: ColumnID ) )];
                     controller_zone->SetLED(LedID,ToRGBColor(RGBCol[0],RGBCol[1],RGBCol[2]), Brightness);
                 }
             }

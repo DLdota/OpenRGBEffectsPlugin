@@ -1,10 +1,11 @@
 #include "OpenRGBEffectSettings.h"
 #include <fstream>
 #include <iostream>
+#include "OpenRGBEffectsPlugin.h"
+
 #include <QFile>
 #include <QString>
 #include <QDir>
-#include "OpenRGBEffectsPlugin.h"
 
 unsigned int OpenRGBEffectSettings::version = 2;
 
@@ -22,6 +23,7 @@ bool OpenRGBEffectSettings::WriteGlobalSettings()
     j["prefer_random"]         = globalSettings.prefer_random;
     j["prefered_colors"]       = globalSettings.prefered_colors;
     j["use_prefered_colors"]   = globalSettings.use_prefered_colors;
+    j["audio_settings"]        = globalSettings.audio_settings;
 
     return write_file(SettingsFolder() / "EffectSettings.json", j);
 }
@@ -46,6 +48,8 @@ void OpenRGBEffectSettings::LoadGlobalSettings()
             if(j.contains("hide_unsupported"))      globalSettings.hide_unsupported     =j["hide_unsupported"];
             if(j.contains("prefer_random"))         globalSettings.prefer_random        =j["prefer_random"];
             if(j.contains("use_prefered_colors"))   globalSettings.use_prefered_colors  =j["use_prefered_colors"];
+            if(j.contains("audio_settings"))        globalSettings.audio_settings       =j["audio_settings"];
+
 
             if(j.contains("prefered_colors"))
             {

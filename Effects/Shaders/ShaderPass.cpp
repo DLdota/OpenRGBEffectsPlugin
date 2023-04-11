@@ -1,5 +1,5 @@
 #include "ShaderPass.h"
-#include "ColorUtils.h"
+#include "RGBController.h"
 
 ShaderPass::ShaderPass(Type type)
 {

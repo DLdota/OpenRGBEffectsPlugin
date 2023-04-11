@@ -5,7 +5,6 @@
 #include "RGBEffect.h"
 #include "EffectList.h"
 
-
 namespace Ui {
 class OpenRGBEffectTab;
 }

@@ -1,6 +1,10 @@
 #ifndef SHADERS_H
 #define SHADERS_H
 
+#include "AudioSignalProcessor.h"
+#include "AudioSettings.h"
+#include "AudioSettingsStruct.h"
+
 #include <QWidget>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLTexture>
@@ -13,8 +17,6 @@
 #include "EffectRegisterer.h"
 #include "ShaderRenderer.h"
 #include "GLSLCodeEditor.h"
-#include "ColorUtils.h"
-#include "chuck_fft.h"
 #include "ShaderProgram.h"
 
 namespace Ui {
@@ -44,62 +46,39 @@ private slots:
     void on_show_rendering_stateChanged(int);
     void on_use_audio_stateChanged(int);
     void on_shaders_currentIndexChanged(int);
-    void on_audio_device_currentIndexChanged(int);
-
     void on_width_valueChanged(int);
     void on_height_valueChanged(int);
-
     void on_invert_time_stateChanged(int);
-
-    void on_amplitude_valueChanged(int);
-    void on_decay_valueChanged(int);
-    void on_average_valueChanged(int);
-
     void on_edit_clicked();
     void on_time_reset_clicked();
+
+    void on_audio_settings_clicked();
+    void OnAudioDeviceChanged(int);
 
 private:
     Ui::Shaders *ui;
     QImage image;
-
     ShaderRenderer* shader_renderer = nullptr;
     GLSLCodeEditor* editor = nullptr;
     GLSLHighlighter* highlighter = nullptr;
-
     float time = 0.f;
-
     unsigned int width = 128;
     unsigned int height = 128;
-
-    void Resize();
-
     std::vector<QString> shader_paths;
     unsigned int current_shader_idx = 0;
-
     bool show_rendering = false;
-
-    std::mutex image_mutex;
-
-    // Audio stuff
-    float fft[256];
-    unsigned char buffer[256];
-    float win_hanning[256];
-    float fft_nrml[256];
-    float fft_fltr[256] = { 0 };
-
+    std::mutex image_mutex;  
     bool use_audio = false;
-
     bool invert_time = false;
 
+    AudioSettings                   audio_settings;
+    Audio::AudioSettingsStruct      audio_settings_struct;
+    AudioSignalProcessor            audio_signal_processor;
+
+    void Resize();
     void StartAudio();
     void StopAudio();
     void HandleAudioCapture();
-
-    int audio_device_idx = 0;
-    float amplitude = 100.f;
-    float decay = 85.f;
-    float filter_constant = 1.f;
-    unsigned int avg_size = 8;
 };
 
 #endif // SHADERS_H

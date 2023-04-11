@@ -1,12 +1,14 @@
 #ifndef AUDIOSTAR_H
 #define AUDIOSTAR_H
 
+#include "AudioSignalProcessor.h"
+#include "AudioSettings.h"
+#include "AudioSettingsStruct.h"
+
 #include <QWidget>
 #include "ui_AudioStar.h"
-#include "ColorUtils.h"
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
-#include "chuck_fft.h"
 
 namespace Ui {
 class AudioStar;
@@ -29,9 +31,9 @@ public:
     json SaveCustomSettings() override;
 
 private slots:
-    void on_devices_currentIndexChanged(int);
-    void on_amplitude_valueChanged(int);
-    void on_decay_valueChanged(int);
+    void OnAudioDeviceChanged(int);
+
+    void on_audio_settings_clicked();
     void on_edge_beat_stateChanged(int);
     void on_edge_beat_sensivity_valueChanged(int);
     void on_edge_beat_hue_valueChanged(int);
@@ -40,30 +42,21 @@ private slots:
 private:
     Ui::AudioStar *ui;
 
-    float fft[256];
-    unsigned char buffer[256];
-    float win_hanning[256];
-    float fft_nrml[256];
-    float fft_fltr[256] = { 0 };
-    float decay = 90.f;
-    float filter_constant = 1.f;
-    int   edge_beat_sensivity  = 100;
-    int   edge_beat_saturation  = 0;
-    int   edge_beat_hue  = 0;
+    bool    edge_beat = false;
+    int     edge_beat_sensivity  = 100;
+    int     edge_beat_saturation  = 0;
+    int     edge_beat_hue  = 0;
+    double  time = 0;
+    double  amp;
+    float   side = 1.f;
 
     void Start();
     void Stop();
+    RGBColor GetColor(float, float, float, float);    
 
-    int audio_device_idx = 0;
-    float amplitude = 100.f;
-    int avg_size = 8;
-    bool edge_beat = false;
-
-    RGBColor GetColor(float, float, float, float);
-
-    double time = 0;
-    double amp;
-    float side = 1.f;
+    AudioSettings                   audio_settings;
+    Audio::AudioSettingsStruct      audio_settings_struct;
+    AudioSignalProcessor            audio_signal_processor;
 };
 
 

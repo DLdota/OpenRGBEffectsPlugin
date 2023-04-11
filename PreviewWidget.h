@@ -3,7 +3,6 @@
 
 #include <QKeyEvent>
 #include <QMouseEvent>
-#include <QImage>
 #include <QLabel>
 
 class PreviewWidget : public QLabel

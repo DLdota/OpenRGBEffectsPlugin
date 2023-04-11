@@ -7,7 +7,6 @@
 #include "OpenRGBPluginInterface.h"
 #include "OpenRGBEffectTab.h"
 #include "ResourceManager.h"
-#include "NetworkServer.h"
 
 enum {
     NET_PACKET_ID_REQUEST_EFFECT_LIST   = 0,

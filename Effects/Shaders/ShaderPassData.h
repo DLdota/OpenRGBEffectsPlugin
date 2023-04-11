@@ -1,7 +1,6 @@
 #ifndef SHADERPASSDATA_H
 #define SHADERPASSDATA_H
 
-#include <QString>
 #include <string>
 
 struct ShaderPassData

@@ -7,7 +7,6 @@
 #include "EffectRegisterer.h"
 #include "hsv.h"
 
-
 namespace Ui {
 class SwirlCircles;
 }

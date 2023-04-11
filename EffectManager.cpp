@@ -1,5 +1,5 @@
 #include "EffectManager.h"
-#include "AudioManager.h"
+#include <set>
 
 EffectManager* EffectManager::instance;
 

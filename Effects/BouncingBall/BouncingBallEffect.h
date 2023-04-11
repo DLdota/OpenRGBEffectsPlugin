@@ -6,10 +6,8 @@
 
 #include <QWidget>
 #include "RGBEffect.h"
-#include "ColorUtils.h"
 #include "BouncingBallSimulation.h"
 #include "EffectRegisterer.h"
-#include "hsv.h"
 #include "ui_BouncingBallEffect.h"
 
 namespace Ui {

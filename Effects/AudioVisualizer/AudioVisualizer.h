@@ -1,66 +1,15 @@
 #ifndef AUDIOVISUALIZER_H
 #define AUDIOVISUALIZER_H
 
+#include "AudioSignalProcessor.h"
+#include "AudioSettings.h"
+#include "AudioSettingsStruct.h"
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
+
 #include "ui_AudioVisualizer.h"
 #include <QWidget>
-#include <QTimer>
-#include <QGraphicsScene>
-#include "AudioManager.h"
-
-/*---------------------------------------------------------*\
-| C/C++ Standard Library Includes                           |
-\*---------------------------------------------------------*/
-#include <math.h>
-#include <string>
-#include <string.h>
 #include <vector>
-#include <thread>
-#include "chuck_fft.h"
-#include "AudioManager.h"
-#include "hsv.h"
-
-/*---------------------------------------------------------*\
-| Project Includes                                          |
-\*---------------------------------------------------------*/
-#include "RGBEffect.h"
-
-/*---------------------------------------------------------*\
-| Audio Library Includes                                    |
-\*---------------------------------------------------------*/
-#ifdef _WIN32
-#include <mmsystem.h>
-#include <mmdeviceapi.h>
-#include <audioclient.h>
-#include <initguid.h>
-#include <mmdeviceapi.h>
-#include <functiondiscoverykeys_devpkey.h>
-#endif
-
-#ifdef __linux__
-#include <AL/al.h>
-#include <AL/alc.h>
-#endif
-
-#ifdef __APPLE__
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
-#endif
-
-
-/*---------------------------------------------------------*\
-| Define Windows types for non-Windows builds               |
-\*---------------------------------------------------------*/
-#ifndef _WIN32
-#include <unistd.h>
-
-typedef unsigned char   BYTE;
-typedef bool            boolean;
-#define Sleep(ms)       (usleep(ms * 1000))
-#define LPSTR           char *
-#define strtok_s        strtok_r
-#endif
 
 //Special purpose row indices
 #define ROW_IDX_BAR_GRAPH           0
@@ -185,10 +134,10 @@ struct vis_pixels
 
 struct ZoneIndexType
 {
-    int                 x_count;
-    int                 y_count;
-    int *               x_index;
-    int *               y_index;
+    int   x_count;
+    int   y_count;
+    int*  x_index;
+    int*  y_index;
 };
 
 namespace Ui {
@@ -216,36 +165,21 @@ private slots:
     /*-------------*\
     | GUI Handling  |
     \*-------------*/
-    void update();
+    void Update();
+    void OnAudioDeviceChanged(int);
+
     void on_spinBox_Background_Brightness_valueChanged(int);
     void on_doubleSpinBox_Animation_Speed_valueChanged(double);
-
-    /*---------------------*\
-    | Amp, Size, and Decay  |
-    \*---------------------*/
-    void on_spinBox_Amplitude_valueChanged(int);
-    void on_spinBox_Average_Size_valueChanged(int);
-    void on_spinBox_Decay_valueChanged(int);
-
-    /*-------------*\
-    | Normalization |
-    \*-------------*/
-    void on_doubleSpinBox_Normalization_Offset_valueChanged(double);
-    void on_doubleSpinBox_Normalization_Scale_valueChanged(double);
-
-    /*------------------------------*\
-    | Color and Brightness Settings  |
-    \*------------------------------*/
-    void on_comboBox_FFT_Window_Mode_currentIndexChanged(int);
     void on_comboBox_Background_Mode_currentIndexChanged(int);
     void on_comboBox_Foreground_Mode_currentIndexChanged(int);
     void on_comboBox_Single_Color_Mode_currentIndexChanged(int);
-    void on_comboBox_Average_Mode_currentIndexChanged(int);
-    void on_checkBox_Reactive_Background_clicked(bool);
-    void on_comboBox_Audio_Device_currentIndexChanged(int);
-    void on_doubleSpinBox_Filter_Constant_valueChanged(double);
-    void on_checkBox_Silent_Background_clicked(bool);
+    void on_checkBox_Reactive_Background_stateChanged(int);
+    void on_checkBox_Silent_Background_stateChanged(int);
     void on_doubleSpinBox_Background_Timeout_valueChanged(double);
+    void on_audio_settings_clicked();
+
+signals:
+    void UpdateGraphSignal();
 
 private:
     /*---------*\
@@ -258,9 +192,8 @@ private:
     /*--------------*\
     | State changes  |
     \*--------------*/
-    bool RegisteredForDevice = false;
-    bool EffectActive = false;
-    void SetDevice();
+    void Start();
+    void Stop();
 
     /*-----------------------*\
     | Pointers                |
@@ -272,93 +205,12 @@ private:
     \*-------------------------------*/
     void LEDUpdateThreadFunction();
     void VisThreadFunction();
-    void SetNormalization(float offset, float scale);
 
     /*--------*\
     | Drawing  |
     \*--------*/
-    void Update();
+    //void Update();
     void DrawPattern(VISUALIZER_PATTERN pattern, int bright, vis_pixels *pixels);
-
-    /*-----------------------*\
-    | Various Peices of Data  |
-    |                         |
-    | fft array               |
-    |                         |
-    | Amplitude               |
-    | Average Mode            |
-    | Average Size            |
-    | Window Mode             |
-    | Decay Speed             |
-    | Audio Device ID         |
-    |                         |
-    | Update UI flag          |
-    |                         |
-    | Background Color Array  |
-    | Foreground Color Array  |
-    |                         |
-    | Image 1                 |
-    | Image 2                 |
-    |                         |
-    | Output Pointer          |
-    | Render Pointer          |
-    |                         |
-    | Animation Speed         |
-    | Background Brightness   |
-    | Background Mode         |
-    | Reactive Background     |
-    | Silent Background       |
-    | Background Timeout      |
-    | Background Timer        |
-    |                         |
-    | Single Color Mode       |
-    |                         |
-    | Normalization Offset    |
-    | Normalization Scaling   |
-    |                         |
-    | Filter Constant         |
-    |                         |
-    | Foreground Mode         |
-    |                         |
-    | Audio Device List       |
-    |------More Misc----------|
-    | Background Step         |
-    |                         |
-    | FFT Variables           |
-    |                         |
-    | Settings Changed Flag   |
-    | Shutdown Flag           |
-    |                         |
-    | Audio Sample Buffer     |
-    |                         |
-    | List of Zone Maps       |
-    |----Drawing Functions----|
-    | Solid Color             |
-    | Solid Color Static      |
-    | Solid Color Foreground  |
-    | Solid Color Background  |
-    | Spectrum Cycling        |
-    | Sine Spectrum Cycling   |
-    | Rainbow Wave            |
-    | Sine Rainbow Wave       |
-    | Color Wheel             |
-    | Vertical Bars           |
-    | Horizontal Bars         |
-    |-------Zone setup--------|
-    | SetupMatrixGrid         |
-    | SetupLinearGrid         |
-    \*-----------------------*/
-    float fft[256];
-
-    int amplitude;
-    int avg_mode;
-    int avg_size;
-    int window_mode;
-    int decay;
-    unsigned int audio_device_idx = 0;
-    unsigned int previous_audio_device_idx = 0;
-
-    bool update_ui;
 
     vis_pixels pixels_bg;
     vis_pixels pixels_fg;
@@ -376,30 +228,26 @@ private:
     bool silent_bkgd;
     float background_timeout;
     float background_timer;
-
     int single_color_mode;
-
-    float nrml_ofst;
-    float nrml_scl;
-
-    float filter_constant;
-
     int frgd_mode;
 
+    int     ledstrip_sections_size  = 1;
+    int     matrix_setup_pos;
+    int     matrix_setup_size;
+    bool    ledstrip_mirror_x       = false;
+    bool    ledstrip_mirror_y       = false;
+    bool    ledstrip_single_color   = false;
+    int     ledstrip_rotate_x       = 0;
+
     std::vector<char *> audio_devices;
-
     float bkgd_step;
-
-    float win_hanning[256];
-    float win_hamming[256];
-    float win_blackman[256];
-    float fft_tmp[512];
-
     bool shutdown_flag;
 
-    unsigned char buffer[256];
-
     std::vector<ZoneIndexType*> ZoneMaps;
+
+    AudioSettings                   audio_settings;
+    Audio::AudioSettingsStruct      audio_settings_struct;
+    AudioSignalProcessor            audio_signal_processor;
 
     /*------------------*\
     | Drawing Functions  |

@@ -32,11 +32,11 @@ void ColorWheelEffect::StepEffect(std::vector<ControllerZone*> controller_zones)
     float cx_shift_mult = cx_shift / 100.f;
     float cy_shift_mult = cy_shift / 100.f;
 
-    for(unsigned int i = 0; i < controller_zones.size(); i++)
+    for(ControllerZone* controller_zone: controller_zones)
     {
-        zone_type ZT = controller_zones[i]->type();
-        int leds_count = controller_zones[i]->leds_count();
-        bool reverse = controller_zones[i]->reverse;
+        zone_type ZT = controller_zone->type();
+        int leds_count = controller_zone->leds_count();
+        bool reverse = controller_zone->reverse;
 
         if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
         {
@@ -46,14 +46,14 @@ void ColorWheelEffect::StepEffect(std::vector<ControllerZone*> controller_zones)
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
                 RGBColor color = GetColor(LedID, 0, cx, cy, reverse);
-                controller_zones[i]->SetLED(LedID, color, Brightness);
+                controller_zone->SetLED(LedID, color, Brightness);
             }
         }
 
         else if (ZT == ZONE_TYPE_MATRIX)
         {
-            int cols = controller_zones[i]->matrix_map_width();
-            int rows = controller_zones[i]->matrix_map_height();
+            int cols = controller_zone->matrix_map_width();
+            int rows = controller_zone->matrix_map_height();
 
             double cx = (cols - 1) * cx_shift_mult;
             double cy = (rows - 1) * cy_shift_mult;
@@ -63,8 +63,8 @@ void ColorWheelEffect::StepEffect(std::vector<ControllerZone*> controller_zones)
                  for (int row_id = 0; row_id < rows; row_id++)
                 {
                     RGBColor color = GetColor(col_id, row_id, cx, cy, reverse);
-                    int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                    controller_zones[i]->SetLED(LedID, color, Brightness);
+                    int LedID = controller_zone->map()[((row_id * cols) + col_id)];
+                    controller_zone->SetLED(LedID, color, Brightness);
                 }
             }
         }
@@ -74,7 +74,8 @@ void ColorWheelEffect::StepEffect(std::vector<ControllerZone*> controller_zones)
 }
 
 
-RGBColor ColorWheelEffect::GetColor(unsigned int x, unsigned int y, double cx, double cy, bool reverse){
+RGBColor ColorWheelEffect::GetColor(unsigned int x, unsigned int y, double cx, double cy, bool reverse)
+{
     float direction_mult = direction == 0 ? 1.f : -1.f;
     float hue = (float)(progress + (int)(180 + direction_mult * (reverse ? atan2(y - cy, x - cx) : atan2(x - cx, y - cy)) * (180.0 / 3.14159)) % 360);
     hsv_t hsv = { 0, 0, 0 };
@@ -102,13 +103,9 @@ void ColorWheelEffect::on_direction_currentIndexChanged(int value)
 
 void ColorWheelEffect::LoadCustomSettings(json settings)
 {
-    if(settings.contains("cx")) cx_shift = settings["cx"];
-    if(settings.contains("cy")) cy_shift = settings["cy"];
-    if(settings.contains("direction")) direction = settings["direction"];
-
-    ui->cx->setValue(cx_shift);
-    ui->cy->setValue(cy_shift);
-    ui->direction->setCurrentIndex(direction);
+    if(settings.contains("cx")) ui->cx->setValue(settings["cx"]);
+    if(settings.contains("cy")) ui->cy->setValue(settings["cy"]);
+    if(settings.contains("direction")) ui->direction->setCurrentIndex(settings["direction"]);
 }
 
 json ColorWheelEffect::SaveCustomSettings()

@@ -1,6 +1,5 @@
 #include "SmoothBlink.h"
 #include "ColorUtils.h"
-#include "hsv.h"
 
 REGISTER_EFFECT(SmoothBlink);
 
@@ -150,7 +149,6 @@ void SmoothBlink::HandleCircleRendering(std::vector<ControllerZone*> controller_
         {
             unsigned int width = controller_zone->matrix_map_width();
             unsigned int height = controller_zone->matrix_map_height();
-            unsigned int * map = controller_zone->map();
 
             float cx = (width - 1) * cx_shift_mult;
             float cy = (height - 1) * cy_shift_mult;
@@ -161,7 +159,7 @@ void SmoothBlink::HandleCircleRendering(std::vector<ControllerZone*> controller_
                 {
                     RGBColor color = GetColor(w, h, cx, cy, width + height);
 
-                    unsigned int led_num = map[h * width + w];
+                    unsigned int led_num = controller_zone->map()[h * width + w];
                     controller_zone->SetLED(led_num, color, Brightness);
                 }
             }

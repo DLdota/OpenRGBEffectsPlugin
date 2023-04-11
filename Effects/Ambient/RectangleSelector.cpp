@@ -1,4 +1,5 @@
 #include "RectangleSelector.h"
+#include <math.h>
 #include <QDesktopWidget>
 #include <QBrush>
 

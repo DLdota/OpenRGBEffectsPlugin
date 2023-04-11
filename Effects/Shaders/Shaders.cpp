@@ -1,5 +1,6 @@
 #include "Shaders.h"
-#include "AudioManager.h"
+#include "Audio/AudioManager.h"
+#include "OpenRGBEffectSettings.h"
 
 /*
 TODO:
@@ -69,31 +70,20 @@ Shaders::Shaders(QWidget *parent) :
         ui->shaders->addItem(path.split( "/" ).last());
     }
 
-    /*-----------------------------------------------*\
-    | List audio devices                              |
-    \*-----------------------------------------------*/
-    std::vector<char *> devices = AudioManager::get()->GetAudioDevices();
+    /*--------------------------*\
+    | Setup audio                |
+    \*--------------------------*/
 
-    for(const char * str : devices)
-    {
-        ui->audio_device->addItem(QString::fromLocal8Bit(str));
-    }
+    memcpy(&audio_settings_struct, &OpenRGBEffectSettings::globalSettings.audio_settings,sizeof(Audio::AudioSettingsStruct));
 
-    ui->audio_frame->hide();
+    audio_signal_processor.SetNormalization(&audio_settings_struct);
 
-    hanning(win_hanning, 256);
+    connect(&audio_settings, &AudioSettings::AudioDeviceChanged, this, &Shaders::OnAudioDeviceChanged);
+    connect(&audio_settings, &AudioSettings::NormalizationChanged,[=]{
+        audio_signal_processor.SetNormalization(&audio_settings_struct);
+    });
 
-    float offset            = 0.04f;
-    float scale             = 0.5f;
-
-    /*------------------------------------*\
-    | Fill in Normalization and FFT array  |
-    \*------------------------------------*/
-    for (int i = 0; i < 256; i++)
-    {
-        fft[i] = 0.0f;
-        fft_nrml[i] = offset + (scale * (i / 256.0f));
-    }
+    audio_settings.SetSettings(&audio_settings_struct);
 
     SetSpeed(1000);
 }
@@ -144,7 +134,7 @@ void Shaders::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     if(use_audio)
     {
-        HandleAudioCapture();
+        audio_signal_processor.Process(FPS, &audio_settings_struct);
     }
 
     if(!shader_renderer->isRunning())
@@ -153,7 +143,7 @@ void Shaders::StepEffect(std::vector<ControllerZone*> controller_zones)
     }
 
     shader_renderer->uniforms.iTime = invert_time ? - time : time;
-    shader_renderer->uniforms.iAudio = fft_fltr;
+    shader_renderer->uniforms.iAudio = (float*) audio_signal_processor.Data().fft_fltr;
 
     image_mutex.lock();
 
@@ -189,7 +179,6 @@ void Shaders::StepEffect(std::vector<ControllerZone*> controller_zones)
         {
             unsigned int width = controller_zone->matrix_map_width();
             unsigned int height = controller_zone->matrix_map_height();
-            unsigned int * map = controller_zone->map();
 
             QImage scaled = copy.scaled(width, height);
 
@@ -199,7 +188,7 @@ void Shaders::StepEffect(std::vector<ControllerZone*> controller_zones)
                 {
                     QColor color = scaled.pixelColor(w, h);
 
-                    unsigned int led_num = map[h * width + w];
+                    unsigned int led_num = controller_zone->map()[h * width + w];
                     controller_zone->SetLED(led_num, ColorUtils::fromQColor(color), Brightness);
                 }
             }
@@ -234,18 +223,11 @@ void Shaders::LoadCustomSettings(json Settings)
     if(Settings.contains("use_audio"))
         ui->use_audio->setChecked(Settings["use_audio"]);
 
-    if(Settings.contains("audio_device_idx"))
-        ui->audio_device->setCurrentIndex(Settings["audio_device_idx"]);
-
-    if(Settings.contains("amplitude"))
-        ui->amplitude->setValue(Settings["amplitude"]);
-
-    if(Settings.contains("decay"))
-        ui->decay->setValue(Settings["decay"]);
-
-    if(Settings.contains("avg_size"))
-        ui->average->setValue(Settings["avg_size"]);
-
+    if (Settings.contains("audio_settings"))
+    {
+        audio_settings_struct = Settings["audio_settings"];
+        audio_settings.SetSettings(&audio_settings_struct);
+    }
 }
 
 json Shaders::SaveCustomSettings()
@@ -259,161 +241,24 @@ json Shaders::SaveCustomSettings()
     settings["show_rendering"]   = show_rendering;
     settings["invert_time"]      = invert_time;
     settings["use_audio"]        = use_audio;
-    settings["audio_device_idx"] = audio_device_idx;
-    settings["amplitude"]        = amplitude;
-    settings["decay"]            = decay;
-    settings["avg_size"]         = avg_size;
+    settings["audio_settings"] = audio_settings_struct;
 
     return settings;
 }
 
 void Shaders::StartAudio()
 {
-    AudioManager::get()->RegisterClient(audio_device_idx, this);
+    if(audio_settings_struct.audio_device >= 0)
+    {
+        AudioManager::get()->RegisterClient(audio_settings_struct.audio_device, this);
+    }
 }
 
 void Shaders::StopAudio()
 {
-    AudioManager::get()->UnRegisterClient(audio_device_idx, this);
-}
-
-void Shaders::HandleAudioCapture()
-{
-    float fft_tmp[512];
-
-    for (int i = 0; i < 256; i++)
+    if(audio_settings_struct.audio_device >= 0)
     {
-        /*------------------*\
-        | Clear the buffers  |
-        \*------------------*/
-        fft_tmp[i] = 0;
-
-        /*----------------------*\
-        | Decay previous values  |
-        \*----------------------*/
-        fft[i] = fft[i] * ((float(decay) / 100.0f / (60 / FPS)));
-    }
-
-    AudioManager::get()->Capture(audio_device_idx, fft_tmp);
-
-#ifdef _WIN32
-    for (int i = 0; i < 512; i++)
-    {
-        fft_tmp[i] *= amplitude;
-    }
-#else
-    for (int i = 0; i < 512; i++)
-    {
-        fft_tmp[i] = (fft_tmp[i] - 128.0f) * (amplitude / 128.0f);
-    }
-#endif
-
-    apply_window(fft_tmp, win_hanning, 256);
-
-    /*------------------------*\
-    | Run the FFT calculation  |    void EffectState(bool) override;
-
-    \*------------------------*/
-    rfft(fft_tmp, 256, 1);
-
-    fft_tmp[0] = fft_tmp[2];
-
-    apply_window(fft_tmp, fft_nrml, 256);
-
-    /*----------------------*\
-    | Compute FFT magnitude  |
-    \*----------------------*/
-    for (int i = 0; i < 128; i += 2)
-    {
-        float fftmag;
-
-        /*---------------------------------------------------------------------------------*\
-        | Compute magnitude from real and imaginary components of FFT and apply simple LPF  |
-        \*---------------------------------------------------------------------------------*/
-        fftmag = (float)sqrt((fft_tmp[i] * fft_tmp[i]) + (fft_tmp[i + 1] * fft_tmp[i + 1]));
-
-        /*----------------------------------------------------------------------------------------*\
-        | Apply a slight logarithmic filter to minimize noise from very low amplitude frequencies  |
-        \*----------------------------------------------------------------------------------------*/
-        fftmag = ( 0.5f * log10(1.1f * fftmag) ) + ( 0.9f * fftmag );
-
-        /*---------------------------*\
-        | Limit FFT magnitude to 1.0  |
-        \*---------------------------*/
-        if (fftmag > 1.0f)
-        {
-            fftmag = 1.0f;
-        }
-
-        /*----------------------------------------------------------*\
-        | Update to new values only if greater than previous values  |
-        \*----------------------------------------------------------*/
-        if (fftmag > fft[i*2])
-        {
-            fft[i*2] = fftmag;;
-        }
-
-        /*----------------------------*\
-        | Prevent from going negative  |
-        \*----------------------------*/
-        if (fft[i*2] < 0.0f)
-        {
-            fft[i*2] = 0.0f;
-        }
-
-        /*--------------------------------------------------------------------*\
-        | Set odd indexes to match their corresponding even index, as the FFT  |
-        | input array uses two indices for one value (real+imaginary)          |
-        \*--------------------------------------------------------------------*/
-        fft[(i * 2) + 1] = fft[i * 2];
-        fft[(i * 2) + 2] = fft[i * 2];
-        fft[(i * 2) + 3] = fft[i * 2];
-    }
-
-
-    /*--------------------------------------------*\
-    | Apply averaging over given number of values  |
-    \*--------------------------------------------*/
-    unsigned int k;
-    float sum1 = 0;
-    float sum2 = 0;
-
-    for (k = 0; k < avg_size; k++)
-    {
-        sum1 += fft[k];
-        sum2 += fft[255 - k];
-    }
-    /*------------------------------*\
-    | Compute averages for end bars  |
-    \*------------------------------*/
-    sum1 = sum1 / k;
-    sum2 = sum2 / k;
-
-    for (k = 0; k < avg_size; k++)
-    {
-        fft[k] = sum1;
-        fft[255 - k] = sum2;
-    }
-
-    for (unsigned int i = 0; i < (256 - avg_size); i += avg_size)
-    {
-        float sum = 0;
-        for (unsigned int j = 0; j < avg_size; j += 1)
-        {
-            sum += fft[i + j];
-        }
-
-        float avg = sum / avg_size;
-
-        for (unsigned int j = 0; j < avg_size; j += 1)
-        {
-            fft[i + j] = avg;
-        }
-    }
-
-    for(int i = 0; i < 256; i++)
-    {
-        fft_fltr[i] = fft_fltr[i] + (filter_constant * (fft[i] - fft_fltr[i]));
+        AudioManager::get()->UnRegisterClient(audio_settings_struct.audio_device, this);
     }
 }
 
@@ -425,7 +270,7 @@ void Shaders::on_show_rendering_stateChanged(int state)
 
 void Shaders::on_use_audio_stateChanged(int state)
 {
-    ui->audio_frame->setVisible(state);
+    ui->audio_settings->setVisible(state);
 
     use_audio = state;
 
@@ -440,11 +285,11 @@ void Shaders::on_use_audio_stateChanged(int state)
     }
 }
 
-void Shaders::on_audio_device_currentIndexChanged(int idx)
+void Shaders::OnAudioDeviceChanged(int value)
 {
     if(!use_audio)
     {
-        audio_device_idx = idx;
+        audio_settings_struct.audio_device = value;
         return;
     }
 
@@ -455,7 +300,7 @@ void Shaders::on_audio_device_currentIndexChanged(int idx)
         StopAudio();
     }
 
-    audio_device_idx = idx;
+    audio_settings_struct.audio_device = value;
 
     if(was_running)
     {
@@ -506,18 +351,7 @@ void Shaders::on_time_reset_clicked()
     time = 0.f;
 }
 
-void Shaders::on_amplitude_valueChanged(int value)
+void Shaders::on_audio_settings_clicked()
 {
-    amplitude = value;
+    audio_settings.show();
 }
-
-void Shaders::on_decay_valueChanged(int value)
-{
-    decay = value;
-}
-
-void Shaders::on_average_valueChanged(int value)
-{
-    avg_size = value;
-}
-

@@ -3,10 +3,11 @@
 
 #include <unordered_set>
 #include <random>
+#include <QPoint>
 
 #include "ColorUtils.h"
 #include "hsv.h"
-#include "RGBEffect.h"
+#include "ControllerZone.h"
 
 class BouncingBallSimulation
 {

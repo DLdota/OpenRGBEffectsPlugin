@@ -7,7 +7,6 @@
 #include <QWidget>
 #include <QPainter>
 #include <QDialog>
-#include <math.h>
 #include <memory>
 
 class RectangleSelector : public QWidget {

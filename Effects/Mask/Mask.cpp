@@ -1,5 +1,4 @@
 #include "Mask.h"
-#include "ColorUtils.h"
 
 REGISTER_EFFECT(Mask);
 
@@ -24,24 +23,24 @@ Mask::~Mask()
 
 void Mask::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
-    for(unsigned int i = 0; i < controller_zones.size(); i++)
+    for(ControllerZone* controller_zone: controller_zones)
     {
-        zone_type ZT = controller_zones[i]->type();
-        int leds_count = controller_zones[i]->leds_count();
+        zone_type ZT = controller_zone->type();
+        int leds_count = controller_zone->leds_count();
 
         if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
         {
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
                 RGBColor color = GetColor(LedID, 0.5, leds_count - 1, 1);
-                controller_zones[i]->SetLED(LedID, color, Brightness);
+                controller_zone->SetLED(LedID, color, Brightness);
             }
         }
 
         else if (ZT == ZONE_TYPE_MATRIX)
         {
-            int cols = controller_zones[i]->matrix_map_width();
-            int rows = controller_zones[i]->matrix_map_height();
+            int cols = controller_zone->matrix_map_width();
+            int rows = controller_zone->matrix_map_height();
 
             for (int col_id = 0; col_id < cols; col_id++)
             {
@@ -49,8 +48,8 @@ void Mask::StepEffect(std::vector<ControllerZone*> controller_zones)
                 {
                     RGBColor color = GetColor(col_id, row_id, cols - 1, rows - 1);
 
-                    int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                    controller_zones[i]->SetLED(LedID, color, Brightness);
+                    int LedID = controller_zone->map()[((row_id * cols) + col_id)];
+                    controller_zone->SetLED(LedID, color, Brightness);
                 }
             }
 

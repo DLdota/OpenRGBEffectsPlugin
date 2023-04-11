@@ -1,7 +1,5 @@
 #include "GLSLHighlighter.h"
 
-
-
 GLSLHighlighter::GLSLHighlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {

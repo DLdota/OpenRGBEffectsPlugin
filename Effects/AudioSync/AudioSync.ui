@@ -6,14 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>264</width>
-    <height>471</height>
+    <width>253</width>
+    <height>248</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout" columnstretch="1,0">
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="preview">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
    <item row="3" column="0" colspan="2">
     <widget class="QFrame" name="rendering_options_frame">
      <property name="frameShape">
@@ -30,33 +37,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QTooltipedSlider" name="hue_shift">
-        <property name="maximum">
-         <number>360</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="color_fade_speed_label">
-        <property name="text">
-         <string>Color fade speed</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QTooltipedSlider" name="color_fade_speed">
-        <property name="maximum">
-         <number>100</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="saturation_label">
         <property name="text">
@@ -67,6 +47,13 @@
       <item row="2" column="1">
        <widget class="QComboBox" name="saturation"/>
       </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="color_fade_speed_label">
+        <property name="text">
+         <string>Color fade speed</string>
+        </property>
+       </widget>
+      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="roll_mode_label">
         <property name="text">
@@ -74,188 +61,23 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1">
+       <widget class="QTooltipedSlider" name="hue_shift">
+        <property name="maximum">
+         <number>360</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
       <item row="3" column="1">
        <widget class="QComboBox" name="roll_mode"/>
       </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QLabel" name="equalizer_label">
-     <property name="text">
-      <string>Equalizer</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QFrame" name="amplitude_frame">
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,1">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="amplitude_label">
-        <property name="text">
-         <string>Amplitude</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QSpinBox" name="amplitude">
-        <property name="minimum">
-         <number>0</number>
-        </property>
+      <item row="1" column="1">
+       <widget class="QTooltipedSlider" name="color_fade_speed">
         <property name="maximum">
-         <number>999999999</number>
-        </property>
-        <property name="value">
          <number>100</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="QLabel" name="rendering_options_label">
-     <property name="text">
-      <string>Rendering options</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="preview">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QFrame" name="device_frame">
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,1">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="device_label">
-        <property name="text">
-         <string>Device</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="device">
-        <property name="acceptDrops">
-         <bool>false</bool>
-        </property>
-        <property name="editable">
-         <bool>false</bool>
-        </property>
-        <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="5" column="0" colspan="2">
-    <widget class="QFrame" name="equalizer_frame">
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="3" column="0">
-       <widget class="QLabel" name="high_label">
-        <property name="text">
-         <string>High</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="middle_label">
-        <property name="text">
-         <string>Middle</string>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="0">
-       <widget class="QLabel" name="avg_size_label">
-        <property name="text">
-         <string>Average size</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QTooltipedSlider" name="middle">
-        <property name="maximum">
-         <number>200</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QTooltipedSlider" name="high">
-        <property name="maximum">
-         <number>200</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="1">
-       <widget class="QComboBox" name="avg_mode"/>
-      </item>
-      <item row="10" column="0">
-       <widget class="QLabel" name="avg_mode_label">
-        <property name="text">
-         <string>Average mode</string>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="1">
-       <widget class="QTooltipedSlider" name="avg_size">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>256</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -269,50 +91,6 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="decay_label">
-        <property name="text">
-         <string>Decay</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="low_label">
-        <property name="text">
-         <string>Low</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="filter_constant_label">
-        <property name="text">
-         <string>Filter constant</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QTooltipedSlider" name="low">
-        <property name="maximum">
-         <number>200</number>
-        </property>
-        <property name="value">
-         <number>0</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <widget class="QTooltipedSlider" name="filter_constant">
-        <property name="maximum">
-         <number>100</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
       <item row="4" column="1">
        <widget class="ctkRangeSlider" name="bypass">
         <property name="orientation">
@@ -320,36 +98,20 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
-       <widget class="QTooltipedSlider" name="decay">
-        <property name="maximum">
-         <number>100</number>
-        </property>
-        <property name="value">
-         <number>0</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="preset"/>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="preset_label">
-        <property name="text">
-         <string>Preset</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QPushButton" name="defaults">
+   <item row="2" column="0" colspan="2">
+    <widget class="QLabel" name="rendering_options_label">
      <property name="text">
-      <string>Reset defaults</string>
+      <string>Rendering options</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QPushButton" name="audio_settings">
+     <property name="text">
+      <string>Audio settings</string>
      </property>
     </widget>
    </item>
@@ -367,6 +129,14 @@
    <header>Dependencies/ctkrangeslider/ctkrangeslider.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>audio_settings</tabstop>
+  <tabstop>hue_shift</tabstop>
+  <tabstop>color_fade_speed</tabstop>
+  <tabstop>saturation</tabstop>
+  <tabstop>roll_mode</tabstop>
+  <tabstop>bypass</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

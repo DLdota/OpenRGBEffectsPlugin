@@ -3,7 +3,6 @@
 
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
-#include "hsv.h"
 
 class Visor: public RGBEffect
 {

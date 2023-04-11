@@ -1,4 +1,5 @@
 #include "Clock.h"
+
 REGISTER_EFFECT(Clock);
 
 Clock::Clock(QWidget *parent) :

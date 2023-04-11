@@ -70,7 +70,7 @@ void BouncingBallSimulation::StepEffect()
 
         // Set new LED color
         unsigned int ledId = zoneType == ZONE_TYPE_MATRIX
-                ? controllerZone->controller->zones[zoneIndex].matrix_map->map[ledIndex]
+                ? controllerZone->map()[ledIndex]
                 : ledIndex;
         controllerZone->SetLED(startIndex + ledId, RGBColor(hsv2rgb(&pixelColor)), Brightness);
 

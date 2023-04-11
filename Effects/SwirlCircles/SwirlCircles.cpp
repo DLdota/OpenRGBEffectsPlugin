@@ -58,7 +58,6 @@ void SwirlCircles::StepEffect(std::vector<ControllerZone*> controller_zones)
         {
             unsigned int width = controller_zone->matrix_map_width();
             unsigned int height = controller_zone->matrix_map_height();
-            unsigned int * map = controller_zone->map();
 
             float hx = 0.5 * width;
             float hy = 0.5 * height;
@@ -72,7 +71,7 @@ void SwirlCircles::StepEffect(std::vector<ControllerZone*> controller_zones)
                 {
                     RGBColor color = GetColor(w, h, width, height, x1, y1);
 
-                    unsigned int led_num = map[h * width + w];
+                    unsigned int led_num = controller_zone->map()[h * width + w];
                     controller_zone->SetLED(led_num, color, Brightness);
                 }
             }

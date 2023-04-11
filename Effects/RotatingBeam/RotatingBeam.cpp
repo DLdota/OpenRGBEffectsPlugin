@@ -142,15 +142,13 @@ void RotatingBeam::StepEffect(std::vector<ControllerZone*> controller_zones)
         {
             unsigned int width = controller_zone->matrix_map_width();
             unsigned int height = controller_zone->matrix_map_height();
-            unsigned int * map = controller_zone->map();
 
             for(unsigned int h = 0; h < height; h++)
             {
                 for(unsigned int w = 0; w <  width; w++)
                 {
                     RGBColor color = GetColor(w, h, line, width - 1, height - 1);
-
-                    unsigned int led_num = map[h * width + w];
+                    unsigned int led_num = controller_zone->map()[h * width + w];
                     controller_zone->SetLED(led_num,color, Brightness);
                 }
             }

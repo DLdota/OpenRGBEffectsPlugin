@@ -7,9 +7,7 @@ NewShaderPassTabHeader::NewShaderPassTabHeader(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->type->addItem("Texture");
-    ui->type->addItem("Audio");
-    ui->type->addItem("Buffer");
+    ui->type->addItems({"Texture", "Audio", "Buffer"});
 }
 
 NewShaderPassTabHeader::~NewShaderPassTabHeader()

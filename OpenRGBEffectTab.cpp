@@ -7,7 +7,6 @@
 #include "EffectTabHeader.h"
 #include "OpenRGBEffectPage.h"
 #include "GlobalSettings.h"
-#include "ScreenRecorder.h"
 
 #include <QAction>
 #include <QDialog>

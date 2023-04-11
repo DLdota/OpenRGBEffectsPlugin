@@ -38,11 +38,11 @@ void RadialRainbow::StepEffect(std::vector<ControllerZone*> controller_zones)
     float cx_shift_mult = cx_shift / 100.f;
     float cy_shift_mult = cy_shift / 100.f;
 
-    for(unsigned int i = 0; i < controller_zones.size(); i++)
+    for(ControllerZone* controller_zone: controller_zones)
     {
-        zone_type ZT = controller_zones[i]->type();
-        int leds_count = controller_zones[i]->leds_count();
-        bool reverse = controller_zones[i]->reverse;
+        zone_type ZT = controller_zone->type();
+        int leds_count = controller_zone->leds_count();
+        bool reverse = controller_zone->reverse;
 
         if (ZT == ZONE_TYPE_SINGLE || ZT == ZONE_TYPE_LINEAR)
         {
@@ -52,14 +52,14 @@ void RadialRainbow::StepEffect(std::vector<ControllerZone*> controller_zones)
             for (int LedID = 0; LedID < leds_count; LedID++)
             {
                 RGBColor color = GetColor(LedID, 0, cx, cy, reverse);
-                controller_zones[i]->SetLED(LedID, color, Brightness);
+                controller_zone->SetLED(LedID, color, Brightness);
             }
         }
 
         else if (ZT == ZONE_TYPE_MATRIX)
         {
-            int cols = controller_zones[i]->matrix_map_width();
-            int rows = controller_zones[i]->matrix_map_height();
+            int cols = controller_zone->matrix_map_width();
+            int rows = controller_zone->matrix_map_height();
 
             double cx = (cols - 1) * cx_shift_mult;
             double cy = (rows - 1) * cy_shift_mult;
@@ -69,8 +69,8 @@ void RadialRainbow::StepEffect(std::vector<ControllerZone*> controller_zones)
                 for (int row_id = 0; row_id < rows; row_id++)
                 {
                     RGBColor color = GetColor(col_id, row_id, cx, cy, reverse);
-                    int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
-                    controller_zones[i]->SetLED(LedID, color, Brightness);
+                    int LedID = controller_zone->map()[(row_id * cols) + col_id];
+                    controller_zone->SetLED(LedID, color, Brightness);
                 }
             }
         }

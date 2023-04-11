@@ -1,5 +1,4 @@
 #include "Stack.h"
-#include "hsv.h"
 #include "ColorUtils.h"
 
 REGISTER_EFFECT(Stack);
@@ -74,7 +73,7 @@ void Stack::StepEffect(std::vector<ControllerZone*> controller_zones)
 
                     for (int row_id = 0; row_id < rows; row_id++)
                     {
-                        int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
+                        int LedID = controller_zones[i]->map()[((row_id * cols) + col_id)];
                         controller_zones[i]->SetLED(LedID, color, Brightness);
                     }
                 }
@@ -89,7 +88,7 @@ void Stack::StepEffect(std::vector<ControllerZone*> controller_zones)
 
                     for (int col_id = 0; col_id < cols; col_id++)
                     {
-                        int LedID = controller_zones[i]->controller->zones[controller_zones[i]->zone_idx].matrix_map->map[((row_id * cols) + col_id)];
+                        int LedID = controller_zones[i]->map()[((row_id * cols) + col_id)];
                         controller_zones[i]->SetLED(LedID, color, Brightness);
                     }
                 }

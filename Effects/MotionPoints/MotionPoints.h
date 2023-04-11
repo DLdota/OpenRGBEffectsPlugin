@@ -5,7 +5,6 @@
 #include "ui_MotionPoints.h"
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
-#include "hsv.h"
 
 struct MovingPoint
 {
