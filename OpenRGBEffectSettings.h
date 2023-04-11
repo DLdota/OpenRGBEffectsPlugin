@@ -14,6 +14,8 @@ struct GlobalSettingsStruct
     int  fpscapture = 60;
     int  brightness = 100;
     int  fps = 60;
+    int  temperature = 0;
+    int  tint = 0;
     bool hide_unsupported = false;
     bool prefer_random = false;
     bool use_prefered_colors = false;

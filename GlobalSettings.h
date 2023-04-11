@@ -27,6 +27,8 @@ private slots:
     void on_preferedColors_ColorsChanged();
     void on_randomColorsCheckBox_stateChanged(int);
     void on_audioSettings_clicked();
+    void on_temperature_valueChanged(int);
+    void on_tint_valueChanged(int);
 
 private:
     Ui::GlobalSettings *ui;

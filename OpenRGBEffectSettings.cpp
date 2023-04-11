@@ -18,6 +18,8 @@ bool OpenRGBEffectSettings::WriteGlobalSettings()
     j["fpscapture"]            = globalSettings.fpscapture;
     j["fps"]                   = globalSettings.fps;
     j["brightness"]            = globalSettings.brightness;
+    j["temperature"]           = globalSettings.temperature;
+    j["tint"]                  = globalSettings.tint;
     j["startup_profile"]       = globalSettings.startup_profile;
     j["hide_unsupported"]      = globalSettings.hide_unsupported;
     j["prefer_random"]         = globalSettings.prefer_random;
@@ -44,6 +46,8 @@ void OpenRGBEffectSettings::LoadGlobalSettings()
             if(j.contains("fpscapture"))            globalSettings.fpscapture           =j["fpscapture"];
             if(j.contains("fps"))                   globalSettings.fps                  =j["fps"];
             if(j.contains("brightness"))            globalSettings.brightness           =j["brightness"];
+            if(j.contains("temperature"))           globalSettings.temperature          =j["temperature"];
+            if(j.contains("tint"))                  globalSettings.tint                 =j["tint"];
             if(j.contains("startup_profile"))       globalSettings.startup_profile      =j["startup_profile"];
             if(j.contains("hide_unsupported"))      globalSettings.hide_unsupported     =j["hide_unsupported"];
             if(j.contains("prefer_random"))         globalSettings.prefer_random        =j["prefer_random"];
