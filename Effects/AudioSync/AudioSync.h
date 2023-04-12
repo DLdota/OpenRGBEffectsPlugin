@@ -83,7 +83,7 @@ private:
     int                     current_freq_hue = 0;
     float                   current_freq_sat = 0;
     float                   current_freq_val = 0;
-    //std::vector<int>        rainbow_hues;
+    std::vector<int>        rainbow_hues;
     std::vector<RGBColor>   colors_rotation;
     int                     fade_step;
     int                     hue_shift;
@@ -103,6 +103,7 @@ private:
     void Stop();
     void CreateUi();
     RGBColor GetColor(int, int, int, int);
+
 
 };
 

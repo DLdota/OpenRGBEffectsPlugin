@@ -77,6 +77,18 @@ AudioSync::AudioSync(QWidget *parent) :
 
     audio_settings.SetSettings(&audio_settings_struct);
 
+    /*---------------------------------------------------------------------------------*\
+    | Create a list of colors to read off of when drawing                               |
+    \*---------------------------------------------------------------------------------*/
+    int start_hue = 360;
+    int stop_hue =  0;
+
+    float hue_step = (stop_hue-start_hue)/256.0f;
+
+    for(int i = 0; i<256;i++)
+    {
+        rainbow_hues.push_back(ceil(start_hue + i * hue_step));
+    }
 }
 
 AudioSync::~AudioSync()
@@ -135,7 +147,9 @@ void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     for(int i = 0; i < 256; i++)
     {
-        HSVPixel.hue = ((i + hue_shift) * 360 / 256) % 360;
+        int shifted = (i+hue_shift)%rainbow_hues.size();
+        HSVPixel.hue = rainbow_hues[shifted];
+
         HSVPixel.saturation = (i >= bypass_min && i <= bypass_max) ? 255 : 128;
         HSVPixel.value = (i >= bypass_min && i <= bypass_max) ? 255 : 128;
 
@@ -178,10 +192,18 @@ void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     if(max_idx >= bypass_min && max_idx <= bypass_max)
     {
-        immediate_freq_hue = ((max_idx + hue_shift) * 360 / 256) % 360;
+        int shifted = (max_idx+hue_shift)%rainbow_hues.size();
+        immediate_freq_hue = rainbow_hues[shifted];
 
         // slowly reach immediate hue
-        current_freq_hue += ((immediate_freq_hue - current_freq_hue) * ((fade_step / 100.f))) / FPS;
+        if(current_freq_hue < immediate_freq_hue)
+        {
+            current_freq_hue += ((immediate_freq_hue - current_freq_hue) / (1.0f - (fade_step / 100.f))) / FPS;
+        }
+        else if(current_freq_hue > immediate_freq_hue)
+        {
+            current_freq_hue -= ((current_freq_hue - immediate_freq_hue ) / (1.0f - (fade_step / 100.f)) )/ FPS;
+        }
 
         if(saturation_mode == SATURATE_HIGH_AMPLITUDES)
         {
