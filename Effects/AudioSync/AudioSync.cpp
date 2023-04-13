@@ -44,6 +44,10 @@ AudioSync::AudioSync(QWidget *parent) :
     ui->color_fade_speed->setValue(50);
     ui->hue_shift->setValue(0);
 
+    ui->silent_color->setChecked(false);
+    ui->silent_color_value->SetRGBColor(0);
+    ui->silent_color_value->setVisible(false);
+
     /*--------------------------*\
     | Map signal to UpdateGraph  |
     \*--------------------------*/
@@ -242,6 +246,16 @@ void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     RGBColor color = RGBColor(hsv2rgb(&HSVVal));
 
+    if(color == 0 && silent_color)
+    {
+        silent_color_timer = std::min<unsigned int>(++silent_color_timer, SILENT_COLOR_TIMEOUT);
+        color = ColorUtils::Enlight(silent_color_value, float(silent_color_timer)/float(SILENT_COLOR_TIMEOUT));
+    }
+    else
+    {
+        silent_color_timer = 0;
+    }
+
     colors_rotation.insert(colors_rotation.begin(), color);
 
     while(colors_rotation.size()>1024)
@@ -333,6 +347,8 @@ void AudioSync::LoadCustomSettings(json settings)
     if (settings.contains("bypass_max"))          ui->bypass->setMaximumValue(settings["bypass_max"]);
     if (settings.contains("saturation_mode"))     ui->saturation->setCurrentIndex(settings["saturation_mode"]);
     if (settings.contains("roll_mode"))           ui->roll_mode->setCurrentIndex(settings["roll_mode"]);
+    if (settings.contains("silent_color"))        ui->silent_color->setChecked(settings["silent_color"]);
+    if (settings.contains("silent_color_value"))  ui->silent_color_value->SetRGBColor(settings["silent_color_value"]);
 
     if (settings.contains("audio_settings"))
     {
@@ -355,6 +371,8 @@ json AudioSync::SaveCustomSettings()
     settings["roll_mode"]           = roll_mode;
     settings["saturation_mode"]     = saturation_mode;
     settings["audio_settings"]      = audio_settings_struct;
+    settings["silent_color"]        = silent_color;
+    settings["silent_color_value"]  = silent_color_value;
 
     return settings;
 }
@@ -391,4 +409,15 @@ void AudioSync::on_roll_mode_currentIndexChanged(int value)
 void AudioSync::on_audio_settings_clicked()
 {
     audio_settings.show();
+}
+
+void AudioSync::on_silent_color_stateChanged(int value)
+{
+    ui->silent_color_value->setVisible(value);
+    silent_color = value;
+}
+
+void AudioSync::on_silent_color_value_ColorSelected(QColor c)
+{
+    silent_color_value = ColorUtils::fromQColor(c);
 }

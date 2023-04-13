@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>253</width>
-    <height>248</height>
+    <width>348</width>
+    <height>240</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,10 +30,20 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="0">
-       <widget class="QLabel" name="hue_shift_label">
+      <item row="3" column="1">
+       <widget class="QComboBox" name="roll_mode"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="color_fade_speed_label">
         <property name="text">
-         <string>Hue shift</string>
+         <string>Color fade speed</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="bypass_label">
+        <property name="text">
+         <string>Band-pass filter</string>
         </property>
        </widget>
       </item>
@@ -43,36 +53,6 @@
          <string>Saturation</string>
         </property>
        </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="saturation"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="color_fade_speed_label">
-        <property name="text">
-         <string>Color fade speed</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="roll_mode_label">
-        <property name="text">
-         <string>Roll mode</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QTooltipedSlider" name="hue_shift">
-        <property name="maximum">
-         <number>360</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QComboBox" name="roll_mode"/>
       </item>
       <item row="1" column="1">
        <widget class="QTooltipedSlider" name="color_fade_speed">
@@ -87,10 +67,20 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="bypass_label">
+      <item row="0" column="1">
+       <widget class="QTooltipedSlider" name="hue_shift">
+        <property name="maximum">
+         <number>360</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="hue_shift_label">
         <property name="text">
-         <string>Band-pass filter</string>
+         <string>Hue shift</string>
         </property>
        </widget>
       </item>
@@ -100,6 +90,26 @@
          <enum>Qt::Horizontal</enum>
         </property>
        </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="roll_mode_label">
+        <property name="text">
+         <string>Roll mode</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="saturation"/>
+      </item>
+      <item row="5" column="0">
+       <widget class="QCheckBox" name="silent_color">
+        <property name="text">
+         <string>Silent color</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="ColorPicker" name="silent_color_value" native="true"/>
       </item>
      </layout>
     </widget>
@@ -130,6 +140,12 @@
    <class>ctkRangeSlider</class>
    <extends>QSlider</extends>
    <header>Dependencies/ctkrangeslider/ctkrangeslider.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ColorPicker</class>
+   <extends>QWidget</extends>
+   <header>ColorPicker.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -18,6 +18,8 @@
 #include "RGBEffect.h"
 #include "EffectRegisterer.h"
 
+#define SILENT_COLOR_TIMEOUT 120
+
 enum SaturationMode
 {
     NO_SATURATION = 0,
@@ -63,6 +65,8 @@ private slots:
     void on_bypass_valuesChanged(int,int);
     void on_saturation_currentIndexChanged(int);
     void on_roll_mode_currentIndexChanged(int);
+    void on_silent_color_stateChanged(int);
+    void on_silent_color_value_ColorSelected(QColor);
 
 signals:
     void UpdateGraphSignal(QPixmap) const;
@@ -91,6 +95,9 @@ private:
     int                     bypass_max;
     int                     saturation_mode;
     int                     roll_mode;
+    bool                    silent_color = false;
+    RGBColor                silent_color_value = 0;
+    unsigned int            silent_color_timer = 0;
 
     AudioSettings                   audio_settings;
     Audio::AudioSettingsStruct      audio_settings_struct;
@@ -103,7 +110,6 @@ private:
     void Stop();
     void CreateUi();
     RGBColor GetColor(int, int, int, int);
-
 
 };
 
