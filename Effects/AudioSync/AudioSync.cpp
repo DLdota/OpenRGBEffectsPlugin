@@ -248,7 +248,8 @@ void AudioSync::StepEffect(std::vector<ControllerZone*> controller_zones)
 
     if(color == 0 && silent_color)
     {
-        silent_color_timer = std::min<unsigned int>(++silent_color_timer, SILENT_COLOR_TIMEOUT);
+        silent_color_timer++;
+        silent_color_timer = std::min<unsigned int>(silent_color_timer, SILENT_COLOR_TIMEOUT);
         color = ColorUtils::Enlight(silent_color_value, float(silent_color_timer)/float(SILENT_COLOR_TIMEOUT));
     }
     else
