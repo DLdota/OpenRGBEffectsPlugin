@@ -48,7 +48,12 @@ OpenRGBEffectTab::OpenRGBEffectTab(QWidget *parent):
     QTimer::singleShot(2000, [=](){
         LoadProfileList();
 
-        std::string startup_profile = OpenRGBEffectSettings::globalSettings.startup_profile;
+        std::string startup_profile = qgetenv("OPENRGB_EFFECTS_PLUGIN_STARTUP_PROFILE").toStdString();
+
+        if(startup_profile.empty())
+        {
+            startup_profile = OpenRGBEffectSettings::globalSettings.startup_profile;
+        }
 
         if(!startup_profile.empty())
         {
