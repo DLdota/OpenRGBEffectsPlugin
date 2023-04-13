@@ -994,6 +994,13 @@ void AudioVisualizer::LoadCustomSettings(json Settings)
 
     if (Settings.contains("BackgroundTimeout"))
         ui->doubleSpinBox_Background_Timeout->setValue(Settings["BackgroundTimeout"]);
+
+    if (Settings.contains("audio_settings"))
+    {
+        audio_settings_struct = Settings["audio_settings"];
+        audio_settings.SetSettings(&audio_settings_struct);
+    }
+
 }
 
 json AudioVisualizer::SaveCustomSettings()
