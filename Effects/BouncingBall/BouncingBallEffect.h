@@ -1,10 +1,8 @@
 #ifndef BOUNCINGBALLEFFECT_H
 #define BOUNCINGBALLEFFECT_H
 
-#include <unordered_map>
-#include <unordered_set>
-
 #include <QWidget>
+#include <vector>
 #include "RGBEffect.h"
 #include "BouncingBallSimulation.h"
 #include "EffectRegisterer.h"
@@ -28,6 +26,8 @@ public:
 
     void SetFPS(unsigned int value) override;
     void SetBrightness(unsigned int value) override;
+    void SetTemperature(int value) override;
+    void SetTint(int value) override;
     void StepEffect(std::vector<ControllerZone*>) override;
     void LoadCustomSettings(json) override;
     json SaveCustomSettings() override;
@@ -36,11 +36,9 @@ public:
 private:
     Ui::BouncingBallEffect *ui;
 
-    void checkForDimensionChange(ControllerZone*, BouncingBallSimulation*);
+    void SetDefaults();
 
-    // Cannot use zone index as key, since preview controller registers with the
-    // same id as the controller it's previewing. Using RGBController name instead.
-    std::unordered_map<ControllerZone*, BouncingBallSimulation*> bouncingBallSimulations;
+    std::vector<BouncingBallSimulation*> bouncingBallSimulations;
 
     int radius;
     int gravity;

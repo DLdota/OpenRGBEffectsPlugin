@@ -5,7 +5,6 @@
 #include <random>
 #include <QPoint>
 
-#include "ColorUtils.h"
 #include "hsv.h"
 #include "ControllerZone.h"
 
@@ -19,24 +18,31 @@ public:
         unsigned int gravity,
         unsigned int horizontalVelocity,
         unsigned int spectrumVelocity,
-        unsigned int dropHeightPercent);
+        unsigned int dropHeightPercent,
+        unsigned int Brightness,
+        int Temperature,
+        int Tint
+        );
 
     static float GetGravity(int value);
 
     void StepEffect();
+    void DetectSizesChanges();
 
     int GetWidth();
     int GetHeight();
 
-    void SetFps(unsigned int fps);
-    void SetBrightness(unsigned int Brightness);
-    void SetWidth(unsigned int width);
-    void SetHeight(unsigned int height);
-    void SetRadius(unsigned int radius);
-    void SetGravity(unsigned int gravity);
-    void SetDropHeightPercent(unsigned int dropHeightPercent);
-    void SetHorizontalVelocity(unsigned int horizontalVelocity);
-    void SetSpectrumVelocity(unsigned int spectrumVelocity);
+    void SetFps(unsigned int);
+    void SetBrightness(unsigned int);
+    void SetTemperature(int);
+    void SetTint(int);
+    void SetWidth(unsigned int);
+    void SetHeight(unsigned int);
+    void SetRadius(unsigned int);
+    void SetGravity(unsigned int);
+    void SetDropHeightPercent(unsigned int);
+    void SetHorizontalVelocity(unsigned int);
+    void SetSpectrumVelocity(unsigned int);
 
 private:
     float getTimeDelta(unsigned int fps);
@@ -48,16 +54,12 @@ private:
 
     std::mutex lockObj;
 
-    zone_type zoneType;
     ControllerZone* controllerZone;
-    unsigned int zoneIndex;
-    unsigned int startIndex;
 
     std::default_random_engine rng;
     std::uniform_int_distribution<> rndX;
     std::uniform_int_distribution<> rndBool;
 
-    const RGBColor off = ColorUtils::OFF();
     hsv_t baseColor;
     float hueDegrees = 0;
 
@@ -68,7 +70,7 @@ private:
     float impactVelocity;
 
     unsigned int fps;
-    float Brightness;
+    unsigned int Brightness;
     int Temperature=0;
     int Tint=0;
     int width;

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>318</width>
-    <height>170</height>
+    <height>173</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,14 +17,14 @@
    <item row="4" column="1">
     <widget class="QLabel" name="spectrum_velocity_value_label">
      <property name="text">
-      <string>10</string>
+      <string>-</string>
      </property>
     </widget>
    </item>
    <item row="3" column="1">
     <widget class="QLabel" name="horizontal_velocity_value_label">
      <property name="text">
-      <string>10</string>
+      <string>-</string>
      </property>
     </widget>
    </item>
@@ -38,7 +38,7 @@
    <item row="5" column="1">
     <widget class="QLabel" name="drop_height_percent_value_label">
      <property name="text">
-      <string>90</string>
+      <string>-</string>
      </property>
     </widget>
    </item>
@@ -51,7 +51,7 @@
       <number>100</number>
      </property>
      <property name="value">
-      <number>10</number>
+      <number>0</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -73,7 +73,7 @@
       <number>100</number>
      </property>
      <property name="value">
-      <number>10</number>
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -109,7 +109,7 @@
       <number>100</number>
      </property>
      <property name="value">
-      <number>90</number>
+      <number>0</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -141,10 +141,10 @@
       <number>100</number>
      </property>
      <property name="value">
-      <number>10</number>
+      <number>0</number>
      </property>
      <property name="sliderPosition">
-      <number>10</number>
+      <number>0</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -169,7 +169,7 @@
       </size>
      </property>
      <property name="text">
-      <string>15</string>
+      <string>-</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -186,7 +186,7 @@
    <item row="2" column="1">
     <widget class="QLabel" name="gravity_value_label">
      <property name="text">
-      <string>10</string>
+      <string>-</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -209,7 +209,7 @@
       <number>100</number>
      </property>
      <property name="value">
-      <number>15</number>
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

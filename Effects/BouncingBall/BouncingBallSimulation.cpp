@@ -1,36 +1,46 @@
 #include "BouncingBallSimulation.h"
 
 BouncingBallSimulation::BouncingBallSimulation(
-    ControllerZone* controllerZone,
-    unsigned int fps,
-    unsigned int radius,
-    unsigned int gravity,
-    unsigned int horizontalVelocity,
-    unsigned int spectrumVelocity,
-    unsigned int dropHeightPercent):
-    controllerZone(controllerZone)
+        ControllerZone* controllerZone,
+        unsigned int fps,
+        unsigned int radius,
+        unsigned int gravity,
+        unsigned int horizontalVelocity,
+        unsigned int spectrumVelocity,
+        unsigned int dropHeightPercent,
+        unsigned int Brightness,
+        int Temperature,
+        int Tint
+        ):
+    controllerZone(controllerZone),
+    fps(fps),
+    Brightness(Brightness),
+    Temperature(Temperature),
+    Tint(Tint),
+    radius(radius),
+    dropHeightPercent(dropHeightPercent),
+    spectrumVelocity(spectrumVelocity)
 {
-    this->zoneIndex = controllerZone->zone_idx;
-    this->zoneType = controllerZone->type();
-
-    if (this->zoneType == ZONE_TYPE_MATRIX) {
-        this->width = controllerZone->matrix_map_width();
-        this->height = controllerZone->matrix_map_height();
-    } else {
-        this->height = controllerZone->leds_count();
-        this->width = 1;
+    if (controllerZone->type() == ZONE_TYPE_MATRIX)
+    {
+        width = controllerZone->matrix_map_width();
+        height = controllerZone->matrix_map_height();
+    }
+    else
+    {
+        height = controllerZone->leds_count();
+        width = 1;
     }
 
-    this->numLeds = width * height;
-    this->fps = fps;
-    this->dt = getTimeDelta(fps);
-    this->radius = radius;
+    numLeds = width * height;
+
+    dt = getTimeDelta(fps);
+
     calculatePointsInCircle(radius);
-    this->dropHeightPercent = dropHeightPercent;
-    this->dx = getHorizontalVelocity(horizontalVelocity);
-    this->spectrumVelocity = spectrumVelocity;
-    this->ddx = 0;
-    this->ddy = GetGravity(gravity);
+
+    dx = getHorizontalVelocity(horizontalVelocity);
+    ddx = 0;
+    ddy = GetGravity(gravity);
 
     rng = std::default_random_engine(std::random_device{}());
     rndX = std::uniform_int_distribution<>(0, width-1); // [min, max] inclusive
@@ -43,6 +53,25 @@ BouncingBallSimulation::BouncingBallSimulation(
     initSimulation();
 }
 
+void BouncingBallSimulation::DetectSizesChanges()
+{
+    if (controllerZone->type() == ZONE_TYPE_MATRIX) {
+        // Manually check for on-the-fly changes in matrix width or height.
+        // Width and height are not updated via slots through the UI.
+        int newWidth = controllerZone->matrix_map_width();
+
+        if (width != newWidth) {
+            SetWidth(newWidth);
+        }
+
+        int newHeight = controllerZone->matrix_map_height();
+
+        if (height != newHeight) {
+            SetHeight(newHeight);
+        }
+    }
+}
+
 void BouncingBallSimulation::StepEffect()
 {
     // Prevent UI components from updating simulation parameters during step effect calculations
@@ -51,7 +80,8 @@ void BouncingBallSimulation::StepEffect()
     // Draw ball
     baseColor.hue = hueDegrees;
     newLedIds.clear();
-    for (unsigned int i = 0; i < pointsInBall.size(); i++) {
+    for (unsigned int i = 0; i < pointsInBall.size(); i++)
+    {
         QPoint point = pointsInBall[i];
         int rx = point.x();
         int ry = point.y();
@@ -59,8 +89,9 @@ void BouncingBallSimulation::StepEffect()
 
         // Skip points outside boundaries of LED matrix
         if (x + rx < 0 || x + rx >= width ||
-            y + ry < 0 || y + ry >= height ||
-            ledIndex < 0 || ledIndex >= numLeds) {
+                y + ry < 0 || y + ry >= height ||
+                ledIndex < 0 || ledIndex >= numLeds)
+        {
             continue;
         }
 
@@ -69,10 +100,11 @@ void BouncingBallSimulation::StepEffect()
         pixelColor.value = pointBrightness[i];
 
         // Set new LED color
-        unsigned int ledId = zoneType == ZONE_TYPE_MATRIX
+        unsigned int ledId = controllerZone->type() == ZONE_TYPE_MATRIX
                 ? controllerZone->map()[ledIndex]
-                : ledIndex;
-        controllerZone->SetLED(startIndex + ledId, RGBColor(hsv2rgb(&pixelColor)), Brightness, Temperature, Tint);
+                  : ledIndex;
+
+        controllerZone->SetLED(ledId, RGBColor(hsv2rgb(&pixelColor)), Brightness, Temperature, Tint);
 
         // Update new and old LED indices
         newLedIds.insert(ledId);
@@ -80,28 +112,35 @@ void BouncingBallSimulation::StepEffect()
     }
 
     // Turn off LEDs no longer within radius of ball
-    for (const unsigned int& oldLedId : oldLedIds) {
-        controllerZone->SetLED(startIndex + oldLedId, off, Brightness, Temperature, Tint);
+    for (const unsigned int& oldLedId : oldLedIds)
+    {
+        controllerZone->SetLED(oldLedId, 0, Brightness, Temperature, Tint);
     }
 
     // New LEDs changed this frame will be old LEDs next frame
     oldLedIds.swap(newLedIds);
 
-    if (zoneType == ZONE_TYPE_MATRIX) {
+    if (controllerZone->type() == ZONE_TYPE_MATRIX)
+    {
         // Update horizontal velocity and position of ball
         float dxp = dx + ddx * dt;
         float xp = x + dxp * dt;
 
-        if (xp < 0) {
+        if (xp < 0)
+        {
             float percentOvershoot = xp / (xp - x);
             dx = -dxp;
             x = dx * dt * percentOvershoot;
-        } else if (xp >= width) {
+        }
+        else if (xp >= width)
+        {
             float overshoot = xp - width - 1;
             float percentOvershoot = overshoot / (xp - x);
             dx = -dxp;
             x = width - 1 + dx * dt * percentOvershoot;
-        } else {
+        }
+        else
+        {
             x += dx * dt;
         }
     }
@@ -110,19 +149,24 @@ void BouncingBallSimulation::StepEffect()
     float dyp = dy + ddy * dt;
     float yp = y + dyp * dt;
 
-    if (yp >= height) {
+    if (yp >= height)
+    {
         float overshoot = yp - height - 1;
         float percentOvershoot = overshoot / (yp - y);
         dy = -impactVelocity + ddy * dt * percentOvershoot;
         y = height - 1 + dy * dt * percentOvershoot;
-    } else {
+    }
+    else
+    {
         dy += ddy * dt;
         y += dy * dt;
     }
 
     // Update color
     hueDegrees += spectrumVelocity * dt;
-    if (hueDegrees >= 360) {
+
+    if (hueDegrees >= 360)
+    {
         hueDegrees = 0;
     }
 
@@ -136,12 +180,12 @@ float BouncingBallSimulation::GetGravity(int value)
 
 int BouncingBallSimulation::GetWidth()
 {
-    return this->width;
+    return width;
 }
 
 int BouncingBallSimulation::GetHeight()
 {
-    return this->height;
+    return height;
 }
 
 // Used to make the physics framerate independent
@@ -152,7 +196,7 @@ float BouncingBallSimulation::getTimeDelta(unsigned int fps)
 
 float BouncingBallSimulation::getDropHeight(unsigned int dropHeightPercent, unsigned int height)
 {
-   return dropHeightPercent / 100.0 * height;
+    return dropHeightPercent / 100.0 * height;
 }
 
 // Solve projectile motion eqn: 0.5*m*v^2 = m*g*h
@@ -172,9 +216,13 @@ void BouncingBallSimulation::calculatePointsInCircle(int radius)
 {
     pointsInBall.clear();
     pointBrightness.clear();
-    for (int rx = -radius; rx <= radius; rx++) {
-        for (int ry = -radius; ry <= radius; ry++) {
-            if (rx * rx + ry * ry <= radius * radius) {
+
+    for (int rx = -radius; rx <= radius; rx++)
+    {
+        for (int ry = -radius; ry <= radius; ry++)
+        {
+            if (rx * rx + ry * ry <= radius * radius)
+            {
                 double distance = sqrt(pow(rx, 2) + pow(ry, 2));
                 unsigned char brightness = (1-distance/radius)*255;
 
@@ -198,79 +246,93 @@ void BouncingBallSimulation::initSimulation()
 
     oldLedIds.clear();
     newLedIds.clear();
-    controllerZone->SetAllZoneLEDs(off, Brightness, Temperature, Tint);
+    controllerZone->SetAllZoneLEDs(0, Brightness, Temperature, Tint);
 }
 
-void BouncingBallSimulation::SetBrightness(unsigned int Brightness)
+void BouncingBallSimulation::SetBrightness(unsigned int value)
 {
-    this->lockObj.lock();
-    this->Brightness = Brightness;
-    this->lockObj.unlock();
+    lockObj.lock();
+    Brightness = value;
+    lockObj.unlock();
 }
 
-void BouncingBallSimulation::SetFps(unsigned int fps)
+void BouncingBallSimulation::SetTemperature(int value)
 {
-    this->lockObj.lock();
-    this->fps = fps;
-    this->dt = getTimeDelta(fps);
-    this->lockObj.unlock();
+    lockObj.lock();
+    Temperature = value;
+    lockObj.unlock();
 }
 
-void BouncingBallSimulation::SetWidth(unsigned int width)
+void BouncingBallSimulation::SetTint(int value)
 {
-    this->lockObj.lock();
-    this->width = width;
-    this->numLeds = width * height;
+    lockObj.lock();
+    Tint = value;
+    lockObj.unlock();
+}
+
+void BouncingBallSimulation::SetFps(unsigned int value)
+{
+    lockObj.lock();
+    fps = value;
+    dt = getTimeDelta(fps);
+    lockObj.unlock();
+}
+
+void BouncingBallSimulation::SetWidth(unsigned int value)
+{
+    lockObj.lock();
+    width = value;
+    numLeds = width * height;
     calculatePointsInCircle(radius);
     rndX = std::uniform_int_distribution<>(0, width-1);
     initSimulation();
-    this->lockObj.unlock();
+    lockObj.unlock();
 }
 
-void BouncingBallSimulation::SetHeight(unsigned int height)
+void BouncingBallSimulation::SetHeight(unsigned int value)
 {
-    this->lockObj.lock();
-    this->height = height;
-    this->numLeds = width * height;
+    lockObj.lock();
+    height = value;
+    numLeds = width * height;
     calculatePointsInCircle(radius);
     initSimulation();
-    this->lockObj.unlock();
+    lockObj.unlock();
 }
 
-void BouncingBallSimulation::SetRadius(unsigned int radius)
+void BouncingBallSimulation::SetRadius(unsigned int value)
 {
-    this->lockObj.lock();
-    this->radius = radius;
+    lockObj.lock();
+    radius = value;
     calculatePointsInCircle(radius);
-    this->lockObj.unlock();
+    lockObj.unlock();
 }
 
-void BouncingBallSimulation::SetGravity(unsigned int gravity)
+void BouncingBallSimulation::SetGravity(unsigned int value)
 {
-    this->lockObj.lock();
-    this->ddy = GetGravity(gravity);
+    lockObj.lock();
+    ddy = GetGravity(value);
     initSimulation();
-    this->lockObj.unlock();
+    lockObj.unlock();
 }
 
-void BouncingBallSimulation::SetDropHeightPercent(unsigned int dropHeightPercent)
+void BouncingBallSimulation::SetDropHeightPercent(unsigned int value)
 {
-    this->lockObj.lock();
-    this->dropHeightPercent = dropHeightPercent;
+    lockObj.lock();
+    dropHeightPercent = value;
     initSimulation();
-    this->lockObj.unlock();
+    lockObj.unlock();
 }
 
-void BouncingBallSimulation::SetHorizontalVelocity(unsigned int horizontalVelocity)
+void BouncingBallSimulation::SetHorizontalVelocity(unsigned int value)
 {
-    this->lockObj.lock();
-    this->dx = getHorizontalVelocity(horizontalVelocity);
-    this->lockObj.unlock();
+    lockObj.lock();
+    dx = getHorizontalVelocity(value);
+    lockObj.unlock();
 }
 
-void BouncingBallSimulation::SetSpectrumVelocity(unsigned int spectrumVelocity)
+void BouncingBallSimulation::SetSpectrumVelocity(unsigned int value)
 {
-    this->lockObj.lock();
-    this->spectrumVelocity = spectrumVelocity;
-    this->lockObj.unlock();
+    lockObj.lock();
+    spectrumVelocity = value;
+    lockObj.unlock();
 }
