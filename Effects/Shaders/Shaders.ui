@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>385</width>
-    <height>285</height>
+    <width>457</width>
+    <height>189</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,58 +19,31 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0" columnstretch="0,0,0,0">
+  <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0,0" columnstretch="0,0,0,0">
    <property name="sizeConstraint">
     <enum>QLayout::SetDefaultConstraint</enum>
    </property>
-   <item row="3" column="0" colspan="2">
+   <item row="5" column="0">
     <widget class="QComboBox" name="shaders"/>
    </item>
-   <item row="3" column="3">
+   <item row="5" column="2">
+    <widget class="QPushButton" name="save_shader_as">
+     <property name="text">
+      <string>Save shader as...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2" colspan="2">
     <widget class="QPushButton" name="time_reset">
      <property name="text">
       <string>Reset time</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="3">
-    <widget class="QCheckBox" name="invert_time">
-     <property name="text">
-      <string>Invert time</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="3">
-    <widget class="QCheckBox" name="show_rendering">
-     <property name="text">
-      <string>Show rendering</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="2">
+   <item row="5" column="1">
     <widget class="QPushButton" name="edit">
      <property name="text">
       <string>Edit shader</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Width</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QSpinBox" name="width">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>512</number>
-     </property>
-     <property name="value">
-      <number>128</number>
      </property>
     </widget>
    </item>
@@ -81,14 +54,14 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="2">
-    <widget class="QLabel" name="label_2">
+   <item row="3" column="0" colspan="2">
+    <widget class="QCheckBox" name="use_audio">
      <property name="text">
-      <string>Height</string>
+      <string>Use audio</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="3">
+   <item row="1" column="3">
     <widget class="QSpinBox" name="height">
      <property name="minimum">
       <number>1</number>
@@ -101,46 +74,65 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="2" colspan="2">
-    <widget class="QPushButton" name="audio_settings">
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="show_rendering">
      <property name="text">
-      <string>Audio settings</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QCheckBox" name="use_audio">
-     <property name="text">
-      <string>Use audio</string>
+      <string>Show rendering</string>
      </property>
     </widget>
    </item>
    <item row="4" column="0" colspan="2">
-    <widget class="QPushButton" name="save_shader_as">
+    <widget class="QCheckBox" name="invert_time">
      <property name="text">
-      <string>Save shader as...</string>
+      <string>Invert time</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="2" colspan="2">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Width</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="3">
     <widget class="QPushButton" name="open_shaders_folder">
      <property name="text">
       <string>Open shaders folder</string>
      </property>
     </widget>
    </item>
+   <item row="1" column="2">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Height</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2" colspan="2">
+    <widget class="QPushButton" name="audio_settings">
+     <property name="text">
+      <string>Audio settings</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QSpinBox" name="width">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>512</number>
+     </property>
+     <property name="value">
+      <number>128</number>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>show_rendering</tabstop>
-  <tabstop>invert_time</tabstop>
   <tabstop>shaders</tabstop>
-  <tabstop>edit</tabstop>
-  <tabstop>time_reset</tabstop>
-  <tabstop>width</tabstop>
-  <tabstop>height</tabstop>
-  <tabstop>use_audio</tabstop>
-  <tabstop>audio_settings</tabstop>
  </tabstops>
  <resources/>
  <connections/>
