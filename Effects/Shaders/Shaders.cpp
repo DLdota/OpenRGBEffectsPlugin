@@ -2,6 +2,9 @@
 #include "Audio/AudioManager.h"
 #include "OpenRGBEffectSettings.h"
 
+#include <QDesktopServices>
+#include <QUrl>
+
 REGISTER_EFFECT(Shaders);
 
 Shaders::Shaders(QWidget *parent) :
@@ -91,6 +94,11 @@ Shaders::Shaders(QWidget *parent) :
     SetSpeed(1000);
 }
 
+Shaders::~Shaders()
+{
+    delete ui;
+}
+
 void Shaders::SetFPS(unsigned int value)
 {
     FPS = value;
@@ -121,9 +129,20 @@ void Shaders::EffectState(bool state)
     }    
 }
 
-Shaders::~Shaders()
+void Shaders::StartAudio()
 {
-    delete ui;
+    if(audio_settings_struct.audio_device >= 0)
+    {
+        AudioManager::get()->RegisterClient(audio_settings_struct.audio_device, this);
+    }
+}
+
+void Shaders::StopAudio()
+{
+    if(audio_settings_struct.audio_device >= 0)
+    {
+        AudioManager::get()->UnRegisterClient(audio_settings_struct.audio_device, this);
+    }
 }
 
 void Shaders::Resize()
@@ -200,71 +219,9 @@ void Shaders::StepEffect(std::vector<ControllerZone*> controller_zones)
     }
 }
 
-void Shaders::LoadCustomSettings(json Settings)
-{
-    if(Settings.contains("shader_name"))
-        ui->shaders->setCurrentText(QString::fromStdString(Settings["shader_name"]));
-
-    if(Settings.contains("shader_program"))
-    {
-        shader_renderer->SetProgram(ShaderProgram::FromJSON(Settings["shader_program"]));
-        editor->SetProgram(shader_renderer->Program());
-    }
-
-    if(Settings.contains("width"))
-        ui->width->setValue(Settings["width"]);
-
-    if(Settings.contains("height"))
-        ui->height->setValue(Settings["height"]);
-
-    if(Settings.contains("show_rendering"))
-        ui->show_rendering->setChecked(Settings["show_rendering"]);
-
-    if(Settings.contains("invert_time"))
-        ui->invert_time->setChecked(Settings["invert_time"]);
-
-    if(Settings.contains("use_audio"))
-        ui->use_audio->setChecked(Settings["use_audio"]);
-
-    if (Settings.contains("audio_settings"))
-    {
-        audio_settings_struct = Settings["audio_settings"];
-        audio_settings.SetSettings(&audio_settings_struct);
-    }
-}
-
-json Shaders::SaveCustomSettings()
-{
-    json settings;
-
-    settings["shader_name"]      = ui->shaders->currentText().toStdString();
-    settings["shader_program"]   = shader_renderer->Program()->ToJSON();
-    settings["width"]            = width;
-    settings["height"]           = height;
-    settings["show_rendering"]   = show_rendering;
-    settings["invert_time"]      = invert_time;
-    settings["use_audio"]        = use_audio;
-    settings["audio_settings"] = audio_settings_struct;
-
-    return settings;
-}
-
-void Shaders::StartAudio()
-{
-    if(audio_settings_struct.audio_device >= 0)
-    {
-        AudioManager::get()->RegisterClient(audio_settings_struct.audio_device, this);
-    }
-}
-
-void Shaders::StopAudio()
-{
-    if(audio_settings_struct.audio_device >= 0)
-    {
-        AudioManager::get()->UnRegisterClient(audio_settings_struct.audio_device, this);
-    }
-}
-
+/*-----------------------------------------------*\
+| UI Bindings                                     |
+\*-----------------------------------------------*/
 void Shaders::on_show_rendering_stateChanged(int state)
 {
     ui->preview->setVisible(state);
@@ -357,4 +314,69 @@ void Shaders::on_time_reset_clicked()
 void Shaders::on_audio_settings_clicked()
 {
     audio_settings.show();
+}
+
+void Shaders::on_save_shader_as_clicked()
+{
+
+}
+
+void Shaders::on_open_shaders_folder_clicked()
+{
+    filesystem::path config_dir = OpenRGBEffectSettings::ShadersFolder();
+    QUrl url = QUrl::fromLocalFile(QString::fromStdString(config_dir.string()));
+    printf("[OpenRGBEffectsPlugin] Opening %s\n", url.path().toStdString().c_str());
+    QDesktopServices::openUrl(url);
+}
+
+/*-----------------------------------------------*\
+| From/to json                                    |
+\*-----------------------------------------------*/
+void Shaders::LoadCustomSettings(json Settings)
+{
+    if(Settings.contains("shader_name"))
+        ui->shaders->setCurrentText(QString::fromStdString(Settings["shader_name"]));
+
+    if(Settings.contains("shader_program"))
+    {
+        shader_renderer->SetProgram(ShaderProgram::FromJSON(Settings["shader_program"]));
+        editor->SetProgram(shader_renderer->Program());
+    }
+
+    if(Settings.contains("width"))
+        ui->width->setValue(Settings["width"]);
+
+    if(Settings.contains("height"))
+        ui->height->setValue(Settings["height"]);
+
+    if(Settings.contains("show_rendering"))
+        ui->show_rendering->setChecked(Settings["show_rendering"]);
+
+    if(Settings.contains("invert_time"))
+        ui->invert_time->setChecked(Settings["invert_time"]);
+
+    if(Settings.contains("use_audio"))
+        ui->use_audio->setChecked(Settings["use_audio"]);
+
+    if (Settings.contains("audio_settings"))
+    {
+        audio_settings_struct = Settings["audio_settings"];
+        audio_settings.SetSettings(&audio_settings_struct);
+    }
+}
+
+json Shaders::SaveCustomSettings()
+{
+    json settings;
+
+    settings["shader_name"]      = ui->shaders->currentText().toStdString();
+    settings["shader_program"]   = shader_renderer->Program()->ToJSON();
+    settings["width"]            = width;
+    settings["height"]           = height;
+    settings["show_rendering"]   = show_rendering;
+    settings["invert_time"]      = invert_time;
+    settings["use_audio"]        = use_audio;
+    settings["audio_settings"] = audio_settings_struct;
+
+    return settings;
 }

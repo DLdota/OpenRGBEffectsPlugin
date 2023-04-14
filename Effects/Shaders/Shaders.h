@@ -51,6 +51,8 @@ private slots:
     void on_invert_time_stateChanged(int);
     void on_edit_clicked();
     void on_time_reset_clicked();
+    void on_save_shader_as_clicked();
+    void on_open_shaders_folder_clicked();
 
     void on_audio_settings_clicked();
     void OnAudioDeviceChanged(int);

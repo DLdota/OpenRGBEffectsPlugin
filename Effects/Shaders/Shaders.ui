@@ -115,6 +115,20 @@
      </property>
     </widget>
    </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QPushButton" name="save_shader_as">
+     <property name="text">
+      <string>Save shader as...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2" colspan="2">
+    <widget class="QPushButton" name="open_shaders_folder">
+     <property name="text">
+      <string>Open shaders folder</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <tabstops>

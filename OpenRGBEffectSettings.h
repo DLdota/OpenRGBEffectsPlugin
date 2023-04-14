@@ -47,6 +47,7 @@ public:
 
     static filesystem::path PatternsFolder();
 
+    static filesystem::path ShadersFolder();
     static std::vector<std::string> ListShaders();
 
     static GlobalSettingsStruct globalSettings;
@@ -58,7 +59,6 @@ private:
 
     static filesystem::path SettingsFolder();
     static filesystem::path ProfilesFolder();
-    static filesystem::path ShadersFolder();
 
     static bool create_dir(filesystem::path);
     static std::vector<std::string> list_files(filesystem::path, bool full_path = false);
