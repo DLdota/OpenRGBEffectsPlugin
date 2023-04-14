@@ -152,6 +152,11 @@ std::vector<std::string> OpenRGBEffectSettings::ListProfiles()
     return list_files(ProfilesFolder());
 }
 
+std::vector<std::string> OpenRGBEffectSettings::ListShaders()
+{
+    return list_files(ShadersFolder(), true);
+}
+
 bool OpenRGBEffectSettings::CreateSettingsDirectory()
 {
     return create_dir(SettingsFolder());
@@ -210,7 +215,7 @@ json OpenRGBEffectSettings::load_json_file(filesystem::path file_name)
     return j;
 }
 
-std::vector<std::string> OpenRGBEffectSettings::list_files(filesystem::path path)
+std::vector<std::string> OpenRGBEffectSettings::list_files(filesystem::path path, bool full_path)
 {
     std::vector<std::string> filenames;
 
@@ -220,7 +225,16 @@ std::vector<std::string> OpenRGBEffectSettings::list_files(filesystem::path path
     {       
         for (const QString & entry : dir.entryList(QDir::Files))
         {
-            filenames.push_back(entry.toStdString());
+            std::string filename = entry.toStdString();
+
+            if(full_path)
+            {
+                filenames.push_back(path / filename);
+            }
+            else
+            {
+                filenames.push_back(filename);
+            }
         }
     }
 
@@ -242,10 +256,14 @@ bool OpenRGBEffectSettings::create_dir(filesystem::path directory)
     return QDir().mkpath(dir.path());
 }
 
-
 filesystem::path OpenRGBEffectSettings::SettingsFolder()
 {
     return OpenRGBEffectsPlugin::RMPointer->GetConfigurationDirectory() / "plugins" / "settings";
+}
+
+filesystem::path OpenRGBEffectSettings::ShadersFolder()
+{
+    return SettingsFolder() / "effect-shaders";
 }
 
 filesystem::path OpenRGBEffectSettings::ProfilesFolder()

@@ -2,17 +2,6 @@
 #include "Audio/AudioManager.h"
 #include "OpenRGBEffectSettings.h"
 
-/*
-TODO:
-
-- add more inputs
-- custom attributes to pass
-
-- bind music
-- gl_FragColor deprecation
-- segfaults after a while - mutex added, lets see.
-*/
-
 REGISTER_EFFECT(Shaders);
 
 Shaders::Shaders(QWidget *parent) :
@@ -51,7 +40,7 @@ Shaders::Shaders(QWidget *parent) :
     connect(shader_renderer, &ShaderRenderer::Log, editor, &GLSLCodeEditor::SetLog);
 
     /*-----------------------------------------------*\
-    | List the embeded shadders, add them to the      |
+    | List the embeded shaders, add them to the       |
     | combo box                                       |
     \*-----------------------------------------------*/
     QDirIterator it(":/shaders");
@@ -62,6 +51,20 @@ Shaders::Shaders(QWidget *parent) :
         shader_list << it.next();
     }
 
+    /*-----------------------------------------------*\
+    | List the custom shaders paths                   |
+    \*-----------------------------------------------*/
+
+    std::vector<std::string> custom_shaders = OpenRGBEffectSettings::ListShaders();
+
+    for(const std::string& shader_path : custom_shaders)
+    {
+        shader_list << QString::fromStdString(shader_path);
+    }
+
+    /*-----------------------------------------------*\
+    | Add them to the combo box                       |
+    \*-----------------------------------------------*/
     shader_list.sort();
 
     for(const QString& path: shader_list)

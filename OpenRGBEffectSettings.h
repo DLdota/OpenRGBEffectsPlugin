@@ -47,6 +47,8 @@ public:
 
     static filesystem::path PatternsFolder();
 
+    static std::vector<std::string> ListShaders();
+
     static GlobalSettingsStruct globalSettings;
 
 private:
@@ -56,9 +58,10 @@ private:
 
     static filesystem::path SettingsFolder();
     static filesystem::path ProfilesFolder();
+    static filesystem::path ShadersFolder();
 
     static bool create_dir(filesystem::path);
-    static std::vector<std::string> list_files(filesystem::path);
+    static std::vector<std::string> list_files(filesystem::path, bool full_path = false);
     static json load_json_file(filesystem::path);
     static bool write_file(filesystem::path, json);
 
