@@ -106,7 +106,12 @@ void ShaderPass::Draw(const Uniforms& uniforms, GLenum unit, QOpenGLFunctions *g
         fbo->bind();
 
         program->setUniformValue("iTime", uniforms.iTime);
-        program->setUniformValueArray("iAudio", uniforms.iAudio, 256, 1);
+
+        if(uniforms.iAudio != nullptr)
+        {
+            program->setUniformValueArray("iAudio", uniforms.iAudio, 256, 1);
+        }
+
         program->setUniformValue("iResolution", QVector3D(width, height, 1));
         program->setUniformValue("iMouse", QVector4D(0.,0.,0.,0.));
         program->setUniformValue("iChannel0", 0);
