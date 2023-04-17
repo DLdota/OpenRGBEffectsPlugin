@@ -1,8 +1,8 @@
 #include "Shaders.h"
 #include "Audio/AudioManager.h"
 #include "OpenRGBEffectSettings.h"
-
 #include <QDesktopServices>
+#include <QInputDialog>
 #include <QUrl>
 
 REGISTER_EFFECT(Shaders);
@@ -318,7 +318,74 @@ void Shaders::on_audio_settings_clicked()
 
 void Shaders::on_save_shader_as_clicked()
 {
+    std::vector<std::string> filenames = OpenRGBEffectSettings::ListShaders();
 
+    QString filename;
+
+    if(filenames.empty())
+    {
+        filename = QInputDialog::getText(
+                    nullptr, "Save shader to file...", "Choose a filename",
+                    QLineEdit::Normal, QString("my-shader")).trimmed();
+    }
+    else
+    {
+        QDialog dialog;
+
+        dialog.setModal(true);
+        dialog.setWindowTitle("Save shader to file...");
+
+        QLabel text1("Overwrite existing shader:", &dialog);
+        QLabel text2("Or create a new one:", &dialog);
+
+        QVBoxLayout dialog_layout(&dialog);
+        QListWidget list_widget(&dialog);
+
+        for(const std::string& f: filenames)
+        {
+            QString qf = QString::fromStdString(f);
+            list_widget.addItem(qf.split( "/" ).last());
+        }
+
+        QLineEdit filename_input(&dialog);
+
+        filename_input.setText(QString("my-shader"));
+
+        dialog_layout.addWidget(&text1);
+        dialog_layout.addWidget(&list_widget);
+        dialog_layout.addWidget(&text2);
+        dialog_layout.addWidget(&filename_input);
+
+        QHBoxLayout buttons_layout;
+
+        QPushButton ok_button;
+        ok_button.setText("OK");
+        buttons_layout.addWidget(&ok_button);
+
+        QPushButton cancel_button;
+        cancel_button.setText("Cancel");
+        dialog.connect(&cancel_button,SIGNAL(clicked()),&dialog,SLOT(reject()));
+        buttons_layout.addWidget(&cancel_button);
+
+        dialog.connect(&ok_button,SIGNAL(clicked()),&dialog,SLOT(accept()));
+
+        dialog_layout.addLayout(&buttons_layout);
+
+        connect(&list_widget, &QListWidget::currentItemChanged, [&](){
+            filename_input.setText(list_widget.currentItem()->text());
+        });
+
+        if (dialog.exec())
+        {
+            filename = filename_input.text();
+        }
+    }
+
+    if(!filename.isEmpty())
+    {
+        std::string fs = shader_renderer->Program()->main_pass->data.fragment_shader;
+        OpenRGBEffectSettings::SaveShader(fs, filename.toStdString());
+    }
 }
 
 void Shaders::on_open_shaders_folder_clicked()

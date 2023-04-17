@@ -27,7 +27,7 @@ bool OpenRGBEffectSettings::WriteGlobalSettings()
     j["use_prefered_colors"]   = globalSettings.use_prefered_colors;
     j["audio_settings"]        = globalSettings.audio_settings;
 
-    return write_file(SettingsFolder() / "EffectSettings.json", j);
+    return write_json_to_file(SettingsFolder() / "EffectSettings.json", j);
 }
 
 void OpenRGBEffectSettings::LoadGlobalSettings()
@@ -107,7 +107,7 @@ bool OpenRGBEffectSettings::SaveUserProfile(json j, std::string filename)
         return false;
     }
 
-    return write_file(ProfilesFolder() / filename, j);
+    return write_json_to_file(ProfilesFolder() / filename, j);
 }
 
 json OpenRGBEffectSettings::LoadUserProfile(std::string filename)
@@ -134,7 +134,18 @@ bool OpenRGBEffectSettings::SaveEffectPattern(json j, std::string effect_name, s
         return false;
     }
 
-    return write_file(PatternsFolder() / effect_name / file_name, j);
+    return write_json_to_file(PatternsFolder() / effect_name / file_name, j);
+}
+
+
+bool OpenRGBEffectSettings::SaveShader(std::string content, std::string file_name)
+{
+    if(!CreateShadersDirectory())
+    {
+        return false;
+    }
+
+    return write_text_to_file(ShadersFolder() / file_name, content);
 }
 
 json OpenRGBEffectSettings::LoadPattern(std::string effect_name, std::string file_name)
@@ -172,7 +183,17 @@ bool OpenRGBEffectSettings::CreateEffectProfilesDirectory()
     return create_dir(ProfilesFolder());
 }
 
-bool OpenRGBEffectSettings::write_file(filesystem::path file_name, json j)
+bool OpenRGBEffectSettings::CreateShadersDirectory()
+{
+    return create_dir(ShadersFolder());
+}
+
+bool OpenRGBEffectSettings::write_json_to_file(filesystem::path file_name, json j)
+{
+    return write_text_to_file(file_name, j.dump(4));
+}
+
+bool OpenRGBEffectSettings::write_text_to_file(filesystem::path file_name, std::string content)
 {
     std::ofstream file(file_name, std::ios::out | std::ios::binary);
 
@@ -180,7 +201,7 @@ bool OpenRGBEffectSettings::write_file(filesystem::path file_name, json j)
     {
         try
         {
-            file << j.dump(4);
+            file << content;
             file.close();
         }
         catch(const std::exception& e)

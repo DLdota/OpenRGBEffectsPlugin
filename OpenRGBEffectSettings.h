@@ -49,6 +49,7 @@ public:
 
     static filesystem::path ShadersFolder();
     static std::vector<std::string> ListShaders();
+    static bool SaveShader(std::string, std::string);
 
     static GlobalSettingsStruct globalSettings;
 
@@ -56,6 +57,7 @@ private:
     static bool CreateSettingsDirectory();
     static bool CreateEffectProfilesDirectory();
     static bool CreateEffectPatternsDirectory(std::string);
+    static bool CreateShadersDirectory();
 
     static filesystem::path SettingsFolder();
     static filesystem::path ProfilesFolder();
@@ -63,7 +65,8 @@ private:
     static bool create_dir(filesystem::path);
     static std::vector<std::string> list_files(filesystem::path, bool full_path = false);
     static json load_json_file(filesystem::path);
-    static bool write_file(filesystem::path, json);
+    static bool write_json_to_file(filesystem::path, json);
+    static bool write_text_to_file(filesystem::path, std::string);
 
 };
 
