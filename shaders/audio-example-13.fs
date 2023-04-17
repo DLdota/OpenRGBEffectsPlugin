@@ -2,48 +2,6 @@
 #define PI 3.14159
 #define double_bars true
 
-vec4 HSVToRGB(float h, float s, float v)
-    {
-    float min;
-    float chroma;
-    float hPrime;
-    float x;
-    vec4 rgbColor;
-
-    chroma = s * v;
-    hPrime = h / 60.0;
-    x = chroma * (1.0 - abs((mod(hPrime, 2.0) - 1.0)));
-
-    if(hPrime < 1.0) {
-            rgbColor.r = chroma;
-            rgbColor.g = x;
-    } else if(hPrime < 2.0) {
-            rgbColor.r = x;
-            rgbColor.g = chroma;
-    } else if(hPrime < 3.0) {
-            rgbColor.g = chroma;
-            rgbColor.b = x;
-    } else if(hPrime < 4.0) {
-            rgbColor.g = x;
-            rgbColor.b = chroma;
-    } else if(hPrime < 5.0) {
-            rgbColor.r = x;
-            rgbColor.b = chroma;
-    } else if(hPrime <= 6.0) {
-            rgbColor.r = chroma;
-            rgbColor.b = x;
-    }
-
-    min = v - chroma;
-
-    rgbColor.r += min;
-    rgbColor.g += min;
-    rgbColor.b += min;
-    rgbColor.a  = 1.0;
-
-    return rgbColor;
-}
-
 float dist(vec2 a, vec2 b, vec2 c)
 {
    vec2 v1 = b - a;
@@ -67,5 +25,5 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     float val = pow(1.-dist(end, start, double_bars?2.*abs(uv-start):uv), 10.);
 
-    fragColor = val*HSVToRGB(mod(100.*iTime+uv.y*180.,360.), 1.,1.);
+    fragColor = vec4(val*HSVToRGB(vec3(mod(100.*iTime+uv.y*180.,360.)/360., 1.,1.)), 1.);
 }

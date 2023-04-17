@@ -257,6 +257,13 @@ std::string ShaderPass::MakeFragmentShader(std::string pre_processor_version, st
             "uniform sampler2D iChannel3;\n"
         ;
 
+    std::string includes =
+            "\n"
+            "vec3 HSVToRGB(vec3 c)\n"
+                "{\n"
+                    "return mix(vec3(1.),clamp((abs(fract(c.x+vec3(3,2,1)/3.)*6.-3.)-1.),0.,1.),c.y)*c.z;\n"
+                "}\n"
+        ;
 
     std::string footer =
             "\n"
@@ -270,6 +277,7 @@ std::string ShaderPass::MakeFragmentShader(std::string pre_processor_version, st
 
     return
             header +
+            includes +
             shader +
             footer ;
 }

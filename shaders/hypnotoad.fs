@@ -7,48 +7,6 @@
 #define spacing 1.
 #define thickness 1.
 
-vec4 hsv2rgb(float h, float s, float v)
-    {
-    float min;
-    float chroma;
-    float hPrime;
-    float x;
-    vec4 rgbColor;
-
-    chroma = s * v;
-    hPrime = h / 60.0;
-    x = chroma * (1.0 - abs((mod(hPrime, 2.0) - 1.0)));
-
-    if(hPrime < 1.0) {
-            rgbColor.r = chroma;
-            rgbColor.g = x;
-    } else if(hPrime < 2.0) {
-            rgbColor.r = x;
-            rgbColor.g = chroma;
-    } else if(hPrime < 3.0) {
-            rgbColor.g = chroma;
-            rgbColor.b = x;
-    } else if(hPrime < 4.0) {
-            rgbColor.g = x;
-            rgbColor.b = chroma;
-    } else if(hPrime < 5.0) {
-            rgbColor.r = x;
-            rgbColor.b = chroma;
-    } else if(hPrime <= 6.0) {
-            rgbColor.r = chroma;
-            rgbColor.b = x;
-    }
-
-    min = v - chroma;
-
-    rgbColor.r += min;
-    rgbColor.g += min;
-    rgbColor.b += min;
-    rgbColor.a  = 1.0;
-
-    return rgbColor;
-}
-
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     vec2 uv = fragCoord.xy / iResolution.xy;
@@ -61,8 +19,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float  value    = cos(animation_mult * distance / (0.001 * spacing)  + iTime);
 
     float v = pow((value+1.) * 0.5, (5. - thickness));
-    float h = abs(mod(angle + distance + iTime * color_mult * color_rotation_speed, 360.));
+    float h = abs(mod(angle + distance + iTime * color_mult * color_rotation_speed, 360.))/360.;
     float s = 1.;
 
-    fragColor = hsv2rgb(h,s,v);
+    fragColor = vec4(HSVToRGB(vec3(h,s,v)), 1.);
 }
