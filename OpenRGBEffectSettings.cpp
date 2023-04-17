@@ -250,7 +250,8 @@ std::vector<std::string> OpenRGBEffectSettings::list_files(filesystem::path path
 
             if(full_path)
             {
-                filenames.push_back(path / filename);
+                filesystem::path p = path / filename;
+                filenames.push_back(p.string());
             }
             else
             {
