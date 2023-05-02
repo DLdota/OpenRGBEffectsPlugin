@@ -36,7 +36,6 @@ You need `libopenal` installed.
 
 You need `openal-soft` installed.
 ```
-
 sudo dnf install openal-soft
 
 ```
