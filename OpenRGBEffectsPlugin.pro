@@ -422,6 +422,7 @@ FORMS +=                                                                        
     Effects/Shaders/ShaderFileTabHeader.ui                                                      \
     Effects/Shaders/ShaderPassEditor.ui                                                         \
     Effects/SmoothBlink/SmoothBlink.ui                                                          \
+    Effects/SpectrumCycling/SpectrumCycling.ui                                                  \
     Effects/Spiral/Spiral.ui                                                                    \
     Effects/Stack/Stack.ui                                                                      \
     Effects/Sunrise/Sunrise.ui                                                                  \
