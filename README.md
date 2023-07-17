@@ -15,12 +15,14 @@ This is a plugin for [OpenRGB](https://gitlab.com/CalcProgrammer1/OpenRGB) that 
 * [MacOS ARM64](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/artifacts/master/download?job=MacOS%20ARM64)
 * [MacOS Intel](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/artifacts/master/download?job=MacOS%20Intel)
 
-## Stable (0.8)
+## Stable (0.9)
 
-* [Windows 64](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/3418186147/artifacts/download)
-* [Linux 64](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/3418186145/artifacts/download)
-* [MacOS ARM64](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/3418186148/artifacts/download)
-* [MacOS Intel](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/3418186149/artifacts/download)
+* [Windows 64](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/4632324527/artifacts/download)
+* [Linux 64](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/4632324432/artifacts/download)
+* [MacOS ARM64](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/4632601567/artifacts/download)
+* [MacOS Intel](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/jobs/4632324711/artifacts/download)
+
+You can get older releases [here](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin/-/releases).
 
 ## How do I install it?
 
