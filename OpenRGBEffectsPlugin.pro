@@ -284,6 +284,7 @@ SOURCES +=                                                                      
     Effects/Rain/Rain.cpp                                                                       \
     Effects/RainbowWave/RainbowWave.cpp                                                         \
     Effects/RandomMarquee/RandomMarquee.cpp                                                     \
+    Effects/RandomSpin/RandomSpin.cpp                                                           \
     Effects/RotatingBeam/RotatingBeam.cpp                                                       \
     Effects/RotatingRainbow/RotatingRainbow.cpp                                                 \
     Effects/Sequence/Sequence.cpp                                                               \
@@ -352,6 +353,7 @@ HEADERS +=                                                                      
     Effects/Rain/Rain.h                                                                         \
     Effects/RainbowWave/RainbowWave.h                                                           \
     Effects/RandomMarquee/RandomMarquee.h                                                       \
+    Effects/RandomSpin/RandomSpin.h                                                             \
     Effects/RotatingBeam/RotatingBeam.h                                                         \
     Effects/RotatingRainbow/RotatingRainbow.h                                                   \
     Effects/Sequence/Sequence.h                                                                 \
@@ -416,6 +418,7 @@ FORMS +=                                                                        
     Effects/RadialRainbow/RadialRainbow.ui                                                      \
     Effects/Rain/Rain.ui                                                                        \
     Effects/RandomMarquee/RandomMarquee.ui                                                      \
+    Effects/RandomSpin/RandomSpin.ui                                                            \
     Effects/RotatingBeam/RotatingBeam.ui                                                        \
     Effects/RotatingRainbow/RotatingRainbow.ui                                                  \
     Effects/Sequence/Sequence.ui                                                                \
