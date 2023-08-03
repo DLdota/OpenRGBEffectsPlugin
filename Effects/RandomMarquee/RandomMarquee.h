@@ -1,5 +1,5 @@
-#ifndef MARQUEE_H
-#define MARQUEE_H
+#ifndef RANDOM_MARQUEE_H
+#define RANDOM_MARQUEE_H
 
 #include <QWidget>
 #include "ui_RandomMarquee.h"
