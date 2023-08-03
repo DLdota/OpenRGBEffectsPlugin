@@ -32,6 +32,7 @@ public:
     static std::string const ClassName() {return "RandomSpin";}
     void StepEffect(std::vector<ControllerZone*>) override;
     void OnControllerZonesListChanged(std::vector<ControllerZone*>)  override;
+    void SetUserColors(std::vector<RGBColor> colors) override;
 
 private:
     Ui::RandomSpin *ui;

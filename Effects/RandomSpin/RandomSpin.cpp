@@ -15,7 +15,7 @@ RandomSpin::RandomSpin(QWidget *parent) :
     EffectDetails.IsReversable      = true;
     EffectDetails.MaxSpeed          = 100;
     EffectDetails.MinSpeed          = 1;
-    EffectDetails.UserColors        = 1;
+    EffectDetails.UserColors        = 2;
     EffectDetails.SupportsRandom    = false;
 
     gradient = QImage(100, 1, QImage::Format_RGB32);
@@ -38,15 +38,15 @@ void RandomSpin::GenerateGradient()
     grad.setSpread(QGradient::Spread::PadSpread);
 
     std::vector<std::tuple<float, RGBColor>> stop_entries = {
-        { 0.f      , 0 },
-        { 0.15f    , 0 },
-        { 0.25f    , UserColors[0] },
-        { 0.35f    , 0 },
-        { 0.f      , 0 },
-        { 0.65f    , 0 },
-        { 0.75f    , UserColors[0] },
-        { 0.85f    , 0 },
-        { 0.8f     , 0 }
+        { 0.f      , UserColors[0] },
+        { 0.15f    , UserColors[0] },
+        { 0.25f    , UserColors[1] },
+        { 0.35f    , UserColors[0] },
+        { 0.f      , UserColors[0] },
+        { 0.65f    , UserColors[0] },
+        { 0.75f    , UserColors[1] },
+        { 0.85f    , UserColors[0] },
+        { 0.8f     , UserColors[0] }
     };
 
     QGradientStops stops;
@@ -76,6 +76,12 @@ void RandomSpin::OnControllerZonesListChanged(std::vector<ControllerZone*> contr
     GenerateGradient();
     spin_entries.clear();
     spin_entries.resize(controller_zones.size());
+}
+
+void RandomSpin::SetUserColors(std::vector<RGBColor> colors)
+{
+    UserColors = colors;
+    GenerateGradient();
 }
 
 void RandomSpin::StepEffect(std::vector<ControllerZone*> controller_zones)
