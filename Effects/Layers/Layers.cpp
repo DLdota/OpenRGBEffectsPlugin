@@ -36,12 +36,12 @@ LayerGroupEntry* Layers::AddLayerGroup()
     LayerGroupEntry* layer_group_entry = new LayerGroupEntry(this);
 
     connect(layer_group_entry, &LayerGroupEntry::Remove, [=](){
-        layer_groups_entries.erase(std::remove(layer_groups_entries.begin(), layer_groups_entries.end(), layer_group_entry), layer_groups_entries.end());
+        layer_groups.erase(std::remove(layer_groups.begin(), layer_groups.end(), layer_group_entry), layer_groups.end());
         delete layer_group_entry;
     });
 
     ui->groups->addTab(layer_group_entry, QString::fromStdString("Group " + std::to_string(ui->groups->count())));
-    layer_groups_entries.push_back(layer_group_entry);
+    layer_groups.push_back(layer_group_entry);
 
     layer_group_entry->OnControllerZonesListChanged(assigned_zones);
     layer_group_entry->EffectState(EffectEnabled);
@@ -52,7 +52,7 @@ LayerGroupEntry* Layers::AddLayerGroup()
 void Layers::ClearLayerGroups()
 {
     ui->groups->clear();
-    layer_groups_entries.clear();
+    layer_groups.clear();
 
     // First tab: add button
     QToolButton *new_group_button = new QToolButton();
@@ -70,41 +70,36 @@ void Layers::ClearLayerGroups()
 
 void Layers::StepEffect(std::vector<ControllerZone*> controller_zones)
 {
-    for(unsigned int g = 0; g < layer_groups_entries.size(); g++){
+    // Iterate over groups
+    for(unsigned int g = 0; g < layer_groups.size(); g++){
 
-        std::vector<std::vector<RGBColor>> previous_states;
+        std::vector<std::vector<RGBColor>> initial_states;
 
-        // save state
+        // Save colors state
+        // No need to save the state if we have only one group
         if(g > 0)
         {
             for(ControllerZone* controller_zone: controller_zones)
             {
-                std::vector<RGBColor> state;
-
-                RGBColor* current = controller_zone->controller->zones[controller_zone->zone_idx].colors;
-
-                for(unsigned int i = 0; i < controller_zone->leds_count(); i ++)
-                {
-                    state.push_back(current[i]);
-                }
-
-                previous_states.push_back(state);
+                initial_states.push_back(controller_zone->colors());
             }
         }
 
-        // run group
-        layer_groups_entries[g]->StepEffect(controller_zones, Brightness, Temperature, Tint);
+        // Run group effect
+        layer_groups[g]->StepEffect(controller_zones, Brightness, Temperature, Tint);
 
-        // compose + set new state
+        // Compose + set new state
+        // No need to compose if we have only one group
         if(g > 0)
         {
             for(unsigned int z = 0; z < controller_zones.size(); z++)
             {
-                RGBColor* current = controller_zones[z]->controller->zones[controller_zones[z]->zone_idx].colors;
+                RGBColor* color_ptr = controller_zones[z]->colors_ptr();
+                printf("Zone %d, Start: %d, Stop: %d\n", z, controller_zones[z]->zone_start_idx(), controller_zones[z]->zone_stop_idx());
 
-                for(unsigned int i = 0; i < controller_zones[z]->leds_count(); i ++)
+                for(unsigned int i = controller_zones[z]->zone_start_idx(), j = 0; i < controller_zones[z]->zone_stop_idx(); i++, j++)
                 {
-                    current[i] = ColorUtils::ApplyColorBlendFn(previous_states[z][i], current[i], layer_groups_entries[g]->composer_fn);
+                    color_ptr[i] = ColorUtils::ApplyColorBlendFn(initial_states[z][j], color_ptr[i], layer_groups[g]->composer_fn);
                 }
             }
         }
@@ -120,9 +115,9 @@ void Layers::OnControllerZonesListChanged(std::vector<ControllerZone*> controlle
 {
     assigned_zones = controller_zones;
 
-    for(LayerGroupEntry* layer_group_entry: layer_groups_entries)
+    for(LayerGroupEntry* layer_group: layer_groups)
     {
-        layer_group_entry->OnControllerZonesListChanged(controller_zones);
+        layer_group->OnControllerZonesListChanged(controller_zones);
     }
 }
 
@@ -130,9 +125,9 @@ void Layers::EffectState(bool state)
 {
     EffectEnabled = state;
 
-    for(LayerGroupEntry* layer_group_entry: layer_groups_entries)
+    for(LayerGroupEntry* layer_group: layer_groups)
     {
-        layer_group_entry->EffectState(state);
+        layer_group->EffectState(state);
     }
 }
 
@@ -156,9 +151,9 @@ json Layers::SaveCustomSettings()
 
     std::vector<json> groups;
 
-    for(LayerGroupEntry* layer_group_entry: layer_groups_entries)
+    for(LayerGroupEntry* layer_group: layer_groups)
     {
-        groups.push_back(layer_group_entry->ToJson());
+        groups.push_back(layer_group->ToJson());
     }
 
     settings["groups"] = groups;

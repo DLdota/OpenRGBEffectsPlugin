@@ -42,14 +42,43 @@ public:
 
     unsigned int startidx()
     {
-        return is_segment ? controller->zones[zone_idx].start_idx + controller->zones[zone_idx].segments[segment_idx].start_idx : controller->zones[zone_idx].start_idx;
+        return is_segment ?
+                   controller->zones[zone_idx].start_idx + controller->zones[zone_idx].segments[segment_idx].start_idx :
+                   controller->zones[zone_idx].start_idx;
+    }
+
+    unsigned int zone_start_idx()
+    {
+        return is_segment ? controller->zones[zone_idx].segments[segment_idx].start_idx : 0;
+    }
+
+    unsigned int zone_stop_idx()
+    {
+        return zone_start_idx() + leds_count();
+    }
+
+    std::vector<RGBColor> colors()
+    {
+        std::vector<RGBColor> color_data;
+
+        RGBColor* color_ptr = colors_ptr();
+
+        for(unsigned int i = zone_start_idx(); i < zone_stop_idx(); i ++)
+        {
+            color_data.push_back(color_ptr[i]);
+        }
+
+        return color_data;
+    }
+
+    RGBColor* colors_ptr()
+    {
+        return controller->zones[zone_idx].colors;
     }
 
     unsigned int size()
     {
-        return type() == ZONE_TYPE_MATRIX ?
-                    controller->zones[zone_idx].matrix_map->width *
-                    controller->zones[zone_idx].matrix_map->height : leds_count();
+        return type() == ZONE_TYPE_MATRIX ? matrix_size() : leds_count();
     }
 
     unsigned int matrix_size()

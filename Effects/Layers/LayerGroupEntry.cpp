@@ -52,56 +52,54 @@ void LayerGroupEntry::AddLayerEntry(LayerEntry* layer_entry)
 
 void LayerGroupEntry::StepEffect(std::vector<ControllerZone*> controller_zones, int Brightness, int Temperature, int Tint)
 {
+    // Reset the current zones to black
     for(ControllerZone* controller_zone: controller_zones)
     {
-        controller_zone->SetAllZoneLEDs(ColorUtils::OFF(), 0.f, 0 , 0);
+        controller_zone->SetAllZoneLEDs(ColorUtils::OFF(), 0, 0 , 0);
     }
 
+    // Iterate over groups
     for(unsigned int l = 0; l < layer_entries.size(); l++){
 
-        std::vector<std::vector<RGBColor>> previous_states;
+        std::vector<std::vector<RGBColor>> initial_states;
 
-        // save state
+        // Save state
+        // No need to save state if only one layer
         if(l > 0)
         {
             for(ControllerZone* controller_zone: controller_zones)
             {
-                std::vector<RGBColor> state;
-
-                RGBColor* current = controller_zone->controller->zones[controller_zone->zone_idx].colors;
-
-                for(unsigned int i = 0; i < controller_zone->leds_count(); i ++)
-                {
-                    state.push_back(current[i]);
-                }
-
-                previous_states.push_back(state);
+                initial_states.push_back(controller_zone->colors());
             }
         }
 
+        // Run the effect defined by the layer
         layer_entries[l]->StepEffect(controller_zones);
 
-        // compose + set new state
+        // Compose + set new state
+        // No need to compose if only one layer
         if(l > 0)
         {
             for(unsigned int z = 0; z < controller_zones.size(); z++)
             {
-                RGBColor* current = controller_zones[z]->controller->zones[controller_zones[z]->zone_idx].colors;
+                RGBColor* color_ptr = controller_zones[z]->colors_ptr();
+                printf("Zone %d, Start: %d, Stop: %d\n", z, controller_zones[z]->zone_start_idx(), controller_zones[z]->zone_stop_idx());
 
-                for(unsigned int i = 0; i < controller_zones[z]->leds_count(); i ++)
+
+                for(unsigned int i = controller_zones[z]->zone_start_idx(), j = 0; i < controller_zones[z]->zone_stop_idx(); i++, j++)
                 {
-                    current[i] = ColorUtils::ApplyColorBlendFn(previous_states[z][i], current[i], layer_entries[l]->GetComposerFn());
+                    color_ptr[i] = ColorUtils::ApplyColorBlendFn(initial_states[z][j], color_ptr[i], layer_entries[l]->GetComposerFn());
                 }
             }
         }
     }
 
-    // apply global adjustments
+    // Apply global adjustments
     for(ControllerZone* controller_zone: controller_zones)
     {
-        RGBColor* current = controller_zone->controller->zones[controller_zone->zone_idx].colors;
+        RGBColor* current = controller_zone->colors_ptr();
 
-        for(unsigned int i = 0; i < controller_zone->leds_count(); i ++)
+        for(unsigned int i = controller_zone->zone_start_idx(); i < controller_zone->zone_stop_idx(); i ++)
         {
             current[i] = ColorUtils::apply_adjustments(current[i], Brightness / 100.f, Temperature, Tint);
         }

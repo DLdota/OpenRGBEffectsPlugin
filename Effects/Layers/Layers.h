@@ -37,7 +37,7 @@ private:
     Ui::Layers *ui;
 
     std::vector<ControllerZone*> assigned_zones;
-    std::vector<LayerGroupEntry*> layer_groups_entries;
+    std::vector<LayerGroupEntry*> layer_groups;
 
     LayerGroupEntry* AddLayerGroup();
     void ClearLayerGroups();
