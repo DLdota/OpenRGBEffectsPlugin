@@ -12,6 +12,7 @@ class RandomSpin;
 
 struct RandomSpinEntry
 {
+    double  stop_progress   = 0;
     double  progress        = 0;
     double  speed_mult      = 1.f;
     bool    dir             = true;

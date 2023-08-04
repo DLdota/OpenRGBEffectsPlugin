@@ -100,19 +100,14 @@ void RandomSpin::StepEffect(std::vector<ControllerZone*> controller_zones)
         if(spin_entries[i].next_time_point < progress)
         {
             spin_entries[i].stop            = !spin_entries[i].stop;
-
             spin_entries[i].next_time_point = progress + custom_rand(1, spin_entries[i].stop ? 1.5 : 3.5);
             spin_entries[i].speed_mult      = custom_rand(1.f, 5.f);
             spin_entries[i].dir             = rand() % 2 == 0;
+            spin_entries[i].stop_progress   = spin_entries[i].progress;
         }
         else
         {
-            spin_entries[i].progress += (spin_entries[i].dir ? -1: 1) * 0.01 * Speed / (float) FPS;
-        }
-
-        if(spin_entries[i].stop)
-        {
-            continue;
+            spin_entries[i].progress +=  (spin_entries[i].dir ? -1: 1) * spin_entries[i].speed_mult * 0.01 * Speed / (float) FPS;
         }
 
         for (int LedID = 0; LedID < leds_count; LedID++)
@@ -127,8 +122,10 @@ void RandomSpin::StepEffect(std::vector<ControllerZone*> controller_zones)
 
 RGBColor RandomSpin::GetColor(unsigned int i, unsigned int w, const RandomSpinEntry& entry)
 {
+    double entry_progress = (entry.stop ? entry.stop_progress : entry.progress);
+
     double percent = (double)i / (double)w;
-    percent += std::fabs(entry.progress * entry.speed_mult);
+    percent += std::fabs(entry_progress );
     percent -= (unsigned long) percent;
 
     QPoint p(percent * 100, 0);
