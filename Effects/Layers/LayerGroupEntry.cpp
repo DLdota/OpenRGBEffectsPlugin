@@ -83,8 +83,6 @@ void LayerGroupEntry::StepEffect(std::vector<ControllerZone*> controller_zones, 
             for(unsigned int z = 0; z < controller_zones.size(); z++)
             {
                 RGBColor* color_ptr = controller_zones[z]->colors_ptr();
-                printf("Zone %d, Start: %d, Stop: %d\n", z, controller_zones[z]->zone_start_idx(), controller_zones[z]->zone_stop_idx());
-
 
                 for(unsigned int i = controller_zones[z]->zone_start_idx(), j = 0; i < controller_zones[z]->zone_stop_idx(); i++, j++)
                 {
