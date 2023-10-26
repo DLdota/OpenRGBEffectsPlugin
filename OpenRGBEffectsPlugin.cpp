@@ -1,6 +1,7 @@
 #include "OpenRGBEffectsPlugin.h"
 #include "EffectManager.h"
 #include "EffectList.h"
+#include "NetworkServer.h"
 #include "OpenRGBEffectSettings.h"
 #include <QSystemTrayIcon>
 #include <QMenu>

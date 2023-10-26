@@ -26,6 +26,8 @@ public:
     void SetScreen(int screen_index);
     void SetRect(QRect rect);
 
+    QPixmap grabWindow(quintptr window, int xIn, int yIn, int width, int height) const;
+
 private:
     std::thread* capture_thread = nullptr;
 

@@ -1,4 +1,4 @@
-QT += gui widgets core
+QT += gui widgets core winextras
 DEFINES += OPEN_RGB_EFFECTS_PLUGIN_LIBRARY
 TEMPLATE = lib
 
@@ -461,6 +461,8 @@ win32:contains(QMAKE_TARGET.arch, x86_64) {
         -lws2_32                                                        \
         -lole32                                                         \
         -lOpenGL32                                                      \
+        -luser32                                                        \
+        -lgdi32 \
 }
 
 win32:contains(QMAKE_TARGET.arch, x86) {
@@ -468,6 +470,8 @@ win32:contains(QMAKE_TARGET.arch, x86) {
         -lws2_32                                                        \
         -lole32                                                         \
         -lOpenGL32                                                      \
+        -luser32                                                        \
+        -lgdi32 \
 }
 
 win32:DEFINES +=                                                        \
