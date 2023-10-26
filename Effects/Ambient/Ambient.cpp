@@ -294,7 +294,7 @@ json Ambient::SaveCustomSettings()
     settings["width"] = width;
     settings["mode"] = mode;
     settings["screen_index"] = screen_index;
-    settings["smoothness"] = smoothness;
+    settings["smoothness"] = 1000 - smoothness;
     return settings;
 }
 
