@@ -1,6 +1,8 @@
 #include "ScreenRecorder.h"
 #include "OpenRGBEffectSettings.h"
+#ifdef _WIN32
 #include <Windows.h>
+#endif
 
 ScreenRecorder* ScreenRecorder::instance;
 
@@ -84,7 +86,11 @@ void ScreenRecorder::CaptureThreadFunction()
         auto start = std::chrono::steady_clock::now();
 
         lock.lock();
+#ifdef _WIN32
         capture = grabWindow(0, rect.left(), rect.top(), rect.width(), rect.height());
+#else
+        capture = screen->grabWindow(0, rect.left(), rect.top(), rect.width(), rect.height());
+#endif
         lock.unlock();
 
         int took = (int) std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
@@ -97,6 +103,7 @@ void ScreenRecorder::CaptureThreadFunction()
     printf("[OpenRGBEffectsPlugin] SCREENRECORDER: Thread stopped\n");
 }
 
+#ifdef _WIN32
 extern QPixmap qt_pixmapFromWinHBITMAP(HBITMAP bitmap, int format = 0);
 
 QPixmap ScreenRecorder::grabWindow(quintptr window, int xIn, int yIn, int width, int height) const
@@ -143,6 +150,7 @@ QPixmap ScreenRecorder::grabWindow(quintptr window, int xIn, int yIn, int width,
 
     return pixmap;
 }
+#endif
 
 const QImage ScreenRecorder::Capture()
 {

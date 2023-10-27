@@ -1,4 +1,4 @@
-QT += gui widgets core winextras
+QT += gui widgets core
 DEFINES += OPEN_RGB_EFFECTS_PLUGIN_LIBRARY
 TEMPLATE = lib
 
